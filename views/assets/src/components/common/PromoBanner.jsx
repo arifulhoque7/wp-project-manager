@@ -133,7 +133,7 @@ export function PromoBanner({ placement = 'projects' }) {
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 px-5 py-4 pl-6 pr-10 sm:pr-12">
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <img
-            src={`${typeof PM_Vars !== 'undefined' ? PM_Vars.dir_url : '/wp-content/plugins/wedevs-project-manager/'}.wordpress-org/icon-128x128.gif`}
+            src={`${typeof PM_Vars !== 'undefined' ? PM_Vars.dir_url : '/wp-content/plugins/wedevs-project-manager/'}views/assets/images/pm-icon-128x128.gif`}
             alt=""
             className="shrink-0 rounded-lg"
             style={{ height: '56px', width: '56px' }}
