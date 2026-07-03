@@ -4,6 +4,10 @@ namespace WeDevs\PM\Google_Workspace\Controllers;
 use WP_REST_Request;
 use WeDevs\PM\Google_Workspace\Google_Service;
 use WeDevs\PM\Google_Workspace\Models\Google_Drive_File;
+use WeDevs\PM\Task\Models\Task;
+use WeDevs\PM\Comment\Models\Comment;
+use WeDevs\PM\Discussion_Board\Models\Discussion_Board;
+use WeDevs\PM\File\Models\File;
 use Carbon\Carbon;
 
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -62,6 +66,42 @@ class Drive_Controller {
     }
 
     /**
+     * Resolve the real project that owns a polymorphic attachable target.
+     * Returns 0 when the target does not exist or the type is not verifiable.
+     */
+    private function attachable_project_id( $type, $id ) {
+        $id = (int) $id;
+
+        if ( ! $id ) {
+            return 0;
+        }
+
+        switch ( $type ) {
+            case 'task':
+                $model = Task::find( $id );
+                return $model ? (int) $model->project_id : 0;
+
+            case 'comment':
+                $model = Comment::find( $id );
+                return $model ? (int) $model->project_id : 0;
+
+            case 'discussion':
+                $model = Discussion_Board::find( $id );
+                return $model ? (int) $model->project_id : 0;
+
+            case 'file':
+                $model = File::find( $id );
+                return $model ? (int) $model->project_id : 0;
+
+            case 'project':
+                return $id;
+
+            default:
+                return 0;
+        }
+    }
+
+    /**
      * For comment attachments, restrict add/remove to the comment author or a
      * project manager (mirrors who can edit the comment). Other entity types
      * are gated by project-level Drive access only.
@@ -84,14 +124,21 @@ class Drive_Controller {
     }
 
     public function index( WP_REST_Request $request ) {
+        $project_id        = (int) $request->get_param( 'project_id' );
         list( $type, $id ) = $this->resolve_attachable( $request );
 
         if ( $type === '' ) {
             return [ 'data' => [] ];
         }
 
+        $owner_project_id = $this->attachable_project_id( $type, $id );
+        if ( ! $owner_project_id || $owner_project_id !== $project_id ) {
+            return new \WP_Error( 'pm_google_forbidden', __( 'This attachment target does not belong to the current project.', 'wedevs-project-manager' ), [ 'status' => 403 ] );
+        }
+
         $files = Google_Drive_File::where( 'attachable_type', $type )
             ->where( 'attachable_id', $id )
+            ->where( 'project_id', $project_id )
             ->orderBy( 'created_at', 'desc' )
             ->get();
 
@@ -132,6 +179,11 @@ class Drive_Controller {
 
         if ( $type === '' || ! $id ) {
             return new \WP_Error( 'pm_google_bad_request', __( 'Invalid attachment target.', 'wedevs-project-manager' ), [ 'status' => 422 ] );
+        }
+
+        $owner_project_id = $this->attachable_project_id( $type, $id );
+        if ( ! $owner_project_id || $owner_project_id !== $project_id ) {
+            return new \WP_Error( 'pm_google_forbidden', __( 'This attachment target does not belong to the current project.', 'wedevs-project-manager' ), [ 'status' => 403 ] );
         }
 
         if ( ! $this->can_manage_attachable( $type, $id, $project_id ) ) {
