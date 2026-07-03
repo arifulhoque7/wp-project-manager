@@ -149,7 +149,7 @@ function FeatureCard({ feature, __, index = 0 }) {
         videoId={feature.video}
       />
       <Card
-        className="group overflow-hidden border hover:border-primary/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-in fade-in slide-in-from-bottom-3"
+        className="group overflow-hidden border hover:border-primary/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-in fade-in slide-in-from-bottom-3 motion-reduce:animate-none motion-reduce:transition-none"
         style={{ animationDelay: `${index * 70}ms`, animationFillMode: 'both' }}
       >
         <div
@@ -224,12 +224,12 @@ export default function WelcomePage() {
         style={{ backgroundImage: 'linear-gradient(139deg, #C444FB 0%, #5B56D7 100%)' }}
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.12),transparent_70%)]" />
-        <div className="absolute -top-16 -right-10 h-56 w-56 rounded-full bg-white/10 blur-3xl animate-pulse" />
-        <div className="absolute -bottom-20 left-1/4 h-48 w-48 rounded-full bg-fuchsia-300/20 blur-3xl animate-pulse" style={{ animationDelay: '1.2s' }} />
+        <div className="absolute -top-16 -right-10 h-56 w-56 rounded-full bg-white/10 blur-3xl animate-pulse motion-reduce:animate-none" />
+        <div className="absolute -bottom-20 left-1/4 h-48 w-48 rounded-full bg-fuchsia-300/20 blur-3xl animate-pulse motion-reduce:animate-none" style={{ animationDelay: '1.2s' }} />
 
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Left - text */}
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 motion-reduce:animate-none">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-yellow-200 mb-4 backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5" />
               {__('Welcome to', 'wedevs-project-manager')}
@@ -279,7 +279,7 @@ export default function WelcomePage() {
           </div>
 
           {/* Right - video thumbnail */}
-          <div className="flex justify-center md:justify-end animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
+          <div className="flex justify-center md:justify-end animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150 motion-reduce:animate-none">
             <div
               className="relative cursor-pointer group rounded-xl overflow-hidden shadow-2xl ring-1 ring-white/20 transition-transform hover:scale-[1.02]"
               onClick={() => setBannerVideoOpen(true)}
@@ -337,7 +337,7 @@ export default function WelcomePage() {
           {RESOURCES.map((resource, index) => (
             <Card
               key={resource.title}
-              className="group text-center border hover:border-primary/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-in fade-in slide-in-from-bottom-3"
+              className="group text-center border hover:border-primary/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-in fade-in slide-in-from-bottom-3 motion-reduce:animate-none motion-reduce:transition-none"
               style={{ animationDelay: `${index * 90}ms`, animationFillMode: 'both' }}
             >
               <CardContent className="p-6 flex flex-col items-center">
