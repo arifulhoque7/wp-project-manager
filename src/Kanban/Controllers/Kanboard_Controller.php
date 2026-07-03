@@ -39,6 +39,36 @@ class Kanboard_Controller {
         return self::$_instance;
     }
 
+    private function get_scoped_board( $board_id, $project_id ) {
+        return Kanboard::where( 'id', intval( $board_id ) )
+            ->where( 'project_id', intval( $project_id ) )
+            ->where( 'type', 'kanboard' )
+            ->first();
+    }
+
+    private function board_in_project( $board_id, $project_id ) {
+        return Kanboard::where( 'id', intval( $board_id ) )
+            ->where( 'project_id', intval( $project_id ) )
+            ->where( 'type', 'kanboard' )
+            ->exists();
+    }
+
+    private function tasks_in_project( array $task_ids, $project_id ) {
+        $task_ids = array_filter( array_map( 'intval', $task_ids ) );
+
+        if ( empty( $task_ids ) ) {
+            return true;
+        }
+
+        $task_ids = array_unique( $task_ids );
+
+        $count = Task::whereIn( 'id', $task_ids )
+            ->where( 'project_id', intval( $project_id ) )
+            ->count();
+
+        return $count === count( $task_ids );
+    }
+
     public function index( WP_REST_Request $request ) {
         $project_id = $request->get_param( 'project_id' );
 
@@ -62,12 +92,28 @@ class Kanboard_Controller {
         $project_id = $request->get_param( 'project_id' );
         $task_id    = $request->get_param( 'task_id' );
 
+        if ( ! $this->board_in_project( $board_id, $project_id ) ) {
+            return new \WP_Error( 'not_found', __( 'Board not found', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
+
+        if ( ! $this->tasks_in_project( [ $task_id ], $project_id ) ) {
+            return new \WP_Error( 'rest_forbidden', __( 'Task does not belong to this project.', 'wedevs-project-manager' ), [ 'status' => 403 ] );
+        }
+
         $this->store_column_task( $board_id, $project_id, $task_id );
 
         wp_send_json_success();
     }
 
     public function store_column_task( $board_id, $project_id, $task_id ) {
+        if ( ! $this->board_in_project( $board_id, $project_id ) ) {
+            return [];
+        }
+
+        if ( ! $this->tasks_in_project( [ $task_id ], $project_id ) ) {
+            return [];
+        }
+
         //where('board_id', $board_id)
         $has_task = Boardable::where('board_type', 'kanboard')
             ->where('boardable_id', $task_id)
@@ -149,13 +195,17 @@ class Kanboard_Controller {
         $bortable_table = 'pm_boardables';
         $task_table     = 'pm_tasks';
 
+        $board = $this->get_scoped_board( $board_id, $project_id );
+
+        if ( ! $board ) {
+            return new \WP_Error( 'not_found', __( 'Board not found', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
+
         Paginator::currentPageResolver(function () use ($page) {
             return $page;
         });
 
-        $tasks = Kanboard::with('tasks')
-            ->find($board_id)
-            ->tasks();
+        $tasks = $board->tasks();
            // ->getQuery();// Task list can not fetch from task transformer, if you include this line
 
         $tasks = apply_filters( 'wedevs_pm_task_query', $tasks,  $project_id, $request );
@@ -198,10 +248,10 @@ class Kanboard_Controller {
         $board_id   = $request->get_param( 'board_id' );
         $project_id = $request->get_param( 'project_id' );
 
-        $board = Kanboard::find($board_id );
+        $board = $this->get_scoped_board( $board_id, $project_id );
 
         if ( ! $board ) {
-            return false;
+            return new \WP_Error( 'not_found', __( 'Board not found', 'wedevs-project-manager' ), [ 'status' => 404 ] );
         }
 
         $data = [
@@ -224,8 +274,11 @@ class Kanboard_Controller {
         $project_id = $request->get_param( 'project_id' );
 
         // Select the time
-        $board = Kanboard::where( 'id', $board_id )
-            ->first();
+        $board = $this->get_scoped_board( $board_id, $project_id );
+
+        if ( ! $board ) {
+            return new \WP_Error( 'not_found', __( 'Board not found', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
 
         $this->delete_all_relation($board);
 
@@ -268,7 +321,22 @@ class Kanboard_Controller {
         $project_id      = $request->get_param('project_id');
         $task_id         = $request->get_param('dragabel_task_id');
 
+        $task_ids = is_array( $task_ids ) ? array_map( 'intval', $task_ids ) : [];
+
+        if ( ! $this->board_in_project( $board_id, $project_id ) ) {
+            return new \WP_Error( 'not_found', __( 'Board not found', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
+
+        if ( ! $this->tasks_in_project( $task_ids, $project_id )
+            || ! $this->tasks_in_project( [ $task_id ], $project_id ) ) {
+            return new \WP_Error( 'rest_forbidden', __( 'One or more tasks do not belong to this project.', 'wedevs-project-manager' ), [ 'status' => 403 ] );
+        }
+
         if ( $is_move == 'yes' ) {
+            if ( ! $this->board_in_project( $sender_board_id, $project_id ) ) {
+                return new \WP_Error( 'not_found', __( 'Board not found', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+            }
+
             $from_sender_board = Boardable::where('board_id', $sender_board_id)
                 ->where('board_type', 'kanboard')
                 ->where('boardable_type', 'task')
@@ -837,7 +905,7 @@ class Kanboard_Controller {
     public function header_background( WP_REST_Request $request ) {
         $project_id        = $request->get_param('project_id');
         $board_id          = $request->get_param('board_id');
-        $header_background = $request->get_param('header_background');
+        $header_background = sanitize_hex_color( $request->get_param('header_background') ) ?: '#fbfcfd';
 
         wedevs_pm_update_meta( $board_id, $project_id, 'kanboard', 'header_background', $header_background );
 
@@ -898,6 +966,19 @@ class Kanboard_Controller {
         $project_id = $request->get_param('project_id');
         $board_id   = $request->get_param('board_id');
         $items      = $request->get_param('items');
+
+        if ( ! $this->board_in_project( $board_id, $project_id ) ) {
+            return new \WP_Error( 'not_found', __( 'Board not found', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
+
+        $items = is_array( $items ) ? array_filter( array_map( 'intval', $items ) ) : [];
+
+        if ( ! empty( $items ) ) {
+            $items = Task::whereIn( 'id', $items )
+                ->where( 'project_id', intval( $project_id ) )
+                ->pluck( 'id' )
+                ->toArray();
+        }
 
         $has_task = Boardable::select('boardable_id')
             ->where('board_type', 'kanboard')
@@ -968,19 +1049,24 @@ class Kanboard_Controller {
             ->toArray();
 
 
-        $query_id = implode( ',', $tk_ids );
+        $tk_ids = array_filter( array_map( 'intval', $tk_ids ) );
 
-        if ( empty( $query_id ) ) {
+        if ( empty( $tk_ids ) ) {
             wp_send_json_success( [] );
         }
 
-        $query = "SELECT *
+        $ids_placeholder = implode( ',', array_fill( 0, count( $tk_ids ), '%d' ) );
+
+        $query = $wpdb->prepare(
+            "SELECT *
             FROM {$wpdb->prefix}pm_boardables as bor
             LEFT JOIN {$wpdb->prefix}pm_tasks as tsk ON bor.boardable_id=tsk.id
             WHERE bor.board_type='kanboard'
             AND bor.boardable_type='task'
-            AND tsk.id IN ($query_id)
-            AND tsk.project_id={$project_id}";
+            AND tsk.id IN ($ids_placeholder)
+            AND tsk.project_id=%d",
+            array_merge( $tk_ids, [ intval( $project_id ) ] )
+        );
 
         $results = $wpdb->get_results( $query );
 

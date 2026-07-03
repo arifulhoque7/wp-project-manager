@@ -35,13 +35,13 @@ $wedevs_pm_router->post( 'projects/{project_id}/kanboard/{board_id}/tasks/{task_
     ->permission( ['WeDevs\PM\Core\Permissions\Delete_Task'] );
 
 $wedevs_pm_router->post( 'projects/{project_id}/list-view-type', 'WeDevs/PM/Kanban/Controllers/Kanboard_Controller@list_view_type' )
-    ->permission( ['WeDevs\PM\Core\Permissions\Access_Project'] );
+    ->permission( ['WeDevs\PM\Core\Permissions\Project_Manage_Capability'] );
 
 $wedevs_pm_router->post( 'projects/{project_id}/boards/{board_id}/automation', 'WeDevs/PM/Kanban/Controllers/Kanboard_Controller@automation' )
-    ->permission( ['WeDevs\PM\Core\Permissions\Access_Project'] );
+    ->permission( ['WeDevs\PM\Core\Permissions\Project_Manage_Capability'] );
 
 $wedevs_pm_router->post( 'projects/{project_id}/kanboard/{board_id}/header_background', 'WeDevs/PM/Kanban/Controllers/Kanboard_Controller@header_background' )
-    ->permission( ['WeDevs\PM\Core\Permissions\Access_Project'] );
+    ->permission( ['WeDevs\PM\Core\Permissions\Project_Manage_Capability'] );
 
 $wedevs_pm_router->post( 'projects/{project_id}/kanboard/filter', 'WeDevs/PM/Kanban/Controllers/Kanboard_Controller@search_tasks' )
     ->permission( ['WeDevs\PM\Core\Permissions\Access_Project'] );
