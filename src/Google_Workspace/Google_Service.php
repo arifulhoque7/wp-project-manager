@@ -297,8 +297,8 @@ class Google_Service {
     // ── Encryption (AES-256-CBC, key from WP salts) ──────────────────────
 
     private static function key() {
-        $salt  = defined( 'AUTH_KEY' ) ? AUTH_KEY : 'pm-google-fallback';
-        $salt .= defined( 'AUTH_SALT' ) ? AUTH_SALT : 'pm-google-fallback-salt';
+        $salt  = defined( 'AUTH_KEY' ) ? AUTH_KEY : wp_salt( 'auth' );
+        $salt .= defined( 'AUTH_SALT' ) ? AUTH_SALT : wp_salt( 'auth' );
         return hash( 'sha256', $salt, true );
     }
 
