@@ -23,6 +23,7 @@ wedevs_pm_register_routes();
 wedevs_pm_clean_svg();
 
 ( new \WeDevs\PM\Google_Workspace\Loader() )->boot();
+new WeDevs\PM\Kanban\Kanban();
 
 do_action( 'wedevs_pm_loaded' );
 
