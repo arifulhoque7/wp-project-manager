@@ -17,7 +17,7 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction,
 } from '@components/ui/alert-dialog'
 import { ShieldCheck, Unlink, HardDrive, Settings as SettingsIcon, Lock, Info } from 'lucide-react'
-import { CalendarGlyph, MeetGlyph } from '@components/google-workspace/GoogleIcons'
+import { CalendarGlyph, MeetGlyph, GoogleColorGlyph, GoogleDriveColorGlyph } from '@components/google-workspace/GoogleIcons'
 import ProBadge from '@components/common/ProBadge'
 import { toast } from 'sonner'
 import { Slot } from '@hooks/useSlot'
@@ -50,28 +50,6 @@ const ProFeatureCard = ({ icon: Icon, title, description }) => {
     </section>
   )
 }
-
-const GoogleGlyph = (props) => (
-  <svg viewBox="0 0 24 24" width="20" height="20" {...props}>
-    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z"/>
-    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/>
-    <path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18a11 11 0 0 0 0 9.88l3.66-2.84z"/>
-    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1A11 11 0 0 0 2.18 7.06l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/>
-  </svg>
-)
-
-const DriveLogo = (props) => (
-  <svg viewBox="0 0 24 24" fill="none" {...props}>
-    <path d="M12 17L15.2083 11.5L17.4718 7.61972L19.8 11.5L21.4109 14.1848C23.2105 17.1841 21.05 21 17.5521 21H14.3333L13.1667 19L12 17Z" fill="url(#pmgw_a)"/>
-    <path d="M8.79167 11.5L12 17L13.1667 19L14.3333 21H9.66667H6.44786C2.95003 21 0.789527 17.1841 2.58914 14.1848L4.2 11.5H8.79167Z" fill="url(#pmgw_b)"/>
-    <path d="M15.2083 11.5H8.79167H4.2L6.52817 7.61972L8.35566 4.57391C10.0064 1.82272 13.9936 1.82272 15.6443 4.57391L17.4718 7.61972L15.2083 11.5Z" fill="url(#pmgw_c)"/>
-    <defs>
-      <linearGradient id="pmgw_a" x1="15.2651" y1="11.2054" x2="21.5787" y2="18.5942" gradientUnits="userSpaceOnUse"><stop stopColor="#FECA06"/><stop offset="1" stopColor="#FFE31F"/></linearGradient>
-      <linearGradient id="pmgw_b" x1="8" y1="18.8492" x2="11.6122" y2="21.1175" gradientUnits="userSpaceOnUse"><stop stopColor="#3185FF"/><stop offset="1" stopColor="#A8A8FE"/></linearGradient>
-      <linearGradient id="pmgw_c" x1="10.1707" y1="8.85" x2="5.8286" y2="10.6011" gradientUnits="userSpaceOnUse"><stop stopColor="#16BC66"/><stop offset="1" stopColor="#78C9FF"/></linearGradient>
-    </defs>
-  </svg>
-)
 
 export default function GoogleWorkspacePage() {
   const dispatch = useAppDispatch()
@@ -115,7 +93,7 @@ export default function GoogleWorkspacePage() {
   return (
     <div className="pm-google-workspace max-w-3xl mx-auto p-6 space-y-6">
       <header className="flex items-center gap-3">
-        <GoogleGlyph />
+        <GoogleColorGlyph />
         <div>
           <h1 className="text-xl font-semibold text-gray-900">{__('Google Workspace', 'wedevs-project-manager')}</h1>
           <p className="text-sm text-gray-500">{__('Connect your Google account to use Google features inside Project Manager.', 'wedevs-project-manager')}</p>
@@ -150,7 +128,7 @@ export default function GoogleWorkspacePage() {
           <div className="flex items-center justify-between gap-4">
             <p className="text-sm text-gray-600">{__('Connect your Google account to browse and attach Drive files to tasks.', 'wedevs-project-manager')}</p>
             <Button size="sm" onClick={onConnect} disabled={connecting}>
-              <GoogleGlyph width="16" height="16" /> <span className="ml-1.5">{connecting ? __('Redirecting…', 'wedevs-project-manager') : __('Connect Google', 'wedevs-project-manager')}</span>
+              <GoogleColorGlyph width="16" height="16" /> <span className="ml-1.5">{connecting ? __('Redirecting…', 'wedevs-project-manager') : __('Connect Google', 'wedevs-project-manager')}</span>
             </Button>
           </div>
         )}
@@ -170,7 +148,7 @@ export default function GoogleWorkspacePage() {
       <section className={`rounded-lg border border-gray-200 bg-white p-5${!status.drive_enabled ? ' opacity-70' : ''}`}>
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-start gap-3">
-            <DriveLogo width="20" height="20" />
+            <GoogleDriveColorGlyph width="20" height="20" />
             <div>
               <div className="text-sm font-medium text-gray-900">{__('Google Drive', 'wedevs-project-manager')}</div>
               <div className="text-xs text-gray-500 mt-0.5">{__('Attach Drive files to tasks, comments, discussions and files.', 'wedevs-project-manager')}</div>

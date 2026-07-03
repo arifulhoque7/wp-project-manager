@@ -38,3 +38,46 @@ export const MeetGlyph = (props) => (
     </defs>
   </svg>
 )
+
+/** Solid monochrome Google Drive glyph (currentColor fill). Size via className. */
+export const DriveSolidGlyph = (props) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+    <path d="M12 17L15.2083 11.5L17.4718 7.61972L19.8 11.5L21.4109 14.1848C23.2105 17.1841 21.05 21 17.5521 21H14.3333L13.1667 19L12 17Z"/>
+    <path d="M8.79167 11.5L12 17L13.1667 19L14.3333 21H9.66667H6.44786C2.95003 21 0.789527 17.1841 2.58914 14.1848L4.2 11.5H8.79167Z"/>
+    <path d="M15.2083 11.5H8.79167H4.2L6.52817 7.61972L8.35566 4.57391C10.0064 1.82272 13.9936 1.82272 15.6443 4.57391L17.4718 7.61972L15.2083 11.5Z"/>
+  </svg>
+)
+
+/** Full-color Google Drive glyph. Size via width/height or className. */
+export const GoogleDriveColorGlyph = (props) => (
+  <svg viewBox="0 0 24 24" fill="none" {...props}>
+    <path d="M12 17L15.2083 11.5L17.4718 7.61972L19.8 11.5L21.4109 14.1848C23.2105 17.1841 21.05 21 17.5521 21H14.3333L13.1667 19L12 17Z" fill="url(#pmgdc_a)"/>
+    <path d="M8.79167 11.5L12 17L13.1667 19L14.3333 21H9.66667H6.44786C2.95003 21 0.789527 17.1841 2.58914 14.1848L4.2 11.5H8.79167Z" fill="url(#pmgdc_b)"/>
+    <path d="M15.2083 11.5H8.79167H4.2L6.52817 7.61972L8.35566 4.57391C10.0064 1.82272 13.9936 1.82272 15.6443 4.57391L17.4718 7.61972L15.2083 11.5Z" fill="url(#pmgdc_c)"/>
+    <defs>
+      <linearGradient id="pmgdc_a" x1="15.2651" y1="11.2054" x2="21.5787" y2="18.5942" gradientUnits="userSpaceOnUse"><stop stopColor="#FECA06"/><stop offset="1" stopColor="#FFE31F"/></linearGradient>
+      <linearGradient id="pmgdc_b" x1="8" y1="18.8492" x2="11.6122" y2="21.1175" gradientUnits="userSpaceOnUse"><stop stopColor="#3185FF"/><stop offset="1" stopColor="#A8A8FE"/></linearGradient>
+      <linearGradient id="pmgdc_c" x1="10.1707" y1="8.85" x2="5.8286" y2="10.6011" gradientUnits="userSpaceOnUse"><stop stopColor="#16BC66"/><stop offset="1" stopColor="#78C9FF"/></linearGradient>
+    </defs>
+  </svg>
+)
+
+/** Full-color Google "G" logo. Default 20×20; override via width/height or className. */
+export const GoogleColorGlyph = (props) => (
+  <svg viewBox="0 0 24 24" width="20" height="20" {...props}>
+    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z"/>
+    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/>
+    <path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18a11 11 0 0 0 0 9.88l3.66-2.84z"/>
+    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1A11 11 0 0 0 2.18 7.06l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/>
+  </svg>
+)
+
+/** Monochrome Google "G" logo (currentColor fill). Size via className. */
+export const GoogleMonoGlyph = (props) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z"/>
+    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/>
+    <path d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18a11 11 0 0 0 0 9.88l3.66-2.84z"/>
+    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1A11 11 0 0 0 2.18 7.06l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/>
+  </svg>
+)

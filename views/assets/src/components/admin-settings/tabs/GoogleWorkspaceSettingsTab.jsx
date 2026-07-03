@@ -17,18 +17,9 @@ import { useToast } from '@hooks/useToast'
 import { Slot } from '@hooks/useSlot'
 import { useProModal } from '@components/common/ProUpgradeModal'
 import ProBadge from '@components/common/ProBadge'
+import { GoogleMonoGlyph } from '@components/google-workspace/GoogleIcons'
 
 const DOCS_URL = 'https://wedevs.com/docs/wp-project-manager/integrations/google-workspace/'
-
-const GoogleGlyph = (props) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
-    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z"/>
-    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/>
-    <path d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18a11 11 0 0 0 0 9.88l3.66-2.84z"/>
-    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1A11 11 0 0 0 2.18 7.06l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/>
-  </svg>
-)
-
 
 /**
  * Free, locked teaser for a Pro Google feature's settings (Calendar/Meet).
@@ -122,7 +113,7 @@ export default function GoogleWorkspaceSettingsTab() {
       <div className="mb-5 flex items-start justify-between gap-3">
         <div>
           <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-            <GoogleGlyph className="h-5 w-5 text-pm-accent" />
+            <GoogleMonoGlyph className="h-5 w-5 text-pm-accent" />
             {__('Google Workspace', 'wedevs-project-manager')}
           </h2>
           <p className="text-xs text-gray-500 mt-1">

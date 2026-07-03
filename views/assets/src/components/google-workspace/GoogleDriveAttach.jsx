@@ -15,34 +15,13 @@ import { fetchStatus, fetchCanUse, fetchAttachmentsFor, detachFileFor } from '@s
 import { Button } from '@components/ui/button'
 import { FileText, Plus, ExternalLink, Trash2, Link2, Lock, X } from 'lucide-react'
 import { toast } from 'sonner'
+import { GoogleDriveColorGlyph, DriveMonoGlyph } from '@components/google-workspace/GoogleIcons'
 import DrivePickerModal from './DrivePickerModal'
 
 const safeHttpUrl = (u) => {
   try { const p = new URL(u, window.location.origin); return (p.protocol === 'https:' || p.protocol === 'http:') ? p.href : '' }
   catch { return '' }
 }
-
-const DriveLogo = ({ className = 'h-4 w-4' }) => (
-  <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-    <path d="M12 17L15.2083 11.5L17.4718 7.61972L19.8 11.5L21.4109 14.1848C23.2105 17.1841 21.05 21 17.5521 21H14.3333L13.1667 19L12 17Z" fill="url(#pmgda_a)"/>
-    <path d="M8.79167 11.5L12 17L13.1667 19L14.3333 21H9.66667H6.44786C2.95003 21 0.789527 17.1841 2.58914 14.1848L4.2 11.5H8.79167Z" fill="url(#pmgda_b)"/>
-    <path d="M15.2083 11.5H8.79167H4.2L6.52817 7.61972L8.35566 4.57391C10.0064 1.82272 13.9936 1.82272 15.6443 4.57391L17.4718 7.61972L15.2083 11.5Z" fill="url(#pmgda_c)"/>
-    <defs>
-      <linearGradient id="pmgda_a" x1="15.2651" y1="11.2054" x2="21.5787" y2="18.5942" gradientUnits="userSpaceOnUse"><stop stopColor="#FECA06"/><stop offset="1" stopColor="#FFE31F"/></linearGradient>
-      <linearGradient id="pmgda_b" x1="8" y1="18.8492" x2="11.6122" y2="21.1175" gradientUnits="userSpaceOnUse"><stop stopColor="#3185FF"/><stop offset="1" stopColor="#A8A8FE"/></linearGradient>
-      <linearGradient id="pmgda_c" x1="10.1707" y1="8.85" x2="5.8286" y2="10.6011" gradientUnits="userSpaceOnUse"><stop stopColor="#16BC66"/><stop offset="1" stopColor="#78C9FF"/></linearGradient>
-    </defs>
-  </svg>
-)
-
-// Outlined Drive glyph for the compact (comment) add button.
-const MonoDrive = ({ className = 'h-3.5 w-3.5' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" className={className} aria-hidden="true">
-    <path d="M12 17L15.2083 11.5L17.4718 7.61972L19.8 11.5L21.4109 14.1848C23.2105 17.1841 21.05 21 17.5521 21H14.3333L13.1667 19L12 17Z"/>
-    <path d="M8.79167 11.5L12 17L13.1667 19L14.3333 21H9.66667H6.44786C2.95003 21 0.789527 17.1841 2.58914 14.1848L4.2 11.5H8.79167Z"/>
-    <path d="M15.2083 11.5H8.79167H4.2L6.52817 7.61972L8.35566 4.57391C10.0064 1.82272 13.9936 1.82272 15.6443 4.57391L17.4718 7.61972L15.2083 11.5Z"/>
-  </svg>
-)
 
 // Tiny "added by" avatar with tooltip — non-intrusive attribution.
 const AdderAvatar = ({ file }) => {
@@ -116,7 +95,7 @@ export default function GoogleDriveAttach({ projectId, attachableType, attachabl
         title={status.picker_ready ? __('Add from Drive', 'wedevs-project-manager') : __('Admin must add the API key and App ID first.', 'wedevs-project-manager')}
         onClick={openPicker}
       >
-        <Plus className="h-3.5 w-3.5" /> <MonoDrive className="h-3.5 w-3.5" />
+        <Plus className="h-3.5 w-3.5" /> <DriveMonoGlyph className="h-3.5 w-3.5" />
       </Button>
     ) : (
       <Button
@@ -175,7 +154,7 @@ export default function GoogleDriveAttach({ projectId, attachableType, attachabl
     <div className={variant === 'section' ? 'px-6 py-3 border-t border-gray-100' : ''}>
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
-          <DriveLogo className="h-4 w-4" />
+          <GoogleDriveColorGlyph className="h-4 w-4" aria-hidden="true" />
           {variant === 'section' && (title || __('Google Drive', 'wedevs-project-manager'))}
           {attachments.length > 0 && <span className="text-xs text-gray-400">({attachments.length})</span>}
         </div>

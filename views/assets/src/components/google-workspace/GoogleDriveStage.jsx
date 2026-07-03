@@ -9,15 +9,8 @@ import { useAppDispatch, useAppSelector } from '@store/index'
 import { fetchStatus, fetchCanUse } from '@store/googleWorkspaceSlice'
 import { Button } from '@components/ui/button'
 import { Plus, X, FileText, Link2 } from 'lucide-react'
+import { DriveSolidGlyph } from '@components/google-workspace/GoogleIcons'
 import DrivePickerModal from './DrivePickerModal'
-
-const MonoDrive = ({ className = 'h-3.5 w-3.5' }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
-    <path d="M12 17L15.2083 11.5L17.4718 7.61972L19.8 11.5L21.4109 14.1848C23.2105 17.1841 21.05 21 17.5521 21H14.3333L13.1667 19L12 17Z"/>
-    <path d="M8.79167 11.5L12 17L13.1667 19L14.3333 21H9.66667H6.44786C2.95003 21 0.789527 17.1841 2.58914 14.1848L4.2 11.5H8.79167Z"/>
-    <path d="M15.2083 11.5H8.79167H4.2L6.52817 7.61972L8.35566 4.57391C10.0064 1.82272 13.9936 1.82272 15.6443 4.57391L17.4718 7.61972L15.2083 11.5Z"/>
-  </svg>
-)
 
 export default function GoogleDriveStage({ projectId, value = [], onChange }) {
   const dispatch = useAppDispatch()
@@ -73,7 +66,7 @@ export default function GoogleDriveStage({ projectId, value = [], onChange }) {
           title={status.picker_ready ? __('Add from Drive', 'wedevs-project-manager') : __('Admin must add the API key and App ID first.', 'wedevs-project-manager')}
           onClick={openPicker}
         >
-          <Plus className="h-3.5 w-3.5" /> <MonoDrive className="h-3.5 w-3.5" />
+          <Plus className="h-3.5 w-3.5" /> <DriveSolidGlyph className="h-3.5 w-3.5" />
         </Button>
       ) : (
         <a href="#/google-workspace" className="text-xs text-blue-600 hover:underline inline-flex items-center gap-1">

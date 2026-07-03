@@ -7,15 +7,8 @@ import { __ } from '@wordpress/i18n'
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@store/index'
 import { fetchStatus, fetchCanUse, fetchAttachmentsFor } from '@store/googleWorkspaceSlice'
+import { DriveMonoGlyph } from '@components/google-workspace/GoogleIcons'
 import DrivePickerModal from './DrivePickerModal'
-
-const DriveGlyph = ({ className = 'h-3.5 w-3.5' }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" className={className} aria-hidden="true">
-    <path d="M12 17L15.2083 11.5L17.4718 7.61972L19.8 11.5L21.4109 14.1848C23.2105 17.1841 21.05 21 17.5521 21H14.3333L13.1667 19L12 17Z"/>
-    <path d="M8.79167 11.5L12 17L13.1667 19L14.3333 21H9.66667H6.44786C2.95003 21 0.789527 17.1841 2.58914 14.1848L4.2 11.5H8.79167Z"/>
-    <path d="M15.2083 11.5H8.79167H4.2L6.52817 7.61972L8.35566 4.57391C10.0064 1.82272 13.9936 1.82272 15.6443 4.57391L17.4718 7.61972L15.2083 11.5Z"/>
-  </svg>
-)
 
 export default function GoogleDriveCommentButton({ projectId, attachableType, attachableId, allowEdit = true, className = '' }) {
   const dispatch = useAppDispatch()
@@ -54,7 +47,7 @@ export default function GoogleDriveCommentButton({ projectId, attachableType, at
         title={__('Add from Google Drive', 'wedevs-project-manager')}
         className={`p-0.5 rounded hover:bg-muted text-pm-text-muted hover:text-pm-accent ${className}`}
       >
-        <DriveGlyph className="h-3.5 w-3.5" />
+        <DriveMonoGlyph className="h-3.5 w-3.5" />
       </button>
       {pickerOpen && (
         <DrivePickerModal
