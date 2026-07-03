@@ -30,7 +30,7 @@ class Comment_Transformer extends TransformerAbstract {
     public function transform( Comment $item ) {
         return [
             'id'               => (int) $item->id,
-            'content'          => wedevs_pm_get_content( $item->content ),
+            'content'          => apply_filters( 'wedevs_pm_comment_content_visibility', wedevs_pm_get_content( $item->content ), (int) $item->project_id ),
             'commentable_type' => $item->commentable_type,
             'commentable_id'   => $item->commentable_id,
             'created_at'       => wedevs_pm_format_date( $item->created_at ),

@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import { useApi } from '@hooks/useApi'
 import { usePermissions } from '@hooks/usePermissions'
 import { useActiveProModules, isProModuleActive, isProPluginInstalled } from '@hooks/useActiveProModules'
@@ -14,6 +15,7 @@ import {
   LayoutTemplate,
 } from 'lucide-react'
 import { cn } from '@lib/utils'
+import { DriveMonoGlyph as GoogleDriveNavIcon } from '@components/google-workspace/GoogleIcons'
 
 function statusColor(p) {
   const s = p.status
@@ -224,6 +226,15 @@ export function AppSidebar() {
   // Pro plugin installed (pm-pro.js loaded) — may or may not be licensed
   const isProInstalled = isProPluginInstalled()
 
+  // G Workspace nav visibility: show when the admin has enabled ANY feature
+  // (Drive, Calendar, or Meet). Prefer the live store (reacts to toggles this
+  // session); fall back to PM_Vars until status is first fetched.
+  const gwStatusFetched = useSelector(s => s.googleWorkspace?.statusFetched)
+  const gwStatus        = useSelector(s => s.googleWorkspace?.status)
+  const gwVars          = (typeof PM_Vars !== 'undefined' && PM_Vars.google_workspace) || {}
+  const anyFeature = (src) => !!(src && (src.drive_enabled || src.calendar_enabled || src.meet_enabled))
+  const workspaceNavEnabled = gwStatusFetched ? anyFeature(gwStatus) : anyFeature(gwVars)
+
   const viewNavItems = useMemo(() => {
     const isModuleActive = (dir) => isProModuleActive(activeModulePaths, dir)
     const items = [
@@ -238,8 +249,13 @@ export function AppSidebar() {
         items.push({ key: 'sprints', label: __('Sprints', 'wedevs-project-manager'), short: __('Sprint', 'wedevs-project-manager'), icon: Timer, route: '/sprints', pro: !isPro })
       }
     }
+    // Google Workspace — free feature, shown to everyone when the admin has
+    // enabled Google Drive in Settings → Google Workspace.
+    if (workspaceNavEnabled) {
+      items.push({ key: 'google-workspace', label: __('G Workspace', 'wedevs-project-manager'), short: __('Workspace', 'wedevs-project-manager'), icon: GoogleDriveNavIcon, route: '/google-workspace' })
+    }
     return items
-  }, [__, isPro, activeModulePaths, canManage, isManagerAnywhere])
+  }, [__, isPro, activeModulePaths, canManage, isManagerAnywhere, workspaceNavEnabled])
 
   // Auto-collapse sidebar on full-width pages (reports, calendar, progress, sprints)
   const autoCollapsedRef = useRef(false)
@@ -284,6 +300,7 @@ export function AppSidebar() {
     if (path.startsWith('/progress')) return 'progress'
     if (path.startsWith('/reports'))  return 'reports'
     if (path.startsWith('/sprints'))  return 'sprints'
+    if (path.startsWith('/google-workspace')) return 'google-workspace'
     if (path.startsWith('/templates')) return 'templates'
     if (path.startsWith('/importtools')) return 'importtools'
     if (path.startsWith('/license')) return 'license'
@@ -315,7 +332,7 @@ export function AppSidebar() {
         )}
         title={item.label}
       >
-        <Icon className={cn('shrink-0', collapsed ? 'w-[18px] h-[18px]' : 'w-[18px] h-[18px]', isActive ? 'text-pm-accent' : 'text-pm-text-muted')} />
+        <Icon className={cn('shrink-0', collapsed ? 'w-[18px] h-[18px]' : 'w-[18px] h-[18px]', !collapsed && item.key === 'google-workspace' && 'self-start mt-[3px]', isActive ? 'text-pm-accent' : 'text-pm-text-muted')} />
         {collapsed
           ? <span className={cn('text-[10px] font-medium leading-none', isActive ? 'text-pm-accent' : 'text-pm-text-muted')}>{item.short ?? item.label}</span>
           : <TruncText className="text-[15px]">{item.label}</TruncText>

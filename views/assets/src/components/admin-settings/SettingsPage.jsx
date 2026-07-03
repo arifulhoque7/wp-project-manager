@@ -9,6 +9,7 @@ import {
   Settings, Mail, ListTodo, Bot, Radio,
   FileText, ShoppingCart, PanelLeftClose, PanelLeftOpen,
 } from 'lucide-react'
+import { DriveMonoGlyph as GoogleWorkspaceNavIcon } from '@components/google-workspace/GoogleIcons'
 
 // Brand SVG icons for settings nav (not available as non-deprecated lucide icons)
 const GitHubNavIcon = (props) => (
@@ -38,6 +39,7 @@ const NotionSettingsTab  = lazy(() => import('./tabs/NotionSettingsTab'))
 const LoomSettingsTab    = lazy(() => import('./tabs/LoomSettingsTab'))
 const InvoiceSettingsTab  = lazy(() => import('./tabs/InvoiceSettingsTab'))
 const PagesSettingsTab    = lazy(() => import('./tabs/PagesSettingsTab'))
+const GoogleWorkspaceSettingsTab = lazy(() => import('./tabs/GoogleWorkspaceSettingsTab'))
 
 // ── Tab → Component map ──────────────────────────────────────
 const tabComponents = {
@@ -49,6 +51,7 @@ const tabComponents = {
   'github':       GitHubSettingsTab,
   'notion':       NotionSettingsTab,
   'loom':         LoomSettingsTab,
+  'google-workspace': GoogleWorkspaceSettingsTab,
   'invoices':     InvoiceSettingsTab,
   'pages':        PagesSettingsTab,
   'woo-project':  null, // injected by pm-pro via filter
@@ -94,6 +97,7 @@ const SettingsPage = () => {
   const showWooTab = !isPro || isWooModuleActive
 
   const integrationTabs = [
+    { key: 'google-workspace', label: __('G Workspace', 'wedevs-project-manager'), icon: GoogleWorkspaceNavIcon },
     { key: 'pusher',  label: __('Pusher',   'wedevs-project-manager'), icon: Radio },
     { key: 'github',  label: __('GitHub',   'wedevs-project-manager'), icon: GitHubNavIcon },
     { key: 'notion',  label: __('Notion',   'wedevs-project-manager'), icon: NotionNavIcon },

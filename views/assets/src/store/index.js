@@ -5,6 +5,7 @@ import projectsReducer from './projectsSlice'
 import taskListsReducer from './taskListsSlice'
 import tasksReducer from './tasksSlice'
 import milestonesReducer from './milestonesSlice'
+import googleWorkspaceReducer from './googleWorkspaceSlice'
 import kanbanReducer from './kanbanSlice'
 
 // Re-export for convenience
@@ -17,6 +18,7 @@ const staticReducers = {
   taskLists:  taskListsReducer,
   tasks:      tasksReducer,
   milestones: milestonesReducer,
+  googleWorkspace: googleWorkspaceReducer,
   kanban:     kanbanReducer,
 }
 
