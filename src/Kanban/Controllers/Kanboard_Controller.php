@@ -467,45 +467,6 @@ class Kanboard_Controller {
 
     static function after_new_comment( $response, $params ) {
         return $response;
-        if( $params['commentable_type'] == 'task' ) {
-
-            $project_id = empty( $params['project_id'] ) ? 0 : intval( $params['project_id'] );
-            $task_id = $params['commentable_id'];
-
-            $metas = \WeDevs\PM\Common\Models\Meta::where( 'project_id', $project_id )
-                ->where( 'entity_type',  'kanboard' )
-                ->where( 'meta_key', 'automation' )
-                ->get()
-                ->toArray();
-
-            foreach ( $metas as $key => $meta ) {
-                $meta_value = $meta['meta_value'];
-                $type = empty( $meta_value['type'] ) ? false : $meta_value['type'];
-
-                if ( $type != 'in_progress' ) {
-                    continue;
-                }
-
-                $column_id = $meta['entity_id'];
-                $meta_project = $meta['project_id'];
-                $meta_value['users'] = empty( $meta_value['users'] ) ? [] : $meta_value['users'];
-
-                if ( $meta_project == $project_id ) {
-                    $has_task = Boardable::where('board_id', '!=', $column_id)
-                        ->where('board_type', 'kanboard')
-                        ->where('boardable_id', $task_id)
-                        ->first();
-
-                    if( $has_task ) {
-                        $has_task->delete();
-                    }
-
-                    self::getInstance()->store_column_task( $column_id, $project_id, $task_id );
-                    self::getInstance()->automaiton_add_users( $meta_value['users'], $task_id, $project_id );
-                }
-            }
-
-        }
     }
 
     function automation( WP_REST_Request $request ) {
