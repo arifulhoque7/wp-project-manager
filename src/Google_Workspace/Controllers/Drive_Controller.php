@@ -20,6 +20,10 @@ class Drive_Controller {
 
     /** GET google-workspace/drive/picker-config */
     public function picker_config( WP_REST_Request $request ) {
+        if ( ! Google_Service::drive_enabled() ) {
+            return new \WP_Error( 'pm_google_drive_disabled', __( 'Google Drive integration is disabled.', 'wedevs-project-manager' ), [ 'status' => 403 ] );
+        }
+
         if ( ! Google_Service::picker_ready() ) {
             return new \WP_Error( 'pm_google_not_ready', __( 'Google Picker is not fully configured. An administrator must add the API key and App ID.', 'wedevs-project-manager' ), [ 'status' => 400 ] );
         }

@@ -17,6 +17,11 @@ import { FileText, Plus, ExternalLink, Trash2, Link2, Lock, X } from 'lucide-rea
 import { toast } from 'sonner'
 import DrivePickerModal from './DrivePickerModal'
 
+const safeHttpUrl = (u) => {
+  try { const p = new URL(u, window.location.origin); return (p.protocol === 'https:' || p.protocol === 'http:') ? p.href : '' }
+  catch { return '' }
+}
+
 const DriveLogo = ({ className = 'h-4 w-4' }) => (
   <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
     <path d="M12 17L15.2083 11.5L17.4718 7.61972L19.8 11.5L21.4109 14.1848C23.2105 17.1841 21.05 21 17.5521 21H14.3333L13.1667 19L12 17Z" fill="url(#pmgda_a)"/>
@@ -150,7 +155,7 @@ export default function GoogleDriveAttach({ projectId, attachableType, attachabl
         {attachments.map(file => (
           <span key={file.id} className="inline-flex items-center gap-1 rounded border border-gray-200 bg-gray-50 pl-1.5 pr-1 py-0.5 text-xs text-gray-700 max-w-[220px]">
             <FileIcon file={file} className="h-3.5 w-3.5 shrink-0" />
-            <a href={file.web_view_link} target="_blank" rel="noreferrer" className="truncate hover:text-blue-600" title={file.name}>{file.name}</a>
+            <a href={safeHttpUrl(file.web_view_link)} target="_blank" rel="noreferrer" className="truncate hover:text-blue-600" title={file.name}>{file.name}</a>
             <AdderAvatar file={file} />
             {canEdit && (
               <button onClick={() => onDetach(file.id)} className="text-gray-400 hover:text-red-600" title={__('Remove', 'wedevs-project-manager')}>
@@ -185,11 +190,11 @@ export default function GoogleDriveAttach({ projectId, attachableType, attachabl
             {(expanded ? attachments : attachments.slice(0, MAX_VISIBLE)).map(file => (
               <li key={file.id} className="group flex items-center gap-2 rounded px-2 py-1.5 hover:bg-gray-50">
                 <FileIcon file={file} />
-                <a href={file.web_view_link} target="_blank" rel="noreferrer" className="flex-1 truncate text-sm text-gray-700 hover:text-blue-600 hover:underline" title={file.name}>
+                <a href={safeHttpUrl(file.web_view_link)} target="_blank" rel="noreferrer" className="flex-1 truncate text-sm text-gray-700 hover:text-blue-600 hover:underline" title={file.name}>
                   {file.name}
                 </a>
                 <AdderAvatar file={file} />
-                <a href={file.web_view_link} target="_blank" rel="noreferrer" className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-blue-600">
+                <a href={safeHttpUrl(file.web_view_link)} target="_blank" rel="noreferrer" className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-blue-600">
                   <ExternalLink className="h-3.5 w-3.5" />
                 </a>
                 {canEdit && (
