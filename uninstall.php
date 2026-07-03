@@ -2,26 +2,17 @@
 /**
  * Uninstall cleanup.
  *
- * Currently scoped to the Google Workspace integration: removes its tables,
- * options, and scheduled cron. Core Project Manager data is intentionally
- * left intact.
+ * User data is intentionally preserved on uninstall — Google Workspace tokens,
+ * Drive attachments, settings, and all core Project Manager data survive a
+ * delete/reinstall. Only the scheduled cleanup cron is cleared, since a dangling
+ * schedule for removed code is not user data.
  */
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
     exit;
 }
 
-global $wpdb;
-
-// Google Workspace tables.
-$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}pm_google_tokens" );
-$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}pm_google_drive_files" );
-
-// Google Workspace options.
-delete_option( 'pm_google_workspace_settings' );
-delete_option( 'pm_google_workspace_db_version' );
-
-// Scheduled cleanup cron.
+// Clear the scheduled cleanup cron only. No tables are dropped, no options deleted.
 $timestamp = wp_next_scheduled( 'pm_google_workspace_cleanup' );
 if ( $timestamp ) {
     wp_unschedule_event( $timestamp, 'pm_google_workspace_cleanup' );
