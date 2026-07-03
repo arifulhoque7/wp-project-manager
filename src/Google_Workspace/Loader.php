@@ -19,6 +19,9 @@ class Loader {
         add_action( 'admin_post_pm_google_oauth_callback', [ $this, 'handle_oauth_callback' ] );
         add_action( 'admin_init', [ $this, 'maybe_install' ] );
 
+        // Hide Google links in comments from users without Drive access in the project.
+        add_filter( 'wedevs_pm_comment_content_visibility', [ $this, 'hide_google_links_without_access' ], 10, 2 );
+
         // Remove Drive attachments when their parent entity is deleted.
         add_action( 'wedevs_cpm_comment_delete', [ $this, 'cleanup_comment_attachments' ], 10, 1 );
         add_action( 'wedevs_pm_after_delete_task', [ $this, 'cleanup_task_attachments' ], 10, 1 );
@@ -29,6 +32,42 @@ class Loader {
         if ( ! wp_next_scheduled( self::CLEANUP_HOOK ) ) {
             wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', self::CLEANUP_HOOK );
         }
+    }
+
+    /**
+     * Strip Google Drive/Docs/Meet links from comment content for users who
+     * lack Drive access in the project. Reuses the existing per-project role
+     * permission (Google_Service::user_can_use_drive) — managers/admins pass,
+     * co_worker/client are gated by the project access map. The URL is removed
+     * server-side, so it never reaches the response.
+     *
+     * @param string $content    Comment HTML.
+     * @param int    $project_id Owning project id.
+     * @return string
+     */
+    public function hide_google_links_without_access( $content, $project_id ) {
+        if ( ! is_string( $content ) || $content === '' ) {
+            return $content;
+        }
+
+        // Cheap short-circuit: only pay the permission lookup when a Google link is present.
+        if ( strpos( $content, 'google.com' ) === false ) {
+            return $content;
+        }
+
+        if ( Google_Service::user_can_use_drive( (int) $project_id ) ) {
+            return $content;
+        }
+
+        // Replace each Google anchor with its plain visible text (drops the href).
+        return preg_replace_callback(
+            '#<a\b[^>]*href=(["\'])https?://[^"\']*(?:drive\.google\.com|docs\.google\.com|meet\.google\.com)[^"\']*\1[^>]*>(.*?)</a>#is',
+            function ( $m ) {
+                $text = trim( wp_strip_all_tags( $m[2] ) );
+                return $text === '' ? '' : esc_html( $text );
+            },
+            $content
+        );
     }
 
     public function run_cleanup() {
