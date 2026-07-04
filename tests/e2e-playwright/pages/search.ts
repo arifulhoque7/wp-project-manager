@@ -8,8 +8,14 @@ export class SearchPage extends Base {
   }
 
   async openSearch() {
-    await this.validateAndClickAny(Selectors.search.trigger);
-    await this.assertionValidate(Selectors.search.input);
+    const trigger = this.page.locator(Selectors.search.trigger).first();
+    if (await trigger.isVisible().catch(() => false)) {
+      await trigger.click();
+    } else {
+      // Fallback: the ⌘K / Ctrl+K global shortcut opens the command palette.
+      await this.page.keyboard.press('Control+k');
+    }
+    await this.page.locator(Selectors.search.input).first().waitFor();
   }
 
   async search(text: string) {

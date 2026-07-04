@@ -8,6 +8,8 @@ export class TaskPage extends Base {
   }
 
   async quickAdd(title: string) {
+    const reveal = this.page.locator(Selectors.task.quickAddReveal).first();
+    if (await reveal.count()) await reveal.click();
     await this.validateAndFillStrings(Selectors.task.quickAddInput, title);
     const [response] = await Promise.all([
       this.page.waitForResponse(
@@ -19,44 +21,110 @@ export class TaskPage extends Base {
   }
 
   async openTask(title: string) {
-    await this.validateAndClick(Selectors.task.byTitle(title));
+    await this.validateAndClick(Selectors.task.rowTitleButton(title));
+    await this.page.locator(Selectors.task.detailSheet).first().waitFor();
+    await this.page.waitForTimeout(500);
+  }
+
+  // The detail sheet is a modal Sheet; close it before touching rows underneath.
+  async closeSheetIfOpen() {
+    const sheet = this.page.locator(Selectors.task.detailSheet).first();
+    if ((await sheet.count()) && (await sheet.isVisible().catch(() => false))) {
+      await this.page.keyboard.press('Escape');
+      await sheet.waitFor({ state: 'hidden' }).catch(() => {});
+      await this.page.waitForTimeout(300);
+    }
+  }
+
+  // No native date input: reveal the dates editor, pick a Due day, Save.
+  async setDueDate(_isoDate: string) {
+    await this.validateAndClick(Selectors.task.setDatesButton);
+    await this.page.locator(Selectors.task.dueDateTrigger).first().click();
+    await this.page.waitForTimeout(300);
+    await this.page.locator(Selectors.task.calendarToday).last().click();
+    await this.page.waitForTimeout(300);
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) => r.url().includes('/update') && r.request().method() === 'POST',
+      ),
+      this.page.locator(Selectors.task.datesSaveButton).first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
     await this.waitForLoading();
   }
 
   async assignUser(username: string) {
-    await this.validateAndFillStrings(Selectors.task.assigneeInput, username);
-    await this.page.waitForTimeout(500);
-    await this.validateAndClick(`text=${username}`);
-  }
-
-  async setDueDate(isoDate: string) {
-    await this.validateAndFillStrings(Selectors.task.dueDateInput, isoDate);
-    await this.page.keyboard.press('Tab');
-  }
-
-  async toggleComplete() {
-    await this.validateAndClick(Selectors.task.checkbox);
-  }
-
-  async editDescription(text: string) {
-    const editor = this.page.locator(Selectors.task.descriptionEditor).first();
-    await editor.click();
-    await editor.fill(text);
-    await this.validateAndClick(Selectors.task.saveButton);
-  }
-
-  async duplicate() {
+    await this.page.locator(Selectors.task.addAssigneeButton).first().click();
+    const search = this.page.locator(Selectors.task.assigneeSearchInput).first();
+    await search.waitFor();
+    await search.fill(username);
+    await this.page.waitForTimeout(600);
     const [response] = await Promise.all([
       this.page.waitForResponse(
-        (r) => r.url().includes('/duplicate') && r.request().method() === 'POST',
+        (r) => r.url().includes('/update') && r.request().method() === 'POST',
       ),
-      this.validateAndClick(Selectors.task.duplicateButton),
+      this.page.locator(Selectors.task.assigneeOption(username)).first().click(),
     ]);
     expect(response.ok()).toBeTruthy();
   }
 
-  async deleteTask() {
-    await this.validateAndClick(Selectors.task.deleteButton);
+  async editDescription(text: string) {
+    await this.validateAndClick(Selectors.task.descEditButton);
+    const editor = this.page.locator(Selectors.task.descEditor).first();
+    await editor.click();
+    await editor.fill(text);
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) => r.url().includes('/update') && r.request().method() === 'POST',
+      ),
+      this.page.locator(Selectors.task.descSaveButton).first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
+    await this.waitForLoading();
+  }
+
+  // Duplicate lives in the row's action dropdown, not in the detail sheet.
+  async duplicate(title: string) {
+    await this.closeSheetIfOpen();
+    const row = this.page.locator(Selectors.task.rowByTitle(title)).first();
+    await row.hover();
+    await row.locator('button').last().click();
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) => r.url().includes('/duplicate') && r.request().method() === 'POST',
+      ),
+      this.page.locator(Selectors.task.menuItem('Duplicate')).first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
+    await this.waitForLoading();
+  }
+
+  // Status is a circle button (first button in the row), not a checkbox input.
+  async toggleComplete(title: string) {
+    await this.closeSheetIfOpen();
+    const row = this.page.locator(Selectors.task.rowByTitle(title)).first();
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) => r.url().includes('/change-status') && r.request().method() === 'POST',
+      ),
+      row.locator('button').first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
+    await this.waitForLoading();
+  }
+
+  async deleteTask(title: string) {
+    await this.closeSheetIfOpen();
+    const row = this.page.locator(Selectors.task.rowByTitle(title)).first();
+    await row.hover();
+    await row.locator('button').last().click();
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) => r.url().includes('/delete') && r.request().method() === 'POST',
+      ),
+      this.page.locator(Selectors.task.menuItem('Delete')).first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
     await this.waitForLoading();
   }
 

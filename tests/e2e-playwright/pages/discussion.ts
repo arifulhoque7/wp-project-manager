@@ -30,7 +30,13 @@ export class DiscussionPage extends Base {
     const editor = this.page.locator(Selectors.discussion.commentInput).first();
     await editor.click();
     await editor.fill(body);
-    await this.validateAndClick(Selectors.discussion.commentSubmit);
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) => r.url().includes('/comments') && r.request().method() === 'POST',
+      ),
+      this.page.locator(Selectors.discussion.commentSubmit).first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
     await this.waitForLoading();
   }
 

@@ -27,78 +27,114 @@ export const Selectors = {
 
   project: {
     modalRoot: '[role="dialog"], .pm-modal',
-    titleInput: 'input[name="title"], input[placeholder*="Project" i]',
+    titleInput: 'input[placeholder="Enter project name"], input[name="title"], input[placeholder*="Project" i]',
     descriptionInput: 'textarea[name="description"], textarea[placeholder*="Description" i]',
     createSubmit: 'button:has-text("Create Project"), button:has-text("Save")',
     cardByTitle: (title: string) => `text=${title}`,
-    starButton: '[data-test="favorite-project"], button[aria-label*="favorite" i]',
-    deleteButton: 'button:has-text("Delete")',
-    confirmDelete: 'button:has-text("Yes"), button:has-text("Confirm")',
-    editButton: 'button:has-text("Edit")',
-    archiveButton: 'button:has-text("Archive")',
-    completeToggle: 'button:has-text("Mark Complete"), button:has-text("Mark as Complete")',
+    // Each project card is a `.group` container whose h3 carries the title.
+    cardRoot: (title: string) => `div.group:has(h3:has-text("${title}"))`,
+    starButton: (title: string) =>
+      `div.group:has(h3:has-text("${title}")) button:has(svg.lucide-star)`,
+    menuTrigger: (title: string) =>
+      `div.group:has(h3:has-text("${title}")) button:has(svg.lucide-ellipsis)`,
+    // Radix menu content is portaled; scope to it so WP admin-bar menuitems don't collide.
+    menuItem: (label: string) => `[data-radix-menu-content] [role="menuitem"]:has-text("${label}")`,
+    confirmDelete: '[role="dialog"] button:has-text("Delete")',
     searchInput: 'input[placeholder*="Search" i]',
   },
 
   taskList: {
-    newButton: 'button:has-text("New Task List"), button:has-text("Add Task List")',
-    titleInput: 'input[placeholder*="List Title" i], input[name="list_title"]',
+    newButton: 'button:has-text("New List"), button:has-text("New Task List"), button:has-text("Add Task List")',
+    titleInput: 'input[placeholder="Task list name"], input[placeholder*="list name" i], input[name="list_title"]',
     descriptionInput: 'textarea[placeholder*="Description" i]',
-    saveButton: 'button:has-text("Save List"), button:has-text("Save")',
+    saveButton: 'button:has-text("Add List"):not([disabled]), button:has-text("Save List"), button:has-text("Save")',
     byTitle: (title: string) => `text=${title}`,
-    deleteMenu: 'button[aria-label*="more" i], button[aria-label*="options" i]',
-    deleteAction: 'button:has-text("Delete List"), a:has-text("Delete List")',
+    // A list section header is a flex div whose direct-child h3 carries the title.
+    menuTrigger: (title: string) =>
+      `div:has(> h3:has-text("${title}")) button:has(svg.lucide-ellipsis)`,
+    deleteMenuItem: '[data-radix-menu-content] [role="menuitem"]:has-text("Delete")',
+    // Delete goes through a useConfirm AlertDialog with a "Confirm" action.
+    confirmDelete: '[role="alertdialog"] button:has-text("Confirm")',
   },
 
   task: {
-    quickAddInput: 'input[placeholder*="Task" i]',
+    quickAddReveal: 'button:has-text("Add a task")',
+    quickAddInput: 'input[placeholder*="Task name" i]',
     quickAddSubmit: 'button:has-text("Add Task")',
     byTitle: (title: string) => `text=${title}`,
+    // A task row is a `.group` flex div whose direct-child title button carries the title.
+    rowByTitle: (title: string) => `div.group:has(> button:has-text("${title}"))`,
+    rowTitleButton: (title: string) => `div.group > button:has-text("${title}")`,
+    detailSheet: '[role="dialog"]',
+    // Detail sheet — Dates: click "Set dates", pick a Due date, Save (no native date input)
+    setDatesButton: '[role="dialog"] button:has-text("Set dates"), [role="dialog"] button:has-text("→")',
+    dueDateTrigger: '[role="dialog"] button:has-text("Due")',
+    calendarToday: 'button:has-text("Today")',
+    datesSaveButton: '[role="dialog"] button:has-text("Save")',
+    // Detail sheet — Assignees: click "Add", search, pick member from dropdown
+    addAssigneeButton: '[role="dialog"] button:has-text("Add")',
+    assigneeSearchInput: '[role="dialog"] input[placeholder*="Search members" i]',
+    assigneeOption: (name: string) =>
+      `[role="dialog"] [class*="overflow-y-auto"] button:has-text("${name}")`,
+    // Detail sheet — Description: Add/Edit button beside the Description heading, then Tiptap editor
+    descEditButton: '[role="dialog"] div:has(> h4:has-text("Description")) > button',
+    descEditor: '[role="dialog"] .ProseMirror',
+    descSaveButton: '[role="dialog"] button:has-text("Save")',
+    // Row dropdown menu items (rendered in the portal as menuitems)
+    menuItem: (label: string) => `[role="menuitem"]:has-text("${label}")`,
+    // Legacy aliases kept for other specs
     checkbox: 'input[type="checkbox"]',
     detailModal: '[role="dialog"]',
-    assigneeInput: 'input[placeholder*="Assign" i]',
-    dueDateInput: 'input[type="date"], input[placeholder*="Due" i]',
-    prioritySelect: 'select[name="priority"], button:has-text("Priority")',
-    duplicateButton: 'button:has-text("Duplicate")',
-    deleteButton: 'button:has-text("Delete Task")',
-    descriptionEditor: '.ProseMirror, [contenteditable="true"]',
+    descriptionEditor: '[role="dialog"] .ProseMirror, .ProseMirror, [contenteditable="true"]',
     saveButton: 'button:has-text("Save")',
     attachFileInput: 'input[type="file"]',
   },
 
   milestone: {
     newButton: 'button:has-text("New Milestone"), button:has-text("Add Milestone")',
-    titleInput: 'input[placeholder*="Milestone" i], input[name="milestone_title"]',
-    descriptionInput: 'textarea[placeholder*="Description" i]',
-    saveButton: 'button:has-text("Save Milestone"), button:has-text("Save")',
+    titleInput: 'input[placeholder*="Milestone title" i], input[placeholder*="Milestone" i]',
+    // Description is a Tiptap RichTextEditor inside the create dialog, not a textarea.
+    descriptionEditor: '[role="dialog"] .ProseMirror',
+    saveButton:
+      'button:has-text("Create Milestone"), button:has-text("Save Milestone"), button:has-text("Save")',
     byTitle: (title: string) => `text=${title}`,
-    completeToggle: 'button:has-text("Mark Complete")',
+    menuTrigger: 'button[aria-label="More actions"]',
+    markComplete: '[data-radix-menu-content] [role="menuitem"]:has-text("Mark Complete")',
   },
 
   discussion: {
     newButton: 'button:has-text("New Discussion"), button:has-text("New Message")',
-    titleInput: 'input[placeholder*="Title" i], input[name="discussion_title"]',
+    titleInput:
+      'input[placeholder*="message title" i], input[placeholder*="discussion" i], input[placeholder*="Title" i]',
     bodyEditor: '.ProseMirror, [contenteditable="true"]',
-    submitButton: 'button:has-text("Post"), button:has-text("Submit")',
+    submitButton:
+      'button:has-text("Add Message"), button:has-text("Post"), button:has-text("Submit")',
     byTitle: (title: string) => `text=${title}`,
-    commentInput: 'textarea[placeholder*="Comment" i], [contenteditable="true"]',
-    commentSubmit: 'button:has-text("Comment"), button:has-text("Reply")',
+    // Comment box on the discussion detail page: Tiptap editor + a Send icon button.
+    commentInput: '.ProseMirror, [contenteditable="true"]',
+    commentSubmit: 'button:has(svg.lucide-send)',
     mentionTrigger: '@',
   },
 
   category: {
-    newInput: 'input[placeholder*="Category" i], input[name="category"]',
-    submit: 'button:has-text("Add"), button:has-text("Save")',
+    newButton: 'button:has-text("New Category"), button:has-text("Add Category")',
+    newInput:
+      '[role="dialog"] input[placeholder*="Category name" i], input[placeholder*="Category name" i], input[name="category"]',
+    submit:
+      '[role="dialog"] button:has-text("Create Category"), [role="dialog"] button:has-text("Save")',
     byName: (name: string) => `text=${name}`,
   },
 
   settings: {
-    emailTab: 'a:has-text("Email"), button:has-text("Email")',
-    taskTypesTab: 'a:has-text("Task Types"), button:has-text("Task Types")',
-    aiTab: 'a:has-text("AI"), button:has-text("AI Settings")',
+    emailTab: 'button:has-text("Email")',
+    taskTypesTab: 'button:has-text("Task Types")',
+    aiTab: 'button:has-text("AI Settings")',
     saveButton: 'button:has-text("Save Changes"), button:has-text("Save")',
-    aiProviderSelect: 'select[name="ai_provider"]',
-    aiApiKeyInput: 'input[name="ai_api_key"], input[placeholder*="API Key" i]',
+    // General tab Save is disabled until the form is dirty — a Switch makes it dirty.
+    generalSwitch: '[role="switch"]',
+    // AI tab uses a shadcn Select (not native) and a Tiptap-free Input#ai_api_key.
+    aiApiKeyInput: '#ai_api_key',
+    aiChangeKeyButton: 'button[title="Change API Key"]',
   },
 
   myTasks: {
@@ -135,10 +171,13 @@ export const Selectors = {
     upsellHeading: 'text=Project Activities',
     emptyState: 'text=No activities yet',
     item: '[data-test="activity-item"], .pm-activity-item',
+    // Pro active + unlicensed gates the activity feed behind the License page.
+    licenseGate: 'h2:has-text("License"), h1:has-text("License")',
   },
 
   search: {
-    trigger: 'button:has-text("Search..."), button:has-text("Search projects and tasks")',
+    trigger:
+      'button:has-text("Search projects and tasks"), button:has-text("Search..."), button:has-text("Search")',
     input: '[role="dialog"] input[placeholder*="Search projects" i]',
     dialog: '[role="dialog"]:has(input[placeholder*="Search projects" i])',
     groupHeading: (name: string) => `[role="dialog"] :text("${name}")`,

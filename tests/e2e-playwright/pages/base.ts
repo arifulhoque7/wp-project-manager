@@ -169,7 +169,8 @@ export class Base {
   // Wait for PM SPA to hydrate and first /pm/v2/projects response to settle
   async waitForPmSpa() {
     try {
-      await this.page.waitForSelector('#wedevs-project-manager', { timeout: 30000 });
+      // 60s: under sustained suite load the admin bundle can take >30s to hydrate.
+      await this.page.waitForSelector('#wedevs-project-manager', { timeout: 60000 });
       await this.page
         .waitForResponse(
           (r) => r.url().includes('/wp-json/pm/v2/projects') && r.status() < 500,

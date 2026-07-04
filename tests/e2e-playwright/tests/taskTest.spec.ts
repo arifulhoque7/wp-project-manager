@@ -66,17 +66,16 @@ test.describe('Tasks CRUD & Actions', () => {
 
   test('TK0006 : Duplicate task', async () => {
     const tk = new TaskPage(page);
-    await tk.duplicate();
+    await tk.duplicate(taskA.title);
   });
 
   test('TK0007 : Toggle complete', async () => {
     const tk = new TaskPage(page);
-    await tk.toggleComplete();
+    await tk.toggleComplete(taskA.title);
   });
 
   test('TK0008 : Delete second task', async () => {
     const tk = new TaskPage(page);
-    await tk.openTask(taskB.title);
-    await tk.deleteTask();
+    await tk.deleteTask(taskB.title);
   });
 });

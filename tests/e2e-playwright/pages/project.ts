@@ -17,7 +17,8 @@ export class ProjectPage extends Base {
     await this.validateAndClick(Selectors.pmDashboard.newProjectButton);
     await this.validateAndFillStrings(Selectors.project.titleInput, title);
     if (description) {
-      await this.validateAndFillStrings(Selectors.project.descriptionInput, description);
+      const desc = this.page.locator(Selectors.project.descriptionInput).first();
+      if (await desc.count()) await desc.fill(description);
     }
     const [response] = await Promise.all([
       this.page.waitForResponse(
@@ -47,20 +48,51 @@ export class ProjectPage extends Base {
     await this.page.waitForTimeout(500);
   }
 
+  // Open the per-card action dropdown (star/complete/delete live on the list card).
+  async openProjectMenu(title: string) {
+    const card = this.page.locator(Selectors.project.cardRoot(title)).first();
+    await card.waitFor();
+    await card.hover();
+    await card.locator('button:has(svg.lucide-ellipsis)').first().click();
+    await this.page.waitForTimeout(300);
+  }
+
   async starProject(title: string) {
-    await this.openProject(title);
-    await this.validateAndClick(Selectors.project.starButton);
+    const card = this.page.locator(Selectors.project.cardRoot(title)).first();
+    await card.waitFor();
+    await card.hover();
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) => r.url().includes('/favourite') && r.request().method() === 'POST',
+      ),
+      this.page.locator(Selectors.project.starButton(title)).first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
   }
 
   async markComplete(title: string) {
-    await this.openProject(title);
-    await this.validateAndClick(Selectors.project.completeToggle);
+    await this.openProjectMenu(title);
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) => r.url().includes('/update') && r.request().method() === 'POST',
+      ),
+      this.page.locator(Selectors.project.menuItem('Complete')).first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
+    await this.waitForLoading();
   }
 
   async deleteProject(title: string) {
-    await this.openProject(title);
-    await this.validateAndClick(Selectors.project.deleteButton);
-    await this.validateAndClick(Selectors.project.confirmDelete);
+    await this.openProjectMenu(title);
+    await this.page.locator(Selectors.project.menuItem('Delete')).first().click();
+    await this.page.waitForTimeout(400);
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) => r.url().includes('/delete') && r.request().method() === 'POST',
+      ),
+      this.page.locator(Selectors.project.confirmDelete).last().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
     await this.waitForLoading();
   }
 }

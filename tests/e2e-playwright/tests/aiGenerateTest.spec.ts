@@ -30,6 +30,8 @@ test.describe('AI Task Generation', () => {
   configureSpecFailFast();
 
   test('AI0001 : Stub AI endpoint and trigger generate', async () => {
+    // The AI generator (projects-list "AI Create" dialog) expects a task_groups
+    // shape and renders the result as editable inputs in a preview step.
     await page.route(`**${RestPaths.aiGenerate}`, async (route) => {
       await route.fulfill({
         status: 200,
@@ -37,7 +39,8 @@ test.describe('AI Task Generation', () => {
         body: JSON.stringify({
           success: true,
           data: {
-            task_lists: [
+            title: 'AI-Generated Project',
+            task_groups: [
               {
                 title: 'AI-Generated List',
                 tasks: [
@@ -52,25 +55,26 @@ test.describe('AI Task Generation', () => {
       });
     });
 
-    const aiBtn = page
-      .locator('button:has-text("Generate with AI"), button:has-text("AI Generate"), button:has-text("AI")')
-      .first();
-    await aiBtn.click();
-
-    await page
-      .locator('textarea[placeholder*="describe" i], textarea')
+    const proj = new ProjectPage(page);
+    await proj.openProjectsList();
+    await page.locator('button:has-text("AI Create")').first().click();
+    const dialog = page.locator('[role="dialog"]').first();
+    await dialog.waitFor();
+    await dialog
+      .locator('textarea')
       .first()
       .fill('Build a QA plan for weekly regression runs');
 
     const [response] = await Promise.all([
       page.waitForResponse((r) => r.url().includes('/projects/ai/generate')),
-      page.locator('button:has-text("Generate")').last().click(),
+      dialog.locator('button:has-text("Generate")').first().click(),
     ]);
     expect(response.ok()).toBeTruthy();
   });
 
-  test('AI0002 : Generated list appears in project', async () => {
-    await expect(page.locator('text=AI-Generated List').first()).toBeVisible();
-    await expect(page.locator('text=AI task one').first()).toBeVisible();
+  test('AI0002 : Generated list appears in preview', async () => {
+    // Preview renders list/task titles as editable inputs, not static text.
+    await expect(page.locator('input[value="AI-Generated List"]').first()).toBeVisible();
+    await expect(page.locator('input[value="AI task one"]').first()).toBeVisible();
   });
 });

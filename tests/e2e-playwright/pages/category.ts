@@ -9,7 +9,10 @@ export class CategoryPage extends Base {
 
   async create(name: string) {
     await this.openCategoriesPage();
-    await this.validateAndFillStrings(Selectors.category.newInput, name);
+    await this.validateAndClick(Selectors.category.newButton);
+    const input = this.page.locator(Selectors.category.newInput).first();
+    await input.waitFor();
+    await input.fill(name);
     const [response] = await Promise.all([
       this.page.waitForResponse(
         (r) => r.url().includes('/categories') && r.request().method() === 'POST',
@@ -17,6 +20,7 @@ export class CategoryPage extends Base {
       this.validateAndClick(Selectors.category.submit),
     ]);
     expect(response.ok()).toBeTruthy();
+    await this.waitForLoading();
   }
 
   async openCategoriesPage() {
