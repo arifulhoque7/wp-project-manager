@@ -111,4 +111,46 @@ export const Selectors = {
     upgradeModal: '[role="dialog"]:has-text("Pro"), .pm-upgrade-modal, [class*="premium" i][role="dialog"]',
     premiumMenuLink: 'a[href*="#/premium"]',
   },
+
+  kanban: {
+    boardHeading: 'h2:has-text("Kanban Board")',
+    addSectionInput: 'input[placeholder*="Add new section" i]',
+    columnTitle: 'input[placeholder*="Add new section" i]',
+    columnByTitle: (title: string) => `text=${title}`,
+    addTaskButton: 'button:has-text("Add task")',
+    addTaskInput: 'textarea[placeholder*="needs to be done" i]',
+  },
+
+  overview: {
+    subtitle: 'text=Project Overview',
+    progressHeading: 'h3:has-text("Overall Progress")',
+    teamMembersHeading: 'h3:has-text("Team Members")',
+    statByLabel: (label: string) => `text=${label}`,
+  },
+
+  activity: {
+    heading: 'h1:has-text("Activities")',
+    subtitle: 'text=All changes and updates in this project',
+    proBadge: 'text=Pro Required',
+    upsellHeading: 'text=Project Activities',
+    emptyState: 'text=No activities yet',
+    item: '[data-test="activity-item"], .pm-activity-item',
+  },
+
+  search: {
+    trigger: 'button:has-text("Search..."), button:has-text("Search projects and tasks")',
+    input: '[role="dialog"] input[placeholder*="Search projects" i]',
+    dialog: '[role="dialog"]:has(input[placeholder*="Search projects" i])',
+    groupHeading: (name: string) => `[role="dialog"] :text("${name}")`,
+    resultByTitle: (title: string) =>
+      `[role="dialog"] [cmdk-item]:has-text("${title}"), [role="dialog"] [role="option"]:has-text("${title}")`,
+    empty: '[role="dialog"] :text("No results found")',
+  },
+
+  taskComment: {
+    sheet: '[role="dialog"]',
+    editor: '[role="dialog"] .ProseMirror, [role="dialog"] [contenteditable="true"]',
+    submitButton: '[role="dialog"] button:has-text("Add Comment")',
+    byText: (text: string) => `[role="dialog"] :text("${text}")`,
+  },
 };
