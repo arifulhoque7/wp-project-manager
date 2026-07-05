@@ -7,12 +7,14 @@ export default defineConfig({
   testDir: './tests',
   timeout: 120000,
   expect: { timeout: 30000 },
+  // fullyParallel:false keeps tests WITHIN a file serial+ordered (shared file
+  // data); only whole files run concurrently. Each spec seeds uniquely-named data
+  // (PM roles are per-project), so parallel files don't overlap. Retries absorb
+  // the occasional runner browser crash.
   fullyParallel: false,
   forbidOnly: false,
-  retries: process.env.CI ? 0 : 0,
-  // CI runs serial: concurrent SPA boots on a runner that also hosts WordPress
-  // overload it and the PM bundle exceeds the 60s hydrate wait. Local keeps 2.
-  workers: process.env.CI ? 1 : 2,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 2 : 2,
   reporter: process.env.CI
     ? [
         ['list', { printSteps: true }],
