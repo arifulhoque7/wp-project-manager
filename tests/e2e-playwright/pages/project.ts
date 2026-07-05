@@ -70,6 +70,22 @@ export class ProjectPage extends Base {
     await this.page.waitForTimeout(300);
   }
 
+  async edit(oldTitle: string, newTitle: string) {
+    await this.openProjectMenu(oldTitle);
+    await this.page.locator(Selectors.project.menuItem('Edit')).first().click();
+    const input = this.page.locator(Selectors.project.titleInput).first();
+    await input.waitFor();
+    await input.fill(newTitle);
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) => /\/projects\/\d+\/update/.test(r.url()) && r.request().method() === 'POST',
+      ),
+      this.page.locator('[role="dialog"] button:has-text("Update Project")').first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
+    await this.waitForLoading();
+  }
+
   async starProject(title: string) {
     const card = this.page.locator(Selectors.project.cardRoot(title)).first();
     await card.waitFor();
