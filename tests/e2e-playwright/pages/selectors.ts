@@ -89,6 +89,10 @@ export const Selectors = {
       `[role="dialog"] div.flex.items-center:has(> div:has(svg.lucide-milestone)) button:has-text("${title}")`,
     // Row dropdown menu items (rendered in the portal as menuitems)
     menuItem: (label: string) => `[role="menuitem"]:has-text("${label}")`,
+    // Privacy toggle (TaskPrivacyField): a single button reading Public / Private.
+    privacyToggle: '[role="dialog"] button:has-text("Public"), [role="dialog"] button:has-text("Private")',
+    privacyPrivate: '[role="dialog"] button:has-text("Private")',
+    privacyPublic: '[role="dialog"] button:has-text("Public")',
     // Legacy aliases kept for other specs
     checkbox: 'input[type="checkbox"]',
     detailModal: '[role="dialog"]',
@@ -107,6 +111,21 @@ export const Selectors = {
     byTitle: (title: string) => `text=${title}`,
     menuTrigger: 'button[aria-label="More actions"]',
     markComplete: '[data-radix-menu-content] [role="menuitem"]:has-text("Mark Complete")',
+    // Card scoped by its h4 title, so the right card's "More actions" is clicked.
+    menuTriggerByTitle: (title: string) =>
+      `div:has(> div h4:has-text("${title}")) button[aria-label="More actions"], div:has(h4:has-text("${title}")) button[aria-label="More actions"]`,
+    editItem: '[data-radix-menu-content] [role="menuitem"]:has-text("Edit")',
+    deleteItem: '[data-radix-menu-content] [role="menuitem"]:has-text("Delete")',
+    confirmDelete: '[role="alertdialog"] button:has-text("Confirm")',
+    editSaveButton:
+      '[role="dialog"] button:has-text("Update"), [role="dialog"] button:has-text("Save Milestone"), [role="dialog"] button:has-text("Save")',
+  },
+
+  discussionCrud: {
+    // Detail page has a single "…" actions menu for the discussion.
+    menuTrigger: 'button:has(svg.lucide-ellipsis)',
+    deleteItem: '[data-radix-menu-content] [role="menuitem"]:has-text("Delete")',
+    confirmDelete: '[role="alertdialog"] button:has-text("Confirm")',
   },
 
   discussion: {

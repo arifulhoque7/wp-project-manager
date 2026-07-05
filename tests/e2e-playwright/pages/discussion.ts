@@ -26,6 +26,32 @@ export class DiscussionPage extends Base {
     await expect(this.page.locator(Selectors.discussion.byTitle(title)).first()).toBeVisible();
   }
 
+  async assertNotVisible(title: string) {
+    await expect(this.page.locator(Selectors.discussion.byTitle(title))).toHaveCount(0);
+  }
+
+  async open(title: string) {
+    await this.page.locator(Selectors.discussion.byTitle(title)).first().click();
+    await this.waitForLoading();
+    await this.page.waitForTimeout(800);
+  }
+
+  // On the discussion detail page: open the actions menu, Delete, confirm.
+  async remove() {
+    await this.page.locator(Selectors.discussionCrud.menuTrigger).first().click();
+    await this.page.waitForTimeout(400);
+    await this.page.locator(Selectors.discussionCrud.deleteItem).first().click();
+    await this.page.waitForTimeout(300);
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) => r.url().includes('/discussion-boards/') && r.url().includes('/delete'),
+      ),
+      this.page.locator(Selectors.discussionCrud.confirmDelete).first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
+    await this.waitForLoading();
+  }
+
   async comment(body: string) {
     const editor = this.page.locator(Selectors.discussion.commentInput).first();
     await editor.click();

@@ -39,6 +39,48 @@ export class MilestonePage extends Base {
     await expect(this.page.locator(Selectors.milestone.byTitle(title)).first()).toBeVisible();
   }
 
+  async assertNotVisible(title: string) {
+    await expect(this.page.locator(Selectors.milestone.byTitle(title))).toHaveCount(0);
+  }
+
+  private async openMenu(title: string) {
+    await this.page.locator(Selectors.milestone.menuTriggerByTitle(title)).first().click();
+    await this.page.waitForTimeout(400);
+  }
+
+  async editTitle(oldTitle: string, newTitle: string) {
+    await this.openMenu(oldTitle);
+    await this.page.locator(Selectors.milestone.editItem).first().click();
+    const input = this.page.locator(Selectors.milestone.titleInput).first();
+    await input.waitFor();
+    await input.fill(newTitle);
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) =>
+          r.url().includes('/milestones/') &&
+          r.url().includes('/update') &&
+          r.request().method() === 'POST',
+      ),
+      this.page.locator(Selectors.milestone.editSaveButton).first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
+    await this.waitForLoading();
+  }
+
+  async remove(title: string) {
+    await this.openMenu(title);
+    await this.page.locator(Selectors.milestone.deleteItem).first().click();
+    await this.page.waitForTimeout(300);
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) => r.url().includes('/milestones/') && r.url().includes('/delete'),
+      ),
+      this.page.locator(Selectors.milestone.confirmDelete).first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
+    await this.waitForLoading();
+  }
+
   // Complete toggle lives in the milestone card's action dropdown ("Mark Complete").
   async toggleComplete(title: string) {
     const card = this.page

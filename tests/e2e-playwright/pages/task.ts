@@ -149,6 +149,23 @@ export class TaskPage extends Base {
     ).toBeVisible();
   }
 
+  // Detail sheet must be open. Flips the privacy toggle and waits for the
+  // tasks/privacy POST that persists it.
+  async makePrivate() {
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) => r.url().includes('/tasks/privacy/') && r.request().method() === 'POST',
+      ),
+      this.page.locator(Selectors.task.privacyPublic).first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
+    await this.waitForLoading();
+  }
+
+  async assertPrivate() {
+    await expect(this.page.locator(Selectors.task.privacyPrivate).first()).toBeVisible();
+  }
+
   async assertTaskVisible(title: string) {
     await expect(this.page.locator(Selectors.task.byTitle(title)).first()).toBeVisible();
   }
