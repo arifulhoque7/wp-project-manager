@@ -27,6 +27,10 @@ export class TaskListPage extends Base {
     await expect(this.page.locator(Selectors.taskList.byTitle(title)).first()).toBeVisible();
   }
 
+  async assertListNotVisible(title: string) {
+    await expect(this.page.locator(Selectors.taskList.byTitle(title))).toHaveCount(0);
+  }
+
   async deleteList(title: string) {
     await this.page.locator(Selectors.taskList.menuTrigger(title)).first().click();
     await this.page.waitForTimeout(300);

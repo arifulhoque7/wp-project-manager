@@ -80,6 +80,13 @@ export const Selectors = {
     descEditButton: '[role="dialog"] div:has(> h4:has-text("Description")) > button',
     descEditor: '[role="dialog"] .ProseMirror',
     descSaveButton: '[role="dialog"] button:has-text("Save")',
+    // Detail sheet — Milestone field: label row anchored on the milestone icon.
+    // Dropdown is inline (not portaled); options live inside the same row.
+    milestoneRow: '[role="dialog"] div.flex.items-center:has(> div:has(svg.lucide-milestone))',
+    milestoneTrigger:
+      '[role="dialog"] div.flex.items-center:has(> div:has(svg.lucide-milestone)) button',
+    milestoneOption: (title: string) =>
+      `[role="dialog"] div.flex.items-center:has(> div:has(svg.lucide-milestone)) button:has-text("${title}")`,
     // Row dropdown menu items (rendered in the portal as menuitems)
     menuItem: (label: string) => `[role="menuitem"]:has-text("${label}")`,
     // Legacy aliases kept for other specs
@@ -142,6 +149,13 @@ export const Selectors = {
     taskRow: '[data-test="my-task-row"], .pm-task-row',
   },
 
+  // AdminRoute Forbidden card — shown when a non-admin/non-manager hits an
+  // admin-only route (/settings, /categories, /importtools, /modules).
+  permissions: {
+    forbiddenHeading: '#wedevs-project-manager :text("Access denied")',
+    forbiddenBody: '#wedevs-project-manager :text("You do not have permission")',
+  },
+
   proTeaser: {
     upgradeBanner: 'text=/Upgrade to Pro|Go Premium|Pro Version|Unlock Premium/i',
     upgradeModal: '[role="dialog"]:has-text("Pro"), .pm-upgrade-modal, [class*="premium" i][role="dialog"]',
@@ -166,11 +180,16 @@ export const Selectors = {
 
   activity: {
     heading: 'h1:has-text("Activities")',
-    subtitle: 'text=All changes and updates in this project',
-    proBadge: 'text=Pro Required',
-    upsellHeading: 'text=Project Activities',
-    emptyState: 'text=No activities yet',
-    item: '[data-test="activity-item"], .pm-activity-item',
+    // NB: these feed into validateAny() which comma-joins them into ONE CSS
+    // locator, so every entry must be valid CSS — Playwright's `text=` engine
+    // syntax is not (it throws mid-list). Use the `:text()` CSS pseudo instead.
+    subtitle: ':text("All changes and updates in this project")',
+    proBadge: ':text("Pro Required")',
+    upsellHeading: ':text("Project Activities")',
+    emptyState: 'h3:has-text("No activities yet")',
+    // Licensed feed renders stat cards (Total/Today/Created/Updated) + rows;
+    // the stat card class is the stable "content region rendered" marker.
+    item: '.rounded-xl.border.bg-card, [data-test="activity-item"], .pm-activity-item',
     // Pro active + unlicensed gates the activity feed behind the License page.
     licenseGate: 'h2:has-text("License"), h1:has-text("License")',
   },

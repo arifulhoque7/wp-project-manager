@@ -43,6 +43,19 @@ export class ProjectPage extends Base {
     await this.waitForLoading();
   }
 
+  // Returns the numeric project id from the current URL (after openProject).
+  currentProjectId(): string {
+    return (this.page.url().match(/projects\/(\d+)/) || [])[1];
+  }
+
+  // Switch directly to a project by id via the hash router (no list re-click).
+  async switchToProjectById(id: string) {
+    await this.navigateToURL(`${this.pmHome}#/projects/${id}/task-lists`);
+    await this.page.waitForSelector(Selectors.pmRoot, { timeout: 60000 });
+    await this.waitForLoading();
+    await this.page.waitForTimeout(1200);
+  }
+
   async searchProject(text: string) {
     await this.validateAndFillStrings(Selectors.project.searchInput, text);
     await this.page.waitForTimeout(500);

@@ -128,6 +128,27 @@ export class TaskPage extends Base {
     await this.waitForLoading();
   }
 
+  // Detail sheet must be open. Opens the Milestone dropdown, picks the milestone,
+  // waits for the attach-tasks POST that persists the link.
+  async assignMilestone(title: string) {
+    await this.page.locator(Selectors.task.milestoneTrigger).first().click();
+    await this.page.waitForTimeout(300);
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) => r.url().includes('/attach-tasks') && r.request().method() === 'POST',
+      ),
+      this.page.locator(Selectors.task.milestoneOption(title)).first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
+    await this.waitForLoading();
+  }
+
+  async assertMilestoneAssigned(title: string) {
+    await expect(
+      this.page.locator(Selectors.task.milestoneRow).locator('button', { hasText: title }).first(),
+    ).toBeVisible();
+  }
+
   async assertTaskVisible(title: string) {
     await expect(this.page.locator(Selectors.task.byTitle(title)).first()).toBeVisible();
   }

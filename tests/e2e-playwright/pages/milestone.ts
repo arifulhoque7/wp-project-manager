@@ -7,6 +7,13 @@ export class MilestonePage extends Base {
     super(page);
   }
 
+  async open(projectId: string) {
+    await this.navigateToURL(`${this.pmHome}#/projects/${projectId}/milestones`);
+    await this.page.waitForSelector(Selectors.pmRoot, { timeout: 60000 });
+    await this.waitForLoading();
+    await this.page.waitForTimeout(800);
+  }
+
   async create(title: string, description = '') {
     await this.validateAndClick(Selectors.milestone.newButton);
     await this.page.locator(Selectors.milestone.titleInput).first().waitFor();
