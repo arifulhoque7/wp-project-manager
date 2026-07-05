@@ -174,6 +174,8 @@ export const Selectors = {
     saveButton: 'button:has-text("Save Changes"), button:has-text("Save")',
     // General tab Save is disabled until the form is dirty — a Switch makes it dirty.
     generalSwitch: '[role="switch"]',
+    // Free General tab has no switch (those are Pro); a number field dirties the form.
+    generalNumberField: '#project_per_page, input[type="number"]',
     // AI tab uses a shadcn Select (not native) and a Tiptap-free Input#ai_api_key.
     aiApiKeyInput: '#ai_api_key',
     aiChangeKeyButton: 'button[title="Change API Key"]',

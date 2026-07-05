@@ -45,11 +45,12 @@ test.describe('Pro Upsell (only when Pro plugin inactive)', () => {
     const dash = new PmDashboardPage(page);
     const isPro = await dash.isProActive();
     test.skip(isPro, 'Pro plugin active — upgrade CTA modal not present');
-    await dash.open();
-    const cta = page
-      .locator('button:has-text("Upgrade"), a:has-text("Upgrade"), button:has-text("Go Pro")')
-      .first();
-    await cta.click();
+    // The My Tasks "Reports" tab is Pro-gated (constants.js: pro: true); clicking
+    // it in free mode calls setProModalOpen(true) → the upgrade modal. The sidebar
+    // "Upgrade to Pro" only navigates to /premium, so it is not a modal trigger.
+    await dash.openMyTasks();
+    await page.waitForTimeout(1000);
+    await page.locator('button:has-text("Reports")').first().click();
     await expect(page.locator(Selectors.proTeaser.upgradeModal).first()).toBeVisible();
   });
 });

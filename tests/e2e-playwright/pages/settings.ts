@@ -38,9 +38,16 @@ export class SettingsPage extends Base {
   }
 
   async saveGeneral() {
-    // Save Changes is disabled until a change makes the form dirty — toggle a switch.
+    // Save Changes is disabled until a change makes the form dirty. The General
+    // switches are Pro-only, so in Free mode dirty a free number field instead.
     const toggle = this.page.locator(Selectors.settings.generalSwitch).first();
-    if (await toggle.count()) await toggle.click();
+    if (await toggle.count()) {
+      await toggle.click();
+    } else {
+      const numInput = this.page.locator(Selectors.settings.generalNumberField).first();
+      await numInput.waitFor();
+      await numInput.fill('15');
+    }
     await this.page.waitForTimeout(200);
     const [response] = await Promise.all([
       this.page.waitForResponse(

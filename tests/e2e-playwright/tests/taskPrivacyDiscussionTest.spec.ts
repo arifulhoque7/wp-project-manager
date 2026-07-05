@@ -12,6 +12,7 @@ let browser: Browser;
 let context: BrowserContext;
 let page: Page;
 let projectId = '';
+let isPro = false;
 
 const proj = ProjectData.randomProject();
 const list = TaskListData.random();
@@ -23,6 +24,7 @@ test.beforeAll(async () => {
   context = await browser.newContext();
   page = await context.newPage();
   await new BasicLoginPage(page).basicLoginAndPmVisit(Users.adminUsername, Users.adminPassword);
+  isPro = await new BasicLoginPage(page).isProActive();
   const pp = new ProjectPage(page);
   await pp.createProject(proj.title, proj.description);
   await pp.openProject(proj.title);
@@ -44,6 +46,8 @@ test.describe('Task privacy + Discussion delete', () => {
   configureSpecFailFast();
 
   test('TPD0001 : Make a task private', async () => {
+    // Task privacy is Pro-gated (TaskPrivacyField renders a ProGate when !isPro).
+    test.skip(!isPro, 'Task privacy is a Pro feature');
     const tk = new TaskPage(page);
     await page.goto(`${Urls.baseUrl}${AdminPaths.pm}#/projects/${projectId}/task-lists`);
     await page.waitForSelector('#wedevs-project-manager', { timeout: 60000 });

@@ -47,6 +47,7 @@ test.beforeAll(async () => {
   adminCtx = await adminBrowser.newContext();
   adminPage = await adminCtx.newPage();
   await new BasicLoginPage(adminPage).basicLoginAndPmVisit(Users.adminUsername, Users.adminPassword);
+  const proActive = await new BasicLoginPage(adminPage).isProActive();
 
   const pp = new ProjectPage(adminPage);
   await pp.createProject(proj.title, proj.description);
@@ -65,9 +66,9 @@ test.beforeAll(async () => {
     { userId: mgr, roleId: 1 },
     { userId: cow, roleId: 2 },
   ];
-  // Client role only exists when Pro (or a manual seed) created it; include it
-  // only if the user resolved, so the spec stays valid on Free-only installs.
-  if (cli) {
+  // The client project role is Pro-only. Assign it (and let RMX0003 run) only
+  // when Pro is active AND the client user exists — otherwise it stays skipped.
+  if (cli && proActive) {
     assignees.push({ userId: cli, roleId: 3 });
     clientAssigned = true;
   }

@@ -78,8 +78,9 @@ jobs:
         run: |
           npx wp-env run tests-cli wp user create pm_manager_user  pm_manager@example.com  --role=subscriber --user_pass=password
           npx wp-env run tests-cli wp user create pm_coworker_user pm_coworker@example.com --role=subscriber --user_pass=password
-          npx wp-env run tests-cli wp user create pm_client_user   pm_client@example.com   --role=subscriber --user_pass=password
           npx wp-env run tests-cli wp user create pm_member_user   pm_member@example.com   --role=subscriber --user_pass=password
+          # No pm_client_user: the client project role is Pro-only, so rolesMatrix
+          # RMX0003 self-skips when the client user is absent (Free-only install).
 
       # PM's REST routes resolve through rewrite rules; a fresh wp-env defaults to
       # plain permalinks (?p=123), so /wp-json/pm/v2/* returns 404 and every REST
