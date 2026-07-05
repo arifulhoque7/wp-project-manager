@@ -47,16 +47,18 @@ jobs:
           node-version: 22
           cache: pnpm
 
+      # Install e2e deps first so the always()-run summary step has node_modules
+      # even if a later build/test step fails (keeps the failure signal clean).
+      - name: Install e2e dependencies
+        working-directory: tests/e2e-playwright
+        run: pnpm install --frozen-lockfile
+
       # Build the Free plugin (vendor autoload + the React bundle the browser loads).
       - name: Build wedevs-project-manager
         run: |
           composer install --no-dev -o
           pnpm install --frozen-lockfile
           pnpm build
-
-      - name: Install e2e dependencies
-        working-directory: tests/e2e-playwright
-        run: pnpm install --frozen-lockfile
 
       # wp-env loads support plugins from <repo>/plugins/* (see .wp-env.json).
       - name: Fetch support plugins
