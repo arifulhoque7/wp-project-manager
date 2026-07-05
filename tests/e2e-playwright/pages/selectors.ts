@@ -175,6 +175,20 @@ export const Selectors = {
   myTasks: {
     badge: '.update-plugins, span.count',
     taskRow: '[data-test="my-task-row"], .pm-task-row',
+    searchInput: 'input[placeholder*="Search by Task Title" i]',
+  },
+
+  taskTypes: {
+    tab: 'button:has-text("Task Types")',
+    addButton: 'button:has-text("New Type")',
+    titleInput: 'input[placeholder*="Bug" i], input[placeholder*="Feature" i]',
+    createButton: 'button:has-text("Create")',
+    rowByTitle: (t: string) => `tr:has(td:has-text("${t}"))`,
+    editButton: (t: string) => `tr:has(td:has-text("${t}")) button[title="Edit"]`,
+    deleteButton: (t: string) => `tr:has(td:has-text("${t}")) button[title="Delete"]`,
+    editInput: 'tr input',
+    editSave: 'button[title="Save"]',
+    confirmDelete: '[role="alertdialog"] button:has-text("Confirm")',
   },
 
   // AdminRoute Forbidden card — shown when a non-admin/non-manager hits an
