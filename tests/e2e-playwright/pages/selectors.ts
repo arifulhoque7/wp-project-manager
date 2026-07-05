@@ -132,6 +132,15 @@ export const Selectors = {
     byName: (name: string) => `text=${name}`,
   },
 
+  categoryCrud: {
+    // Row = grid-cols-12 with the name span; the "…" trigger reveals on hover.
+    rowMenu: (name: string) =>
+      `div.grid.grid-cols-12:has(span:has-text("${name}")) button:has(svg.lucide-ellipsis)`,
+    editItem: '[data-radix-menu-content] [role="menuitem"]:has-text("Edit")',
+    deleteItem: '[data-radix-menu-content] [role="menuitem"]:has-text("Delete")',
+    confirmDelete: '[role="alertdialog"] button:has-text("Confirm")',
+  },
+
   settings: {
     emailTab: 'button:has-text("Email")',
     taskTypesTab: 'button:has-text("Task Types")',
