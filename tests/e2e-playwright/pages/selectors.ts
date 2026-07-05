@@ -41,6 +41,9 @@ export const Selectors = {
     menuItem: (label: string) => `[data-radix-menu-content] [role="menuitem"]:has-text("${label}")`,
     confirmDelete: '[role="dialog"] button:has-text("Delete")',
     searchInput: 'input[placeholder*="Search" i]',
+    // Create sheet — Category is the only shadcn Select (combobox) in the form.
+    categoryTrigger: '[role="dialog"] button[role="combobox"]',
+    categoryOption: (name: string) => `[role="option"]:has-text("${name}")`,
   },
 
   taskList: {
@@ -55,6 +58,10 @@ export const Selectors = {
     deleteMenuItem: '[data-radix-menu-content] [role="menuitem"]:has-text("Delete")',
     // Delete goes through a useConfirm AlertDialog with a "Confirm" action.
     confirmDelete: '[role="alertdialog"] button:has-text("Confirm")',
+    // Rename replaces the h3 with an inline input (border-pm-accent) + a Save (check) button.
+    renameMenuItem: '[data-radix-menu-content] [role="menuitem"]:has-text("Rename")',
+    renameInput: 'input.border-pm-accent',
+    renameSave: 'button[title="Save"]:has(svg.lucide-check)',
   },
 
   task: {

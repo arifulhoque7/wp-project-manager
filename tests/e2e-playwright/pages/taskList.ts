@@ -31,6 +31,25 @@ export class TaskListPage extends Base {
     await expect(this.page.locator(Selectors.taskList.byTitle(title))).toHaveCount(0);
   }
 
+  // Rename via the section "…" menu → inline input in the header → Save (check).
+  async renameList(oldTitle: string, newTitle: string) {
+    await this.page.locator(Selectors.taskList.menuTrigger(oldTitle)).first().click();
+    await this.page.waitForTimeout(300);
+    await this.page.locator(Selectors.taskList.renameMenuItem).first().click();
+    const input = this.page.locator(Selectors.taskList.renameInput).first();
+    await input.waitFor();
+    await input.fill(newTitle);
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) =>
+          /\/task-lists\/\d+\/update/.test(r.url()) && r.request().method() === 'POST',
+      ),
+      this.page.locator(Selectors.taskList.renameSave).first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
+    await this.waitForLoading();
+  }
+
   async deleteList(title: string) {
     await this.page.locator(Selectors.taskList.menuTrigger(title)).first().click();
     await this.page.waitForTimeout(300);
