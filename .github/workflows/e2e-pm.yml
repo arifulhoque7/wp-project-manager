@@ -89,6 +89,13 @@ jobs:
         working-directory: tests/e2e-playwright
         run: npx wp-env run tests-cli wp rewrite structure '/%postname%/' --hard
 
+      # wp-reset shows a first-run admin "pointer" tooltip that overlays the page
+      # and intercepts clicks (e.g. the Settings tabs). It is not used by any test,
+      # so deactivate it to keep the admin UI clickable.
+      - name: Deactivate wp-reset (its pointer intercepts clicks)
+        working-directory: tests/e2e-playwright
+        run: npx wp-env run tests-cli wp plugin deactivate wp-reset
+
       - name: Cache Playwright binaries
         id: playwright-cache
         uses: actions/cache@v4
