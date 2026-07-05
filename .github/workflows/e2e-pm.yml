@@ -81,6 +81,13 @@ jobs:
           npx wp-env run tests-cli wp user create pm_client_user   pm_client@example.com   --role=subscriber --user_pass=password
           npx wp-env run tests-cli wp user create pm_member_user   pm_member@example.com   --role=subscriber --user_pass=password
 
+      # PM's REST routes resolve through rewrite rules; a fresh wp-env defaults to
+      # plain permalinks (?p=123), so /wp-json/pm/v2/* returns 404 and every REST
+      # call fails. Switch to pretty permalinks so the API resolves.
+      - name: Set pretty permalinks
+        working-directory: tests/e2e-playwright
+        run: npx wp-env run tests-cli wp rewrite structure '/%postname%/' --hard
+
       - name: Cache Playwright binaries
         id: playwright-cache
         uses: actions/cache@v4
