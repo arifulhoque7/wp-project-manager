@@ -24,6 +24,7 @@ test.beforeAll(async () => {
   await pp.createProject(proj.title, proj.description);
   await pp.openProject(proj.title);
   projectId = (page.url().match(/projects\/(\d+)/) || [])[1];
+  if (!projectId) throw new Error(`Failed to extract projectId from URL: ${page.url()}`);
 });
 
 test.afterAll(async () => {

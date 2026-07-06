@@ -94,8 +94,9 @@ export const Selectors = {
       '[role="dialog"] div.flex.items-center:has(> div:has(svg.lucide-milestone)) button',
     milestoneOption: (title: string) =>
       `[role="dialog"] div.flex.items-center:has(> div:has(svg.lucide-milestone)) button:has-text("${title}")`,
-    // Row dropdown menu items (rendered in the portal as menuitems)
-    menuItem: (label: string) => `[role="menuitem"]:has-text("${label}")`,
+    // Row dropdown menu items — scope to the Radix menu portal so a stray
+    // [role="menuitem"] elsewhere on the page can't match (matches project.menuItem).
+    menuItem: (label: string) => `[data-radix-menu-content] [role="menuitem"]:has-text("${label}")`,
     // Privacy toggle (TaskPrivacyField): a single button reading Public / Private.
     privacyToggle: '[role="dialog"] button:has-text("Public"), [role="dialog"] button:has-text("Private")',
     privacyPrivate: '[role="dialog"] button:has-text("Private")',

@@ -52,7 +52,7 @@ test.describe('Tasks CRUD & Actions', () => {
   test('TK0003 : Set due date on task', async () => {
     const tk = new TaskPage(page);
     await tk.openTask(taskA.title);
-    await tk.setDueDate(TaskData.futureDueDate());
+    await tk.setDueDateToday();
   });
 
   test('TK0004 : Assign admin to task', async () => {

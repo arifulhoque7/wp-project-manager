@@ -45,7 +45,9 @@ export class ProjectPage extends Base {
 
   // Returns the numeric project id from the current URL (after openProject).
   currentProjectId(): string {
-    return (this.page.url().match(/projects\/(\d+)/) || [])[1];
+    const match = this.page.url().match(/projects\/(\d+)/);
+    if (!match) throw new Error(`Could not extract project id from URL: ${this.page.url()}`);
+    return match[1];
   }
 
   // Switch directly to a project by id via the hash router (no list re-click).

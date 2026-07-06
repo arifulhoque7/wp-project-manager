@@ -23,7 +23,7 @@ export class RolesPage extends Base {
       });
       const json = await res.json();
       const rows = (json.data ?? []) as Array<{ id?: number; email?: string }>;
-      const hit = rows.find((r) => r.email === email) ?? rows[0];
+      const hit = rows.find((r) => r.email === email);
       return hit?.id ?? 0;
     }, email);
   }

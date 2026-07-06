@@ -21,11 +21,11 @@ export class SearchPage extends Base {
   async search(text: string) {
     const [response] = await Promise.all([
       this.page.waitForResponse(
-        (r) => r.url().includes('admin-topbar-search') && r.status() < 500,
+        (r) => r.url().includes('admin-topbar-search'),
       ),
       this.validateAndFillStrings(Selectors.search.input, text),
     ]);
-    expect(response.status()).toBeLessThan(500);
+    expect(response.ok()).toBeTruthy();
     await this.page.waitForTimeout(500);
   }
 

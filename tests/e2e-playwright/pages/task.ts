@@ -36,8 +36,9 @@ export class TaskPage extends Base {
     }
   }
 
-  // No native date input: reveal the dates editor, pick a Due day, Save.
-  async setDueDate(_isoDate: string) {
+  // No native date input: reveal the dates editor, pick Today as the Due day, Save.
+  // (Uses the calendar's "Today" button — the specific date value isn't asserted.)
+  async setDueDateToday() {
     await this.validateAndClick(Selectors.task.setDatesButton);
     await this.page.locator(Selectors.task.dueDateTrigger).first().click();
     await this.page.waitForTimeout(300);
