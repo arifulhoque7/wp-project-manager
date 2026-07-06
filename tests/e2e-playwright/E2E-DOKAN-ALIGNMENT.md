@@ -116,14 +116,20 @@ Result: Free ~11.7m (was 45m) green; Pro unblocked (was 16/16 features failing).
    `wp-data/debug.log`; `.wp-env.json` sets `WP_DEBUG_LOG` + maps `wp-data`; the
    workflow prints the log on `always()`, so a failing run shows PHP errors too.
 
+5. **Real Playwright sharding** — DONE ✅. Replaced the hand-split
+   parallel-one/two configs + testMatch lists with a single `playwright.config.ts`
+   using `projects: [setup, chromium (dependencies: [setup])]` and CI
+   `--shard=<i>/<n>`. Workflow now runs a **matrix** of shard jobs in parallel
+   (Free 2, Pro 3), each emits a `blob` report, and a `merge-report` job stitches
+   them into one HTML via `playwright merge-reports`. `setup` project runs first on
+   every shard to seed the reused auth. No more manual worker/testMatch bookkeeping.
+
 Remaining (incremental, keep suite green each step):
 
-5. **Setup projects with `dependencies`** — a `_site.setup` (options/permalinks via
-   API) → `_auth.setup` → `e2e_tests` chain like Dokan's `projects[]`.
 6. **`utils/` reorg** — `test.ts` custom fixtures (authed page, seeded project),
    `pwMatchers.ts`, `apiUtils.ts` split. Touches every spec — do per-batch.
-7. **Dynamic sharding** — `shard-durations.json` + `getShardSpecs.js` to balance
-   shards by recorded duration instead of hand-split lists.
+7. **Duration-based shard balancing** — optionally feed recorded per-file
+   durations so shards split by time, not test count (Dokan's `shard-durations`).
 
 ---
 

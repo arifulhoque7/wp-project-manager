@@ -12,3 +12,5 @@ playwright/.auth/
 
 # wp-env debug log mount
 wp-data/
+blob-report/
+all-blob-reports/
