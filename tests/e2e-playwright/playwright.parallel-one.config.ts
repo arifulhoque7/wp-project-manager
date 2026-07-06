@@ -5,15 +5,15 @@ dotenv.config({ quiet: true });
 
 export default defineConfig({
   testDir: './tests',
-  timeout: 120000,
-  expect: { timeout: 30000 },
+  timeout: 90000,
+  expect: { timeout: 20000 },
   // fullyParallel:false keeps tests WITHIN a file serial+ordered (they share the
   // file's created data); only whole files run concurrently across workers. Each
   // spec seeds its own uniquely-named data (PM roles are per-project), so parallel
   // files don't overlap. Retries absorb the occasional runner browser crash.
   fullyParallel: false,
   forbidOnly: false,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 2 : 3,
   reporter: process.env.CI
     ? [
@@ -26,7 +26,9 @@ export default defineConfig({
         ['html', { outputFolder: './playwright-report/parallel-one-report', open: 'never' }],
       ],
   use: {
-    actionTimeout: 0,
+    // Bounded so a wrong/blocked selector fails in 15s instead of hanging the
+    // whole 90s test timeout (× retries). Keeps the suite fast on failures.
+    actionTimeout: 15000,
     headless: true,
     viewport: { width: 1280, height: 720 },
     trace: 'retain-on-failure',
