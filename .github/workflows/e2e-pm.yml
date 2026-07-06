@@ -20,18 +20,25 @@ on:
 
 jobs:
   test:
-    name: e2e (shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }})
+    name: e2e (${{ matrix.group }})
     # Run on forks only — the canonical repos are covered elsewhere.
     if: github.repository != 'weDevsOfficial/wedevs-project-manager' && github.repository != 'weDevsOfficial/pm-pro'
     timeout-minutes: 60
     runs-on: ubuntu-22.04
     strategy:
-      # Real Playwright sharding: each job runs `--shard=<i>/<n>` — Playwright
-      # auto-balances the feature-folder specs, no hand-maintained testMatch lists.
+      # Feature-grouped shards: each job runs a set of feature FOLDERS so related
+      # specs stay together. Shards are independent — each self-contained (its own
+      # wp-env + the setup project runs first, within the shard, for auth); no job
+      # depends on another (only merge-report waits on all).
       fail-fast: false
       matrix:
-        shardIndex: [1, 2]
-        shardTotal: [2]
+        include:
+          - group: core
+            folders: tests/projects tests/tasks tests/task-lists tests/categories
+          - group: content
+            folders: tests/milestones tests/discussions tests/files tests/kanban tests/my-tasks tests/overview
+          - group: admin
+            folders: tests/search tests/activity tests/settings tests/roles tests/upsell tests/auth
 
     steps:
       - name: Checkout wedevs-project-manager
@@ -96,7 +103,7 @@ jobs:
         working-directory: tests/e2e-playwright
         run: npx playwright install chromium --with-deps
 
-      - name: 🧪 Run e2e tests (shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }})
+      - name: 🧪 Run e2e tests (${{ matrix.group }})
         env:
           CI: true
           QA_BASE_URL: http://localhost:8889
@@ -104,7 +111,8 @@ jobs:
           QA_ADMIN_PASSWORD: password
         if: success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.testsuite == 'E2E')
         working-directory: tests/e2e-playwright
-        run: pnpm exec playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+        # setup project runs first (dependency) for auth, then this group's folders.
+        run: pnpm exec playwright test ${{ matrix.folders }}
 
       # PHP notices/errors land in wp-data/debug.log (WP_DEBUG_LOG); surface on failure.
       - name: Surface WP debug.log
@@ -117,7 +125,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: blob-report-${{ matrix.shardIndex }}
+          name: blob-report-${{ matrix.group }}
           path: tests/e2e-playwright/blob-report
           retention-days: 3
 
