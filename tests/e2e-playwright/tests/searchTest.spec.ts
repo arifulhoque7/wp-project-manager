@@ -6,6 +6,7 @@ import { TaskPage } from '../pages/task';
 import { SearchPage } from '../pages/search';
 import { ProjectData, TaskListData, TaskData, Users } from '../utils/testData';
 import { configureSpecFailFast } from '../utils/specFailFast';
+import { pmContextOptions } from '../utils/auth';
 
 let browser: Browser;
 let context: BrowserContext;
@@ -17,7 +18,7 @@ const task = TaskData.random();
 
 test.beforeAll(async () => {
   browser = await chromium.launch();
-  context = await browser.newContext();
+  context = await browser.newContext(pmContextOptions());
   page = await context.newPage();
   const login = new BasicLoginPage(page);
   await login.basicLoginAndPmVisit(Users.adminUsername, Users.adminPassword);

@@ -6,6 +6,7 @@ import { TaskPage } from '../pages/task';
 import { DiscussionPage } from '../pages/discussion';
 import { ProjectData, TaskListData, TaskData, DiscussionData, Users, AdminPaths, Urls } from '../utils/testData';
 import { configureSpecFailFast } from '../utils/specFailFast';
+import { pmContextOptions } from '../utils/auth';
 
 // Task privacy toggle + discussion delete — both were untested (audit gaps).
 let browser: Browser;
@@ -21,7 +22,7 @@ const disc = DiscussionData.random();
 
 test.beforeAll(async () => {
   browser = await chromium.launch();
-  context = await browser.newContext();
+  context = await browser.newContext(pmContextOptions());
   page = await context.newPage();
   await new BasicLoginPage(page).basicLoginAndPmVisit(Users.adminUsername, Users.adminPassword);
   isPro = await new BasicLoginPage(page).isProActive();

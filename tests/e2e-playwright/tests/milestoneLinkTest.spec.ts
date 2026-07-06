@@ -6,6 +6,7 @@ import { TaskPage } from '../pages/task';
 import { MilestonePage } from '../pages/milestone';
 import { ProjectData, TaskListData, TaskData, MilestoneData, Users } from '../utils/testData';
 import { configureSpecFailFast } from '../utils/specFailFast';
+import { pmContextOptions } from '../utils/auth';
 
 // Cross-functional: a task assigned to a milestone (POST attach-tasks) must
 // persist that link across a reload — proves the task<->milestone relation,
@@ -22,7 +23,7 @@ const milestone = MilestoneData.random();
 
 test.beforeAll(async () => {
   browser = await chromium.launch();
-  context = await browser.newContext();
+  context = await browser.newContext(pmContextOptions());
   page = await context.newPage();
   const login = new BasicLoginPage(page);
   await login.basicLoginAndPmVisit(Users.adminUsername, Users.adminPassword);

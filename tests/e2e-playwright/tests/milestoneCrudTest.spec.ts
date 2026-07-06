@@ -4,6 +4,7 @@ import { ProjectPage } from '../pages/project';
 import { MilestonePage } from '../pages/milestone';
 import { MilestoneData, ProjectData, Users } from '../utils/testData';
 import { configureSpecFailFast } from '../utils/specFailFast';
+import { pmContextOptions } from '../utils/auth';
 
 // Milestone edit + delete — the audit found only create/complete were tested.
 let browser: Browser;
@@ -17,7 +18,7 @@ const renamed = MilestoneData.random().title;
 
 test.beforeAll(async () => {
   browser = await chromium.launch();
-  context = await browser.newContext();
+  context = await browser.newContext(pmContextOptions());
   page = await context.newPage();
   await new BasicLoginPage(page).basicLoginAndPmVisit(Users.adminUsername, Users.adminPassword);
   const pp = new ProjectPage(page);

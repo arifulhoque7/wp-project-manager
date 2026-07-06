@@ -6,6 +6,7 @@ import { TaskPage } from '../pages/task';
 import { MyTasksPage } from '../pages/myTasks';
 import { ProjectData, TaskListData, TaskData, Users } from '../utils/testData';
 import { configureSpecFailFast } from '../utils/specFailFast';
+import { pmContextOptions } from '../utils/auth';
 
 // My Tasks status tabs: an incomplete assigned task shows under Current Tasks,
 // a completed one under Completed — the status filter was untested.
@@ -39,7 +40,7 @@ async function seedAssignedTask(
 
 test.beforeAll(async () => {
   browser = await chromium.launch();
-  context = await browser.newContext();
+  context = await browser.newContext(pmContextOptions());
   page = await context.newPage();
   await new BasicLoginPage(page).basicLoginAndPmVisit(Users.adminUsername, Users.adminPassword);
   await seedAssignedTask(page, projA, openTask, false);

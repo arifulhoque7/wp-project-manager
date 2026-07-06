@@ -6,6 +6,7 @@ import { TaskPage } from '../pages/task';
 import { TaskCommentPage } from '../pages/taskComment';
 import { ProjectData, TaskListData, TaskData, Users } from '../utils/testData';
 import { configureSpecFailFast } from '../utils/specFailFast';
+import { pmContextOptions } from '../utils/auth';
 
 // Task comment edit + delete — only posting was tested.
 let browser: Browser;
@@ -20,7 +21,7 @@ const edited = 'Edited comment text';
 
 test.beforeAll(async () => {
   browser = await chromium.launch();
-  context = await browser.newContext();
+  context = await browser.newContext(pmContextOptions());
   page = await context.newPage();
   await new BasicLoginPage(page).basicLoginAndPmVisit(Users.adminUsername, Users.adminPassword);
   const pp = new ProjectPage(page);

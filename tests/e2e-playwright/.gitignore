@@ -6,3 +6,6 @@ setup/
 parallel-one/
 parallel-two/
 *.log
+
+# Playwright saved auth state (produced by the setup project)
+playwright/.auth/

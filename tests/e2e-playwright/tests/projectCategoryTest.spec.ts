@@ -5,6 +5,7 @@ import { ProjectPage } from '../pages/project';
 import { Selectors } from '../pages/selectors';
 import { Users } from '../utils/testData';
 import { configureSpecFailFast } from '../utils/specFailFast';
+import { pmContextOptions } from '../utils/auth';
 
 // Assigning a category to a project from the create sheet — CC covers category
 // CRUD and PJ covers project CRUD, but nothing asserted a project actually
@@ -39,7 +40,7 @@ async function pmApi(page: Page, path: string, body?: unknown) {
 
 test.beforeAll(async () => {
   browser = await chromium.launch();
-  context = await browser.newContext();
+  context = await browser.newContext(pmContextOptions());
   page = await context.newPage();
   const login = new BasicLoginPage(page);
   await login.basicLoginAndPmVisit(Users.adminUsername, Users.adminPassword);

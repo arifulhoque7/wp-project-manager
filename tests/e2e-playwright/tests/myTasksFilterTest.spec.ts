@@ -7,6 +7,7 @@ import { MyTasksPage } from '../pages/myTasks';
 import { Selectors } from '../pages/selectors';
 import { ProjectData, TaskListData, TaskData, Users } from '../utils/testData';
 import { configureSpecFailFast } from '../utils/specFailFast';
+import { pmContextOptions } from '../utils/auth';
 
 // My Tasks title filter — aggregation was tested, filtering was not. Two assigned
 // tasks; searching one title must hide the other.
@@ -38,7 +39,7 @@ async function seedAssignedTask(
 
 test.beforeAll(async () => {
   browser = await chromium.launch();
-  context = await browser.newContext();
+  context = await browser.newContext(pmContextOptions());
   page = await context.newPage();
   await new BasicLoginPage(page).basicLoginAndPmVisit(Users.adminUsername, Users.adminPassword);
   await seedAssignedTask(page, projA, taskA);

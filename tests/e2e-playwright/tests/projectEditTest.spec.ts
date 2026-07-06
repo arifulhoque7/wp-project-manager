@@ -3,6 +3,7 @@ import { BasicLoginPage } from '../pages/basicLogin';
 import { ProjectPage } from '../pages/project';
 import { ProjectData, Users } from '../utils/testData';
 import { configureSpecFailFast } from '../utils/specFailFast';
+import { pmContextOptions } from '../utils/auth';
 
 // Project in-place edit — create/star/complete/delete were tested, edit was not.
 let browser: Browser;
@@ -14,7 +15,7 @@ const renamed = ProjectData.randomProject().title;
 
 test.beforeAll(async () => {
   browser = await chromium.launch();
-  context = await browser.newContext();
+  context = await browser.newContext(pmContextOptions());
   page = await context.newPage();
   await new BasicLoginPage(page).basicLoginAndPmVisit(Users.adminUsername, Users.adminPassword);
   await new ProjectPage(page).createProject(proj.title, proj.description);

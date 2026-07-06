@@ -2,6 +2,7 @@ import { Browser, BrowserContext, Page, test, chromium } from '@playwright/test'
 import { BasicLoginPage } from '../pages/basicLogin';
 import { PmDashboardPage } from '../pages/pmDashboard';
 import { Users } from '../utils/testData';
+import { saveAdminAuth } from '../utils/auth';
 import { configureSpecFailFast } from '../utils/specFailFast';
 
 let browser: Browser;
@@ -15,6 +16,9 @@ test.beforeAll(async () => {
 });
 
 test.afterAll(async () => {
+  // Persist the admin session so every admin spec reuses it (skips wp-login).
+  // Best-effort: if login failed, the empty state just makes specs log in normally.
+  await saveAdminAuth(context).catch(() => {});
   await context.close();
   await browser.close();
 });

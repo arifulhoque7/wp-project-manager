@@ -3,6 +3,7 @@ import { BasicLoginPage } from '../pages/basicLogin';
 import { PmDashboardPage } from '../pages/pmDashboard';
 import { Users } from '../utils/testData';
 import { configureSpecFailFast } from '../utils/specFailFast';
+import { pmContextOptions } from '../utils/auth';
 
 let browser: Browser;
 let context: BrowserContext;
@@ -10,7 +11,7 @@ let page: Page;
 
 test.beforeAll(async () => {
   browser = await chromium.launch();
-  context = await browser.newContext();
+  context = await browser.newContext(pmContextOptions());
   page = await context.newPage();
   const login = new BasicLoginPage(page);
   await login.basicLoginAndPmVisit(Users.adminUsername, Users.adminPassword);

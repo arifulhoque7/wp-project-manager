@@ -4,6 +4,7 @@ import { BasicLoginPage } from '../pages/basicLogin';
 import { Selectors } from '../pages/selectors';
 import { Users } from '../utils/testData';
 import { configureSpecFailFast } from '../utils/specFailFast';
+import { pmContextOptions } from '../utils/auth';
 
 // Settings → Task Types CRUD (create/edit/delete) — was untested.
 let browser: Browser;
@@ -15,7 +16,7 @@ const renamed = `Type ${faker.string.alphanumeric(5)}`;
 
 test.beforeAll(async () => {
   browser = await chromium.launch();
-  context = await browser.newContext();
+  context = await browser.newContext(pmContextOptions());
   page = await context.newPage();
   const login = new BasicLoginPage(page);
   await login.basicLoginAndPmVisit(Users.adminUsername, Users.adminPassword);

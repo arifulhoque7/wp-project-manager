@@ -5,6 +5,7 @@ import { TaskListPage } from '../pages/taskList';
 import { CategoryPage } from '../pages/category';
 import { ProjectData, TaskListData, CategoryData, Users } from '../utils/testData';
 import { configureSpecFailFast } from '../utils/specFailFast';
+import { pmContextOptions } from '../utils/auth';
 
 // Edit/delete CRUD on core objects — the audit found these were never tested
 // (only create/complete/delete existed for some). Real UI, real update/delete
@@ -22,7 +23,7 @@ const renamedCat = CategoryData.random().name;
 
 test.beforeAll(async () => {
   browser = await chromium.launch();
-  context = await browser.newContext();
+  context = await browser.newContext(pmContextOptions());
   page = await context.newPage();
   await new BasicLoginPage(page).basicLoginAndPmVisit(Users.adminUsername, Users.adminPassword);
   const pp = new ProjectPage(page);

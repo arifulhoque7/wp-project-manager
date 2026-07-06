@@ -6,6 +6,7 @@ import { TaskPage } from '../pages/task';
 import { MyTasksPage } from '../pages/myTasks';
 import { ProjectData, TaskListData, TaskData, Users } from '../utils/testData';
 import { configureSpecFailFast } from '../utils/specFailFast';
+import { pmContextOptions } from '../utils/auth';
 
 // My Tasks must aggregate the current user's assigned tasks across DIFFERENT
 // projects — the whole point of the dashboard. Assign admin one task in each
@@ -43,7 +44,7 @@ async function seedAssignedTask(
 
 test.beforeAll(async () => {
   browser = await chromium.launch();
-  context = await browser.newContext();
+  context = await browser.newContext(pmContextOptions());
   page = await context.newPage();
   const login = new BasicLoginPage(page);
   await login.basicLoginAndPmVisit(Users.adminUsername, Users.adminPassword);
