@@ -25,7 +25,8 @@ import {
   Pagination, PaginationContent, PaginationItem,
   PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis,
 } from "@components/ui/pagination";
-import { Plus, ChevronsUpDown, ListTodo, Crown } from "lucide-react";
+import { Plus, ChevronsUpDown, ListTodo } from "lucide-react";
+import ProBadge from "@components/common/ProBadge";
 import BackButton from '@components/common/BackButton';
 import { Slot } from "@hooks/useSlot";
 import TaskListSection from "./TaskListSection";
@@ -298,21 +299,23 @@ export default function TaskListsPage() {
             placeholder={__("Task list details", 'wedevs-project-manager')}
             minHeight="80px"
           />
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id="new-list-private"
-              checked={newListPrivate}
-              onCheckedChange={(v) => setNewListPrivate(!!v)}
-              disabled={!isPro}
-            />
-            <label
-              htmlFor="new-list-private"
-              className={cn("text-sm cursor-pointer", isPro ? 'text-pm-text-primary' : 'text-pm-text-muted')}
-            >
-              {__("Private", 'wedevs-project-manager')}
-            </label>
-            {!isPro && <Crown className="h-3.5 w-3.5 text-pm-accent" />}
-          </div>
+          {userCan('view_private_list') && (
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="new-list-private"
+                checked={newListPrivate}
+                onCheckedChange={(v) => setNewListPrivate(!!v)}
+                disabled={!isPro}
+              />
+              <label
+                htmlFor="new-list-private"
+                className={cn("text-sm cursor-pointer", isPro ? 'text-pm-text-primary' : 'text-pm-text-muted')}
+              >
+                {__("Private", 'wedevs-project-manager')}
+              </label>
+              {!isPro && <ProBadge />}
+            </div>
+          )}
           <div className="flex items-center gap-2 pt-1">
             <Button
               type="button"

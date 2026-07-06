@@ -17,7 +17,7 @@ import FileUploadArea from '@components/common/FileUploadArea'
 import CommentAttachment from '@components/common/CommentAttachment'
 import { Lock, MessageSquare, Pencil, Trash2 } from 'lucide-react'
 import BackButton from '@components/common/BackButton'
-import { formatPmDateTime } from '@lib/pm-utils'
+import { formatPmDateTime, isPrivate } from '@lib/pm-utils'
 import TaskRow from './TaskRow'
 import TaskDetailSheet from './TaskDetailSheet'
 import { sanitizeHtml } from '@lib/sanitize'
@@ -277,7 +277,7 @@ export default function SingleTaskListPage() {
       {/* List header */}
       <div className="flex items-center gap-3 flex-wrap">
         <h1 className="text-xl font-bold text-pm-text-primary">{currentList.title}</h1>
-        {currentList.meta?.privacy === 1 && (
+        {isPrivate(currentList.meta?.privacy) && (
           <Lock className="h-4 w-4 text-pm-text-muted" title={__('Private', 'wedevs-project-manager')} />
         )}
         <span className="text-sm text-pm-text-muted tabular-nums">

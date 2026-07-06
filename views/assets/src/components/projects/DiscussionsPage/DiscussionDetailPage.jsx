@@ -45,7 +45,7 @@ import FileUploadArea from "@components/common/FileUploadArea";
 import NotifyUsers from "@components/common/NotifyUsers";
 import ProBadge from "@components/common/ProBadge";
 import CommentAttachment from "@components/common/CommentAttachment";
-import { formatPmDateTime } from "@lib/pm-utils";
+import { formatPmDateTime, isPrivate as checkPrivate } from "@lib/pm-utils";
 import { usePermissions } from "@hooks/usePermissions";
 import GoogleDriveAttach from "@components/google-workspace/GoogleDriveAttach";
 import CommentLinkActions from "@components/google-workspace/CommentLinkActions";
@@ -197,7 +197,7 @@ export default function DiscussionDetailPage() {
   };
 
   const handleTogglePrivacy = async () => {
-    const newPrivacy = discussion.meta?.privacy ? 0 : 1;
+    const newPrivacy = checkPrivate(discussion.meta?.privacy) ? 0 : 1;
     try {
       await api.post(`projects/${projectId}/discussion-boards/privacy/${discussionId}`, {
         is_private: newPrivacy,
@@ -319,7 +319,7 @@ export default function DiscussionDetailPage() {
 
   if (!discussion) return null;
 
-  const isPrivate = discussion.meta?.privacy;
+  const isPrivate = checkPrivate(discussion.meta?.privacy);
   const commentCount = comments.length;
 
   return (

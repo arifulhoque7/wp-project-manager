@@ -81,10 +81,14 @@ test.describe('Privacy on create (Pro) — task list + task', () => {
     expect(await listPrivacyByTitle(page, privateListTitle), 'new list meta.privacy').toBe(1);
   });
 
-  test('PVC0002 : The private list shows the Lock icon (no reload)', async () => {
+  test('PVC0002 : The Lock icon persists after a reload', async () => {
     test.skip(!isPro, 'Privacy is a Pro feature');
+    // Server returns meta.privacy as the string '1'; the lock must still render
+    // after a reload (regression: a strict `=== 1` compare hid it).
+    await page.reload();
+    await page.waitForSelector('#wedevs-project-manager', { timeout: 60000 });
     const row = page.locator('div').filter({ hasText: privateListTitle }).first();
-    await expect(row.locator('svg.lucide-lock, [title="Private"]').first()).toBeVisible({ timeout: 10000 });
+    await expect(row.locator('svg.lucide-lock, [title="Private"]').first()).toBeVisible({ timeout: 15000 });
   });
 
   test('PVC0003 : Add a PRIVATE task → privacy persists', async () => {
@@ -121,5 +125,42 @@ test.describe('Privacy on create (Pro) — task list + task', () => {
     await page.waitForTimeout(1500); // async privacy POST fires after create resolves
     const show = await pmApi(page, 'GET', `projects/${projectId}/tasks/${taskId}`);
     expect(Number(show?.data?.meta?.privacy ?? 0), 'new task meta.privacy').toBe(1);
+  });
+
+  test('PVC0004 : Toggle list privacy from the "…" menu (private→public→private)', async () => {
+    test.skip(!isPro, 'Privacy is a Pro feature');
+    const lists = await pmApi(page, 'GET', `projects/${projectId}/task-lists?per_page=100`);
+    const inbox = ((lists?.data as { id: number; title: string }[]) || []).find((l) => l.title === 'Inbox');
+    const inboxId = inbox?.id ?? 0;
+    expect(inboxId, 'inbox list id').toBeGreaterThan(0);
+    // Seed Inbox private so the menu offers "Make Public" first.
+    await pmApi(page, 'POST', `projects/${projectId}/task-lists/privacy/${inboxId}`, { is_private: 1 });
+    await page.reload();
+    await page.waitForSelector('#wedevs-project-manager', { timeout: 60000 });
+
+    const listPrivacy = async (): Promise<number> => {
+      const r = await pmApi(page, 'GET', `projects/${projectId}/task-lists?per_page=100`);
+      const l = ((r?.data as { id: number; meta?: { privacy?: unknown } }[]) || []).find((x) => x.id === inboxId);
+      return Number(l?.meta?.privacy ?? 0);
+    };
+    expect(await listPrivacy(), 'private after seed').toBe(1);
+
+    // Make Public
+    await page.getByRole('button', { name: 'List options' }).first().click();
+    await Promise.all([
+      page.waitForResponse((r) => r.url().includes('/task-lists/privacy/') && r.request().method() === 'POST'),
+      page.getByRole('menuitem', { name: /Make Public/i }).click(),
+    ]);
+    await page.waitForTimeout(600);
+    expect(await listPrivacy(), 'public after toggle').toBe(0);
+
+    // Make Private again
+    await page.getByRole('button', { name: 'List options' }).first().click();
+    await Promise.all([
+      page.waitForResponse((r) => r.url().includes('/task-lists/privacy/') && r.request().method() === 'POST'),
+      page.getByRole('menuitem', { name: /Make Private/i }).click(),
+    ]);
+    await page.waitForTimeout(600);
+    expect(await listPrivacy(), 'private after toggle back').toBe(1);
   });
 });
