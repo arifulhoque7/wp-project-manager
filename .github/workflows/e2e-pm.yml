@@ -22,7 +22,7 @@ jobs:
   test:
     name: e2e (${{ matrix.group }})
     # Run on forks only — the canonical repos are covered elsewhere.
-    if: github.repository != 'weDevsOfficial/wedevs-project-manager' && github.repository != 'weDevsOfficial/pm-pro'
+    if: github.repository != 'weDevsOfficial/wp-project-manager' && github.repository != 'weDevsOfficial/pm-pro'
     timeout-minutes: 60
     runs-on: ubuntu-22.04
     strategy:
@@ -131,7 +131,7 @@ jobs:
 
   merge-report:
     name: merge shard reports
-    if: always() && github.repository != 'weDevsOfficial/wedevs-project-manager' && github.repository != 'weDevsOfficial/pm-pro'
+    if: always() && github.repository != 'weDevsOfficial/wp-project-manager' && github.repository != 'weDevsOfficial/pm-pro'
     needs: [test]
     runs-on: ubuntu-22.04
     steps:
