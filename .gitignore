@@ -27,3 +27,6 @@ wp-project-manager.zip
 CLAUDE.local.md
 .claude/settings.local.json
 .claude/agent-memory/
+
+# Local wp-env scaffolding (CI clones/fetches these fresh)
+/plugins/
