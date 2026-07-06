@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@store/index'
-import { toggleExpand, addTaskToList, reorderTasksLocal, updateTaskList, deleteTaskList } from '@store/taskListsSlice'
+import { toggleExpand, addTaskToList, reorderTasksLocal, updateTaskList, deleteTaskList, updateTaskPrivacy } from '@store/taskListsSlice'
 import { sortTasks } from '@store/tasksSlice'
 import { createTask } from '@store/tasksSlice'
 import { useApi } from '@hooks/useApi'
@@ -12,6 +12,7 @@ import { useConfirm } from '@hooks/useConfirm'
 import { Milestone as MilestoneIcon } from 'lucide-react'
 import { Button } from '@components/ui/button'
 import { Input } from '@components/ui/input'
+import { Checkbox } from '@components/ui/checkbox'
 import { DatePicker } from '@components/ui/date-picker'
 import RichTextEditor from '@components/common/RichTextEditor'
 import { Progress } from '@components/ui/progress'
@@ -66,6 +67,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
   const [newTitle, setNewTitle] = useState('')
   const [newDesc, setNewDesc] = useState('')
   const [newDueDate, setNewDueDate] = useState('')
+  const [newTaskPrivate, setNewTaskPrivate] = useState(false)
   const [assigneeSearch, setAssigneeSearch] = useState('')
   const [assigneeOpen, setAssigneeOpen] = useState(false)
   const assigneeBoxRef = useRef(null)
@@ -125,6 +127,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
     setNewTitle('')
     setNewDesc('')
     setNewDueDate('')
+    setNewTaskPrivate(false)
     setAssigneeSearch('')
     setAssigneeOpen(false)
     setSelectedAssignees([])
@@ -166,6 +169,15 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
             task_ids: [result.id],
           }).catch(() => {});
         }
+        // Privacy (Pro) persists through the dedicated endpoint, then reflect it
+        // locally so the Lock icon shows without a reload.
+        if (isPro && newTaskPrivate && result.id) {
+          api.post(`projects/${projectId}/tasks/privacy/${result.id}`, {
+            is_private: 1,
+          }).then(() => {
+            dispatch(updateTaskPrivacy({ taskId: result.id, privacy: 1 }));
+          }).catch(() => {});
+        }
       }
       resetForm()
       setShowNewTask(true) // keep form open for rapid entry
@@ -174,7 +186,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
       toast.error(__('Failed to create task', 'wedevs-project-manager'))
     }
     setCreating(false)
-  }, [dispatch, projectId, list.id, newTitle, newDesc, newDueDate, selectedAssignees, creating, toast, __, resetForm])
+  }, [dispatch, projectId, list.id, newTitle, newDesc, newDueDate, selectedAssignees, creating, isPro, newTaskPrivate, api, toast, __, resetForm])
 
   // ── Task drag-drop within list ──────────────────
   const dragTaskIdx = useRef(null)
@@ -367,6 +379,8 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
             variant="ghost"
             size="icon"
             className="h-6 w-6"
+            title={__('Add task', 'wedevs-project-manager')}
+            aria-label={__('Add task', 'wedevs-project-manager')}
             onClick={() => { setShowNewTask(v => !v); if (!expanded) dispatch(toggleExpand(list.id)) }}
           >
             <Plus className="h-4 w-4" />
@@ -603,6 +617,23 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                   </div>
                 </div>
               )}
+
+              {/* Privacy (Pro) */}
+              <div className="flex items-center gap-2 pl-[26px]">
+                <Checkbox
+                  id={`new-task-private-${list.id}`}
+                  checked={newTaskPrivate}
+                  onCheckedChange={(v) => setNewTaskPrivate(!!v)}
+                  disabled={!isPro}
+                />
+                <label
+                  htmlFor={`new-task-private-${list.id}`}
+                  className={cn('text-sm cursor-pointer', isPro ? 'text-pm-text-primary' : 'text-pm-text-muted')}
+                >
+                  {__('Private', 'wedevs-project-manager')}
+                </label>
+                {!isPro && <Crown className="h-3.5 w-3.5 text-pm-accent" />}
+              </div>
 
               {/* Actions */}
               <div className="flex items-center gap-2 pl-[26px]">

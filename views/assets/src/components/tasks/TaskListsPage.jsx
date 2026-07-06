@@ -9,6 +9,7 @@ import {
   reorderListsLocal,
   expandAll,
   collapseAll,
+  updateListPrivacy,
 } from "@store/taskListsSlice";
 import { cn } from "@lib/utils";
 import { useToast } from "@hooks/useToast";
@@ -125,14 +126,25 @@ export default function TaskListsPage() {
       if (!canCreateList || !newListTitle.trim() || creatingList) return;
       setCreatingList(true);
       try {
-        await dispatch(
+        const newList = await dispatch(
           createTaskList({
             projectId,
             title: newListTitle.trim(),
             description: newListDesc.trim() || undefined,
-            privacy: newListPrivate ? 1 : 0,
           }),
         ).unwrap();
+        // Privacy is a Pro feature persisted through the dedicated privacy
+        // endpoint (the create route ignores it). Mirror the task-privacy flow.
+        if (isPro && newListPrivate && newList?.id) {
+          try {
+            await api.post(`projects/${projectId}/task-lists/privacy/${newList.id}`, {
+              is_private: 1,
+            });
+            dispatch(updateListPrivacy({ listId: newList.id, privacy: 1 }));
+          } catch {
+            toast.error(__("Failed to set list privacy", 'wedevs-project-manager'));
+          }
+        }
         setNewListTitle("");
         setNewListDesc("");
         setNewListPrivate(false);
@@ -151,6 +163,8 @@ export default function TaskListsPage() {
       newListPrivate,
       creatingList,
       canCreateList,
+      isPro,
+      api,
       toast,
       __,
     ],
