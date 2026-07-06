@@ -1,6 +1,6 @@
 import { Browser, BrowserContext, Page, test, chromium, expect } from '@playwright/test';
 import { BasicLoginPage } from '../../pages/basicLogin';
-import { PmDashboardPage } from '../../pages/pmDashboard';
+import { PmProjectListPage } from '../../pages/pmProjectList';
 import { Users } from '../../utils/testData';
 import { Selectors } from '../../pages/selectors';
 import { configureSpecFailFast } from '../../utils/specFailFast';
@@ -27,7 +27,7 @@ test.describe('Pro Upsell (only when Pro plugin inactive)', () => {
   configureSpecFailFast();
 
   test('PU0001 : Premium menu link visible in free mode', async () => {
-    const dash = new PmDashboardPage(page);
+    const dash = new PmProjectListPage(page);
     await dash.open();
     const isPro = await dash.isProActive();
     test.skip(isPro, 'Pro plugin active — premium upsell link is hidden');
@@ -35,7 +35,7 @@ test.describe('Pro Upsell (only when Pro plugin inactive)', () => {
   });
 
   test('PU0002 : Premium route shows upgrade view', async () => {
-    const dash = new PmDashboardPage(page);
+    const dash = new PmProjectListPage(page);
     const isPro = await dash.isProActive();
     test.skip(isPro, 'Pro plugin active — upgrade view is hidden');
     await dash.openPremiumTeaser();
@@ -43,7 +43,7 @@ test.describe('Pro Upsell (only when Pro plugin inactive)', () => {
   });
 
   test('PU0003 : Upgrade modal opens from CTA', async () => {
-    const dash = new PmDashboardPage(page);
+    const dash = new PmProjectListPage(page);
     const isPro = await dash.isProActive();
     test.skip(isPro, 'Pro plugin active — upgrade CTA modal not present');
     // The My Tasks "Reports" tab is Pro-gated (constants.js: pro: true); clicking

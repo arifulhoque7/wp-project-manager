@@ -1,6 +1,6 @@
 import { Browser, BrowserContext, Page, test, chromium, expect } from '@playwright/test';
 import { BasicLoginPage } from '../../pages/basicLogin';
-import { PmDashboardPage } from '../../pages/pmDashboard';
+import { PmProjectListPage } from '../../pages/pmProjectList';
 import { Users } from '../../utils/testData';
 import { configureSpecFailFast } from '../../utils/specFailFast';
 import { pmContextOptions } from '../../utils/auth';
@@ -26,13 +26,13 @@ test.describe('Free Permissions', () => {
   configureSpecFailFast();
 
   test('RP0001 : Admin can reach Settings page', async () => {
-    const dash = new PmDashboardPage(page);
+    const dash = new PmProjectListPage(page);
     await dash.openSettings();
     await dash.assertAppMounted();
   });
 
   test('RP0002 : Admin can reach Categories page', async () => {
-    const dash = new PmDashboardPage(page);
+    const dash = new PmProjectListPage(page);
     await dash.openCategories();
     await dash.assertAppMounted();
   });
@@ -40,7 +40,7 @@ test.describe('Free Permissions', () => {
   test('RP0003 : Free REST projects endpoint returns 200 for admin', async () => {
     // The custom PM router requires the X-WP-Nonce header (PM_Vars.permission)
     // and the is_admin param — a bare request is unauthorized by design.
-    const dash = new PmDashboardPage(page);
+    const dash = new PmProjectListPage(page);
     await dash.open();
     const status = await page.evaluate(async () => {
       const v = window.PM_Vars;

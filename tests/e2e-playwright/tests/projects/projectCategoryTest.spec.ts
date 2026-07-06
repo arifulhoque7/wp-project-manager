@@ -61,7 +61,7 @@ test.describe('Project — category assignment', () => {
   test('PCG0001 : Create a project with a category selected', async () => {
     const pp = new ProjectPage(page);
     await pp.openProjectsList();
-    await page.locator(Selectors.pmDashboard.newProjectButton).first().click();
+    await page.locator(Selectors.pmProjectList.newProjectButton).first().click();
     await page.locator(Selectors.project.titleInput).first().fill(project);
     // Category is a shadcn Select — open it and pick the seeded option.
     await page.locator(Selectors.project.categoryTrigger).first().click();

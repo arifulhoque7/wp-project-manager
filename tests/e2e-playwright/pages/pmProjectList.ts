@@ -2,7 +2,7 @@ import { type Page, expect } from '@playwright/test';
 import { Base } from './base';
 import { Selectors } from './selectors';
 
-export class PmDashboardPage extends Base {
+export class PmProjectListPage extends Base {
   constructor(page: Page) {
     super(page);
   }

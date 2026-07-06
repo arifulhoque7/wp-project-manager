@@ -18,7 +18,7 @@ export const Selectors = {
 
   pmRoot: '#wedevs-project-manager',
 
-  pmDashboard: {
+  pmProjectList: {
     appReady: '#wedevs-project-manager',
     projectsPageTitle: 'text=Projects',
     newProjectButton: 'button:has-text("New Project"), [data-test="new-project"]',

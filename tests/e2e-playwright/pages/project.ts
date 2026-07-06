@@ -14,7 +14,7 @@ export class ProjectPage extends Base {
 
   async createProject(title: string, description = '') {
     await this.openProjectsList();
-    await this.validateAndClick(Selectors.pmDashboard.newProjectButton);
+    await this.validateAndClick(Selectors.pmProjectList.newProjectButton);
     await this.validateAndFillStrings(Selectors.project.titleInput, title);
     if (description) {
       const desc = this.page.locator(Selectors.project.descriptionInput).first();

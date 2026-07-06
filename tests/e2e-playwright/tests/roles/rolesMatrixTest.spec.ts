@@ -25,7 +25,7 @@ let pid = '';
 let clientAssigned = false;
 
 const base = Urls.baseUrl + AdminPaths.pm;
-const projectListsUrl = () => `${base}#/projects/${pid}/task-lists`;
+const pmProjectListsUrl = () => `${base}#/projects/${pid}/task-lists`;
 const projectSettingsUrl = () => `${base}#/projects/${pid}/settings`;
 const globalSettingsUrl = Urls.baseUrl + AdminPaths.pmSettings;
 
@@ -86,7 +86,7 @@ test.describe('Role Authorization Matrix', () => {
 
   test('RMX0001 : Non-member cannot see the project content', async () => {
     await runAsRole(async (page) => {
-      await page.goto(projectListsUrl());
+      await page.goto(pmProjectListsUrl());
       await page.waitForSelector(Selectors.pmRoot, { timeout: 60000 });
       await page.waitForTimeout(2500);
       // Blocked members never receive the project payload, so its list never renders.
@@ -96,7 +96,7 @@ test.describe('Role Authorization Matrix', () => {
 
   test('RMX0002 : Co-worker can access the project but not manager-only surfaces', async () => {
     await runAsRole(async (page, roles) => {
-      await roles.gotoAndExpectAllowed(projectListsUrl());
+      await roles.gotoAndExpectAllowed(pmProjectListsUrl());
       await expect(page.locator(Selectors.taskList.byTitle(list.title)).first()).toBeVisible();
       await roles.assertCannotDeleteList(list.title); // canDeleteTaskList = isManager
       await roles.gotoAndExpectForbidden(projectSettingsUrl()); // ProjectRoute managerOnly
@@ -107,7 +107,7 @@ test.describe('Role Authorization Matrix', () => {
   test('RMX0003 : Client can access the project but not manager-only surfaces', async () => {
     test.skip(!clientAssigned, 'Client role not present (Free-only install)');
     await runAsRole(async (page, roles) => {
-      await roles.gotoAndExpectAllowed(projectListsUrl());
+      await roles.gotoAndExpectAllowed(pmProjectListsUrl());
       await expect(page.locator(Selectors.taskList.byTitle(list.title)).first()).toBeVisible();
       await roles.assertCannotDeleteList(list.title);
       await roles.gotoAndExpectForbidden(projectSettingsUrl());
@@ -117,7 +117,7 @@ test.describe('Role Authorization Matrix', () => {
 
   test('RMX0004 : Project manager gets project management but NOT site-admin pages', async () => {
     await runAsRole(async (page, roles) => {
-      await roles.gotoAndExpectAllowed(projectListsUrl());
+      await roles.gotoAndExpectAllowed(pmProjectListsUrl());
       await roles.assertCanDeleteList(list.title); // isManager → Delete item shown
       await roles.gotoAndExpectAllowed(projectSettingsUrl()); // managerOnly → manager passes
       // A project manager is a Subscriber site-wide → blocked from global admin pages.

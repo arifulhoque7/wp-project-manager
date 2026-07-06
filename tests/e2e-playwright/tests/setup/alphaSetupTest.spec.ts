@@ -1,8 +1,9 @@
 import { Browser, BrowserContext, Page, test, chromium } from '@playwright/test';
 import { BasicLoginPage } from '../../pages/basicLogin';
-import { PmDashboardPage } from '../../pages/pmDashboard';
+import { PmProjectListPage } from '../../pages/pmProjectList';
 import { Users } from '../../utils/testData';
 import { saveAdminAuth } from '../../utils/auth';
+import { saveBaseline } from '../../utils/baseline';
 import { configureSpecFailFast } from '../../utils/specFailFast';
 
 let browser: Browser;
@@ -37,31 +38,40 @@ test.describe('Login and Setup (Free)', () => {
   });
 
   test('LS0003 : PM menu visible in sidebar', { tag: ['@Basic'] }, async () => {
-    const dash = new PmDashboardPage(page);
+    const dash = new PmProjectListPage(page);
     await dash.assertMenuVisible();
   });
 
   test('LS0004 : PM SPA mounts on Projects page', { tag: ['@Basic'] }, async () => {
-    const dash = new PmDashboardPage(page);
+    const dash = new PmProjectListPage(page);
     await dash.open();
     await dash.assertAppMounted();
   });
 
   test('LS0005 : My Tasks page opens', { tag: ['@Basic'] }, async () => {
-    const dash = new PmDashboardPage(page);
+    const dash = new PmProjectListPage(page);
     await dash.openMyTasks();
     await dash.assertAppMounted();
   });
 
   test('LS0006 : Categories page opens for admin', { tag: ['@Basic'] }, async () => {
-    const dash = new PmDashboardPage(page);
+    const dash = new PmProjectListPage(page);
     await dash.openCategories();
     await dash.assertAppMounted();
   });
 
   test('LS0007 : Settings page opens for admin', { tag: ['@Basic'] }, async () => {
-    const dash = new PmDashboardPage(page);
+    const dash = new PmProjectListPage(page);
     await dash.openSettings();
     await dash.assertAppMounted();
+  });
+
+  // Seed the shared prerequisite project + list (via REST) that container specs
+  // reuse instead of each creating their own — persisted to baseline.json.
+  test('LS0008 : Seed baseline project', { tag: ['@Basic'] }, async () => {
+    const dash = new PmProjectListPage(page);
+    await dash.open();
+    await dash.assertAppMounted();
+    await saveBaseline(page);
   });
 });
