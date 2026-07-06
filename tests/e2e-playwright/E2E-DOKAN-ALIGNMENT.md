@@ -94,28 +94,35 @@ Result: Free ~11.7m (was 45m) green; Pro unblocked (was 16/16 features failing).
 
 ---
 
-## Phase 2 — architecture (TODO, incremental, keep suite green each step)
+## Phase 2 — architecture
 
-1. **Auth reuse via `storageState`** *(biggest speed win)* — a `_auth.setup.ts`
-   setup project logs in once per role, saves cookies; specs load `storageState`
-   instead of `basicLoginAndPmVisit` in every `beforeAll` (~5–8s × 60+ specs).
-2. **Setup projects with `dependencies`** — `_site.setup` (permalinks/options via
-   API) → `_auth.setup` (auth) → `e2e_tests`. Mirrors Dokan's `projects[]`.
-3. **`global-setup.ts` / `global-teardown.ts`** — reset `debug.log`, surface it on
-   failure (Dokan maps `wp-data/debug.log`); teardown cleans seeded data.
-4. **`types/`** — `environment.d.ts` (typed `process.env`), `global.d.ts`
-   (`PM_Vars` / `PM_Pro_Vars`) to kill the `as unknown as {…}` casts in specs.
-5. **`utils/` reorg** — `test.ts` (custom fixtures: authed page, seeded project),
-   `pwMatchers.ts`, `apiUtils.ts`, `payloads.ts`, `testData.ts` split.
-6. **Feature folders** — move flat specs into `tests/<feature>/` (projects/, tasks/,
-   milestones/, settings/, pro: sprints/, invoices/, modules/…).
-7. **Dynamic sharding** — Dokan's `shard-durations.json` + `getShardSpecs.js`
-   balance shards by recorded duration instead of the hand-split lists.
-8. **`.wp-env.ci.json` + override** — separate CI env (Free+Pro mapping, debug.log)
-   like Dokan, selected in-workflow.
+1. **Auth reuse via `storageState`** — DONE ✅. The setup project (`tests/setup/`)
+   saves the admin session (`playwright/.auth/admin.json`); the admin specs create
+   their context with `pmContextOptions()` so `basicLogin` sees the dashboard
+   already authed and skips wp-login. Role/permission specs keep real per-user
+   login. Measured 74.5s → 64.8s over 3 specs (~3.3s/spec). `utils/auth.ts`.
+2. **Feature folders** — DONE ✅. Flat specs moved into `tests/<feature>/` matching
+   Dokan (Free: projects/ tasks/ task-lists/ milestones/ discussions/ categories/
+   files/ kanban/ my-tasks/ search/ activity/ overview/ settings/ roles/ upsell/
+   auth/ setup/; Pro: sprints/ invoices/ gantt/ labels/ custom-fields/ recurrence/
+   subtasks/ time-tracker/ inline-properties/ modules/ templates/ archive/
+   duplicate/ license/ project-settings/ multi-feature/ reports/ woo/ setup/).
+   Imports rewritten `../` → `../../`; shard + setup configs point at new paths.
 
-Risk note: 6 (feature folders) + 5 (fixtures) touch every spec — do per-batch,
-run locally against wp-env after each, never merge red.
+Remaining (incremental, keep suite green each step):
+
+3. **Setup projects with `dependencies`** — a `_site.setup` (options/permalinks via
+   API) → `_auth.setup` → `e2e_tests` chain like Dokan's `projects[]`.
+4. **`global-setup.ts` / `global-teardown.ts`** — reset + surface `debug.log`.
+5. **`types/`** — `environment.d.ts`, `global.d.ts` (`PM_Vars`/`PM_Pro_Vars`) to
+   kill the `as unknown as {…}` casts in specs.
+6. **`utils/` reorg** — `test.ts` custom fixtures (authed page, seeded project),
+   `pwMatchers.ts`, `apiUtils.ts` split.
+7. **Dynamic sharding** — `shard-durations.json` + `getShardSpecs.js` to balance
+   shards by recorded duration instead of hand-split lists.
+
+Risk note: fixtures (6) touch every spec — do per-batch, run against wp-env, never
+merge red.
 
 ---
 
