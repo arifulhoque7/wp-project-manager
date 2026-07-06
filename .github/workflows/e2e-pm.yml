@@ -134,6 +134,14 @@ jobs:
     if: always() && github.repository != 'weDevsOfficial/wedevs-project-manager' && github.repository != 'weDevsOfficial/pm-pro'
     needs: [test]
     runs-on: ubuntu-22.04
+    # Needed to publish the HTML report to GitHub Pages (a live, clickable URL).
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -155,9 +163,19 @@ jobs:
       - name: Merge into one HTML report
         working-directory: tests/e2e-playwright
         run: pnpm exec playwright merge-reports --reporter=html ./all-blob-reports
-      - name: Upload merged HTML report
+      # Also keep the downloadable artifact.
+      - name: Upload merged HTML report (artifact)
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: tests/e2e-playwright/playwright-report
           retention-days: 7
+      # Publish the report to GitHub Pages → a live URL shown on the run.
+      # Requires Pages enabled once: repo Settings → Pages → Source = GitHub Actions.
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: tests/e2e-playwright/playwright-report
+      - name: Deploy report to GitHub Pages
+        id: pages
+        uses: actions/deploy-pages@v4
