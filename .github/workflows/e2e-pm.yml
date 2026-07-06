@@ -61,40 +61,26 @@ jobs:
         run: |
           mkdir -p plugins
           cd plugins
-          for slug in wp-mail-log wp-reset; do
-            wget -q "https://downloads.wordpress.org/plugin/${slug}.latest-stable.zip"
-            unzip -q "${slug}.latest-stable.zip"
-            rm "${slug}.latest-stable.zip"
-          done
+          wget -q "https://downloads.wordpress.org/plugin/wp-mail-log.latest-stable.zip"
+          unzip -q "wp-mail-log.latest-stable.zip"
+          rm "wp-mail-log.latest-stable.zip"
 
+      # wp-env applies .wp-env.json: 1024M memory (heavy React pages need it) and
+      # mu-plugins (tests/e2e-playwright/mu-plugins) that force pretty permalinks
+      # (PM REST needs rewrite rules) and drop admin pointers — no wp-cli setup.
       - name: Start WordPress env
         working-directory: tests/e2e-playwright
         run: npx wp-env start
 
       # The role/permission specs log in as pre-existing PM users; seed them into
       # the tests instance (localhost:8889). Defaults mirror utils/testData.ts.
+      # (No pm_client_user: the client role is Pro-only, so RMX0003 self-skips.)
       - name: Seed QA users
         working-directory: tests/e2e-playwright
         run: |
           npx wp-env run tests-cli wp user create pm_manager_user  pm_manager@example.com  --role=subscriber --user_pass=password
           npx wp-env run tests-cli wp user create pm_coworker_user pm_coworker@example.com --role=subscriber --user_pass=password
           npx wp-env run tests-cli wp user create pm_member_user   pm_member@example.com   --role=subscriber --user_pass=password
-          # No pm_client_user: the client project role is Pro-only, so rolesMatrix
-          # RMX0003 self-skips when the client user is absent (Free-only install).
-
-      # PM's REST routes resolve through rewrite rules; a fresh wp-env defaults to
-      # plain permalinks (?p=123), so /wp-json/pm/v2/* returns 404 and every REST
-      # call fails. Switch to pretty permalinks so the API resolves.
-      - name: Set pretty permalinks
-        working-directory: tests/e2e-playwright
-        run: npx wp-env run tests-cli wp rewrite structure '/%postname%/' --hard
-
-      # wp-reset shows a first-run admin "pointer" tooltip that overlays the page
-      # and intercepts clicks (e.g. the Settings tabs). It is not used by any test,
-      # so deactivate it to keep the admin UI clickable.
-      - name: Deactivate wp-reset (its pointer intercepts clicks)
-        working-directory: tests/e2e-playwright
-        run: npx wp-env run tests-cli wp plugin deactivate wp-reset
 
       - name: Cache Playwright binaries
         id: playwright-cache
