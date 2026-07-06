@@ -107,6 +107,13 @@ jobs:
           mkdir -p test-results
           pnpm run test:sharded:ci
 
+      # WP_DEBUG_LOG writes PHP notices/errors to wp-data/debug.log (bind-mounted
+      # via .wp-env.json). Surface it so a failing run shows backend errors too.
+      - name: Surface WP debug.log
+        if: always()
+        working-directory: tests/e2e-playwright
+        run: test -s wp-data/debug.log && { echo '--- wp-data/debug.log ---'; cat wp-data/debug.log; } || echo 'debug.log empty'
+
       - name: Generate test summary
         if: always()
         working-directory: tests/e2e-playwright

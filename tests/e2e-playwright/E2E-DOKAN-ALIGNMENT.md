@@ -109,20 +109,21 @@ Result: Free ~11.7m (was 45m) green; Pro unblocked (was 16/16 features failing).
    duplicate/ license/ project-settings/ multi-feature/ reports/ woo/ setup/).
    Imports rewritten `../` → `../../`; shard + setup configs point at new paths.
 
+3. **`types/`** — DONE ✅. `types/global.d.ts` augments `Window` with `PM_Vars` /
+   `PM_Pro_Vars` (typed inside `page.evaluate`) and `types/environment.d.ts` types
+   the `QA_*` `process.env`. All `(window as unknown as {…}).PM_Vars` casts removed.
+4. **`global-setup` + `debug.log` surfacing** — DONE ✅. `global-setup.ts` resets
+   `wp-data/debug.log`; `.wp-env.json` sets `WP_DEBUG_LOG` + maps `wp-data`; the
+   workflow prints the log on `always()`, so a failing run shows PHP errors too.
+
 Remaining (incremental, keep suite green each step):
 
-3. **Setup projects with `dependencies`** — a `_site.setup` (options/permalinks via
+5. **Setup projects with `dependencies`** — a `_site.setup` (options/permalinks via
    API) → `_auth.setup` → `e2e_tests` chain like Dokan's `projects[]`.
-4. **`global-setup.ts` / `global-teardown.ts`** — reset + surface `debug.log`.
-5. **`types/`** — `environment.d.ts`, `global.d.ts` (`PM_Vars`/`PM_Pro_Vars`) to
-   kill the `as unknown as {…}` casts in specs.
 6. **`utils/` reorg** — `test.ts` custom fixtures (authed page, seeded project),
-   `pwMatchers.ts`, `apiUtils.ts` split.
+   `pwMatchers.ts`, `apiUtils.ts` split. Touches every spec — do per-batch.
 7. **Dynamic sharding** — `shard-durations.json` + `getShardSpecs.js` to balance
    shards by recorded duration instead of hand-split lists.
-
-Risk note: fixtures (6) touch every spec — do per-batch, run against wp-env, never
-merge red.
 
 ---
 

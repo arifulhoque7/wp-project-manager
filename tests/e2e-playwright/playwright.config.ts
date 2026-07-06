@@ -5,6 +5,7 @@ dotenv.config({ quiet: true });
 
 export default defineConfig({
   testDir: './tests',
+  globalSetup: './global-setup',
   timeout: 120000,
   expect: { timeout: 30000 },
   fullyParallel: false,

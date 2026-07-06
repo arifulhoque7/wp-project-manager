@@ -24,7 +24,7 @@ export class ActivityPage extends Base {
   // can assert a specific action was logged (pro-independent).
   async fetchActivitiesRaw(projectId: string): Promise<string> {
     return this.page.evaluate(async (pid) => {
-      const v = (window as unknown as { PM_Vars: { rest_url: string; permission: string; is_admin: unknown } }).PM_Vars;
+      const v = window.PM_Vars;
       const base = v.rest_url.replace(/\/$/, '');
       const res = await fetch(`${base}/projects/${pid}/activities?per_page=50&page=1&is_admin=${v.is_admin}`, {
         headers: { 'X-WP-Nonce': v.permission },

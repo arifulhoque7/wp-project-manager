@@ -43,7 +43,7 @@ test.describe('Free Permissions', () => {
     const dash = new PmDashboardPage(page);
     await dash.open();
     const status = await page.evaluate(async () => {
-      const v = (window as unknown as { PM_Vars: { rest_url: string; permission: string; is_admin: unknown } }).PM_Vars;
+      const v = window.PM_Vars;
       const base = v.rest_url.replace(/\/$/, '');
       const res = await fetch(`${base}/projects?per_page=1&is_admin=${v.is_admin}`, {
         headers: { 'X-WP-Nonce': v.permission },

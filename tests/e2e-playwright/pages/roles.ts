@@ -16,7 +16,7 @@ export class RolesPage extends Base {
   // Resolve a WP user id from a PM users/search hit matching the given email.
   async resolveUserId(email: string): Promise<number> {
     return this.page.evaluate(async (email) => {
-      const v = (window as unknown as { PM_Vars: { rest_url: string; permission: string; is_admin: unknown } }).PM_Vars;
+      const v = window.PM_Vars;
       const base = v.rest_url.replace(/\/$/, '');
       const res = await fetch(`${base}/users/search?query=${encodeURIComponent(email)}&is_admin=${v.is_admin}`, {
         headers: { 'X-WP-Nonce': v.permission },
@@ -34,7 +34,7 @@ export class RolesPage extends Base {
   async assignRoles(projectId: string, title: string, assignees: RoleAssignee[]): Promise<number> {
     return this.page.evaluate(
       async ({ projectId, title, assignees }) => {
-        const v = (window as unknown as { PM_Vars: { rest_url: string; permission: string; is_admin: unknown } }).PM_Vars;
+        const v = window.PM_Vars;
         const base = v.rest_url.replace(/\/$/, '');
         const res = await fetch(`${base}/projects/${projectId}/update`, {
           method: 'POST',
@@ -55,7 +55,7 @@ export class RolesPage extends Base {
   async resolveTaskId(projectId: string, taskTitle: string): Promise<number> {
     return this.page.evaluate(
       async ({ projectId, taskTitle }) => {
-        const v = (window as unknown as { PM_Vars: { rest_url: string; permission: string; is_admin: unknown } }).PM_Vars;
+        const v = window.PM_Vars;
         const base = v.rest_url.replace(/\/$/, '');
         const res = await fetch(
           `${base}/projects/${projectId}/task-lists?with=incomplete_tasks,complete_tasks&is_admin=${v.is_admin}`,
@@ -82,7 +82,7 @@ export class RolesPage extends Base {
   async attemptTaskRename(projectId: string, taskId: number, newTitle: string): Promise<number> {
     return this.page.evaluate(
       async ({ projectId, taskId, newTitle }) => {
-        const v = (window as unknown as { PM_Vars: { rest_url: string; permission: string; is_admin: unknown } }).PM_Vars;
+        const v = window.PM_Vars;
         const base = v.rest_url.replace(/\/$/, '');
         const res = await fetch(`${base}/projects/${projectId}/tasks/${taskId}/update`, {
           method: 'POST',
@@ -98,7 +98,7 @@ export class RolesPage extends Base {
   async getTaskTitle(projectId: string, taskId: number): Promise<string> {
     return this.page.evaluate(
       async ({ projectId, taskId }) => {
-        const v = (window as unknown as { PM_Vars: { rest_url: string; permission: string; is_admin: unknown } }).PM_Vars;
+        const v = window.PM_Vars;
         const base = v.rest_url.replace(/\/$/, '');
         const res = await fetch(`${base}/projects/${projectId}/tasks/${taskId}?is_admin=${v.is_admin}`, {
           headers: { 'X-WP-Nonce': v.permission },

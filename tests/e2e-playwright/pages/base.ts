@@ -157,7 +157,7 @@ export class Base {
     try {
       await this.page.waitForSelector('#wedevs-project-manager', { timeout: 15000 });
       const result = await this.page.evaluate(() => {
-        const pm = (window as unknown as { PM_Vars?: { is_pro?: unknown } }).PM_Vars;
+        const pm = window.PM_Vars;
         return Boolean(pm?.is_pro);
       });
       return result;

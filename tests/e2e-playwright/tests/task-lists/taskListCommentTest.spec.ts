@@ -22,7 +22,7 @@ let listId = 0;
 
 async function pmApi(page: Page, path: string) {
   return page.evaluate(async ({ path }) => {
-    const v = (window as unknown as { PM_Vars: { rest_url: string; permission: string; is_admin: unknown } }).PM_Vars;
+    const v = window.PM_Vars;
     const base = v.rest_url.replace(/\/$/, '');
     const sep = path.includes('?') ? '&' : '?';
     const res = await fetch(`${base}/${path}${sep}is_admin=${v.is_admin}`, {
