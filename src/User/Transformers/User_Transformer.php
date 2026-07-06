@@ -155,9 +155,10 @@ class User_Transformer extends TransformerAbstract {
                 }
             });
 
-            $start_at = WP_Router::$request->get_param( 'start_at' ) ?? false;
-            $due_date = WP_Router::$request->get_param( 'due_date' ) ?? false;
-            
+            $request  = WP_Router::$request;
+            $start_at = $request ? ( $request->get_param( 'start_at' ) ?? false ) : false;
+            $due_date = $request ? ( $request->get_param( 'due_date' ) ?? false ) : false;
+
             if ( ! empty( $start_at ) && ! empty( $due_date ) ) {
                 
                 $total_current_tasks = $tasks->where( 'status', 'incomplete' )->filter( function( $item ) use ( $start_at, $due_date, &$total ) {
@@ -273,8 +274,9 @@ class User_Transformer extends TransformerAbstract {
         $project_ids = User_Role::where( 'user_id', $item->ID )->get(['project_id'])->toArray();
         $project_ids = wp_list_pluck( $project_ids, 'project_id' );
 
-        $page = WP_Router::$request->get_param( 'mytask_activities_page' ) ?? 1;
-        $per_page = WP_Router::$request->get_param( 'mytask_activities_per_page' ) ?? 15;
+        $request  = WP_Router::$request;
+        $page     = $request ? ( $request->get_param( 'mytask_activities_page' ) ?? 1 ) : 1;
+        $per_page = $request ? ( $request->get_param( 'mytask_activities_per_page' ) ?? 15 ) : 15;
 
         Paginator::currentPageResolver(function () use ($page) {
             return $page;
@@ -294,8 +296,9 @@ class User_Transformer extends TransformerAbstract {
     }
 
     public function includeGraph ( User $item ) {
-        $start_at = WP_Router::$request->get_param( 'start_at' ) ?? false;
-        $due_date = WP_Router::$request->get_param( 'due_date' ) ?? false;
+        $request  = WP_Router::$request;
+        $start_at = $request ? ( $request->get_param( 'start_at' ) ?? false ) : false;
+        $due_date = $request ? ( $request->get_param( 'due_date' ) ?? false ) : false;
 
         if ( $start_at && $due_date ) {
             $first_day = gmdate( 'Y-m-d', strtotime( $start_at ) );
