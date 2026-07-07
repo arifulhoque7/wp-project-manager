@@ -60,7 +60,8 @@ class Comment_Transformer extends TransformerAbstract {
      * @return \League\Fractal\Resource\Collection
      */
     public function includeReplies( Comment $item ) {
-        $page =  WP_Router::$request->get_param( 'reply_page' ) ?? 1;
+        $request = WP_Router::$request;
+        $page    = $request ? ( $request->get_param( 'reply_page' ) ?? 1 ) : 1;
 
         $replies = $item->replies()->paginate( wedevs_pm_config('app.comment_per_page'), ['*'], 'reply_page', $page );
 
@@ -79,7 +80,8 @@ class Comment_Transformer extends TransformerAbstract {
      * @return \League\Fractal\Resource\Collection
      */
     public function includeFiles( Comment $item ) {
-        $page =  WP_Router::$request->get_param( 'file_page' ) ?? 1;
+        $request = WP_Router::$request;
+        $page    = $request ? ( $request->get_param( 'file_page' ) ?? 1 ) : 1;
 
         $files = $item->files()->get();
 

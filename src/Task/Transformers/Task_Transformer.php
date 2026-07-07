@@ -165,7 +165,8 @@ class Task_Transformer extends TransformerAbstract {
      * @return \League\Fractal\Resource\Collection
      */
     public function includeBoards( Task $item ) {
-        $page = WP_Router::$request->get_param( 'board_page' ) ?? 1;
+        $request = WP_Router::$request;
+        $page    = $request ? ( $request->get_param( 'board_page' ) ?? 1 ) : 1;
 
         Paginator::currentPageResolver(function () use ($page) {
             return $page;
@@ -184,7 +185,8 @@ class Task_Transformer extends TransformerAbstract {
     }
 
     public function includeComments( Task $item ) {
-        $page = WP_Router::$request->get_param( 'comment_page' ) ?? 1;
+        $request = WP_Router::$request;
+        $page    = $request ? ( $request->get_param( 'comment_page' ) ?? 1 ) : 1;
 
         Paginator::currentPageResolver(function () use ($page) {
             return $page;
@@ -209,7 +211,8 @@ class Task_Transformer extends TransformerAbstract {
     }
 
     public function includeActivities( Task $item ) {
-        $page = WP_Router::$request->get_param( 'activitie_page' ) ?? 1;
+        $request = WP_Router::$request;
+        $page    = $request ? ( $request->get_param( 'activitie_page' ) ?? 1 ) : 1;
 
         Paginator::currentPageResolver(function () use ($page) {
             return $page;
@@ -220,7 +223,8 @@ class Task_Transformer extends TransformerAbstract {
     }
 
     public function includeFiles( Task $item ) {
-        $page = WP_Router::$request->get_param( 'file_page' ) ?? 1;
+        $request = WP_Router::$request;
+        $page    = $request ? ( $request->get_param( 'file_page' ) ?? 1 ) : 1;
 
         Paginator::currentPageResolver(function () use ($page) {
             return $page;
