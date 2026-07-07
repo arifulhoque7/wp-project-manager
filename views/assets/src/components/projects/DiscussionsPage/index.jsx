@@ -38,7 +38,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
-import { formatPmDateTime } from "@lib/pm-utils";
+import { formatPmDateTime, isPrivate as checkPrivate } from "@lib/pm-utils";
 import ProBadge from "@components/common/ProBadge";
 import { usePermissions } from "@hooks/usePermissions";
 import { useCurrentProject } from "@hooks/useCurrentProject";
@@ -171,7 +171,7 @@ export default function DiscussionsPage() {
   const handleTogglePrivacy = useCallback(
     async (e, disc) => {
       e.stopPropagation();
-      const newPrivacy = disc.meta?.privacy ? 0 : 1;
+      const newPrivacy = checkPrivate(disc.meta?.privacy) ? 0 : 1;
       try {
         await api.post(
           `projects/${projectId}/discussion-boards/privacy/${disc.id}`,
@@ -291,7 +291,7 @@ export default function DiscussionsPage() {
       ) : (
         <div className="space-y-2">
           {discussions.map((d) => {
-            const isPrivate = d.meta?.privacy;
+            const isPrivate = checkPrivate(d.meta?.privacy);
             const commentCount = d.meta?.total_comments ?? d.comments?.data?.length ?? 0;
 
             return (

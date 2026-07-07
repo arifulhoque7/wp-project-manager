@@ -116,3 +116,49 @@ features:
     name: Premium route shows upgrade view
   - id: PU0003
     name: Upgrade modal opens from CTA
+
+  # Kanban Board (KB00xx)
+  - id: KB0001
+    name: Open project Kanban board
+  - id: KB0002
+    name: Create a Kanban section
+
+  # Project Overview (OV00xx)
+  - id: OV0001
+    name: Open project Overview
+  - id: OV0002
+    name: Overall progress panel renders
+  - id: OV0003
+    name: Team members panel renders
+
+  # Activity Feed (AC00xx)
+  - id: AC0001
+    name: Open project Activities
+  - id: AC0002
+    name: Activity content region renders
+
+  # Global Search (SR00xx)
+  - id: SR0001
+    name: Open global search dialog
+  - id: SR0002
+    name: Search finds seeded project
+  - id: SR0003
+    name: Search finds seeded task
+  - id: SR0004
+    name: Selecting a project result navigates
+
+  # Task Comments (TC00xx)
+  - id: TC0001
+    name: Open task detail sheet
+  - id: TC0002
+    name: Post a comment on the task
+  - id: TC0003
+    name: Post a second comment
+
+  # Authentication (AU00xx)
+  - id: AU0001
+    name: Admin logs into WP dashboard
+  - id: AU0002
+    name: PM SPA mounts after login
+  - id: AU0003
+    name: Admin logs out and login form returns
