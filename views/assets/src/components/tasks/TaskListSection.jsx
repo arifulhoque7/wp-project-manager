@@ -493,7 +493,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
             </div>
           )}
           {(incompleteTasks.length > 0 || completeTasks.length > 0) && (
-            <div className={cn('grid items-center gap-2 px-4 py-2 border-b bg-muted/20 text-[11px] font-semibold uppercase tracking-wider text-pm-text-muted/70', TASK_GRID)}>
+            <div className={cn('grid items-center gap-2 px-4 py-2 border-b bg-muted/20 text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70', TASK_GRID)}>
               <div className="flex items-center gap-1.5"><ListChecks className="h-3.5 w-3.5" />{__('Task', 'wedevs-project-manager')}</div>
               <div className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" />{__('Type', 'wedevs-project-manager')}</div>
               <div className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" />{__('Labels', 'wedevs-project-manager')}</div>

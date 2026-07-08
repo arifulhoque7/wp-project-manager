@@ -1101,7 +1101,7 @@ export default function MyTasksPage() {
             <div className="rounded-lg border bg-card overflow-hidden">
               <div className="overflow-x-auto">
                 <div className="min-w-[760px]">
-                  <div className={cn("grid gap-2 px-4 py-2 bg-muted/30 border-b text-[11px] font-semibold uppercase tracking-wider text-pm-text-muted/70", MYTASK_GRID)}>
+                  <div className={cn("grid gap-2 px-4 py-2 bg-muted/30 border-b text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70", MYTASK_GRID)}>
                     <div className="flex items-center gap-1.5"><ListChecks className="h-3.5 w-3.5" />{__("Task", 'wedevs-project-manager')}</div>
                     <div className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" />{__("Type", 'wedevs-project-manager')}</div>
                     <div className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" />{__("Labels", 'wedevs-project-manager')}</div>

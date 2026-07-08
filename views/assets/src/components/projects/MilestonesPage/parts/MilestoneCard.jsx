@@ -42,7 +42,7 @@ import MilestoneHealthBadge from "./MilestoneHealthBadge";
 import MilestoneProgress from "./MilestoneProgress";
 import { TASK_GRID } from "@components/tasks/TaskRow";
 import { Progress } from "@components/ui/progress";
-import { AlignLeft, Users as UsersIcon, BarChart3, Tag } from "lucide-react";
+import { AlignLeft, Users as UsersIcon, BarChart3, Tag, Paperclip } from "lucide-react";
 
 export default function MilestoneCard({ milestone, projectId, onEdit, onImportTasks, expanded, onToggleExpanded, onTaskOpen }) {
   const api = useApi();
@@ -185,7 +185,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
             <div className="flex items-center gap-2 flex-wrap">
               <h4
                 className={cn(
-                  "text-sm font-semibold",
+                  "text-base font-semibold",
                   isComplete
                     ? "text-pm-text-muted line-through"
                     : "text-pm-text-primary",
@@ -209,25 +209,25 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
               />
             )}
 
-            <div className="flex items-center gap-4 mt-2.5 flex-wrap">
+            <div className="flex items-center gap-2 mt-2.5 flex-wrap">
               <MilestoneProgress
                 progress={milestone.progress ?? 0}
                 taskCount={milestone.task_count}
               />
               {milestone.achieve_date && (
-                <span className="text-sm text-pm-text-muted flex items-center gap-1">
+                <span className="inline-flex items-center gap-1.5 rounded-md bg-muted/50 px-2.5 py-1 text-[13px] text-pm-text-muted">
                   <Clock className="h-3.5 w-3.5" />
                   {formatPmDateTime(milestone.achieve_date)}
                 </span>
               )}
               {directTasks.length > 0 && (
-                <span className="text-sm text-pm-text-muted flex items-center gap-1">
+                <span className="inline-flex items-center gap-1.5 rounded-md bg-muted/50 px-2.5 py-1 text-[13px] text-pm-text-muted">
                   <ListChecks className="h-3.5 w-3.5" />
                   {directTasks.length} {__("tasks", 'wedevs-project-manager')}
                 </span>
               )}
               {discussions.length > 0 && (
-                <span className="text-sm text-pm-text-muted flex items-center gap-1">
+                <span className="inline-flex items-center gap-1.5 rounded-md bg-muted/50 px-2.5 py-1 text-[13px] text-pm-text-muted">
                   <MessageSquare className="h-3.5 w-3.5" />
                   {discussions.length} {__("discussions", 'wedevs-project-manager')}
                 </span>
@@ -297,12 +297,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
       {hasDetails && (
         <>
           <Separator />
-          <div className={cn(
-            "bg-muted/10 px-4 py-3 grid gap-4",
-            directTasks.length > 0 && discussions.length > 0
-              ? "grid-cols-1 md:grid-cols-2"
-              : "grid-cols-1",
-          )}>
+          <div className="bg-muted/10 px-4 py-3 space-y-4">
             {directTasks.length > 0 && (() => {
               const incompleteTasks = directTasks.filter((t) => t.status !== 1 && t.status !== "1" && t.status !== "complete");
               const completedTasks = directTasks.filter((t) => t.status === 1 || t.status === "1" || t.status === "complete");
@@ -409,7 +404,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                 );
               };
               const gridHeader = (
-                <div className={cn("grid gap-2 px-4 py-2 border-b bg-muted/20 text-[11px] font-semibold uppercase tracking-wider text-pm-text-muted/70", TASK_GRID)}>
+                <div className={cn("grid gap-2 px-4 py-2 border-b bg-muted/20 text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70", TASK_GRID)}>
                   <div className="flex items-center gap-1.5"><ListChecks className="h-3.5 w-3.5" />{__("Task", 'wedevs-project-manager')}</div>
                   <div className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" />{__("Type", 'wedevs-project-manager')}</div>
                   <div className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" />{__("Labels", 'wedevs-project-manager')}</div>
@@ -429,7 +424,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                     className="flex items-center gap-1 mb-2 w-full text-left"
                   >
                     <ChevronDown className={cn("h-3.5 w-3.5 text-pm-text-muted/70 transition-transform", !tasksExpanded && "-rotate-90")} />
-                    <h5 className="text-[11px] font-semibold uppercase tracking-wider text-pm-text-muted/70 flex items-center gap-1">
+                    <h5 className="text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70 flex items-center gap-1">
                       <ListChecks className="h-3 w-3" />
                       {__("Tasks", 'wedevs-project-manager')}
                       <span className="text-[10px] font-normal">({directTasks.length})</span>
@@ -467,34 +462,54 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
 
             {discussions.length > 0 && (
               <div>
-                <h5 className="text-[11px] font-semibold uppercase tracking-wider text-pm-text-muted/70 mb-2 flex items-center gap-1">
-                  <MessageSquare className="h-3 w-3" />
-                  {__("Discussions", 'wedevs-project-manager')}
-                </h5>
-                <ul className="space-y-1.5">
+                <div className="inline-flex items-center gap-1.5 rounded-md bg-blue-100 text-blue-700 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider mb-1.5">
+                  <MessageSquare className="h-3.5 w-3.5" />
+                  {__("Discussions", 'wedevs-project-manager')} ({discussions.length})
+                </div>
+                <div className="rounded-lg border bg-card overflow-hidden divide-y divide-border/40">
                   {discussions.map((disc) => {
-                    const commentCount = disc.meta?.total_comments ?? 0;
+                    const commentCount = disc.meta?.total_comments ?? disc.meta?.total_comment ?? 0;
+                    const discCreator = disc.creator?.data;
+                    const discDate = disc.created_at;
+                    const fileCount = disc.meta?.total_files ?? 0;
                     return (
-                      <li key={disc.id} className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          className="text-sm text-pm-accent hover:underline truncate text-left flex-1 min-w-0"
-                          onClick={() =>
-                            navigate(`/projects/${projectId}/discussions/${disc.id}`)
-                          }
-                        >
-                          {disc.title}
-                        </button>
-                        {commentCount > 0 && (
-                          <span className="flex items-center gap-0.5 text-[12px] text-pm-text-muted shrink-0">
-                            <MessageSquare className="h-3 w-3" />
-                            {commentCount}
-                          </span>
-                        )}
-                      </li>
+                      <button
+                        key={disc.id}
+                        type="button"
+                        className="group w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-muted/20 transition-colors"
+                        onClick={() => navigate(`/projects/${projectId}/discussions/${disc.id}`)}
+                      >
+                        <span className="flex h-9 w-9 items-center justify-center rounded-md bg-blue-50 text-blue-500 shrink-0">
+                          <MessageSquare className="h-4 w-4" />
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-pm-text-primary truncate group-hover:text-pm-accent transition-colors">
+                            {disc.title}
+                          </p>
+                          <div className="flex items-center gap-3 mt-0.5 text-[12px] text-pm-text-muted">
+                            {discCreator && (
+                              <span className="inline-flex items-center gap-1.5 min-w-0">
+                                <UserAvatar user={discCreator} size="xs" />
+                                <span className="truncate">{discCreator.display_name}</span>
+                              </span>
+                            )}
+                            {discDate && (
+                              <span className="inline-flex items-center gap-1 shrink-0"><Calendar className="h-3.5 w-3.5" />{formatPmDateTime(discDate)}</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3 shrink-0">
+                          {fileCount > 0 && (
+                            <span className="flex items-center gap-1 text-[13px] text-pm-text-muted"><Paperclip className="h-3.5 w-3.5" />{fileCount}</span>
+                          )}
+                          {commentCount > 0 && (
+                            <span className="flex items-center gap-1 text-[13px] text-pm-text-muted"><MessageSquare className="h-3.5 w-3.5" />{commentCount}</span>
+                          )}
+                        </div>
+                      </button>
                     );
                   })}
-                </ul>
+                </div>
               </div>
             )}
           </div>
