@@ -326,10 +326,10 @@ export default function ProjectOverview() {
       {(() => {
         const st = project.status;
         const pill = st === "complete"
-          ? { label: __("Completed", 'wedevs-project-manager'), cls: "bg-emerald-50 text-emerald-600" }
+          ? { label: __("Completed", 'wedevs-project-manager'), cls: "bg-emerald-100 text-emerald-700" }
           : st === "archived"
             ? { label: __("Archived", 'wedevs-project-manager'), cls: "bg-muted text-pm-text-muted" }
-            : { label: __("Active", 'wedevs-project-manager'), cls: "bg-emerald-50 text-emerald-600" };
+            : { label: __("Active", 'wedevs-project-manager'), cls: "bg-blue-100 text-blue-700" };
         const owner = assignees[0];
         return (
           <div className="rounded-xl border bg-card p-4 flex flex-wrap items-center gap-4">
@@ -470,7 +470,7 @@ export default function ProjectOverview() {
             <div className="overflow-x-auto -mx-1">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-[11px] uppercase tracking-wider text-pm-text-muted/70 border-b">
+                  <tr className="text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70 border-b">
                     <th className="text-left font-semibold py-2 px-2">{__("Document", 'wedevs-project-manager')}</th>
                     <th className="text-left font-semibold py-2 px-2">{__("Type", 'wedevs-project-manager')}</th>
                     <th className="text-left font-semibold py-2 px-2">{__("Date", 'wedevs-project-manager')}</th>
@@ -531,7 +531,7 @@ export default function ProjectOverview() {
           <div className="overflow-x-auto -mx-1">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-[11px] uppercase tracking-wider text-pm-text-muted/70 border-b">
+                <tr className="text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70 border-b">
                   <th className="text-left font-semibold py-2 px-2 w-10">{__("No", 'wedevs-project-manager')}</th>
                   <th className="text-left font-semibold py-2 px-2">{__("Milestone", 'wedevs-project-manager')}</th>
                   <th className="text-left font-semibold py-2 px-2">{__("Planned Date", 'wedevs-project-manager')}</th>
@@ -553,7 +553,7 @@ export default function ProjectOverview() {
                         {(m.task_count?.completed ?? 0)}/{(m.task_count?.total ?? 0)}
                       </td>
                       <td className="py-2.5 px-2">
-                        <span className={cn("inline-flex items-center rounded-md px-2 py-0.5 text-[12px] font-medium", done ? "bg-emerald-50 text-emerald-600" : "bg-amber-50 text-amber-700")}>
+                        <span className={cn("inline-flex items-center rounded-md px-2 py-0.5 text-[12px] font-medium", done ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700")}>
                           {done ? __("Complete", 'wedevs-project-manager') : __("Pending", 'wedevs-project-manager')}
                         </span>
                       </td>

@@ -434,7 +434,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                     <div className="space-y-3">
                       {incompleteTasks.length > 0 && (
                         <div>
-                          <div className="inline-flex items-center gap-1.5 rounded-md bg-amber-100 text-amber-700 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider mb-1.5"><Clock className="h-3.5 w-3.5" />{__("Pending", 'wedevs-project-manager')} ({incompleteTasks.length})</div>
+                          <div className="inline-flex items-center gap-1.5 rounded-md bg-amber-100 text-amber-700 px-2.5 py-1 text-[12px] font-bold uppercase tracking-wider mb-1.5"><Clock className="h-3.5 w-3.5" />{__("Pending", 'wedevs-project-manager')} ({incompleteTasks.length})</div>
                           <div className="rounded-lg border bg-card overflow-hidden">
                             <div className="overflow-x-auto"><div className="min-w-[1120px]">
                               {gridHeader}
@@ -445,7 +445,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                       )}
                       {completedTasks.length > 0 && (
                         <div>
-                          <div className="inline-flex items-center gap-1.5 rounded-md bg-emerald-100 text-emerald-700 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider mb-1.5"><CheckCircle className="h-3.5 w-3.5" />{__("Completed", 'wedevs-project-manager')} ({completedTasks.length})</div>
+                          <div className="inline-flex items-center gap-1.5 rounded-md bg-emerald-100 text-emerald-700 px-2.5 py-1 text-[12px] font-bold uppercase tracking-wider mb-1.5"><CheckCircle className="h-3.5 w-3.5" />{__("Completed", 'wedevs-project-manager')} ({completedTasks.length})</div>
                           <div className="rounded-lg border bg-card overflow-hidden">
                             <div className="overflow-x-auto"><div className="min-w-[1120px]">
                               {gridHeader}
@@ -462,7 +462,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
 
             {discussions.length > 0 && (
               <div>
-                <div className="inline-flex items-center gap-1.5 rounded-md bg-blue-100 text-blue-700 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider mb-1.5">
+                <div className="inline-flex items-center gap-1.5 rounded-md bg-blue-100 text-blue-700 px-2.5 py-1 text-[12px] font-bold uppercase tracking-wider mb-1.5">
                   <MessageSquare className="h-3.5 w-3.5" />
                   {__("Discussions", 'wedevs-project-manager')} ({discussions.length})
                 </div>

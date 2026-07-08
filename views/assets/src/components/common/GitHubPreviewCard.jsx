@@ -68,9 +68,9 @@ export default function GitHubPreviewCard({ previewData, loading, url, onRefresh
   const typeLabel = previewData.type === 'pull_request' ? __('PR', 'wedevs-project-manager') : __('Issue', 'wedevs-project-manager')
 
   const stateColors = {
-    open:   'text-green-600 bg-green-50',
-    closed: 'text-red-600 bg-red-50',
-    merged: 'text-purple-600 bg-purple-50',
+    open:   'text-emerald-700 bg-emerald-100',
+    closed: 'text-red-700 bg-red-100',
+    merged: 'text-purple-700 bg-purple-100',
   }
 
   const openInGitHubLogo = () => {
