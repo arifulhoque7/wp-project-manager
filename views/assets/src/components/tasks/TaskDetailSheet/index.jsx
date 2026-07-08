@@ -518,12 +518,12 @@ export default function TaskDetailSheet() {
                 className="p-1.5 rounded-md hover:bg-muted text-pm-text-muted hover:text-pm-text-primary transition-colors"
                 title={fullscreen ? __('Exit full screen', 'wedevs-project-manager') : __('Full screen', 'wedevs-project-manager')}
               >
-                {fullscreen ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
+                {fullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
               </button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="p-1.5 rounded-md hover:bg-muted text-pm-text-muted hover:text-pm-text-primary transition-colors">
-                    <MoreHorizontal className="h-5 w-5" />
+                    <MoreHorizontal className="h-4 w-4" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
@@ -541,7 +541,7 @@ export default function TaskDetailSheet() {
 
             <Separator />
 
-            <div className="px-6 pt-6 pb-4 space-y-4">
+            <div className="px-6 pt-6 pb-5 space-y-5">
               <SheetHeader className="space-y-1.5">
                 <SheetDescription asChild>
                   <div className="flex items-center gap-2 text-[13px] text-muted-foreground min-w-0">
@@ -556,7 +556,7 @@ export default function TaskDetailSheet() {
                         className="inline-flex items-center gap-1 font-medium text-pm-accent hover:text-pm-accent/80 transition-colors truncate min-w-0"
                         title={currentTask.project?.data?.title || currentTask.project?.title}
                       >
-                        <Layers className="h-3 w-3 shrink-0" />
+                        <Layers className="h-4 w-4 shrink-0" />
                         {currentTask.project?.data?.title || currentTask.project?.title}
                       </button>
                     )}
@@ -582,8 +582,8 @@ export default function TaskDetailSheet() {
                 </div>
               </SheetHeader>
 
-              <div className="space-y-0.5">
-                <div className="flex items-center h-9 px-2 rounded-md hover:bg-muted/40 transition-colors cursor-pointer" onClick={handleToggleStatus}>
+              <div className="space-y-1 pt-1">
+                <div className="flex items-center h-10 px-2 rounded-md hover:bg-muted/40 transition-colors cursor-pointer" onClick={handleToggleStatus}>
                   <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
                     <Check className="h-4 w-4" /><span className="text-sm">{__('Status', 'wedevs-project-manager')}</span>
                   </div>
@@ -594,7 +594,7 @@ export default function TaskDetailSheet() {
                   </span>
                 </div>
 
-                <div className="flex items-center min-h-[32px] px-2 rounded-md hover:bg-muted/40 transition-colors">
+                <div className="flex items-center min-h-10 px-2 rounded-md hover:bg-muted/40 transition-colors">
                   <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
                     <Calendar className="h-4 w-4" /><span className="text-sm">{__('Dates', 'wedevs-project-manager')}</span>
                   </div>
@@ -627,7 +627,7 @@ export default function TaskDetailSheet() {
                   )}
                 </div>
 
-                <div className="flex items-start min-h-[32px] px-2 rounded-md hover:bg-muted/40 transition-colors py-1">
+                <div className="flex items-start min-h-10 px-2 rounded-md hover:bg-muted/40 transition-colors py-1">
                   <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0 pt-0.5">
                     <Users className="h-4 w-4" /><span className="text-sm">{__('Assignees', 'wedevs-project-manager')}</span>
                   </div>
@@ -639,7 +639,7 @@ export default function TaskDetailSheet() {
                           {user.display_name}
                           {canEditTask(currentTask) && (
                             <button type="button" className="ml-0.5 text-pm-text-muted hover:text-destructive" onClick={() => handleRemoveAssignee(user.assigned_to ?? user.id)}>
-                              <X className="h-3.5 w-3.5" />
+                              <X className="h-4 w-4" />
                             </button>
                           )}
                         </span>
@@ -647,7 +647,7 @@ export default function TaskDetailSheet() {
                       {canEditTask(currentTask) && (
                         <button type="button" onClick={() => setShowAssigneeSearch(v => !v)}
                           className="inline-flex items-center gap-1 text-[15px] text-pm-accent hover:text-pm-accent/80 transition-colors">
-                          <Plus className="h-3.5 w-3.5" />{__('Add', 'wedevs-project-manager')}
+                          <Plus className="h-4 w-4" />{__('Add', 'wedevs-project-manager')}
                         </button>
                       )}
                     </div>
@@ -684,7 +684,7 @@ export default function TaskDetailSheet() {
                 </div>
 
                 {currentTask.creator?.data && (
-                  <div className="flex items-center h-9 px-2 rounded-md hover:bg-muted/40 transition-colors">
+                  <div className="flex items-center h-10 px-2 rounded-md hover:bg-muted/40 transition-colors">
                     <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
                       <Users className="h-4 w-4" /><span className="text-sm">{__('Created by', 'wedevs-project-manager')}</span>
                     </div>
@@ -700,7 +700,7 @@ export default function TaskDetailSheet() {
                 )}
 
                 {currentTask.created_at && (
-                  <div className="flex items-center h-9 px-2 rounded-md hover:bg-muted/40 transition-colors">
+                  <div className="flex items-center h-10 px-2 rounded-md hover:bg-muted/40 transition-colors">
                     <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
                       <Calendar className="h-4 w-4" /><span className="text-sm">{__('Created', 'wedevs-project-manager')}</span>
                     </div>
@@ -730,8 +730,8 @@ export default function TaskDetailSheet() {
 
             <Separator />
 
-            <div className="px-6 py-3">
-              <div className="flex items-center justify-between mb-2">
+            <div className="px-6 py-5">
+              <div className="flex items-center justify-between mb-3">
                 <h4 className="flex items-center gap-1.5 text-sm font-semibold uppercase tracking-wider text-pm-text-muted/70"><FileText className="h-4 w-4" />{__('Description', 'wedevs-project-manager')}</h4>
                 {!editingDesc && canEditTask(currentTask) && (
                   <Button
@@ -740,9 +740,9 @@ export default function TaskDetailSheet() {
                     onClick={() => { setDescription(currentTask.description?.html || currentTask.description?.content || ''); setEditingDesc(true) }}
                   >
                     {currentTask.description?.content ? (<>
-                      <Pencil className="h-3 w-3" />{__('Edit', 'wedevs-project-manager')}
+                      <Pencil className="h-4 w-4" />{__('Edit', 'wedevs-project-manager')}
                     </>) : (<>
-                      <Plus className="h-3 w-3" />{__('Add', 'wedevs-project-manager')}
+                      <Plus className="h-4 w-4" />{__('Add', 'wedevs-project-manager')}
                     </>)}
                   </Button>
                 )}
@@ -825,10 +825,10 @@ export default function TaskDetailSheet() {
                             {canEdit && !isEditing && (
                               <span className="opacity-0 group-hover/comment:opacity-100 transition-opacity flex items-center gap-1 ml-auto">
                                 <button type="button" onClick={() => startEditComment(comment)} className="p-0.5 rounded hover:bg-muted text-pm-text-muted hover:text-pm-accent" title={__('Edit', 'wedevs-project-manager')}>
-                                  <Pencil className="h-3.5 w-3.5" />
+                                  <Pencil className="h-4 w-4" />
                                 </button>
                                 <button type="button" onClick={() => handleDeleteComment(comment.id)} className="p-0.5 rounded hover:bg-muted text-pm-text-muted hover:text-destructive" title={__('Delete', 'wedevs-project-manager')}>
-                                  <Trash2 className="h-3.5 w-3.5" />
+                                  <Trash2 className="h-4 w-4" />
                                 </button>
                               </span>
                             )}
@@ -890,7 +890,7 @@ export default function TaskDetailSheet() {
                 />
                 <div className="flex items-center gap-2">
                   <Button size="sm" className="h-7 text-sm gap-1" onClick={handleSubmitComment} disabled={!newComment.trim() || submittingComment}>
-                    <Plus className="h-3 w-3" />{submittingComment ? __('Sending...', 'wedevs-project-manager') : __('Add Comment', 'wedevs-project-manager')}
+                    <Plus className="h-4 w-4" />{submittingComment ? __('Sending...', 'wedevs-project-manager') : __('Add Comment', 'wedevs-project-manager')}
                   </Button>
                   <CommentLinkActions projectId={projectId} onInsert={(html) => setNewComment(prev => (prev || '') + html)} />
                 </div>
@@ -946,14 +946,14 @@ export default function TaskDetailSheet() {
                             {(act.action === 'attach_drive_file' || act.meta?.has_drive) && (
                               act.action === 'attach_drive_file' && act.meta?.file_url ? (
                                 <a href={act.meta.file_url} target="_blank" rel="noopener noreferrer" title={act.meta.file_name || __('Google Drive file', 'wedevs-project-manager')} className="ml-1.5 inline-flex align-middle text-pm-text-muted/35 hover:text-pm-accent">
-                                  <DriveMonoGlyph className="h-3.5 w-3.5" />
+                                  <DriveMonoGlyph className="h-4 w-4" />
                                 </a>
                               ) : (
-                                <DriveMonoGlyph className="ml-1.5 inline-flex align-middle h-3.5 w-3.5 text-pm-text-muted/30" title={__('Google Drive', 'wedevs-project-manager')} />
+                                <DriveMonoGlyph className="ml-1.5 inline-flex align-middle h-4 w-4 text-pm-text-muted/30" title={__('Google Drive', 'wedevs-project-manager')} />
                               )
                             )}
                             {act.meta?.has_meet && (
-                              <Video className="ml-1.5 inline-flex align-middle h-3.5 w-3.5 text-pm-text-muted/30" title={__('Google Meet', 'wedevs-project-manager')} />
+                              <Video className="ml-1.5 inline-flex align-middle h-4 w-4 text-pm-text-muted/30" title={__('Google Meet', 'wedevs-project-manager')} />
                             )}
                             {act.committed_at && <span className="ml-1.5 text-[14px]">· {formatPmDateTime(act.committed_at)}</span>}
                           </div>

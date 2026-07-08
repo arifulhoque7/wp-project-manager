@@ -56,7 +56,7 @@ export default function KanbanCard({ task, boardId, onRemove }) {
   };
 
   return (
-    <div className="relative bg-pm-surface rounded-md p-2.5 group shadow-sm hover:shadow-md transition-shadow duration-200 border border-pm-border/40 hover:border-pm-border">
+    <div className="relative bg-pm-surface rounded-md p-3 group shadow-sm hover:shadow-md transition-shadow duration-200 border border-pm-border/40 hover:border-pm-border">
       <ConfirmDialog />
 
       {canEdit && (
@@ -68,26 +68,26 @@ export default function KanbanCard({ task, boardId, onRemove }) {
           className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 p-1 rounded-lg hover:bg-red-50 text-pm-text-muted hover:text-red-500 transition-all border-none outline-none shadow-none bg-transparent"
           title={__("Remove", 'wedevs-project-manager')}
         >
-          <Minus className="h-3.5 w-3.5" />
+          <Minus className="h-4 w-4" />
         </button>
       )}
 
       {/* Top pills — collapses to nothing when the task has no meta */}
       <div className="flex items-center gap-1.5 flex-wrap pr-6 mb-2 empty:hidden">
         {task.type?.title && (
-          <span className="inline-flex items-center rounded-md border border-pm-border px-1.5 py-0.5 text-[11px] font-medium text-pm-text-muted">
+          <span className="inline-flex items-center rounded-md border border-pm-border px-2.5 py-0.5 text-[12px] font-medium text-pm-text-muted">
             {task.type.title}
           </span>
         )}
         {priority && (
-          <span className={cn("inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-medium", priority.cls)}>
+          <span className={cn("inline-flex items-center gap-1 rounded-md px-2.5 py-0.5 text-[12px] font-medium", priority.cls)}>
             <span className={cn("h-1.5 w-1.5 rounded-full", priority.dot)} />
             {priority.label}
           </span>
         )}
         {task.github_issue && (
           <span title={`${task.github_issue.source}${task.github_issue.issue_number ? ` #${task.github_issue.issue_number}` : ''}`} className="shrink-0">
-            <Github className="h-3.5 w-3.5 text-pm-text-muted" />
+            <Github className="h-4 w-4 text-pm-text-muted" />
           </span>
         )}
         <TaskLabelBadges task={task} variant="full" />
@@ -117,19 +117,19 @@ export default function KanbanCard({ task, boardId, onRemove }) {
           <div className="inline-flex items-center gap-2.5 ml-auto">
             {dueDate && (
               <span className={cn("inline-flex items-center gap-1 text-[11px] font-medium", overdue ? "text-red-500" : "text-pm-text-muted")}>
-                <Calendar className="h-3 w-3" />
+                <Calendar className="h-4 w-4" />
                 {dueDate}
               </span>
             )}
             {subtaskCount > 0 && (
               <span className="inline-flex items-center gap-1 text-[11px] text-pm-text-muted">
-                <Layers className="h-3 w-3" />
+                <Layers className="h-4 w-4" />
                 {subtaskCount}
               </span>
             )}
             {commentCount > 0 && (
               <span className="inline-flex items-center gap-1 text-[11px] text-pm-text-muted">
-                <MessageSquare className="h-3 w-3" />
+                <MessageSquare className="h-4 w-4" />
                 {commentCount}
               </span>
             )}

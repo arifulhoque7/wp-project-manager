@@ -201,7 +201,7 @@ export default function TaskRow({ task, projectId, listId, draggable: isDraggabl
             <Tooltip>
               <TooltipTrigger asChild>
                 <span className="shrink-0">
-                  <Github className="h-3.5 w-3.5 text-pm-text-muted" />
+                  <Github className="h-4 w-4 text-pm-text-muted" />
                 </span>
               </TooltipTrigger>
               <TooltipContent side="bottom">
@@ -212,13 +212,13 @@ export default function TaskRow({ task, projectId, listId, draggable: isDraggabl
         )}
         {(task.meta?.total_sub_task ?? 0) > 0 && (
           <span className="flex items-center gap-0.5 text-[12px] text-pm-text-muted shrink-0">
-            <Layers className="h-3.5 w-3.5" />
+            <Layers className="h-4 w-4" />
             {task.meta.total_sub_task}
           </span>
         )}
         {(task.meta?.total_comment ?? 0) > 0 && (
           <span className="flex items-center gap-0.5 text-[12px] text-pm-text-muted shrink-0">
-            <MessageSquare className="h-3.5 w-3.5" />
+            <MessageSquare className="h-4 w-4" />
             {task.meta?.total_comment}
           </span>
         )}
@@ -226,7 +226,7 @@ export default function TaskRow({ task, projectId, listId, draggable: isDraggabl
           <TooltipProvider delayDuration={200}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Lock className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+                <Lock className="h-4 w-4 text-amber-500 shrink-0" />
               </TooltipTrigger>
               <TooltipContent side="top" className="text-[12px]">
                 {__('Private task', 'wedevs-project-manager')}
@@ -239,7 +239,7 @@ export default function TaskRow({ task, projectId, listId, draggable: isDraggabl
       {/* Col 2 — Type */}
       <div className="min-w-0">
         {task.type?.title ? (
-          <Badge variant="outline" className="max-w-full truncate text-[11px] px-1.5 py-0.5 h-auto font-normal text-muted-foreground">
+          <Badge variant="outline" className="max-w-full truncate text-[12px] px-2.5 py-0.5 h-auto font-normal text-muted-foreground">
             {task.type.title}
           </Badge>
         ) : (
@@ -248,7 +248,7 @@ export default function TaskRow({ task, projectId, listId, draggable: isDraggabl
       </div>
 
       {/* Col 3 — Labels */}
-      <div className="flex items-center gap-1 flex-wrap min-w-0">
+      <div className="flex items-center gap-1 flex-wrap min-w-0 overflow-hidden">
         <TaskLabelBadges task={task} variant="full" />
       </div>
 
@@ -279,7 +279,7 @@ export default function TaskRow({ task, projectId, listId, draggable: isDraggabl
       <div className={cn('flex items-center gap-1 text-[13px] min-w-0', dueDateColorClass(task.due_date))}>
         {dueDateStr ? (
           <>
-            <Calendar className="h-3.5 w-3.5 shrink-0" />
+            <Calendar className="h-4 w-4 shrink-0" />
             <span className="truncate">
               {formatPmDate(task.start_at) && !isComplete
                 ? `${formatPmDate(task.start_at)} → ${dueDateStr}`
@@ -299,8 +299,8 @@ export default function TaskRow({ task, projectId, listId, draggable: isDraggabl
       {/* Col 7 — Priority */}
       <div className="min-w-0">
         {task.priority > 0 ? (
-          <span className={cn('inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-medium', priorityPill)}>
-            <Flag className="h-3 w-3" />
+          <span className={cn('inline-flex items-center gap-1 rounded-md px-2.5 py-0.5 text-[12px] font-medium', priorityPill)}>
+            <Flag className="h-4 w-4" />
             {priorityLabel}
           </span>
         ) : (
@@ -346,7 +346,7 @@ export default function TaskRow({ task, projectId, listId, draggable: isDraggabl
                 ) : (
                   <><LockIcon className="h-4 w-4 mr-2" />{__('Make Private', 'wedevs-project-manager')}</>
                 )}
-                {!isPro && <Crown className="h-3.5 w-3.5 ml-auto text-pm-accent" />}
+                {!isPro && <Crown className="h-4 w-4 ml-auto text-pm-accent" />}
               </DropdownMenuItem>
             )}
             {mayEdit && (

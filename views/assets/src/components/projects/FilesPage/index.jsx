@@ -156,7 +156,7 @@ export default function FilesPage() {
       )}
     >
       {label}
-      <ArrowUpDown className="h-3 w-3 shrink-0 opacity-60" />
+      <ArrowUpDown className="h-4 w-4 shrink-0 opacity-60" />
     </button>
   );
 
@@ -283,7 +283,7 @@ export default function FilesPage() {
                           {r.thumbUrl ? (
                             <img src={r.thumbUrl} alt={r.fileName} className="w-full h-full object-cover rounded-lg" />
                           ) : (
-                            <Icon className={cn("h-5 w-5", r.iconColor)} />
+                            <Icon className={cn("h-4 w-4", r.iconColor)} />
                           )}
                         </div>
                         <p className="text-sm font-medium text-pm-text-primary truncate">{r.fileName}</p>
@@ -291,7 +291,7 @@ export default function FilesPage() {
 
                       {/* Type */}
                       <div className="min-w-0">
-                        <span className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-pm-text-muted uppercase">
+                        <span className="inline-flex items-center rounded-md bg-muted px-2.5 py-0.5 text-[12px] font-medium text-pm-text-muted uppercase">
                           {r.typeLabel}
                         </span>
                       </div>
@@ -309,7 +309,7 @@ export default function FilesPage() {
                               href={r.attachedUrl}
                               className="inline-flex items-center gap-1 text-pm-accent hover:underline truncate"
                             >
-                              <ExternalLink className="h-3 w-3 shrink-0" />
+                              <ExternalLink className="h-4 w-4 shrink-0" />
                               {r.attachedTo}
                             </a>
                           ) : (
@@ -341,7 +341,7 @@ export default function FilesPage() {
                       <div className="flex items-center justify-end gap-1">
                         {r.url && (
                           <Button variant="outline" size="sm" className="h-8 text-[13px]" onClick={handleDownload}>
-                            <Download className="h-3.5 w-3.5 mr-1" />
+                            <Download className="h-4 w-4 mr-1" />
                             {__("Download", 'wedevs-project-manager')}
                           </Button>
                         )}

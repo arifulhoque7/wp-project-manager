@@ -151,7 +151,7 @@ export const KanbanCards = ({
     <ScrollArea className="overflow-hidden">
       <SortableContext items={items}>
         <div
-          className={cn("flex flex-grow flex-col gap-2 p-2.5", className)}
+          className={cn("flex flex-grow flex-col gap-3 p-3", className)}
           {...props}
         >
           {filteredData.map(children)}

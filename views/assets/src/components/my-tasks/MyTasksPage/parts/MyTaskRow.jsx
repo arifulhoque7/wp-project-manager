@@ -56,23 +56,23 @@ export default function MyTaskRow({ task, projectTitle, onToggle, onOpen }) {
         </button>
         {(task.meta?.total_sub_task ?? 0) > 0 && (
           <span className="flex items-center gap-0.5 text-[11px] text-pm-text-muted shrink-0">
-            <Layers className="h-3.5 w-3.5" />{task.meta.total_sub_task}
+            <Layers className="h-4 w-4" />{task.meta.total_sub_task}
           </span>
         )}
         {(task.meta?.total_comment ?? 0) > 0 && (
           <span className="flex items-center gap-0.5 text-[11px] text-pm-text-muted shrink-0">
-            <MessageSquare className="h-3.5 w-3.5" />{task.meta.total_comment}
+            <MessageSquare className="h-4 w-4" />{task.meta.total_comment}
           </span>
         )}
         {isPrivate(task.meta?.privacy) && (
-          <Lock className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+          <Lock className="h-4 w-4 text-amber-500 shrink-0" />
         )}
       </div>
 
       {/* Type */}
       <div className="min-w-0">
         {task.type?.title ? (
-          <Badge variant="outline" className="max-w-full truncate text-[11px] px-1.5 py-0.5 h-auto font-normal text-muted-foreground">
+          <Badge variant="outline" className="max-w-full truncate text-[12px] px-2.5 py-0.5 h-auto font-normal text-muted-foreground">
             {task.type.title}
           </Badge>
         ) : (
@@ -81,7 +81,7 @@ export default function MyTaskRow({ task, projectTitle, onToggle, onOpen }) {
       </div>
 
       {/* Labels */}
-      <div className="flex items-center gap-1 flex-wrap min-w-0">
+      <div className="flex items-center gap-1 flex-wrap min-w-0 overflow-hidden">
         <TaskLabelBadges task={task} variant="full" />
       </div>
 
@@ -105,7 +105,7 @@ export default function MyTaskRow({ task, projectTitle, onToggle, onOpen }) {
       <div className={cn("flex items-center gap-1 text-[13px] min-w-0", overdue ? "text-red-500" : "text-pm-text-muted")}>
         {formatPmDate(task.due_date) ? (
           <>
-            <Calendar className="h-3.5 w-3.5 shrink-0" />
+            <Calendar className="h-4 w-4 shrink-0" />
             <span className="truncate">{formatPmDate(task.due_date)}</span>
             {overdue && (
               <Badge variant="destructive" className="text-[10px] px-1 py-0 h-4 shrink-0">

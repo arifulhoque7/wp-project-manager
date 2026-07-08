@@ -487,7 +487,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
           <div className="min-w-[1180px]">
           {totalIncomplete > 0 && (
             <div className="px-4 pt-3 pb-1.5">
-              <span className="inline-flex items-center gap-1.5 rounded-md bg-amber-100 text-amber-700 px-2.5 py-1 text-[12px] font-bold uppercase tracking-wider">
+              <span className="inline-flex items-center gap-1.5 rounded-md bg-amber-100 text-amber-700 px-2.5 py-0.5 text-[12px] font-bold uppercase tracking-wider">
                 <Clock className="h-3.5 w-3.5" />{__('Pending', 'wedevs-project-manager')} ({totalIncomplete})
               </span>
             </div>
@@ -739,7 +739,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                   className="h-4 w-4 transition-transform duration-200"
                   style={{ transform: showCompleted ? 'rotate(0deg)' : 'rotate(-90deg)' }}
                 />
-                <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-100 text-emerald-700 px-2.5 py-1 text-[12px] font-bold uppercase tracking-wider">
+                <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-100 text-emerald-700 px-2.5 py-0.5 text-[12px] font-bold uppercase tracking-wider">
                   <CheckCircle2 className="h-3.5 w-3.5" />
                   {totalComplete} {__('Completed', 'wedevs-project-manager')}
                 </span>

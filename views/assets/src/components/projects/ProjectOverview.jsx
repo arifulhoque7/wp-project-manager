@@ -311,7 +311,7 @@ export default function ProjectOverview() {
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 min-w-0">
           <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => navigate("/projects")}>
-            <ArrowLeft className="h-5 w-5" />
+            <ArrowLeft className="h-4 w-4" />
           </Button>
           <h1 className="text-xl font-bold text-pm-text-primary truncate">{__("Projects", 'wedevs-project-manager')}</h1>
         </div>
@@ -339,13 +339,13 @@ export default function ProjectOverview() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-lg font-bold text-pm-text-primary truncate">{project.title}</h2>
-                <span className={cn("inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[13px] font-medium", pill.cls)}>
-                  <CheckCircle className="h-3.5 w-3.5" />{pill.label}
+                <span className={cn("inline-flex items-center gap-1.5 rounded-md px-2.5 py-0.5 text-[12px] font-medium", pill.cls)}>
+                  <CheckCircle className="h-4 w-4" />{pill.label}
                 </span>
               </div>
               <div className="flex items-center gap-3 flex-wrap mt-1.5 text-[13px] text-pm-text-muted">
                 <span className="inline-flex items-center gap-1">
-                  <CalendarIcon className="h-3.5 w-3.5" />
+                  <CalendarIcon className="h-4 w-4" />
                   {formatPmDate(project.created_at, { month: "short", day: "numeric", year: "numeric" }) || "—"}
                   {project.est_completion_date ? ` – ${formatPmDate(project.est_completion_date, { month: "short", day: "numeric", year: "numeric" })}` : ""}
                 </span>
@@ -370,7 +370,7 @@ export default function ProjectOverview() {
             }
           >
             <div className={`p-2 rounded-lg ${s.bg} shrink-0`}>
-              <s.icon className={`h-5 w-5 ${s.fg}`} />
+              <s.icon className={`h-4 w-4 ${s.fg}`} />
             </div>
             <div className="text-left min-w-0">
               <p className="text-lg font-bold text-pm-text-primary tabular-nums leading-none">{s.value}</p>
@@ -406,7 +406,7 @@ export default function ProjectOverview() {
         {/* Progress Over Time */}
         <div className="rounded-xl border bg-card p-5">
           <h3 className="text-base font-semibold text-pm-text-primary mb-4 flex items-center gap-2">
-            <Activity className="h-5 w-5 text-pm-text-muted" />
+            <Activity className="h-4 w-4 text-pm-text-muted" />
             {__("Progress Over Time", 'wedevs-project-manager')}
           </h3>
           {graph.length > 0 ? (
@@ -459,7 +459,7 @@ export default function ProjectOverview() {
         <div className="rounded-xl border bg-card p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-base font-semibold text-pm-text-primary flex items-center gap-2">
-              <FileText className="h-5 w-5 text-pm-text-muted" />
+              <FileText className="h-4 w-4 text-pm-text-muted" />
               {__("Recent Documents", 'wedevs-project-manager')}
             </h3>
             <button type="button" onClick={() => navigate(`/projects/${projectId}/files`)} className="text-[13px] font-medium text-pm-accent hover:underline">
@@ -491,7 +491,7 @@ export default function ProjectOverview() {
                           </div>
                         </td>
                         <td className="py-2.5 px-2">
-                          <span className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-pm-text-muted uppercase">{ext}</span>
+                          <span className="inline-flex items-center rounded-md bg-muted px-2.5 py-0.5 text-[12px] font-medium text-pm-text-muted uppercase">{ext}</span>
                         </td>
                         <td className="py-2.5 px-2 text-[13px] text-pm-text-muted tabular-nums whitespace-nowrap">
                           {formatPmDate(f.attached_at, { month: "short", day: "numeric", year: "numeric" }) || "—"}
@@ -520,7 +520,7 @@ export default function ProjectOverview() {
       <div className="rounded-xl border bg-card p-5">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base font-semibold text-pm-text-primary flex items-center gap-2">
-            <Milestone className="h-5 w-5 text-pm-text-muted" />
+            <Milestone className="h-4 w-4 text-pm-text-muted" />
             {__("Milestones", 'wedevs-project-manager')}
           </h3>
           <button type="button" onClick={() => navigate(`/projects/${projectId}/milestones`)} className="text-[13px] font-medium text-pm-accent hover:underline">
@@ -553,7 +553,7 @@ export default function ProjectOverview() {
                         {(m.task_count?.completed ?? 0)}/{(m.task_count?.total ?? 0)}
                       </td>
                       <td className="py-2.5 px-2">
-                        <span className={cn("inline-flex items-center rounded-md px-2 py-0.5 text-[12px] font-medium", done ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700")}>
+                        <span className={cn("inline-flex items-center rounded-md px-2.5 py-0.5 text-[12px] font-medium", done ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700")}>
                           {done ? __("Complete", 'wedevs-project-manager') : __("Pending", 'wedevs-project-manager')}
                         </span>
                       </td>
@@ -572,7 +572,7 @@ export default function ProjectOverview() {
       <div className="rounded-xl border bg-card p-5">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base font-semibold text-pm-text-primary flex items-center gap-2">
-            <Users className="h-5 w-5 text-pm-text-muted" />
+            <Users className="h-4 w-4 text-pm-text-muted" />
             {__("Team Members", 'wedevs-project-manager')}
             <span className="text-[14px] bg-muted px-1.5 py-0.5 rounded-full tabular-nums font-normal">
               {assignees.length}
@@ -593,7 +593,7 @@ export default function ProjectOverview() {
           >
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm" className="h-7 text-sm gap-1.5">
-                <UserPlus className="h-3.5 w-3.5" />
+                <UserPlus className="h-4 w-4" />
                 {__("Add", 'wedevs-project-manager')}
               </Button>
             </PopoverTrigger>
@@ -604,7 +604,7 @@ export default function ProjectOverview() {
                   <CommandList>
                     {searchingMembers && (
                       <div className="flex items-center justify-center py-4 text-sm text-muted-foreground">
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />{__("Searching...", 'wedevs-project-manager')}
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />{__("Searching...", 'wedevs-project-manager')}
                       </div>
                     )}
                     {!searchingMembers && memberSearch.trim().length >= 2 && memberResults.length === 0 && (

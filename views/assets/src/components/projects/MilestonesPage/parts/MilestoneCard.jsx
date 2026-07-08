@@ -173,7 +173,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
           >
             <CheckCircle
               className={cn(
-                "h-5 w-5 transition-colors",
+                "h-4 w-4 transition-colors",
                 isComplete
                   ? "text-emerald-500"
                   : "text-pm-text-muted/30 hover:text-emerald-400",
@@ -199,7 +199,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                 }
               />
               {checkPrivate(milestone.meta?.privacy) ? (
-                <Lock className="h-3.5 w-3.5 text-pm-text-muted" />
+                <Lock className="h-4 w-4 text-pm-text-muted" />
               ) : null}
             </div>
 
@@ -215,20 +215,20 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                 taskCount={milestone.task_count}
               />
               {milestone.achieve_date && (
-                <span className="inline-flex items-center gap-1.5 rounded-md bg-muted/50 px-2.5 py-1 text-[13px] text-pm-text-muted">
-                  <Clock className="h-3.5 w-3.5" />
+                <span className="inline-flex items-center gap-1.5 rounded-md bg-muted/50 px-2.5 py-0.5 text-[13px] text-pm-text-muted">
+                  <Clock className="h-4 w-4" />
                   {formatPmDateTime(milestone.achieve_date)}
                 </span>
               )}
               {directTasks.length > 0 && (
-                <span className="inline-flex items-center gap-1.5 rounded-md bg-muted/50 px-2.5 py-1 text-[13px] text-pm-text-muted">
-                  <ListChecks className="h-3.5 w-3.5" />
+                <span className="inline-flex items-center gap-1.5 rounded-md bg-muted/50 px-2.5 py-0.5 text-[13px] text-pm-text-muted">
+                  <ListChecks className="h-4 w-4" />
                   {directTasks.length} {__("tasks", 'wedevs-project-manager')}
                 </span>
               )}
               {discussions.length > 0 && (
-                <span className="inline-flex items-center gap-1.5 rounded-md bg-muted/50 px-2.5 py-1 text-[13px] text-pm-text-muted">
-                  <MessageSquare className="h-3.5 w-3.5" />
+                <span className="inline-flex items-center gap-1.5 rounded-md bg-muted/50 px-2.5 py-0.5 text-[13px] text-pm-text-muted">
+                  <MessageSquare className="h-4 w-4" />
                   {discussions.length} {__("discussions", 'wedevs-project-manager')}
                 </span>
               )}
@@ -345,21 +345,21 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                         {task.title}
                       </button>
                       {subtaskCount > 0 && (
-                        <span className="flex items-center gap-0.5 text-[11px] text-pm-text-muted shrink-0"><Layers className="h-3.5 w-3.5" />{subtaskCount}</span>
+                        <span className="flex items-center gap-0.5 text-[11px] text-pm-text-muted shrink-0"><Layers className="h-4 w-4" />{subtaskCount}</span>
                       )}
                       {commentCount > 0 && (
-                        <span className="flex items-center gap-0.5 text-[11px] text-pm-text-muted shrink-0"><MessageSquare className="h-3.5 w-3.5" />{commentCount}</span>
+                        <span className="flex items-center gap-0.5 text-[11px] text-pm-text-muted shrink-0"><MessageSquare className="h-4 w-4" />{commentCount}</span>
                       )}
-                      {taskIsPrivate && <Lock className="h-3.5 w-3.5 text-amber-500 shrink-0" />}
+                      {taskIsPrivate && <Lock className="h-4 w-4 text-amber-500 shrink-0" />}
                     </div>
                     {/* Type */}
                     <div className="min-w-0">
                       {task.type?.title ? (
-                        <Badge variant="outline" className="max-w-full truncate text-[11px] px-1.5 py-0.5 h-auto font-normal text-muted-foreground">{task.type.title}</Badge>
+                        <Badge variant="outline" className="max-w-full truncate text-[12px] px-2.5 py-0.5 h-auto font-normal text-muted-foreground">{task.type.title}</Badge>
                       ) : (<span className="text-[13px] text-pm-text-muted">—</span>)}
                     </div>
                     {/* Labels */}
-                    <div className="flex items-center gap-1 flex-wrap min-w-0"><TaskLabelBadges task={task} variant="full" /></div>
+                    <div className="flex items-center gap-1 flex-wrap min-w-0 overflow-hidden"><TaskLabelBadges task={task} variant="full" /></div>
                     {/* Description */}
                     <div className="min-w-0 text-[13px] text-pm-text-muted truncate">{descText || '—'}</div>
                     {/* Assignee */}
@@ -372,7 +372,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                     <div className={cn("flex items-center gap-1 text-[13px] min-w-0", dueDateColorClass(task.due_date))}>
                       {dueDate ? (
                         <>
-                          <Calendar className="h-3.5 w-3.5 shrink-0" />
+                          <Calendar className="h-4 w-4 shrink-0" />
                           <span className="truncate">{startDate && !taskComplete ? `${startDate} → ${dueDate}` : dueDate}</span>
                           {overdueTask && <Badge variant="destructive" className="text-[10px] px-1 py-0 h-4 shrink-0">{__("Overdue", 'wedevs-project-manager')}</Badge>}
                         </>
@@ -381,7 +381,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                     {/* Priority */}
                     <div className="min-w-0">
                       {prio ? (
-                        <span className={cn("inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-medium", prio.cls)}><Flag className="h-3 w-3" />{prio.label}</span>
+                        <span className={cn("inline-flex items-center gap-1 rounded-md px-2.5 py-0.5 text-[12px] font-medium", prio.cls)}><Flag className="h-4 w-4" />{prio.label}</span>
                       ) : (<span className="text-[13px] text-pm-text-muted">—</span>)}
                     </div>
                     {/* Progress */}
@@ -397,7 +397,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                         onClick={() => handleUnlinkTask(task)}
                         title={__("Unlink from milestone", 'wedevs-project-manager')}
                       >
-                        <Minus className="h-3.5 w-3.5" />
+                        <Minus className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
@@ -405,14 +405,14 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
               };
               const gridHeader = (
                 <div className={cn("grid gap-2 px-4 py-2 border-b bg-muted/20 text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70", TASK_GRID)}>
-                  <div className="flex items-center gap-1.5"><ListChecks className="h-3.5 w-3.5" />{__("Task", 'wedevs-project-manager')}</div>
-                  <div className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" />{__("Type", 'wedevs-project-manager')}</div>
-                  <div className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" />{__("Labels", 'wedevs-project-manager')}</div>
-                  <div className="flex items-center gap-1.5"><AlignLeft className="h-3.5 w-3.5" />{__("Description", 'wedevs-project-manager')}</div>
-                  <div className="flex items-center gap-1.5"><UsersIcon className="h-3.5 w-3.5" />{__("Assignee", 'wedevs-project-manager')}</div>
-                  <div className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{__("Due Date", 'wedevs-project-manager')}</div>
-                  <div className="flex items-center gap-1.5"><Flag className="h-3.5 w-3.5" />{__("Priority", 'wedevs-project-manager')}</div>
-                  <div className="flex items-center gap-1.5"><BarChart3 className="h-3.5 w-3.5" />{__("Progress", 'wedevs-project-manager')}</div>
+                  <div className="flex items-center gap-1.5"><ListChecks className="h-4 w-4" />{__("Task", 'wedevs-project-manager')}</div>
+                  <div className="flex items-center gap-1.5"><Tag className="h-4 w-4" />{__("Type", 'wedevs-project-manager')}</div>
+                  <div className="flex items-center gap-1.5"><Tag className="h-4 w-4" />{__("Labels", 'wedevs-project-manager')}</div>
+                  <div className="flex items-center gap-1.5"><AlignLeft className="h-4 w-4" />{__("Description", 'wedevs-project-manager')}</div>
+                  <div className="flex items-center gap-1.5"><UsersIcon className="h-4 w-4" />{__("Assignee", 'wedevs-project-manager')}</div>
+                  <div className="flex items-center gap-1.5"><Calendar className="h-4 w-4" />{__("Due Date", 'wedevs-project-manager')}</div>
+                  <div className="flex items-center gap-1.5"><Flag className="h-4 w-4" />{__("Priority", 'wedevs-project-manager')}</div>
+                  <div className="flex items-center gap-1.5"><BarChart3 className="h-4 w-4" />{__("Progress", 'wedevs-project-manager')}</div>
                   <div></div>
                 </div>
               );
@@ -423,9 +423,9 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                     onClick={setTasksExpanded}
                     className="flex items-center gap-1 mb-2 w-full text-left"
                   >
-                    <ChevronDown className={cn("h-3.5 w-3.5 text-pm-text-muted/70 transition-transform", !tasksExpanded && "-rotate-90")} />
+                    <ChevronDown className={cn("h-4 w-4 text-pm-text-muted/70 transition-transform", !tasksExpanded && "-rotate-90")} />
                     <h5 className="text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70 flex items-center gap-1">
-                      <ListChecks className="h-3 w-3" />
+                      <ListChecks className="h-4 w-4" />
                       {__("Tasks", 'wedevs-project-manager')}
                       <span className="text-[10px] font-normal">({directTasks.length})</span>
                     </h5>
@@ -434,7 +434,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                     <div className="space-y-3">
                       {incompleteTasks.length > 0 && (
                         <div>
-                          <div className="inline-flex items-center gap-1.5 rounded-md bg-amber-100 text-amber-700 px-2.5 py-1 text-[12px] font-bold uppercase tracking-wider mb-1.5"><Clock className="h-3.5 w-3.5" />{__("Pending", 'wedevs-project-manager')} ({incompleteTasks.length})</div>
+                          <div className="inline-flex items-center gap-1.5 rounded-md bg-amber-100 text-amber-700 px-2.5 py-0.5 text-[12px] font-bold uppercase tracking-wider mb-1.5"><Clock className="h-4 w-4" />{__("Pending", 'wedevs-project-manager')} ({incompleteTasks.length})</div>
                           <div className="rounded-lg border bg-card overflow-hidden">
                             <div className="overflow-x-auto"><div className="min-w-[1120px]">
                               {gridHeader}
@@ -445,7 +445,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                       )}
                       {completedTasks.length > 0 && (
                         <div>
-                          <div className="inline-flex items-center gap-1.5 rounded-md bg-emerald-100 text-emerald-700 px-2.5 py-1 text-[12px] font-bold uppercase tracking-wider mb-1.5"><CheckCircle className="h-3.5 w-3.5" />{__("Completed", 'wedevs-project-manager')} ({completedTasks.length})</div>
+                          <div className="inline-flex items-center gap-1.5 rounded-md bg-emerald-100 text-emerald-700 px-2.5 py-0.5 text-[12px] font-bold uppercase tracking-wider mb-1.5"><CheckCircle className="h-4 w-4" />{__("Completed", 'wedevs-project-manager')} ({completedTasks.length})</div>
                           <div className="rounded-lg border bg-card overflow-hidden">
                             <div className="overflow-x-auto"><div className="min-w-[1120px]">
                               {gridHeader}
@@ -462,8 +462,8 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
 
             {discussions.length > 0 && (
               <div>
-                <div className="inline-flex items-center gap-1.5 rounded-md bg-blue-100 text-blue-700 px-2.5 py-1 text-[12px] font-bold uppercase tracking-wider mb-1.5">
-                  <MessageSquare className="h-3.5 w-3.5" />
+                <div className="inline-flex items-center gap-1.5 rounded-md bg-blue-100 text-blue-700 px-2.5 py-0.5 text-[12px] font-bold uppercase tracking-wider mb-1.5">
+                  <MessageSquare className="h-4 w-4" />
                   {__("Discussions", 'wedevs-project-manager')} ({discussions.length})
                 </div>
                 <div className="rounded-lg border bg-card overflow-hidden divide-y divide-border/40">
@@ -494,16 +494,16 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                               </span>
                             )}
                             {discDate && (
-                              <span className="inline-flex items-center gap-1 shrink-0"><Calendar className="h-3.5 w-3.5" />{formatPmDateTime(discDate)}</span>
+                              <span className="inline-flex items-center gap-1 shrink-0"><Calendar className="h-4 w-4" />{formatPmDateTime(discDate)}</span>
                             )}
                           </div>
                         </div>
                         <div className="flex items-center gap-3 shrink-0">
                           {fileCount > 0 && (
-                            <span className="flex items-center gap-1 text-[13px] text-pm-text-muted"><Paperclip className="h-3.5 w-3.5" />{fileCount}</span>
+                            <span className="flex items-center gap-1 text-[13px] text-pm-text-muted"><Paperclip className="h-4 w-4" />{fileCount}</span>
                           )}
                           {commentCount > 0 && (
-                            <span className="flex items-center gap-1 text-[13px] text-pm-text-muted"><MessageSquare className="h-3.5 w-3.5" />{commentCount}</span>
+                            <span className="flex items-center gap-1 text-[13px] text-pm-text-muted"><MessageSquare className="h-4 w-4" />{commentCount}</span>
                           )}
                         </div>
                       </button>
