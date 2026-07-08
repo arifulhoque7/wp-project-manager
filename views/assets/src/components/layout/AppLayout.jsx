@@ -16,7 +16,7 @@ export function AppLayout() {
   return (
     <div className="pm-app-layout flex h-full overflow-hidden bg-pm-surface-muted">
       {!hideSidebar && <AppSidebar />}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden m-2 rounded-xl border border-pm-border bg-pm-surface shadow-sm">
         <TopBar />
         {!hideSubNav && <ProjectSubNavBar />}
         <main className="flex-1 overflow-y-auto">

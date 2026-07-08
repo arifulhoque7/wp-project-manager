@@ -111,7 +111,7 @@ export default function ModulesPage() {
  const modules = useMemo(() => getModules(), []);
 
   return (
-    <div className="max-w-[1400px] mx-auto p-4 sm:p-6 space-y-6">
+    <div className="w-full p-4 sm:p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -132,13 +132,13 @@ export default function ModulesPage() {
           return (
             <div
               key={m.id}
-              className="group relative rounded-xl border bg-card overflow-hidden hover:shadow-md transition-shadow"
+              className="group relative rounded-lg border bg-card overflow-hidden hover:shadow-md transition-shadow"
             >
               <div className="p-5">
                 {/* Header: icon + toggle */}
                 <div className="flex items-start justify-between mb-3">
                   <div
-                    className={`p-3 rounded-xl ${bg} group-hover:scale-110 transition-transform`}
+                    className={`p-3 rounded-lg ${bg} group-hover:scale-110 transition-transform`}
                   >
                     <m.icon className={`h-6 w-6 ${fg}`} />
                   </div>
@@ -168,7 +168,7 @@ export default function ModulesPage() {
               {/* Hover overlay for free users */}
               {!isPro && (
                 <div
-                  className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-xl"
+                  className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-lg"
                   onClick={() => setOpen(true)}
                 >
                   <div className="flex items-center gap-2 bg-pm-surface rounded-full px-4 py-2 shadow-lg">

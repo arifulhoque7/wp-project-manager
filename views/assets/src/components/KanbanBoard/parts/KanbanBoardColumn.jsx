@@ -40,7 +40,6 @@ import {
   KanbanCards,
   KanbanHeader as KanbanHeaderDnd,
 } from "../../kanban/index";
-import { isDarkHexBg } from "../utils";
 import KanbanCard from "./KanbanCard";
 import ImportTaskModal from "./ImportTaskModal";
 import AutomationModal from "./AutomationModal";
@@ -192,7 +191,6 @@ export default function KanbanBoardColumn({
   };
 
   const headerBg = board.header_background;
-  const isDarkBg = isDarkHexBg(headerBg);
 
   const tasksArr = Array.isArray(board.tasks)
     ? board.tasks
@@ -210,14 +208,12 @@ export default function KanbanBoardColumn({
     <>
       <KanbanBoardDnd id={column.id}>
         <KanbanHeaderDnd className="!p-0">
-          <div
-            className="flex items-center justify-between w-full rounded-t-xl px-2 py-1.5"
-            style={{
-              backgroundColor: headerBg || "#f8fafc",
-              color: isDarkBg ? "#fff" : "var(--pm-text-primary)",
-            }}
-          >
+          <div className="flex items-center justify-between w-full px-3 py-2.5">
             <div className="flex items-center gap-2 flex-1 min-w-0">
+              <span
+                className="h-3.5 w-3.5 rounded-full border-2 shrink-0"
+                style={{ borderColor: headerBg || 'var(--pm-accent)' }}
+              />
               {editing && canManage ? (
                 <Input
                   value={title}
@@ -227,27 +223,18 @@ export default function KanbanBoardColumn({
                     if (e.key === "Enter") handleTitleSave();
                   }}
                   autoFocus
-                  className="h-6 text-sm bg-white/20 border-white/30"
+                  className="h-6 text-sm"
                 />
               ) : (
                 <span
-                  className="font-semibold text-[13px] truncate cursor-pointer select-none"
-                  style={{ color: isDarkBg ? "#fff" : "var(--pm-text-primary)" }}
+                  className="font-semibold text-[13px] truncate cursor-pointer select-none text-pm-text-primary"
                   onDoubleClick={() => canManage && setEditing(true)}
                   title={canManage ? __("Double-click to rename", 'wedevs-project-manager') : ""}
                 >
                   {board.title}
                 </span>
               )}
-              <span
-                className="text-[11px] font-semibold px-1.5 py-0.5 rounded-full shrink-0"
-                style={{
-                  backgroundColor: isDarkBg
-                    ? "rgba(255,255,255,0.2)"
-                    : "rgba(0,0,0,0.08)",
-                  color: isDarkBg ? "#fff" : "var(--pm-text-muted)",
-                }}
-              >
+              <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded-md bg-muted text-pm-text-muted shrink-0">
                 {taskCount}
               </span>
             </div>
@@ -256,14 +243,14 @@ export default function KanbanBoardColumn({
                 projectId={projectId}
                 boardId={board.id}
                 onAdd={onAddExistingTask}
-                iconStyle={{ color: isDarkBg ? "#fff" : "var(--pm-text-muted)" }}
+                iconStyle={{ color: "var(--pm-text-muted)" }}
               />
               {(canManage || canCreate) && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button
-                      className="p-1 rounded-lg hover:bg-black/10 border-none outline-none shadow-none bg-transparent transition-colors"
-                      style={{ color: isDarkBg ? "#fff" : "var(--pm-text-muted)" }}
+                      className="p-1 rounded-lg hover:bg-muted border-none outline-none shadow-none bg-transparent transition-colors"
+                      style={{ color: "var(--pm-text-muted)" }}
                     >
                       <MoreVertical className="h-4 w-4" />
                     </button>
@@ -340,9 +327,9 @@ export default function KanbanBoardColumn({
         )}
 
         {canCreate && (
-          <div className="p-2 border-t border-pm-border/40">
+          <div className="p-2 border-t border-pm-border/60">
             {addingTask ? (
-              <div className="rounded-xl bg-pm-surface border border-pm-border shadow-sm p-2.5 space-y-2.5 focus-within:border-pm-accent/40 focus-within:ring-2 focus-within:ring-pm-accent/10 transition-all">
+              <div className="rounded-md bg-pm-surface border border-pm-border shadow-sm p-2 space-y-2 focus-within:border-pm-accent/40 focus-within:ring-2 focus-within:ring-pm-accent/10 transition-all">
                 <textarea
                   value={newTaskTitle}
                   onChange={(e) => setNewTaskTitle(e.target.value)}
@@ -363,7 +350,7 @@ export default function KanbanBoardColumn({
                   <Popover>
                     <PopoverTrigger asChild>
                       <button
-                        className={`inline-flex items-center gap-1.5 text-[11px] font-medium px-2 py-1 rounded-full border transition-colors ${
+                        className={`inline-flex items-center gap-1.5 text-[11px] font-medium px-2 py-1 rounded-md border transition-colors ${
                           selectedList
                             ? "border-pm-accent/20 bg-pm-accent/5 text-pm-accent hover:bg-pm-accent/10"
                             : "border-pm-border bg-pm-surface-muted text-pm-text hover:bg-pm-hover"
@@ -407,7 +394,7 @@ export default function KanbanBoardColumn({
                   <Popover>
                     <PopoverTrigger asChild>
                       <button
-                        className={`inline-flex items-center gap-1.5 text-[11px] font-medium px-2 py-1 rounded-full border transition-colors ${
+                        className={`inline-flex items-center gap-1.5 text-[11px] font-medium px-2 py-1 rounded-md border transition-colors ${
                           selectedAssigneeObjs.length > 0
                             ? "border-pm-accent/20 bg-pm-accent/5 text-pm-accent hover:bg-pm-accent/10"
                             : "border-pm-border bg-pm-surface-muted text-pm-text hover:bg-pm-hover"
@@ -472,7 +459,7 @@ export default function KanbanBoardColumn({
                   </Popover>
 
                   <div
-                    className={`inline-flex items-center gap-1 text-[11px] font-medium rounded-full border transition-colors ${
+                    className={`inline-flex items-center gap-1 text-[11px] font-medium rounded-md border transition-colors ${
                       newTaskDueDate
                         ? "border-pm-accent/20 bg-pm-accent/5 text-pm-accent"
                         : "border-pm-border bg-pm-surface-muted text-pm-text hover:bg-pm-hover"
@@ -494,7 +481,7 @@ export default function KanbanBoardColumn({
                         el.focus();
                         el.click();
                       }}
-                      className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full border-none outline-none shadow-none bg-transparent cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md border-none outline-none shadow-none bg-transparent cursor-pointer"
                       title={__("Pick due date", 'wedevs-project-manager')}
                     >
                       <Calendar className="h-3 w-3" />
@@ -556,11 +543,13 @@ export default function KanbanBoardColumn({
               </div>
             ) : (
               <button
-                className="w-full text-left text-xs text-pm-text-muted hover:text-pm-text px-2 py-1.5 rounded-lg hover:bg-pm-hover flex items-center gap-1.5 transition-colors"
+                className="w-full flex items-center gap-2 px-2 py-2 rounded-md text-[13px] font-medium text-pm-text-muted hover:text-pm-text hover:bg-pm-surface transition-colors"
                 onClick={() => setAddingTask(true)}
               >
-                <Plus className="h-3.5 w-3.5" />
-                {__("Add task", 'wedevs-project-manager')}
+                <span className="flex h-5 w-5 items-center justify-center rounded-full border border-current shrink-0">
+                  <Plus className="h-3 w-3" />
+                </span>
+                {__("Add Task", 'wedevs-project-manager')}
               </button>
             )}
           </div>

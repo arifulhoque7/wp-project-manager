@@ -40,6 +40,9 @@ import {
 import TaskCheckbox from "./TaskCheckbox";
 import MilestoneHealthBadge from "./MilestoneHealthBadge";
 import MilestoneProgress from "./MilestoneProgress";
+import { TASK_GRID } from "@components/tasks/TaskRow";
+import { Progress } from "@components/ui/progress";
+import { AlignLeft, Users as UsersIcon, BarChart3, Tag } from "lucide-react";
 
 export default function MilestoneCard({ milestone, projectId, onEdit, onImportTasks, expanded, onToggleExpanded, onTaskOpen }) {
   const api = useApi();
@@ -321,81 +324,103 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                 const assignees = taskAssignees(task);
                 const startDate = taskDateStr(task.start_at);
                 const dueDate = taskDateStr(task.due_date);
-                const est = taskEstTime(task);
                 const commentCount = parseInt(task.meta?.total_comment ?? task.comments_count ?? 0, 10) || 0;
                 const subtaskCount = parseInt(task.meta?.total_sub_task ?? 0, 10) || 0;
                 const taskIsPrivate = checkPrivate(task.meta?.privacy);
-                const priorityColor = task.priority >= 3 ? 'text-red-500' : task.priority === 2 ? 'text-amber-500' : task.priority === 1 ? 'text-blue-500' : '';
                 const overdueTask = isOverdue(task.due_date, task.status);
+                const descText = (task.description?.content || task.description?.html || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+                const prio = task.priority === 1
+                  ? { label: __('High', 'wedevs-project-manager'), cls: 'bg-red-100 text-red-700' }
+                  : task.priority === 2
+                    ? { label: __('Medium', 'wedevs-project-manager'), cls: 'bg-amber-100 text-amber-700' }
+                    : task.priority === 3
+                      ? { label: __('Low', 'wedevs-project-manager'), cls: 'bg-emerald-100 text-emerald-700' }
+                      : null;
+                const progressPct = taskComplete ? 100 : 0;
                 return (
-                  <li key={task.id} className={cn("group flex items-center gap-2 py-2 px-3 rounded hover:bg-muted/30", taskComplete && "opacity-60")}>
-                    <TaskCheckbox complete={taskComplete} onClick={() => handleToggleTaskStatus(task)} />
-                    <button
-                      type="button"
-                      onClick={() => handleOpenTask(task)}
-                      className={cn("text-sm truncate flex-1 text-left hover:text-pm-accent transition-colors", taskComplete && "line-through text-pm-text-muted")}
-                    >
-                      {task.title}
-                    </button>
-                    <TaskLabelBadges task={task} variant="full" />
-                    {task.type && (
-                      <Badge variant="outline" className="text-[11px] px-1.5 py-0 shrink-0">{task.type.title}</Badge>
-                    )}
-                    {task.priority > 0 && (
-                      <Flag className={cn("h-3.5 w-3.5 shrink-0", priorityColor)} />
-                    )}
-                    {assignees.length > 0 && (
-                      <div className="flex -space-x-1.5 shrink-0">
-                        {assignees.slice(0, 3).map((u) => (
-                          <UserAvatar key={u.id} user={u} size="sm" className="border border-white" />
-                        ))}
-                        {assignees.length > 3 && <span className="text-[11px] text-pm-text-muted ml-1">+{assignees.length - 3}</span>}
-                      </div>
-                    )}
-                    {(startDate || dueDate) && (
-                      <div className={cn("hidden sm:flex items-center gap-1 text-[13px] shrink-0", dueDateColorClass(task.due_date))}>
-                        <Calendar className="h-3.5 w-3.5" />
-                        <span>{startDate || dueDate}</span>
-                        {startDate && dueDate && <><span>–</span><span>{dueDate}</span></>}
-                      </div>
-                    )}
-                    {overdueTask && (
-                      <Badge variant="destructive" className="text-[11px] px-1.5 py-0 h-4 shrink-0">
-                        {__("Overdue", 'wedevs-project-manager')}
-                      </Badge>
-                    )}
-                    {est && (
-                      <div className="hidden sm:flex items-center gap-0.5 text-[13px] text-pm-text-muted shrink-0">
-                        <Timer className="h-3.5 w-3.5" />
-                        <span>{est}</span>
-                      </div>
-                    )}
-                    {subtaskCount > 0 && (
-                      <span className="flex items-center gap-0.5 text-[13px] text-pm-text-muted shrink-0">
-                        <Layers className="h-3.5 w-3.5" />
-                        {subtaskCount}
-                      </span>
-                    )}
-                    {commentCount > 0 && (
-                      <span className="flex items-center gap-0.5 text-[13px] text-pm-text-muted shrink-0">
-                        <MessageSquare className="h-3.5 w-3.5" />
-                        {commentCount}
-                      </span>
-                    )}
-                    {taskIsPrivate && (
-                      <Lock className="h-3.5 w-3.5 text-amber-500 shrink-0" />
-                    )}
-                    <button
-                      type="button"
-                      className="h-5 w-5 rounded flex items-center justify-center text-pm-text-muted/30 hover:text-destructive hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-all shrink-0"
-                      onClick={() => handleUnlinkTask(task)}
-                      title={__("Unlink from milestone", 'wedevs-project-manager')}
-                    >
-                      <Minus className="h-3 w-3" />
-                    </button>
-                  </li>
+                  <div key={task.id} className={cn("group grid items-center gap-2 px-4 py-3 border-b border-border/30 last:border-b-0 hover:bg-muted/20 transition-colors", TASK_GRID, taskComplete && "opacity-60")}>
+                    {/* Task */}
+                    <div className="flex items-center gap-2 min-w-0">
+                      <TaskCheckbox complete={taskComplete} onClick={() => handleToggleTaskStatus(task)} />
+                      <button
+                        type="button"
+                        onClick={() => handleOpenTask(task)}
+                        className={cn("min-w-0 text-left text-sm truncate hover:text-pm-accent transition-colors", taskComplete ? "line-through text-pm-text-muted" : "text-pm-text-primary")}
+                      >
+                        {task.title}
+                      </button>
+                      {subtaskCount > 0 && (
+                        <span className="flex items-center gap-0.5 text-[11px] text-pm-text-muted shrink-0"><Layers className="h-3.5 w-3.5" />{subtaskCount}</span>
+                      )}
+                      {commentCount > 0 && (
+                        <span className="flex items-center gap-0.5 text-[11px] text-pm-text-muted shrink-0"><MessageSquare className="h-3.5 w-3.5" />{commentCount}</span>
+                      )}
+                      {taskIsPrivate && <Lock className="h-3.5 w-3.5 text-amber-500 shrink-0" />}
+                    </div>
+                    {/* Type */}
+                    <div className="min-w-0">
+                      {task.type?.title ? (
+                        <Badge variant="outline" className="max-w-full truncate text-[11px] px-1.5 py-0.5 h-auto font-normal text-muted-foreground">{task.type.title}</Badge>
+                      ) : (<span className="text-[13px] text-pm-text-muted">—</span>)}
+                    </div>
+                    {/* Labels */}
+                    <div className="flex items-center gap-1 flex-wrap min-w-0"><TaskLabelBadges task={task} variant="full" /></div>
+                    {/* Description */}
+                    <div className="min-w-0 text-[13px] text-pm-text-muted truncate">{descText || '—'}</div>
+                    {/* Assignee */}
+                    <div className="flex items-center -space-x-1.5 min-w-0">
+                      {assignees.length > 0 ? assignees.slice(0, 3).map((u) => (
+                        <UserAvatar key={u.id} user={u} size="md" className="border-2 border-background" />
+                      )) : (<span className="text-[13px] text-pm-text-muted">—</span>)}
+                    </div>
+                    {/* Due */}
+                    <div className={cn("flex items-center gap-1 text-[13px] min-w-0", dueDateColorClass(task.due_date))}>
+                      {dueDate ? (
+                        <>
+                          <Calendar className="h-3.5 w-3.5 shrink-0" />
+                          <span className="truncate">{startDate && !taskComplete ? `${startDate} → ${dueDate}` : dueDate}</span>
+                          {overdueTask && <Badge variant="destructive" className="text-[10px] px-1 py-0 h-4 shrink-0">{__("Overdue", 'wedevs-project-manager')}</Badge>}
+                        </>
+                      ) : (<span className="text-pm-text-muted">—</span>)}
+                    </div>
+                    {/* Priority */}
+                    <div className="min-w-0">
+                      {prio ? (
+                        <span className={cn("inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-medium", prio.cls)}><Flag className="h-3 w-3" />{prio.label}</span>
+                      ) : (<span className="text-[13px] text-pm-text-muted">—</span>)}
+                    </div>
+                    {/* Progress */}
+                    <div className="flex items-center gap-2 min-w-0">
+                      <Progress value={progressPct} className="h-1 flex-1" />
+                      <span className="text-[11px] font-medium text-pm-text-muted tabular-nums w-8 text-right">{progressPct}%</span>
+                    </div>
+                    {/* Actions — unlink */}
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity justify-self-end">
+                      <button
+                        type="button"
+                        className="h-6 w-6 rounded flex items-center justify-center text-pm-text-muted/40 hover:text-destructive hover:bg-destructive/10 transition-all"
+                        onClick={() => handleUnlinkTask(task)}
+                        title={__("Unlink from milestone", 'wedevs-project-manager')}
+                      >
+                        <Minus className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
                 );
               };
+              const gridHeader = (
+                <div className={cn("grid gap-2 px-4 py-2 border-b bg-muted/20 text-[11px] font-semibold uppercase tracking-wider text-pm-text-muted/70", TASK_GRID)}>
+                  <div className="flex items-center gap-1.5"><ListChecks className="h-3.5 w-3.5" />{__("Task", 'wedevs-project-manager')}</div>
+                  <div className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" />{__("Type", 'wedevs-project-manager')}</div>
+                  <div className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" />{__("Labels", 'wedevs-project-manager')}</div>
+                  <div className="flex items-center gap-1.5"><AlignLeft className="h-3.5 w-3.5" />{__("Description", 'wedevs-project-manager')}</div>
+                  <div className="flex items-center gap-1.5"><UsersIcon className="h-3.5 w-3.5" />{__("Assignee", 'wedevs-project-manager')}</div>
+                  <div className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{__("Due Date", 'wedevs-project-manager')}</div>
+                  <div className="flex items-center gap-1.5"><Flag className="h-3.5 w-3.5" />{__("Priority", 'wedevs-project-manager')}</div>
+                  <div className="flex items-center gap-1.5"><BarChart3 className="h-3.5 w-3.5" />{__("Progress", 'wedevs-project-manager')}</div>
+                  <div></div>
+                </div>
+              );
               return (
                 <div>
                   <button
@@ -411,24 +436,30 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                     </h5>
                   </button>
                   {tasksExpanded && (
-                    <>
+                    <div className="space-y-3">
                       {incompleteTasks.length > 0 && (
-                        <div className="mb-3">
-                          <div className="text-[14px] font-semibold uppercase text-pm-text-muted mb-1">{__("Incomplete", 'wedevs-project-manager')} ({incompleteTasks.length})</div>
-                          <ul className="space-y-0.5">
-                            {incompleteTasks.map((task) => renderTask(task, false))}
-                          </ul>
+                        <div>
+                          <div className="inline-flex items-center gap-1.5 rounded-md bg-amber-100 text-amber-700 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider mb-1.5"><Clock className="h-3.5 w-3.5" />{__("Pending", 'wedevs-project-manager')} ({incompleteTasks.length})</div>
+                          <div className="rounded-lg border bg-card overflow-hidden">
+                            <div className="overflow-x-auto"><div className="min-w-[1120px]">
+                              {gridHeader}
+                              {incompleteTasks.map((task) => renderTask(task, false))}
+                            </div></div>
+                          </div>
                         </div>
                       )}
                       {completedTasks.length > 0 && (
                         <div>
-                          <div className="text-[14px] font-semibold uppercase text-pm-text-muted mb-1">{__("Completed", 'wedevs-project-manager')} ({completedTasks.length})</div>
-                          <ul className="space-y-0.5">
-                            {completedTasks.map((task) => renderTask(task, true))}
-                          </ul>
+                          <div className="inline-flex items-center gap-1.5 rounded-md bg-emerald-100 text-emerald-700 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider mb-1.5"><CheckCircle className="h-3.5 w-3.5" />{__("Completed", 'wedevs-project-manager')} ({completedTasks.length})</div>
+                          <div className="rounded-lg border bg-card overflow-hidden">
+                            <div className="overflow-x-auto"><div className="min-w-[1120px]">
+                              {gridHeader}
+                              {completedTasks.map((task) => renderTask(task, true))}
+                            </div></div>
+                          </div>
                         </div>
                       )}
-                    </>
+                    </div>
                   )}
                 </div>
               );

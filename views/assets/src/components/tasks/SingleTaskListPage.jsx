@@ -234,9 +234,9 @@ export default function SingleTaskListPage() {
 
   if (loading) {
     return (
-      <div className="max-w-[1400px] mx-auto p-4 sm:p-6 space-y-5">
+      <div className="w-full p-4 sm:p-6 space-y-5">
         <Skeleton className="h-8 w-48" />
-        <div className="rounded-xl border bg-card overflow-hidden">
+        <div className="rounded-lg border bg-card overflow-hidden">
           <div className="px-4 py-3 bg-muted/30 border-b">
             <Skeleton className="h-5 w-1/3" />
           </div>
@@ -252,7 +252,7 @@ export default function SingleTaskListPage() {
 
   if (!currentList) {
     return (
-      <div className="max-w-[1400px] mx-auto p-4 sm:p-6">
+      <div className="w-full p-4 sm:p-6">
         <BackButton fallback={`/projects/${projectId}/task-lists`} label={__('Back to Task Lists', 'wedevs-project-manager')} className="mb-4" />
         <p className="text-sm text-pm-text-muted">{__('Task list not found.', 'wedevs-project-manager')}</p>
       </div>
@@ -270,7 +270,7 @@ export default function SingleTaskListPage() {
   return (
     <>
     <ConfirmDialog />
-    <div className="max-w-[1400px] mx-auto p-4 sm:p-6 space-y-5">
+    <div className="w-full p-4 sm:p-6 space-y-5">
       {/* Back button */}
       <BackButton fallback={`/projects/${projectId}/task-lists`} label={__('Back to Task Lists', 'wedevs-project-manager')} />
 
@@ -295,7 +295,7 @@ export default function SingleTaskListPage() {
       )}
 
       {/* Tasks */}
-      <div className="rounded-xl border bg-card overflow-hidden">
+      <div className="rounded-lg border bg-card overflow-hidden">
         {/* Incomplete tasks */}
         {incompleteTasks.length > 0 ? (
           incompleteTasks.map(task => (
@@ -357,7 +357,7 @@ export default function SingleTaskListPage() {
       </div>
 
       {/* ── Discussion ── */}
-      <div className="rounded-xl border bg-card p-4 space-y-4">
+      <div className="rounded-lg border bg-card p-4 space-y-4">
         <h3 className="text-sm font-semibold uppercase tracking-wider text-pm-text-muted flex items-center gap-1.5">
           <MessageSquare className="h-4 w-4" />{__('Discussion', 'wedevs-project-manager')}
           {comments.length > 0 && (

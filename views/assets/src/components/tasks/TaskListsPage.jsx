@@ -187,7 +187,7 @@ export default function TaskListsPage() {
   const renderSkeleton = () => (
     <div className="space-y-4">
       {Array.from({ length: 3 }).map((_, i) => (
-        <div key={i} className="rounded-xl border bg-card overflow-hidden">
+        <div key={i} className="rounded-lg border bg-card overflow-hidden">
           <div className="px-4 py-3 bg-muted/30 border-b">
             <Skeleton className="h-5 w-1/3" />
           </div>
@@ -224,7 +224,7 @@ export default function TaskListsPage() {
   // ── Main render ─────────────────────────────
 
   return (
-    <div className="max-w-[1400px] mx-auto p-4 sm:p-6 space-y-5">
+    <div className="w-full p-4 sm:p-6 space-y-5">
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-3">
@@ -276,7 +276,7 @@ export default function TaskListsPage() {
       {showNewList && canCreateList && (
         <form
           onSubmit={handleCreateList}
-          className="rounded-xl border bg-card p-4 space-y-3"
+          className="rounded-lg border bg-card p-4 space-y-3"
         >
           <Input
             autoFocus
@@ -358,7 +358,7 @@ export default function TaskListsPage() {
         renderEmpty()
       ) : filteredTasks ? (
         /* Filtered results — flat task list */
-        <div className="rounded-xl border bg-card overflow-hidden">
+        <div className="rounded-lg border bg-card overflow-hidden">
           <div className="px-4 py-2.5 bg-muted/30 border-b">
             <span className="text-sm font-medium text-pm-text-muted">
               {filteredTasks.length} {filteredTasks.length === 1 ? __("result", 'wedevs-project-manager') : __("results", 'wedevs-project-manager')}
@@ -392,7 +392,7 @@ export default function TaskListsPage() {
               onDragOver={(e) => handleListDragOver(e, idx)}
               onDrop={(e) => handleListDrop(e, idx)}
               onDragEnd={handleListDragEnd}
-              className={dragOverIdx === idx ? "ring-2 ring-pm-accent/40 rounded-xl transition-shadow" : ""}
+              className={dragOverIdx === idx ? "ring-2 ring-pm-accent/40 rounded-lg transition-shadow" : ""}
             >
               <TaskListSection list={list} projectId={projectId} showLabels={showLabels} isInbox={inboxListId && parseInt(list.id, 10) === inboxListId} />
             </div>

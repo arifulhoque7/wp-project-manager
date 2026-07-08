@@ -72,15 +72,13 @@ export const KanbanBoard = ({ id, children, className }) => {
       {...attributes}
       {...listeners}
       className={cn(
-        "flex size-full min-h-40 flex-col overflow-hidden rounded-xl border bg-pm-surface-muted text-sm shadow-sm ring-2 transition-all duration-200 cursor-grab active:cursor-grabbing",
+        "flex size-full min-h-40 flex-col overflow-hidden rounded-xl border border-pm-border/50 bg-pm-surface-muted/70 text-sm transition-all duration-200 cursor-grab active:cursor-grabbing",
         // Card dragged over this column
-        isOver && !activeColumnId && "ring-pm-accent/50 border-pm-accent/30 bg-pm-accent/5",
+        isOver && !activeColumnId && "ring-2 ring-pm-accent/50 border-pm-accent/30 bg-pm-accent/5",
         // Column dragged over this column — distinct highlight
-        isColumnOver && "ring-blue-400 border-blue-400 bg-blue-50/60 scale-[1.01]",
-        // No drag-over
-        !isOver && !isColumnOver && "ring-transparent border-pm-border/40",
+        isColumnOver && "ring-2 ring-blue-400 border-blue-400 bg-blue-50/60 scale-[1.01]",
         // This column is being dragged
-        isDragging && "opacity-40 shadow-2xl scale-[0.97] border-dashed border-pm-border",
+        isDragging && "opacity-40 scale-[0.97]",
         className
       )}
     >
@@ -131,7 +129,7 @@ export const KanbanCard = ({
       </div>
       {activeCardId === id && (
         <t.In>
-          <div className="rounded-xl shadow-xl ring-2 ring-pm-accent/40 opacity-95 rotate-1 scale-[1.02]">
+          <div className="rounded-lg shadow-xl ring-2 ring-pm-accent/40 opacity-95 rotate-1 scale-[1.02]">
             {children ?? <p className="m-0 font-medium text-sm">{name}</p>}
           </div>
         </t.In>

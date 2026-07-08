@@ -150,7 +150,7 @@ export const fetchBoardTasks = createAsyncThunk(
   'kanban/fetchBoardTasks',
   async ({ projectId, boardId, page = 1, perPage = 50 }, { rejectWithValue }) => {
     try {
-      const res = await api.get(`projects/${projectId}/kanboard/${boardId}`, { page, per_page: perPage })
+      const res = await api.get(`projects/${projectId}/kanboard/${boardId}`, { page, per_page: perPage, with: 'assignees,labels' })
       const data = Array.isArray(res?.data) ? res.data : (res?.data ?? res)
       const meta = res?.meta ?? null
       return { boardId, tasks: data, meta, page }
@@ -164,7 +164,7 @@ export const loadMoreBoardTasks = createAsyncThunk(
   'kanban/loadMoreBoardTasks',
   async ({ projectId, boardId, page, perPage = 50 }, { rejectWithValue }) => {
     try {
-      const res = await api.get(`projects/${projectId}/kanboard/${boardId}`, { page, per_page: perPage })
+      const res = await api.get(`projects/${projectId}/kanboard/${boardId}`, { page, per_page: perPage, with: 'assignees,labels' })
       const data = Array.isArray(res?.data) ? res.data : (res?.data ?? res)
       const meta = res?.meta ?? null
       return { boardId, tasks: data, meta }

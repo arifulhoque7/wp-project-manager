@@ -170,7 +170,7 @@ function FeatureCard({ feature, __, index = 0 }) {
         </div>
         <CardContent className="p-5 text-center">
           <div
-            className="inline-flex items-center justify-center h-10 w-10 rounded-xl mb-3 mx-auto transition-transform duration-300 group-hover:scale-110"
+            className="inline-flex items-center justify-center h-10 w-10 rounded-lg mb-3 mx-auto transition-transform duration-300 group-hover:scale-110"
             style={{ background: feature.bg }}
           >
             <feature.icon className={`h-5 w-5 ${feature.fg}`} />
@@ -221,7 +221,7 @@ export default function WelcomePage() {
       />
 
       <div className="relative rounded-2xl overflow-hidden px-8 py-10 md:px-12 md:py-14 text-white shadow-xl"
-        style={{ backgroundImage: 'linear-gradient(139deg, #C444FB 0%, #5B56D7 100%)' }}
+        style={{ backgroundImage: 'linear-gradient(139deg, #8A6FBB 0%, #6F56A3 100%)' }}
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.12),transparent_70%)]" />
         <div className="absolute -top-16 -right-10 h-56 w-56 rounded-full bg-white/10 blur-3xl animate-pulse motion-reduce:animate-none" />
@@ -281,13 +281,13 @@ export default function WelcomePage() {
           {/* Right - video thumbnail */}
           <div className="flex justify-center md:justify-end animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150 motion-reduce:animate-none">
             <div
-              className="relative cursor-pointer group rounded-xl overflow-hidden shadow-2xl ring-1 ring-white/20 transition-transform hover:scale-[1.02]"
+              className="relative cursor-pointer group rounded-lg overflow-hidden shadow-2xl ring-1 ring-white/20 transition-transform hover:scale-[1.02]"
               onClick={() => setBannerVideoOpen(true)}
             >
               <img
                 src={getAssetUrl('images/welcome/intro-video-bg-image.png')}
                 alt={__('Introduction Video', 'wedevs-project-manager')}
-                className="max-w-full h-auto block rounded-xl"
+                className="max-w-full h-auto block rounded-lg"
               />
               <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/20 transition-colors">
                 <div className="h-16 w-16 rounded-full bg-white/95 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">

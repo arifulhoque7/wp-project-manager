@@ -193,7 +193,7 @@ export default function DiscussionsPage() {
   return (
     <>
     <ConfirmDialog />
-    <div className="max-w-[1400px] mx-auto p-4 sm:p-6 space-y-5">
+    <div className="w-full p-4 sm:p-6 space-y-5">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-3">
           <BackButton fallback={`/projects/${projectId}/task-lists`} />
@@ -215,7 +215,7 @@ export default function DiscussionsPage() {
       </div>
 
       {showForm && (
-        <form onSubmit={handleCreate} className="rounded-xl border bg-card p-4 space-y-3">
+        <form onSubmit={handleCreate} className="rounded-lg border bg-card p-4 space-y-3">
           <Input
             autoFocus
             value={formTitle}
@@ -275,7 +275,7 @@ export default function DiscussionsPage() {
       {loading ? (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-20 rounded-xl" />
+            <Skeleton key={i} className="h-20 rounded-lg" />
           ))}
         </div>
       ) : discussions.length === 0 ? (
@@ -297,7 +297,7 @@ export default function DiscussionsPage() {
             return (
               <div
                 key={d.id}
-                className="rounded-xl border bg-card hover:shadow-sm transition-shadow cursor-pointer group"
+                className="rounded-lg border bg-card hover:shadow-sm transition-shadow cursor-pointer group"
                 onClick={() => navigate(`/projects/${projectId}/discussions/${d.id}`)}
               >
                 <div className="p-4 flex items-start gap-3">

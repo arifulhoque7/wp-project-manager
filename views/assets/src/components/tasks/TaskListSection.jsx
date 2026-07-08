@@ -39,13 +39,22 @@ import {
   Archive,
   Copy,
   Crown,
+  ListChecks,
+  AlignLeft,
+  Users,
+  Calendar,
+  Flag,
+  BarChart3,
+  Tag,
+  CheckCircle2,
+  Clock,
 } from 'lucide-react'
 import { Slot } from '@hooks/useSlot'
 import { usePermissions } from '@hooks/usePermissions'
 import { useCurrentProject } from '@hooks/useCurrentProject'
 import { useProModal } from '@components/common/ProUpgradeModal'
 import TaskStatusCircle from '@components/common/TaskStatusCircle'
-import TaskRow from './TaskRow'
+import TaskRow, { TASK_GRID } from './TaskRow'
 import { sanitizeHtml } from '@lib/sanitize'
 
 export default function TaskListSection({ list, projectId, showLabels, isInbox = false }) {
@@ -331,7 +340,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
   }, [api, projectId, list.id, incompleteTasks, completeTasks, dispatch, toast, __])
 
   return (
-    <div className="rounded-xl border bg-card">
+    <div className="rounded-lg border bg-card">
       <ConfirmDialog />
       {/* Section header */}
       <div className="flex items-center gap-2 px-4 py-2.5 bg-muted/30 border-b">
@@ -474,7 +483,28 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
 
       {/* Expanded content */}
       {expanded && (
-        <div>
+        <div className="overflow-x-auto">
+          <div className="min-w-[1180px]">
+          {totalIncomplete > 0 && (
+            <div className="px-4 pt-3 pb-1.5">
+              <span className="inline-flex items-center gap-1.5 rounded-md bg-amber-100 text-amber-700 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider">
+                <Clock className="h-3.5 w-3.5" />{__('Pending', 'wedevs-project-manager')} ({totalIncomplete})
+              </span>
+            </div>
+          )}
+          {(incompleteTasks.length > 0 || completeTasks.length > 0) && (
+            <div className={cn('grid items-center gap-2 px-4 py-2 border-b bg-muted/20 text-[11px] font-semibold uppercase tracking-wider text-pm-text-muted/70', TASK_GRID)}>
+              <div className="flex items-center gap-1.5"><ListChecks className="h-3.5 w-3.5" />{__('Task', 'wedevs-project-manager')}</div>
+              <div className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" />{__('Type', 'wedevs-project-manager')}</div>
+              <div className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" />{__('Labels', 'wedevs-project-manager')}</div>
+              <div className="flex items-center gap-1.5"><AlignLeft className="h-3.5 w-3.5" />{__('Description', 'wedevs-project-manager')}</div>
+              <div className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5" />{__('Assignee', 'wedevs-project-manager')}</div>
+              <div className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{__('Due Date', 'wedevs-project-manager')}</div>
+              <div className="flex items-center gap-1.5"><Flag className="h-3.5 w-3.5" />{__('Priority', 'wedevs-project-manager')}</div>
+              <div className="flex items-center gap-1.5"><BarChart3 className="h-3.5 w-3.5" />{__('Progress', 'wedevs-project-manager')}</div>
+              <div></div>
+            </div>
+          )}
           {/* Incomplete tasks */}
           {incompleteTasks.length > 0 ? (
             incompleteTasks.map((task, idx) => (
@@ -608,18 +638,21 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                           className="h-8 text-sm"
                         />
                         {assigneeOpen && assigneeResults.length > 0 && (
-                          <div className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-lg shadow-lg z-50 max-h-40 overflow-y-auto">
+                          <div className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-lg shadow-lg z-50 max-h-72 overflow-y-auto p-1">
                             {assigneeResults.map(user => {
                               const isSelected = selectedAssignees.some(u => parseInt(u.id) === parseInt(user.id))
                               return (
                                 <button
                                   key={user.id}
                                   type="button"
-                                  className={cn("w-full flex items-center gap-2 px-3 py-2 text-sm text-left transition-colors", isSelected ? "bg-pm-accent/5 text-pm-accent" : "hover:bg-muted/50")}
+                                  className={cn("w-full flex items-center gap-2.5 rounded-md px-2 py-1.5 text-left transition-colors", isSelected ? "bg-pm-accent/5" : "hover:bg-muted/60")}
                                   onClick={() => isSelected ? removeAssignee(user.id) : addAssignee(user)}
                                 >
-                                  <UserAvatar user={user} size="sm" />
-                                  <span className="flex-1 truncate">{user.display_name}</span>
+                                  <UserAvatar user={user} size="md" className="shrink-0" />
+                                  <div className="min-w-0 flex-1">
+                                    <p className="text-sm font-medium text-pm-text-primary truncate">{user.display_name}</p>
+                                    {user.email && <p className="text-[12px] text-pm-text-muted truncate">{user.email}</p>}
+                                  </div>
                                   {isSelected && <Check className="h-4 w-4 text-pm-accent shrink-0" />}
                                 </button>
                               )
@@ -700,13 +733,14 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
               <button
                 type="button"
                 onClick={() => setShowCompleted(v => !v)}
-                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-pm-text-muted hover:bg-muted/20 transition-colors"
+                className="w-full flex items-center gap-2 px-4 py-2.5 text-[13px] font-medium text-pm-text-muted hover:bg-muted/20 transition-colors bg-muted/10"
               >
                 <ChevronDown
-                  className="h-3.5 w-3.5 transition-transform duration-200"
+                  className="h-4 w-4 transition-transform duration-200"
                   style={{ transform: showCompleted ? 'rotate(0deg)' : 'rotate(-90deg)' }}
                 />
-                <span className="font-medium">
+                <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-100 text-emerald-700 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider">
+                  <CheckCircle2 className="h-3.5 w-3.5" />
                   {totalComplete} {__('Completed', 'wedevs-project-manager')}
                 </span>
               </button>
@@ -731,6 +765,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
               )}
             </div>
           )}
+          </div>
         </div>
       )}
     </div>

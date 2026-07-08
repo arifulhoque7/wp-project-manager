@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { useState, useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { usePermissions } from '@hooks/usePermissions'
 import { useActiveProModules, isProModuleActive } from '@hooks/useActiveProModules'
@@ -24,6 +24,8 @@ const getSubNavFree = () => [
 function buildProSubNav(modulePaths) {
   const isActive = (dir) => isProModuleActive(modulePaths, dir)
   const items = []
+  // Activities is not a module — always show when pro is active (mirrors AppSidebar).
+  items.push({ key: 'activities', label: __('Activities', 'wedevs-project-manager'), icon: Activity, path: (pid) => `/projects/${pid}/activities` })
   if (isActive('Gantt'))    items.push({ key: 'gantt',    label: __('Gantt Chart',  'wedevs-project-manager'), icon: GitBranch, path: (pid) => `/projects/${pid}/gantt` })
   if (isActive('Invoice'))  items.push({ key: 'invoices', label: __('Invoices',     'wedevs-project-manager'), icon: Receipt,   path: (pid) => `/projects/${pid}/invoices` })
   items.push({ key: 'settings', label: __('Settings', 'wedevs-project-manager'), icon: Settings, path: (pid) => `/projects/${pid}/settings` })
@@ -38,16 +40,6 @@ export function ProjectSubNavBar() {
   const activeModulePaths = useActiveProModules()
   const location = useLocation()
   const navigate = useNavigate()
-
-  const [sidebarMode, setSidebarMode] = useState(
-    () => localStorage.getItem('pm-sidebar-mode') ?? 'wordpress'
-  )
-
-  useEffect(() => {
-    const handler = (e) => setSidebarMode(e.detail)
-    window.addEventListener('pm-sidebar-mode-change', handler)
-    return () => window.removeEventListener('pm-sidebar-mode-change', handler)
-  }, [])
 
   const activeProjectId = useMemo(() => {
     const m = location.pathname.match(/^\/projects\/(\d+)/)
@@ -75,12 +67,12 @@ export function ProjectSubNavBar() {
     return 'task-lists'
   }, [location.pathname, activeProjectId, subNav])
 
-  // Only render in WP sidebar mode when inside a project
-  if (sidebarMode !== 'wordpress' || !activeProjectId) return null
+  // Render whenever inside a project (both plugin + WP sidebar modes)
+  if (!activeProjectId) return null
 
   return (
-    <div className="shrink-0 bg-pm-surface border-b border-pm-border">
-      <nav className="flex items-stretch overflow-x-auto px-2 scrollbar-none">
+    <div className="shrink-0 bg-pm-surface border-b border-pm-border px-4 py-2">
+      <nav className="inline-flex items-center gap-0.5 overflow-x-auto rounded-lg border border-pm-border bg-muted/60 p-1 scrollbar-none">
         {subNav.map(item => {
           const Icon = item.icon
           const isActive = activeSubKey === item.key
@@ -90,11 +82,10 @@ export function ProjectSubNavBar() {
               key={item.key}
               onClick={() => navigate(item.path(activeProjectId))}
               className={cn(
-                'group/tab flex items-center gap-1.5 px-3 py-2.5 text-[13px] font-medium whitespace-nowrap',
-                'border-b-2 transition-colors shrink-0',
+                'group/tab flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-medium whitespace-nowrap transition-all duration-200 shrink-0',
                 isActive
-                  ? 'border-pm-accent text-pm-accent'
-                  : 'border-transparent text-pm-text-muted hover:text-pm-text hover:border-pm-border',
+                  ? 'bg-background text-pm-text-primary shadow-sm'
+                  : 'text-pm-text-muted hover:text-pm-text-primary',
               )}
             >
               <Icon className={cn(

@@ -65,7 +65,7 @@ export default function ActivityItem({ act, projectId: fallbackProjectId }) {
 
   return (
     <div className="flex items-start gap-3 py-3 px-4 hover:bg-pm-hover/50 rounded-lg transition-colors">
-      <UserAvatar user={actor} size="lg" className="mt-0.5" fallbackClassName="bg-pm-accent/10 text-pm-accent" />
+      <UserAvatar user={actor} size="lg" className="mt-0.5" />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-0.5">
           <button

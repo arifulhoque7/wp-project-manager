@@ -94,7 +94,7 @@ export function FrontendLayout() {
             <div className="flex items-center gap-3">
               <GlobalSearch variant="frontend" />
               <div className="hidden sm:flex items-center gap-2">
-                <UserAvatar user={{ avatar_url: userAvatar, display_name: userName }} size="md" fallbackClassName="bg-pm-accent/10 text-pm-accent" />
+                <UserAvatar user={{ avatar_url: userAvatar, display_name: userName }} size="md" />
                 <span className="text-sm font-medium text-pm-text-primary">{userName}</span>
               </div>
               <a
@@ -142,10 +142,10 @@ export function FrontendLayout() {
         </div>
       </header>
 
-      {/* Sidebar + Main content */}
+      {/* Sidebar + Main content — main is a rounded white card like the admin panel */}
       <div className="flex min-h-[calc(100vh-56px)]">
         {!hideSidebar && <AppSidebar />}
-        <main className="flex-1 overflow-auto p-6">
+        <main className="flex-1 min-w-0 overflow-auto m-2 rounded-xl border border-pm-border bg-pm-surface shadow-sm">
           <Outlet />
         </main>
       </div>

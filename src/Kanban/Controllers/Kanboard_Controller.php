@@ -216,7 +216,16 @@ class Kanboard_Controller {
         $resource = new Collection( $task_collection, new Task_Transformer );
         $resource->setPaginator( new IlluminatePaginatorAdapter( $tasks ) );
 
-        return $this->get_response( $resource );
+        $response = $this->get_response( $resource );
+
+        // Inject Pro labels into each task (parity with the task-list endpoint,
+        // which applies the same filter). No-op when Pro/Label module is absent.
+        $task_ids = $task_collection->pluck( 'id' )->toArray();
+        if ( ! empty( $task_ids ) ) {
+            $response = apply_filters( 'wedevs_pm_after_transformer_list_tasks', $response, $task_ids );
+        }
+
+        return $response;
     }
 
 

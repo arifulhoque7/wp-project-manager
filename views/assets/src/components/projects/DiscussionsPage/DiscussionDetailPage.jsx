@@ -309,10 +309,10 @@ export default function DiscussionDetailPage() {
 
   if (loading) {
     return (
-      <div className="max-w-[1400px] mx-auto p-4 sm:p-6 space-y-4">
+      <div className="w-full p-4 sm:p-6 space-y-4">
         <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-40 rounded-xl" />
-        <Skeleton className="h-24 rounded-xl" />
+        <Skeleton className="h-40 rounded-lg" />
+        <Skeleton className="h-24 rounded-lg" />
       </div>
     );
   }
@@ -325,7 +325,7 @@ export default function DiscussionDetailPage() {
   return (
     <>
     <ConfirmDialog />
-    <div className="max-w-[1400px] mx-auto p-4 sm:p-6 space-y-5">
+    <div className="w-full p-4 sm:p-6 space-y-5">
       {/* Header */}
       <div className="flex items-center gap-3">
         <BackButton fallback={`/projects/${projectId}/discussions`} />
@@ -336,7 +336,7 @@ export default function DiscussionDetailPage() {
       </div>
 
       {/* Discussion body */}
-      <div className="rounded-xl border bg-card overflow-hidden">
+      <div className="rounded-lg border bg-card overflow-hidden">
         <div className="p-4 sm:p-5">
           {editing ? (
             <div className="space-y-3">

@@ -136,14 +136,14 @@ export default function KanbanDndBoard({
 
   return (
     <div className="flex gap-4 overflow-x-auto pb-4 h-[calc(100vh-200px)]">
-      <div className="shrink-0" style={{ width: `${columns.length * 280 + (columns.length - 1) * 16}px` }}>
+      <div className="shrink-0" style={{ width: `${columns.length * 320 + (columns.length - 1) * 16}px` }}>
         <KanbanProvider
           columns={columns}
           data={kanbanData}
           onDataChange={handleDataChange}
           onDragEnd={handleDragEnd}
           onColumnReorder={handleColumnReorder}
-          className="!grid-flow-col !auto-cols-[280px]"
+          className="!grid-flow-col !auto-cols-[320px]"
         >
           {(column) => (
             <KanbanBoardColumn
@@ -168,7 +168,7 @@ export default function KanbanDndBoard({
 
       {canManage && (
         <div className="min-w-[260px] max-w-[300px] shrink-0 self-start">
-          <div className="rounded-xl border border-dashed border-pm-border bg-pm-surface-muted/80 hover:bg-pm-surface hover:border-pm-border transition-colors p-2">
+          <div className="rounded-lg border border-dashed border-pm-border bg-pm-surface-muted/80 hover:bg-pm-surface hover:border-pm-border transition-colors p-2">
             <Input
               value={newColTitle}
               onChange={(e) => setNewColTitle(e.target.value)}

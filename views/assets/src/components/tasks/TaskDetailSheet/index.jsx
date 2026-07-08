@@ -146,6 +146,7 @@ export default function TaskDetailSheet() {
   const [activities, setActivities] = useState([])
   const [showActivities, setShowActivities] = useState(false)
   const [loadingActivities, setLoadingActivities] = useState(false)
+  const [detailTab, setDetailTab] = useState('comments')
 
   useEffect(() => {
     if (currentTask) {
@@ -497,7 +498,7 @@ export default function TaskDetailSheet() {
         side="right"
         className={cn(
           'overflow-y-auto p-0 transition-all duration-300',
-          fullscreen ? 'w-full sm:max-w-full' : 'w-full sm:max-w-[560px]',
+          fullscreen ? 'w-full sm:max-w-full' : 'w-full sm:max-w-[760px]',
         )}
         onPointerDownOutside={(e) => { if (isGooglePickerInteraction(e)) e.preventDefault() }}
         onInteractOutside={(e) => { if (isGooglePickerInteraction(e)) e.preventDefault() }}
@@ -559,29 +560,7 @@ export default function TaskDetailSheet() {
                         {currentTask.project?.data?.title || currentTask.project?.title}
                       </button>
                     )}
-                    <span className="text-muted-foreground/40">|</span>
-                    <span className="font-mono text-[12px] text-muted-foreground/70">#{currentTask.id}</span>
-                    {currentTask.creator?.data && (
-                      <>
-                        <span className="text-muted-foreground/40">·</span>
-                        <div className="inline-flex items-center gap-1 shrink-0">
-                          <UserAvatar user={currentTask.creator.data} size="xs" />
-                          <button
-                            type="button"
-                            onClick={() => { dispatch(closeTaskSheet()); navigate('/my-tasks'); }}
-                            className="text-muted-foreground hover:text-pm-accent transition-colors cursor-pointer"
-                          >
-                            {currentTask.creator.data.display_name}
-                          </button>
-                        </div>
-                      </>
-                    )}
-                    {currentTask.created_at && (
-                      <>
-                        <span className="text-muted-foreground/40">·</span>
-                        <span className="inline-flex items-center gap-1 shrink-0"><Calendar className="h-3 w-3" />{formatPmDateTime(currentTask.created_at)}</span>
-                      </>
-                    )}
+                    <span className="font-mono text-[12px] text-muted-foreground/60">#{currentTask.id}</span>
                   </div>
                 </SheetDescription>
                 <div className="flex items-center gap-3">
@@ -594,7 +573,7 @@ export default function TaskDetailSheet() {
                       className="text-lg font-semibold h-auto py-0.5 border-none shadow-none focus-visible:ring-1 flex-1"
                     />
                   ) : (
-                    <SheetTitle className={cn('text-lg leading-snug truncate', canEditTask(currentTask) && 'cursor-pointer hover:text-pm-accent transition-colors', complete && 'line-through text-pm-text-muted')}
+                    <SheetTitle className={cn('text-xl font-bold leading-snug truncate', canEditTask(currentTask) && 'cursor-pointer hover:text-pm-accent transition-colors', complete && 'line-through text-pm-text-muted')}
                       title={currentTask.title}
                       onClick={() => canEditTask(currentTask) && setEditingTitle(true)}>
                       {currentTask.title}
@@ -603,13 +582,13 @@ export default function TaskDetailSheet() {
                 </div>
               </SheetHeader>
 
-              <div className="bg-muted/20 pb-2">
-                <div className="flex items-center h-8 px-2 rounded-md hover:bg-muted/40 transition-colors cursor-pointer" onClick={handleToggleStatus}>
+              <div className="space-y-0.5">
+                <div className="flex items-center h-9 px-2 rounded-md hover:bg-muted/40 transition-colors cursor-pointer" onClick={handleToggleStatus}>
                   <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
                     <Check className="h-4 w-4" /><span className="text-sm">{__('Status', 'wedevs-project-manager')}</span>
                   </div>
-                  <span className={cn('inline-flex items-center gap-1.5 text-[15px] font-medium px-2.5 py-0.5 rounded-full',
-                    complete ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600')}>
+                  <span className={cn('inline-flex items-center gap-1.5 text-[15px] font-medium px-2.5 py-0.5 rounded-md',
+                    complete ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700')}>
                     <span className={cn('h-1.5 w-1.5 rounded-full', complete ? 'bg-emerald-500' : 'bg-amber-500')} />
                     {complete ? __('Done', 'wedevs-project-manager') : __('Active', 'wedevs-project-manager')}
                   </span>
@@ -655,7 +634,7 @@ export default function TaskDetailSheet() {
                   <div className="flex-1">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       {assignees.map(user => (
-                        <span key={user.id || user.assigned_to} className="inline-flex items-center gap-1 text-sm bg-muted/50 rounded-full pl-0.5 pr-2 py-0.5">
+                        <span key={user.id || user.assigned_to} className="inline-flex items-center gap-1 text-sm bg-muted/50 rounded-md pl-0.5 pr-2 py-0.5">
                           <UserAvatar user={user} size="sm" />
                           {user.display_name}
                           {canEditTask(currentTask) && (
@@ -678,19 +657,22 @@ export default function TaskDetailSheet() {
                           placeholder={__('Search members...', 'wedevs-project-manager')} className="h-7 text-sm"
                           onKeyDown={e => { if (e.key === 'Escape') { setShowAssigneeSearch(false); setAssigneeQuery('') } }}
                         />
-                        <div className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-lg shadow-lg z-50 max-h-36 overflow-y-auto">
+                        <div className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-lg shadow-lg z-50 max-h-72 overflow-y-auto p-1">
                           {filteredMembers.length === 0 && (
-                            <div className="px-3 py-2 text-xs text-pm-text-muted">{__('No project members', 'wedevs-project-manager')}</div>
+                            <div className="px-3 py-3 text-sm text-pm-text-muted">{__('No project members', 'wedevs-project-manager')}</div>
                           )}
                           {filteredMembers.map(u => {
                             const isAssigned = assignees.some(a => parseInt(a.id || a.assigned_to) === parseInt(u.id))
                             return (
                               <button key={u.id} type="button"
-                                className={cn("w-full flex items-center gap-2 px-3 py-1.5 text-sm text-left", isAssigned ? "bg-pm-accent/5 text-pm-accent" : "hover:bg-muted/50")}
+                                className={cn("w-full flex items-center gap-2.5 rounded-md px-2 py-1.5 text-left transition-colors", isAssigned ? "bg-pm-accent/5" : "hover:bg-muted/60")}
                                 onClick={() => isAssigned ? handleRemoveAssignee(u.id) : handleAddAssignee(u)}
                               >
-                                <UserAvatar user={u} size="sm" />
-                                <span className="flex-1">{u.display_name}</span>
+                                <UserAvatar user={u} size="md" className="shrink-0" />
+                                <div className="min-w-0 flex-1">
+                                  <p className="text-sm font-medium text-pm-text-primary truncate">{u.display_name}</p>
+                                  {u.email && <p className="text-[12px] text-pm-text-muted truncate">{u.email}</p>}
+                                </div>
                                 {isAssigned && <Check className="h-4 w-4 text-pm-accent shrink-0" />}
                               </button>
                             )
@@ -700,6 +682,31 @@ export default function TaskDetailSheet() {
                     )}
                   </div>
                 </div>
+
+                {currentTask.creator?.data && (
+                  <div className="flex items-center h-9 px-2 rounded-md hover:bg-muted/40 transition-colors">
+                    <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
+                      <Users className="h-4 w-4" /><span className="text-sm">{__('Created by', 'wedevs-project-manager')}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => { dispatch(closeTaskSheet()); navigate('/my-tasks'); }}
+                      className="inline-flex items-center gap-1.5 text-sm text-pm-text-primary hover:text-pm-accent transition-colors"
+                    >
+                      <UserAvatar user={currentTask.creator.data} size="sm" />
+                      {currentTask.creator.data.display_name}
+                    </button>
+                  </div>
+                )}
+
+                {currentTask.created_at && (
+                  <div className="flex items-center h-9 px-2 rounded-md hover:bg-muted/40 transition-colors">
+                    <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
+                      <Calendar className="h-4 w-4" /><span className="text-sm">{__('Created', 'wedevs-project-manager')}</span>
+                    </div>
+                    <span className="text-sm text-pm-text-primary">{formatPmDateTime(currentTask.created_at)}</span>
+                  </div>
+                )}
 
                 <TaskEstimationField task={currentTask} projectId={currentTask?.project_id} dispatch={dispatch} api={api} />
 
@@ -723,7 +730,7 @@ export default function TaskDetailSheet() {
 
             <Separator />
 
-            <div className="px-5 py-2">
+            <div className="px-6 py-3">
               <div className="flex items-center justify-between mb-2">
                 <h4 className="flex items-center gap-1.5 text-sm font-semibold uppercase tracking-wider text-pm-text-muted/70"><FileText className="h-4 w-4" />{__('Description', 'wedevs-project-manager')}</h4>
                 {!editingDesc && canEditTask(currentTask) && (
@@ -766,20 +773,37 @@ export default function TaskDetailSheet() {
 
             <Separator />
 
-            <ProSubtasksSection
-              taskId={currentTask?.id}
-              projectId={currentTask?.project_id}
-              currentTask={currentTask}
-            />
+            <div className="px-6 pt-4">
+              <div className="flex items-center gap-6 border-b border-pm-border">
+                {[
+                  { key: 'subtasks', label: __('Subtasks', 'wedevs-project-manager'), count: 0 },
+                  { key: 'comments', label: __('Comments', 'wedevs-project-manager'), count: comments.length },
+                  { key: 'activities', label: __('Activities', 'wedevs-project-manager'), count: 0 },
+                ].map(t => (
+                  <button
+                    key={t.key}
+                    type="button"
+                    onClick={() => { setDetailTab(t.key); if (t.key === 'activities' && !showActivities) handleLoadActivities() }}
+                    className={cn('relative -mb-px flex items-center gap-1.5 pb-3 text-sm font-semibold transition-colors', detailTab === t.key ? 'text-pm-text-primary' : 'text-pm-text-muted hover:text-pm-text')}
+                  >
+                    {t.label}
+                    {t.count > 0 && <span className="text-[12px] bg-muted px-1.5 py-0.5 rounded-md tabular-nums font-medium">{t.count}</span>}
+                    {detailTab === t.key && <span className="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-pm-accent" />}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-            <Separator />
+            {detailTab === 'subtasks' && (
+              <ProSubtasksSection
+                taskId={currentTask?.id}
+                projectId={currentTask?.project_id}
+                currentTask={currentTask}
+              />
+            )}
 
-            <div className="px-6 py-4">
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-pm-text-muted/70 mb-3 flex items-center gap-1">
-                <MessageSquare className="h-4 w-4" />{__('Comments', 'wedevs-project-manager')}
-                {comments.length > 0 && <span className="text-[14px] bg-muted px-1.5 py-0.5 rounded-full tabular-nums">{comments.length}</span>}
-              </h4>
-
+            {detailTab === 'comments' && (
+              <div className="px-6 py-4">
               {comments.length > 0 && (
                 <div className="space-y-3 mb-4">
                   {comments.map(comment => {
@@ -871,29 +895,11 @@ export default function TaskDetailSheet() {
                   <CommentLinkActions projectId={projectId} onInsert={(html) => setNewComment(prev => (prev || '') + html)} />
                 </div>
               </div>
-            </div>
-
-            <Separator />
-
-            <div className="px-6 py-4">
-              <div className="flex items-center justify-between">
-                <h4 className="text-sm font-semibold uppercase tracking-wider text-pm-text-muted flex items-center gap-1.5">
-                  <Activity className="h-4 w-4" />{__('Activity', 'wedevs-project-manager')}
-                </h4>
-                <button
-                  type="button"
-                  onClick={showActivities ? () => setShowActivities(false) : handleLoadActivities}
-                  className="p-1 rounded hover:bg-muted text-pm-text-muted hover:text-pm-accent transition-colors"
-                  title={showActivities ? __('Hide activity', 'wedevs-project-manager') : __('Show activity', 'wedevs-project-manager')}
-                >
-                  {showActivities
-                    ? <Eye className="h-4 w-4" />
-                    : <EyeOff className="h-4 w-4" />
-                  }
-                </button>
               </div>
-              {showActivities && (
-                <div className="mt-3 space-y-2">
+              )}
+
+              {detailTab === 'activities' && (
+                <div className="px-6 py-4 space-y-2">
                   {loadingActivities ? (
                     <div className="space-y-2">
                       <Skeleton className="h-4 w-full" />
@@ -959,7 +965,6 @@ export default function TaskDetailSheet() {
                   )}
                 </div>
               )}
-            </div>
 
           </div>
         ) : null}

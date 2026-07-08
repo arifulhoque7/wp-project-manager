@@ -59,7 +59,7 @@ function MockActivityItem({ item }) {
   return (
     <div className="flex items-start gap-3 py-3 px-4 hover:bg-pm-hover/50 rounded-lg transition-colors">
       <Avatar className="h-8 w-8 shrink-0 mt-0.5">
-        <AvatarFallback className="text-[15px] font-semibold bg-pm-accent/10 text-pm-accent">
+        <AvatarFallback className="text-[15px] font-semibold bg-pm-accent-light text-pm-accent">
           {item.initials}
         </AvatarFallback>
       </Avatar>
@@ -101,7 +101,7 @@ export default function ProgressPage() {
   if (licenseGuard) return licenseGuard
 
   return (
-    <div className="max-w-[1400px] mx-auto p-4 sm:p-6 space-y-6">
+    <div className="w-full p-4 sm:p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -116,7 +116,7 @@ export default function ProgressPage() {
       </div>
 
       {/* Progress preview card */}
-      <div className="group relative rounded-xl border bg-card overflow-hidden">
+      <div className="group relative rounded-lg border bg-card overflow-hidden">
         <div className="p-4">
           {/* Stats bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
@@ -126,7 +126,7 @@ export default function ProgressPage() {
               { label: __('Comments', 'wedevs-project-manager'),        value: '8',  icon: MessageSquare, color: 'text-blue-500 bg-blue-50' },
               { label: __('Files Uploaded', 'wedevs-project-manager'),  value: '3',  icon: Upload,        color: 'text-amber-500 bg-amber-50' },
             ].map((stat) => (
-              <div key={stat.label} className="rounded-xl border bg-card p-4 flex items-center gap-3">
+              <div key={stat.label} className="rounded-lg border bg-card p-4 flex items-center gap-3">
                 <div className={`shrink-0 p-2 rounded-lg ${stat.color.split(' ')[1]}`}>
                   <stat.icon className={`h-5 w-5 ${stat.color.split(' ')[0]}`} />
                 </div>
@@ -166,7 +166,7 @@ export default function ProgressPage() {
         {/* Pro overlay */}
         {!isPro && (
           <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex flex-col items-center justify-center cursor-pointer rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
+            className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex flex-col items-center justify-center cursor-pointer rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
             onClick={() => setOpen(true)}
           >
             <div className="bg-pm-surface rounded-2xl px-8 py-6 shadow-xl text-center">

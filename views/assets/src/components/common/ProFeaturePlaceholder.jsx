@@ -35,10 +35,10 @@ function KanbanMock() {
 
 function GanttMock() {
   const tasks = [
-    { name: __('Research', 'wedevs-project-manager'), start: 5, width: 30, color: '#7C3AED' },
-    { name: __('Design', 'wedevs-project-manager'), start: 20, width: 25, color: '#a78bfa' },
-    { name: __('Development', 'wedevs-project-manager'), start: 35, width: 40, color: '#7C3AED' },
-    { name: __('Testing', 'wedevs-project-manager'), start: 60, width: 20, color: '#a78bfa' },
+    { name: __('Research', 'wedevs-project-manager'), start: 5, width: 30, color: '#6F56A3' },
+    { name: __('Design', 'wedevs-project-manager'), start: 20, width: 25, color: '#9B82C9' },
+    { name: __('Development', 'wedevs-project-manager'), start: 35, width: 40, color: '#6F56A3' },
+    { name: __('Testing', 'wedevs-project-manager'), start: 60, width: 20, color: '#9B82C9' },
     { name: __('Deployment', 'wedevs-project-manager'), start: 75, width: 15, color: '#22c55e' },
     { name: __('Review', 'wedevs-project-manager'), start: 10, width: 35, color: '#f59e0b' },
   ]
@@ -133,7 +133,7 @@ function SettingsMock() {
 
 function SprintsMock() {
   const sprints = [
-    { name: __('Sprint 12', 'wedevs-project-manager'), status: __('Active', 'wedevs-project-manager'), dates: 'Mar 18 – Mar 31', tasks: 8, completed: 3, color: '#7C3AED' },
+    { name: __('Sprint 12', 'wedevs-project-manager'), status: __('Active', 'wedevs-project-manager'), dates: 'Mar 18 – Mar 31', tasks: 8, completed: 3, color: '#6F56A3' },
     { name: __('Sprint 11', 'wedevs-project-manager'), status: __('Completed', 'wedevs-project-manager'), dates: 'Mar 4 – Mar 17', tasks: 12, completed: 12, color: '#22c55e' },
     { name: __('Sprint 10', 'wedevs-project-manager'), status: __('Completed', 'wedevs-project-manager'), dates: 'Feb 18 – Mar 3', tasks: 10, completed: 10, color: '#22c55e' },
   ]
@@ -271,7 +271,7 @@ export default function ProFeaturePlaceholder({ title, description, icon: Icon, 
   if (licenseGuard) return licenseGuard
 
   return (
-    <div className="max-w-[1400px] mx-auto p-4 sm:p-6 space-y-6">
+    <div className="w-full p-4 sm:p-6 space-y-6">
       {/* Header — same pattern as CalendarPage */}
       <div className="flex items-center justify-between">
         <div>
@@ -282,7 +282,7 @@ export default function ProFeaturePlaceholder({ title, description, icon: Icon, 
       </div>
 
       {/* Preview card — same pattern as CalendarPage */}
-      <div className="group relative rounded-xl border bg-card overflow-hidden">
+      <div className="group relative rounded-lg border bg-card overflow-hidden">
         <div className="p-6">
           {MockComponent ? <MockComponent /> : (
             <div style={{ minHeight: '500px' }} className="flex items-center justify-center">
@@ -294,7 +294,7 @@ export default function ProFeaturePlaceholder({ title, description, icon: Icon, 
         {/* Pro overlay — same as CalendarPage: hidden, shows on hover */}
         {!isPro && (
           <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex flex-col items-center justify-center cursor-pointer rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
+            className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex flex-col items-center justify-center cursor-pointer rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
             onClick={() => setOpen(true)}
           >
             <div className="bg-pm-surface rounded-2xl px-8 py-6 shadow-xl text-center">

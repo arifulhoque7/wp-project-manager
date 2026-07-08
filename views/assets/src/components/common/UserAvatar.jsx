@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 
 const sizeMap = {
   xs: { avatar: 'h-4 w-4',   text: 'text-[6px]' },
-  sm: { avatar: 'h-5 w-5',   text: 'text-[7px]' },
+  sm: { avatar: 'h-7 w-7',   text: 'text-[11px]' },
   md: { avatar: 'h-7 w-7',   text: 'text-[11px]' },
   lg: { avatar: 'h-8 w-8',   text: 'text-[13px]' },
   xl: { avatar: 'h-14 w-14', text: 'text-lg' },
@@ -41,7 +41,7 @@ export function UserAvatar({ user, size = 'md', className, fallbackClassName, ..
         <AvatarImage src={avatarUrl} alt={name} loading="lazy" />
       )}
       <AvatarFallback
-        className={cn(s.text, 'font-semibold bg-primary/10 text-primary', fallbackClassName)}
+        className={cn(s.text, 'font-semibold bg-pm-accent-light text-pm-accent', fallbackClassName)}
       >
         {getInitials(name)}
       </AvatarFallback>

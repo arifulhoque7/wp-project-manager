@@ -70,6 +70,8 @@ import {
   Plus,
   LayoutGrid,
   List,
+  ChevronDown,
+  ChevronRight,
   Star,
   MoreHorizontal,
   Trash2,
@@ -88,6 +90,8 @@ import {
   Pencil,
   Settings,
   Search,
+  ListChecks,
+  Calendar,
 } from "lucide-react";
 
 import AiCreateDialog from "../AiCreateDialog";
@@ -101,6 +105,8 @@ import {
   isComplete,
   statusColor,
   statusLabel,
+  statusPill,
+  groupByStatus,
   getDescriptionSnippet,
   getFilterTabs,
 } from "./utils";
@@ -113,6 +119,11 @@ export default function ProjectsPage() {
   const { canCreate, isPro } = usePermissions();
   const proApi = useProApi();
   const { setOpen: setProModalOpen } = useProModal();
+  const [collapsedGroups, setCollapsedGroups] = useState({});
+  const toggleGroup = useCallback(
+    (key) => setCollapsedGroups((prev) => ({ ...prev, [key]: !prev[key] })),
+    [],
+  );
 
   const {
     projects,
@@ -395,7 +406,7 @@ export default function ProjectsPage() {
         return (
           <div
             key={project.id}
-            className="group relative rounded-xl border bg-card overflow-hidden hover:shadow-lg hover:border-border/80 transition-all duration-200"
+            className="group relative rounded-lg border bg-card overflow-hidden hover:shadow-lg hover:border-border/80 transition-all duration-200"
           >
             <div
               className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl"
@@ -467,8 +478,9 @@ export default function ProjectsPage() {
                   </span>
                 </div>
                 {getMeta(project) && (
-                  <p className="text-[13px] text-pm-text-muted">
-                    {getMeta(project).total_complete_tasks ?? 0} {__("done", 'wedevs-project-manager')} / {getMeta(project).total_tasks ?? 0} {__("total", 'wedevs-project-manager')}
+                  <p className="flex items-center gap-1.5 text-[13px] text-pm-text-muted">
+                    <ListChecks className="h-3.5 w-3.5 shrink-0" />
+                    {getMeta(project).total_complete_tasks ?? 0}/{getMeta(project).total_tasks ?? 0} ({progress}% {__("completed", 'wedevs-project-manager')})
                   </p>
                 )}
               </div>
@@ -476,21 +488,22 @@ export default function ProjectsPage() {
               <div className="flex items-center justify-between pt-1">
                 <div className="flex items-center gap-3">
                   {renderAssignees(project)}
-                  {project.created_at && (
-                    <span className="text-[13px] text-pm-text-muted">
-                      {formatPmDate(project.created_at)}
+                  {project.est_completion_date && (
+                    <span className="inline-flex items-center gap-1 text-[13px] text-pm-text-muted">
+                      <Calendar className="h-3.5 w-3.5 shrink-0" />
+                      {formatPmDate(project.est_completion_date)}
                     </span>
                   )}
                 </div>
                 <span
-                  className="inline-flex items-center gap-1 text-[15px] font-medium px-2 py-0.5 rounded-full"
-                  style={{ backgroundColor: statusColor(project) + '12', color: statusColor(project) }}
+                  className="inline-flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-0.5 rounded-md"
+                  style={{ backgroundColor: statusPill(project).bg, color: statusPill(project).text }}
                 >
                   <span
                     className="h-1.5 w-1.5 rounded-full"
                     style={{ backgroundColor: statusColor(project) }}
                   />
-                  {__(statusLabel(project), 'wedevs-project-manager')}
+                  {statusLabel(project)}
                 </span>
               </div>
             </div>
@@ -500,135 +513,138 @@ export default function ProjectsPage() {
     </div>
   );
 
-  const renderListView = () => (
-    <div className="rounded-xl border bg-card overflow-x-auto">
-      <table className="w-full text-sm min-w-[800px]">
-        <thead>
-          <tr className="border-b bg-muted/30">
-            <th className="text-left px-5 py-2.5 text-[14px] font-semibold uppercase tracking-wider text-pm-text-muted/70">
-              {__("Project", 'wedevs-project-manager')}
-            </th>
-            <th className="text-left px-4 py-2.5 text-[14px] font-semibold uppercase tracking-wider text-pm-text-muted/70">
-              {__("Status", 'wedevs-project-manager')}
-            </th>
-            <th className="text-left px-4 py-2.5 text-[14px] font-semibold uppercase tracking-wider text-pm-text-muted/70 w-36">
-              {__("Progress", 'wedevs-project-manager')}
-            </th>
-            <th className="text-left px-4 py-2.5 text-[14px] font-semibold uppercase tracking-wider text-pm-text-muted/70">
-              {__("Details", 'wedevs-project-manager')}
-            </th>
-            <th className="text-left px-4 py-2.5 text-[14px] font-semibold uppercase tracking-wider text-pm-text-muted/70">
-              {__("Members", 'wedevs-project-manager')}
-            </th>
-            <th className="text-left px-4 py-2.5 text-[14px] font-semibold uppercase tracking-wider text-pm-text-muted/70">
-              {__("Created", 'wedevs-project-manager')}
-            </th>
-            <th className="text-left px-4 py-2.5 text-[14px] font-semibold uppercase tracking-wider text-pm-text-muted/70 w-10">
-              {__("Action", 'wedevs-project-manager')}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {projects.map((project) => {
-            const progress = projectProgress(project);
-            const projectColor = project.color_code || statusColor(project);
-
+  const renderListView = () => {
+    const groups = groupByStatus(projects);
+    return (
+      <div className="rounded-lg border bg-card overflow-x-auto">
+        <table className="w-full text-sm min-w-[820px]">
+          <thead>
+            <tr className="border-b bg-muted/30">
+              <th className="text-left px-5 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70">
+                {__("Project Name", 'wedevs-project-manager')}
+              </th>
+              <th className="text-left px-4 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70">
+                {__("Description", 'wedevs-project-manager')}
+              </th>
+              <th className="text-left px-4 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70 whitespace-nowrap">
+                {__("Deadline", 'wedevs-project-manager')}
+              </th>
+              <th className="text-left px-4 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70 w-40">
+                {__("Progress", 'wedevs-project-manager')}
+              </th>
+              <th className="text-left px-4 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70">
+                {__("Members", 'wedevs-project-manager')}
+              </th>
+              <th className="px-4 py-2.5 w-10"></th>
+            </tr>
+          </thead>
+          {groups.map((group) => {
+            const isCollapsed = collapsedGroups[group.key];
             return (
-              <tr
-                key={project.id}
-                className="group border-b last:border-b-0 hover:bg-muted/20 transition-colors"
-              >
-                <td className="px-5 py-3 max-w-[300px]">
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <span
-                      className="h-2 w-2 rounded-full shrink-0 ring-2 ring-background"
-                      style={{ backgroundColor: projectColor }}
-                    />
-                    <span
-                      className="font-medium text-pm-text-primary truncate cursor-pointer hover:text-pm-accent transition-colors"
-                      role="button"
-                      tabIndex={0}
-                      onClick={() =>
-                        navigate(`/projects/${project.id}/task-lists`)
-                      }
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault()
-                          navigate(`/projects/${project.id}/task-lists`)
-                        }
-                      }}
+              <tbody key={group.key} className="border-b last:border-b-0">
+                <tr className="bg-muted/20">
+                  <td colSpan={6} className="px-3 py-2">
+                    <button
+                      onClick={() => toggleGroup(group.key)}
+                      className="inline-flex items-center gap-2"
+                      aria-expanded={!isCollapsed}
                     >
-                      {project.title}
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className={cn(
-                        "h-6 w-6 shrink-0 transition-opacity",
-                        !project.favourite &&
-                          "opacity-0 group-hover:opacity-100",
-                      )}
-                      onClick={() => handleToggleFavourite(project.id)}
-                    >
-                      <Star
-                        className={cn(
-                          "h-4 w-4",
-                          project.favourite
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "text-muted-foreground",
-                        )}
-                      />
-                    </Button>
-                  </div>
-                </td>
-                <td className="px-4 py-3">
-                  <span
-                    className="inline-flex items-center gap-1.5 text-[15px] font-medium px-2 py-0.5 rounded-full"
-                    style={{ backgroundColor: statusColor(project) + '12', color: statusColor(project) }}
-                  >
-                    <span
-                      className="h-1.5 w-1.5 rounded-full"
-                      style={{ backgroundColor: statusColor(project) }}
-                    />
-                    {__(statusLabel(project), 'wedevs-project-manager')}
-                  </span>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <Progress value={progress} className="h-1 flex-1" />
-                      <span className="text-[14px] font-medium text-pm-text-muted tabular-nums w-7 text-right">
-                        {progress}%
+                      <span
+                        className="inline-flex items-center rounded-md px-2.5 py-1 text-[12px] font-semibold uppercase tracking-wide"
+                        style={{ backgroundColor: group.pill.bg, color: group.pill.text }}
+                      >
+                        {group.label} ({group.items.length})
                       </span>
-                    </div>
-                    {getMeta(project) && (
-                      <p className="text-[13px] text-pm-text-muted">
-                        {getMeta(project).total_complete_tasks ?? 0} {__("done", 'wedevs-project-manager')} / {getMeta(project).total_tasks ?? 0} {__("total", 'wedevs-project-manager')}
-                      </p>
-                    )}
-                  </div>
-                </td>
-                <td className="px-4 py-3">
-                  {renderMetaCounters(project)}
-                </td>
-                <td className="px-4 py-3">{renderAssignees(project)}</td>
-                <td className="px-4 py-3">
-                  {project.created_at && (
-                    <span className="text-[15px] text-pm-text-muted">
-                      {formatPmDate(project.created_at)}
-                    </span>
-                  )}
-                </td>
-                <td className="px-3 py-3 text-center">
-                  {renderProjectDropdown(project)}
-                </td>
-              </tr>
+                      {isCollapsed
+                        ? <ChevronRight className="h-4 w-4 text-pm-text-muted" />
+                        : <ChevronDown className="h-4 w-4 text-pm-text-muted" />}
+                    </button>
+                  </td>
+                </tr>
+                {!isCollapsed && group.items.map((project) => {
+                  const progress = projectProgress(project);
+                  const projectColor = project.color_code || statusColor(project);
+
+                  return (
+                    <tr
+                      key={project.id}
+                      className="group border-t hover:bg-muted/20 transition-colors"
+                    >
+                      <td className="px-5 py-3 max-w-[260px]">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <span
+                            className="h-2 w-2 rounded-full shrink-0 ring-2 ring-background"
+                            style={{ backgroundColor: projectColor }}
+                          />
+                          <span
+                            className="font-medium text-pm-text-primary truncate cursor-pointer hover:text-pm-accent transition-colors"
+                            role="button"
+                            tabIndex={0}
+                            onClick={() =>
+                              navigate(`/projects/${project.id}/task-lists`)
+                            }
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault()
+                                navigate(`/projects/${project.id}/task-lists`)
+                              }
+                            }}
+                          >
+                            {project.title}
+                          </span>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className={cn(
+                              "h-6 w-6 shrink-0 transition-opacity",
+                              !project.favourite &&
+                                "opacity-0 group-hover:opacity-100",
+                            )}
+                            onClick={() => handleToggleFavourite(project.id)}
+                          >
+                            <Star
+                              className={cn(
+                                "h-4 w-4",
+                                project.favourite
+                                  ? "fill-yellow-400 text-yellow-400"
+                                  : "text-muted-foreground",
+                              )}
+                            />
+                          </Button>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 max-w-[240px]">
+                        <span className="block truncate text-pm-text-muted">
+                          {getDescriptionSnippet(project) || '—'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <span className="text-pm-text-muted">
+                          {formatPmDate(project.est_completion_date) || '—'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <Progress value={progress} className="h-1 flex-1" />
+                          <span className="text-[12px] font-medium text-pm-text-muted tabular-nums w-8 text-right">
+                            {progress}%
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">{renderAssignees(project)}</td>
+                      <td className="px-3 py-3 text-right">
+                        {renderProjectDropdown(project)}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
             );
           })}
-        </tbody>
-      </table>
-    </div>
-  );
+        </table>
+      </div>
+    );
+  };
 
   const goToPage = useCallback(
     (page) => {
@@ -701,7 +717,7 @@ export default function ProjectsPage() {
   };
 
   return (
-    <div className="max-w-[1400px] mx-auto p-4 sm:p-6 space-y-6">
+    <div className="w-full p-4 sm:p-6 space-y-6">
       <PromoBanner placement="projects" />
 
       <div className="flex items-center justify-between flex-wrap gap-2">
@@ -734,12 +750,13 @@ export default function ProjectsPage() {
       </div>
 
       <div className="flex items-center justify-between flex-wrap gap-3">
-        <div className="inline-flex max-w-full items-center rounded-lg bg-muted/60 p-1 gap-0.5 overflow-x-auto scrollbar-none">
+        <div className="inline-flex max-w-full items-center rounded-lg border border-pm-border bg-muted/60 p-1 gap-0.5 overflow-x-auto scrollbar-none">
           {FILTER_TABS.map((tab) => {
             const count = tab.countKey
               ? projectsMeta[tab.countKey]
               : totalCount;
             const isActive = activeFilter === tab.key;
+            const TabIcon = tab.icon;
 
             return (
               <button
@@ -753,6 +770,12 @@ export default function ProjectsPage() {
                     : "text-pm-text-muted hover:text-pm-text-primary",
                 )}
               >
+                {TabIcon && (
+                  <TabIcon
+                    className="h-4 w-4 shrink-0"
+                    style={isActive ? { color: tab.color } : undefined}
+                  />
+                )}
                 {tab.label}
                 <span
                   className="inline-flex items-center justify-center rounded-full px-1.5 min-w-[18px] h-[18px] text-[14px] font-semibold tabular-nums transition-colors"
@@ -805,23 +828,29 @@ export default function ProjectsPage() {
             </SelectContent>
           </Select>
 
-          <div className="flex items-center border rounded-md">
-            <Button
-              variant={viewMode === "grid" ? "default" : "ghost"}
-              size="icon"
-              className="h-9 w-9 rounded-r-none"
+          <div className="inline-flex items-center gap-0.5 rounded-lg border border-pm-border bg-muted/60 p-1">
+            <button
+              type="button"
               onClick={() => handleViewModeChange("grid")}
+              aria-label={__("Grid view", 'wedevs-project-manager')}
+              className={cn(
+                'inline-flex h-7 w-7 items-center justify-center rounded-md transition-all duration-200',
+                viewMode === "grid" ? 'bg-background text-pm-accent shadow-sm' : 'text-pm-text-muted hover:text-pm-text-primary',
+              )}
             >
-              <LayoutGrid className="h-5 w-5" />
-            </Button>
-            <Button
-              variant={viewMode === "list" ? "default" : "ghost"}
-              size="icon"
-              className="h-9 w-9 rounded-l-none"
+              <LayoutGrid className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
               onClick={() => handleViewModeChange("list")}
+              aria-label={__("List view", 'wedevs-project-manager')}
+              className={cn(
+                'inline-flex h-7 w-7 items-center justify-center rounded-md transition-all duration-200',
+                viewMode === "list" ? 'bg-background text-pm-accent shadow-sm' : 'text-pm-text-muted hover:text-pm-text-primary',
+              )}
             >
-              <List className="h-5 w-5" />
-            </Button>
+              <List className="h-4 w-4" />
+            </button>
           </div>
         </div>
       </div>

@@ -186,8 +186,8 @@ const SettingsPage = () => {
                     type="button"
                     title={collapsed ? tab.label : undefined}
                     className={cn(
-                      'w-full flex items-center rounded-md transition-colors text-left mb-0.5 group/tab',
-                      collapsed ? 'justify-center px-0 py-2' : 'gap-2.5 px-2.5 py-[7px]',
+                      'w-full flex items-center rounded-lg transition-colors text-left mb-1 group/tab',
+                      collapsed ? 'justify-center px-0 py-2' : 'gap-3 px-3 py-2.5',
                       isActive
                         ? 'bg-pm-accent/10 text-pm-accent font-medium'
                         : 'text-pm-text-muted hover:bg-pm-hover hover:text-pm-text'
@@ -222,7 +222,7 @@ const SettingsPage = () => {
           <Suspense
             fallback={
               activeTab === 'woo-project' ? (
-                <div className="max-w-[1400px] mx-auto p-6 space-y-5">
+                <div className="w-full p-6 space-y-5">
                   <div className="h-7 w-64 bg-pm-border/30 rounded-lg animate-pulse" />
                   <div className="h-4 w-96 bg-pm-border/30 rounded-lg animate-pulse" />
                   <div className="h-32 w-full bg-pm-border/30 rounded-lg animate-pulse" />

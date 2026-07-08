@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mona Sans — self-hosted variable font (OFL) */
+@font-face {
+  font-family: 'Mona Sans';
+  src: url('./fonts/MonaSansVF.woff2') format('woff2-variations');
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mona Sans';
+  src: url('./fonts/MonaSansVF-Italic.woff2') format('woff2-variations');
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
+  font-style: italic;
+  font-display: swap;
+}
+
+
 /* Headway badge — position absolutely so it doesn't break flex layout */
 #pm-headway-icon .HW_badge_cont {
   position: absolute;
@@ -43,7 +62,7 @@
   --popover:               0 0% 100%;
   --popover-foreground:    240 10% 3.9%;
 
-  --primary:               262 80% 57%;        /* #7C3AED — pm-accent */
+  --primary:               260 31% 49%;        /* #6F56A3 — pm-accent */
   --primary-foreground:    0 0% 100%;           /* white */
 
   --secondary:             240 4.8% 95.9%;
@@ -60,9 +79,9 @@
 
   --border:                240 5.9% 90%;
   --input:                 240 5.9% 90%;
-  --ring:                  262 80% 57%;         /* matches --primary */
+  --ring:                  260 31% 49%;         /* matches --primary */
 
-  --radius:                0.375rem;
+  --radius:                0.5rem;
 
   /* ── PM custom color tokens (light) ── */
   --pm-sidebar:            #1A1A2E;
@@ -71,15 +90,15 @@
   --pm-sidebar-text:       #A8B2D8;
   --pm-sidebar-txt-active: #FFFFFF;
   --pm-surface:            #FFFFFF;
-  --pm-surface-muted:      #F7F8FA;
-  --pm-border:             #E5E7EB;
-  --pm-hover:              #F3F4F6;
-  --pm-accent:             #7C3AED;
-  --pm-accent-hover:       #6D28D9;
-  --pm-accent-light:       #EDE9FE;
-  --pm-text:               #1F2937;
-  --pm-text-muted:         #6B7280;
-  --pm-text-primary:       #111827;
+  --pm-surface-muted:      #F4F4F5;
+  --pm-border:             #E4E4E7;
+  --pm-hover:              #F4F4F5;
+  --pm-accent:             #6F56A3;
+  --pm-accent-hover:       #5E4789;
+  --pm-accent-light:       #ECE7F3;
+  --pm-text:               #27272A;
+  --pm-text-muted:         #71717A;
+  --pm-text-primary:       #18181B;
 }
 
 /* ── Dark mode — toggled via data-pm-theme="dark" on <html>
@@ -95,7 +114,7 @@
   --popover:               220 40% 14%;
   --popover-foreground:    210 40% 96%;
 
-  --primary:               262 80% 65%;
+  --primary:               260 40% 66%;
   --primary-foreground:    0 0% 100%;
 
   --secondary:             220 30% 19%;
@@ -112,7 +131,7 @@
 
   --border:                220 28% 26%;
   --input:                 220 28% 26%;
-  --ring:                  262 80% 65%;
+  --ring:                  260 40% 66%;
 
   /* ── PM custom color tokens (dark) ── */
   --pm-sidebar:            #0B1020;
@@ -124,9 +143,9 @@
   --pm-surface-muted:      #101828;
   --pm-border:             #2a3a5c;
   --pm-hover:              #1e2d48;
-  --pm-accent:             #9D6FFF;
-  --pm-accent-hover:       #8B5CF6;
-  --pm-accent-light:       #2D1F5E;
+  --pm-accent:             #9B82C9;
+  --pm-accent-hover:       #8A6FBB;
+  --pm-accent-light:       #2A2140;
   --pm-text:               #CBD5E1;
   --pm-text-muted:         #7B8DB0;
   --pm-text-primary:       #F1F5F9;
@@ -135,7 +154,7 @@
   --tw-prose-body:         #CBD5E1;
   --tw-prose-headings:     #F1F5F9;
   --tw-prose-lead:         #94A3B8;
-  --tw-prose-links:        #9D6FFF;
+  --tw-prose-links:        #9B82C9;
   --tw-prose-bold:         #F1F5F9;
   --tw-prose-counters:     #7B8DB0;
   --tw-prose-bullets:      #7B8DB0;
@@ -143,7 +162,7 @@
   --tw-prose-quotes:       #CBD5E1;
   --tw-prose-quote-borders:#2a3a5c;
   --tw-prose-captions:     #7B8DB0;
-  --tw-prose-code:         #9D6FFF;
+  --tw-prose-code:         #9B82C9;
   --tw-prose-pre-code:     #CBD5E1;
   --tw-prose-pre-bg:       #101828;
   --tw-prose-th-borders:   #2a3a5c;
@@ -170,7 +189,7 @@ body:not(.wp-admin) #wedevs-project-manager {
 }
 
 #wedevs-project-manager {
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Mona Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 14px;
   line-height: 1.5;
   color: hsl(var(--foreground));
@@ -380,7 +399,7 @@ body:not(.wp-admin) #wedevs-project-manager {
 }
 
 .pm-sidebar-scroll:hover {
-  scrollbar-color: hsl(262 80% 57% / 0.35) transparent;
+  scrollbar-color: hsl(260 31% 49% / 0.35) transparent;
 }
 
 .pm-sidebar-scroll::-webkit-scrollbar {
@@ -398,11 +417,11 @@ body:not(.wp-admin) #wedevs-project-manager {
 }
 
 .pm-sidebar-scroll:hover::-webkit-scrollbar-thumb {
-  background: hsl(262 80% 57% / 0.35);
+  background: hsl(260 31% 49% / 0.35);
 }
 
 .pm-sidebar-scroll:hover::-webkit-scrollbar-thumb:hover {
-  background: hsl(262 80% 57% / 0.6);
+  background: hsl(260 31% 49% / 0.6);
 }
 
 /* ── Full-screen settings mode — hides WP admin chrome ───── */
@@ -508,7 +527,7 @@ body.pm-fullscreen-settings.pm-mode-wordpress.folded #wedevs-pm {
      because a Select inside a Sheet still teleports here. ──── */
 [data-radix-popper-content-wrapper] {
   z-index: 3000 !important;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-family: 'Mona Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   font-size: 14px !important;
   line-height: 1.5 !important;
   color: hsl(var(--foreground)) !important;
@@ -544,7 +563,7 @@ body.pm-fullscreen-settings.pm-mode-wordpress.folded #wedevs-pm {
      Specificity (0,2,0) beats Tailwind z-50 at (0,1,0). ───── */
 [role="dialog"][data-state] {
   z-index: 2001 !important;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Mona Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 14px;
   line-height: 1.5;
   color: hsl(var(--foreground));
@@ -573,7 +592,7 @@ body.pm-fullscreen-settings.pm-mode-wordpress.folded #wedevs-pm {
 }
 [role="alertdialog"][data-state] {
   z-index: 2501 !important;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Mona Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 14px;
   line-height: 1.5;
   color: hsl(var(--foreground));
@@ -678,7 +697,7 @@ body.admin-bar [data-sonner-toaster] {
   min-height: 0 !important;
   min-width: 0 !important;
   padding: 0.5rem 1rem !important;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-family: 'Mona Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   font-size: 0.875rem !important;
   font-weight: 500 !important;
   line-height: 1 !important;

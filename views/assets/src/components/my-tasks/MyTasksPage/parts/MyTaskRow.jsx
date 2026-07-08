@@ -5,12 +5,18 @@ import { UserAvatar } from '@components/common/UserAvatar';
 import TaskLabelBadges from "@components/tasks/TaskLabelBadges";
 import TaskStatusCircle from "@components/common/TaskStatusCircle";
 import { isPrivate } from "@lib/pm-utils";
-import { MessageSquare, Lock, Layers } from "lucide-react";
+import { cn } from "@lib/utils";
+import { MessageSquare, Lock, Layers, Calendar } from "lucide-react";
 import {
   isTaskComplete,
   formatPmDate,
   isOverdue,
 } from "@lib/pm-utils";
+
+// Shared column grid — header (MyTasksPage) + rows must match.
+// Task | Type | Labels | Project | Assignee | Due
+export const MYTASK_GRID =
+  "grid-cols-[minmax(200px,2.2fr)_84px_minmax(90px,1fr)_minmax(110px,1.1fr)_100px_minmax(120px,1.1fr)]";
 
 export default function MyTaskRow({ task, projectTitle, onToggle, onOpen }) {
   const complete = isTaskComplete(task.status);
@@ -27,81 +33,90 @@ export default function MyTaskRow({ task, projectTitle, onToggle, onOpen }) {
     ? task.assignees
     : task.assignees?.data ?? [];
 
+  const overdue = isOverdue(task.due_date, task.status);
+  const project = projectTitle || task.project?.data?.title || "";
+
   return (
-    <div className="flex items-center gap-3 px-4 py-2.5 border-b border-border/40 last:border-b-0 hover:bg-muted/20 transition-colors group">
-      <button
-        type="button"
-        onClick={handleToggle}
-        disabled={toggling}
-        className="shrink-0"
-      >
-        <TaskStatusCircle complete={complete} />
-      </button>
+    <div className={cn("grid items-center gap-2 px-4 py-2.5 border-b border-border/40 last:border-b-0 hover:bg-muted/20 transition-colors group", MYTASK_GRID)}>
+      {/* Task */}
+      <div className="flex items-center gap-2 min-w-0">
+        <button type="button" onClick={handleToggle} disabled={toggling} className="shrink-0">
+          <TaskStatusCircle complete={complete} />
+        </button>
+        <button
+          type="button"
+          className={cn(
+            "min-w-0 text-left text-sm truncate hover:text-pm-accent transition-colors",
+            complete ? "line-through text-pm-text-muted" : "text-pm-text-primary",
+          )}
+          onClick={() => onOpen && onOpen(task)}
+          title={task.title}
+        >
+          {task.title}
+        </button>
+        {(task.meta?.total_sub_task ?? 0) > 0 && (
+          <span className="flex items-center gap-0.5 text-[11px] text-pm-text-muted shrink-0">
+            <Layers className="h-3.5 w-3.5" />{task.meta.total_sub_task}
+          </span>
+        )}
+        {(task.meta?.total_comment ?? 0) > 0 && (
+          <span className="flex items-center gap-0.5 text-[11px] text-pm-text-muted shrink-0">
+            <MessageSquare className="h-3.5 w-3.5" />{task.meta.total_comment}
+          </span>
+        )}
+        {isPrivate(task.meta?.privacy) && (
+          <Lock className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+        )}
+      </div>
 
-      <button
-        type="button"
-        className={`flex-1 text-sm truncate text-left hover:text-pm-accent transition-colors ${
-          complete ? "line-through text-pm-text-muted" : "text-pm-text-primary"
-        }`}
-        onClick={() => onOpen && onOpen(task)}
-      >
-        {task.title}
-      </button>
+      {/* Type */}
+      <div className="min-w-0">
+        {task.type?.title ? (
+          <Badge variant="outline" className="max-w-full truncate text-[11px] px-1.5 py-0.5 h-auto font-normal text-muted-foreground">
+            {task.type.title}
+          </Badge>
+        ) : (
+          <span className="text-[13px] text-pm-text-muted">—</span>
+        )}
+      </div>
 
-      {assignees.length > 0 && (
-        <div className="flex -space-x-1.5 shrink-0">
-          {assignees.slice(0, 3).map((u) => (
-            <UserAvatar key={u.id || u.ID} user={u} size="sm" className="border border-background" />
-          ))}
-        </div>
-      )}
+      {/* Labels */}
+      <div className="flex items-center gap-1 flex-wrap min-w-0">
+        <TaskLabelBadges task={task} variant="full" />
+      </div>
 
-      <TaskLabelBadges task={task} variant="full" />
+      {/* Project */}
+      <div className="min-w-0 text-[13px] text-pm-text-muted truncate">
+        {project || "—"}
+      </div>
 
-      {projectTitle && (
-        <span className="text-[15px] text-pm-text-muted bg-muted/50 px-2 py-0.5 rounded truncate max-w-[120px] shrink-0">
-          {projectTitle}
-        </span>
-      )}
+      {/* Assignee */}
+      <div className="flex items-center -space-x-1.5 min-w-0">
+        {assignees.length > 0 ? (
+          assignees.slice(0, 3).map((u) => (
+            <UserAvatar key={u.id || u.ID} user={u} size="md" className="border-2 border-background" />
+          ))
+        ) : (
+          <span className="text-[13px] text-pm-text-muted">—</span>
+        )}
+      </div>
 
-      {task.task_list?.data?.title && (
-        <span className="text-[15px] text-pm-text-muted truncate max-w-[100px] shrink-0 hidden md:block">
-          {task.task_list.data.title}
-        </span>
-      )}
-
-      <span
-        className={`text-[15px] shrink-0 tabular-nums ${
-          isOverdue(task.due_date, task.status)
-            ? "text-red-500"
-            : "text-pm-text-muted"
-        }`}
-      >
-        {formatPmDate(task.due_date) || "—"}
-      </span>
-      {isOverdue(task.due_date, task.status) && (
-        <Badge variant="destructive" className="text-[11px] px-1.5 py-0 h-4 shrink-0">
-          {__('Overdue', 'wedevs-project-manager')}
-        </Badge>
-      )}
-
-      {(task.meta?.total_sub_task ?? 0) > 0 && (
-        <span className="flex items-center gap-0.5 text-[15px] text-pm-text-muted shrink-0">
-          <Layers className="h-3.5 w-3.5" />
-          {task.meta.total_sub_task}
-        </span>
-      )}
-
-      {(task.meta?.total_comment ?? 0) > 0 && (
-        <span className="flex items-center gap-0.5 text-[15px] text-pm-text-muted shrink-0">
-          <MessageSquare className="h-3.5 w-3.5" />
-          {task.meta.total_comment}
-        </span>
-      )}
-
-      {isPrivate(task.meta?.privacy) && (
-        <Lock className="h-3.5 w-3.5 text-pm-text-muted shrink-0" />
-      )}
+      {/* Due */}
+      <div className={cn("flex items-center gap-1 text-[13px] min-w-0", overdue ? "text-red-500" : "text-pm-text-muted")}>
+        {formatPmDate(task.due_date) ? (
+          <>
+            <Calendar className="h-3.5 w-3.5 shrink-0" />
+            <span className="truncate">{formatPmDate(task.due_date)}</span>
+            {overdue && (
+              <Badge variant="destructive" className="text-[10px] px-1 py-0 h-4 shrink-0">
+                {__('Overdue', 'wedevs-project-manager')}
+              </Badge>
+            )}
+          </>
+        ) : (
+          <span>—</span>
+        )}
+      </div>
     </div>
   );
 }

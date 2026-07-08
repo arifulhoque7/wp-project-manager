@@ -17,7 +17,7 @@ export default function MilestoneFilterBar({ filter, sort, counts, onFilterChang
 
   return (
     <div className="flex items-center justify-between flex-wrap gap-3">
-      <div className="inline-flex max-w-full items-center rounded-lg bg-muted/60 p-1 gap-0.5 overflow-x-auto scrollbar-none">
+      <div className="inline-flex max-w-full items-center rounded-lg border border-pm-border bg-muted/60 p-1 gap-0.5 overflow-x-auto scrollbar-none">
         {filterTabs.map((tab) => {
           const count = counts[tab.key] ?? 0;
           const isActive = filter === tab.key;

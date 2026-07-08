@@ -70,7 +70,7 @@ export default function LicensePage() {
   }
 
   return (
-    <div className="max-w-[1400px] mx-auto p-6 space-y-6">
+    <div className="w-full p-6 space-y-6">
       <ConfirmDialog />
       <div className="flex items-center gap-3 mb-6">
         <Shield className="h-5 w-5 text-pm-accent" />

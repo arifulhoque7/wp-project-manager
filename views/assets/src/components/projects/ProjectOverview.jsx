@@ -23,7 +23,10 @@ import {
   Loader2,
   Trash2,
   ListChecks,
+  Pencil,
+  Calendar as CalendarIcon,
 } from "lucide-react";
+import { cn } from "@lib/utils";
 import {
   Popover,
   PopoverContent,
@@ -70,6 +73,18 @@ export default function ProjectOverview() {
 
   const [loading, setLoading] = useState(true);
   const [graph, setGraph] = useState([]);
+  const [documents, setDocuments] = useState([]);
+  const [milestones, setMilestones] = useState([]);
+
+  useEffect(() => {
+    if (!projectId) return;
+    api.get(`projects/${projectId}/files`, { per_page: 6 })
+      .then((res) => setDocuments(res?.data ?? []))
+      .catch(() => setDocuments([]));
+    api.get(`projects/${projectId}/milestones`, { per_page: 6 })
+      .then((res) => setMilestones(res?.data ?? []))
+      .catch(() => setMilestones([]));
+  }, [projectId]);
 
   // Member management
   const [memberPopover, setMemberPopover] = useState(false);
@@ -209,14 +224,14 @@ export default function ProjectOverview() {
 
   if (loading) {
     return (
-      <div className="max-w-[1400px] mx-auto p-4 sm:p-6 space-y-5">
+      <div className="w-full p-4 sm:p-6 space-y-5">
         <Skeleton className="h-8 w-1/3" />
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-24 rounded-xl" />
+            <Skeleton key={i} className="h-24 rounded-lg" />
           ))}
         </div>
-        <Skeleton className="h-40 rounded-xl" />
+        <Skeleton className="h-40 rounded-lg" />
       </div>
     );
   }
@@ -291,24 +306,57 @@ export default function ProjectOverview() {
   ];
 
   return (
-    <div className="max-w-[1400px] mx-auto p-4 sm:p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={() => navigate("/projects")}
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
-        <div>
-          <h1 className="text-xl font-bold text-pm-text-primary">
-            {project.title}
-          </h1>
-          <p className="text-sm text-pm-text-muted">{__("Project Overview", 'wedevs-project-manager')}</p>
+    <div className="w-full p-4 sm:p-6 space-y-6">
+      {/* Header row */}
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2 min-w-0">
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => navigate("/projects")}>
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <h1 className="text-xl font-bold text-pm-text-primary truncate">{__("Projects", 'wedevs-project-manager')}</h1>
         </div>
+        {canManageMembers && (
+          <Button size="sm" className="h-9 gap-1.5 shrink-0" onClick={() => navigate(`/projects/${projectId}/settings`)}>
+            <Pencil className="h-4 w-4" />{__("Edit", 'wedevs-project-manager')}
+          </Button>
+        )}
       </div>
+
+      {/* Project header card */}
+      {(() => {
+        const st = project.status;
+        const pill = st === "complete"
+          ? { label: __("Completed", 'wedevs-project-manager'), cls: "bg-emerald-50 text-emerald-600" }
+          : st === "archived"
+            ? { label: __("Archived", 'wedevs-project-manager'), cls: "bg-muted text-pm-text-muted" }
+            : { label: __("Active", 'wedevs-project-manager'), cls: "bg-emerald-50 text-emerald-600" };
+        const owner = assignees[0];
+        return (
+          <div className="rounded-xl border bg-card p-4 flex flex-wrap items-center gap-4">
+            <div className="h-14 w-14 rounded-lg bg-pm-accent/10 flex items-center justify-center shrink-0">
+              <ClipboardList className="h-7 w-7 text-pm-accent" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="text-lg font-bold text-pm-text-primary truncate">{project.title}</h2>
+                <span className={cn("inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[13px] font-medium", pill.cls)}>
+                  <CheckCircle className="h-3.5 w-3.5" />{pill.label}
+                </span>
+              </div>
+              <div className="flex items-center gap-3 flex-wrap mt-1.5 text-[13px] text-pm-text-muted">
+                <span className="inline-flex items-center gap-1">
+                  <CalendarIcon className="h-3.5 w-3.5" />
+                  {formatPmDate(project.created_at, { month: "short", day: "numeric", year: "numeric" }) || "—"}
+                  {project.est_completion_date ? ` – ${formatPmDate(project.est_completion_date, { month: "short", day: "numeric", year: "numeric" })}` : ""}
+                </span>
+                {owner && (
+                  <span className="inline-flex items-center gap-1.5"><UserAvatar user={owner} size="sm" />{owner.display_name}</span>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Stats grid — clickable cards */}
       <div className="flex gap-2 overflow-x-auto pb-1">
@@ -316,7 +364,7 @@ export default function ProjectOverview() {
           <button
             key={s.label}
             type="button"
-            className="flex-1 min-w-[120px] rounded-xl border bg-pm-surface px-3 py-3 flex items-center gap-3 hover:shadow-md hover:border-border/80 transition-all"
+            className="flex-1 min-w-[120px] rounded-lg border bg-pm-surface px-3 py-3 flex items-center gap-3 hover:shadow-md hover:border-border/80 transition-all"
             onClick={() =>
               s.route && navigate(`/projects/${projectId}/${s.route}`)
             }
@@ -335,7 +383,7 @@ export default function ProjectOverview() {
       {/* Progress */}
       <div className="rounded-xl border bg-card p-5 space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-pm-text-primary">
+          <h3 className="text-base font-semibold text-pm-text-primary">
             {__("Overall Progress", 'wedevs-project-manager')}
           </h3>
           <span className="text-lg font-bold text-pm-accent tabular-nums">
@@ -353,97 +401,177 @@ export default function ProjectOverview() {
         </div>
       </div>
 
-      {/* 30-Day Activity Chart — shadcn/Recharts */}
-      {graph.length > 0 &&
-        (() => {
-          const chartData = graph.map((day) => ({
-            date: day.date_time?.date || "",
-            label: formatPmDate(day.date_time),
-            tasks: day.tasks || 0,
-            activities: day.activities || 0,
-          }));
+      {/* Progress Over Time + Recent Documents */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {/* Progress Over Time */}
+        <div className="rounded-xl border bg-card p-5">
+          <h3 className="text-base font-semibold text-pm-text-primary mb-4 flex items-center gap-2">
+            <Activity className="h-5 w-5 text-pm-text-muted" />
+            {__("Progress Over Time", 'wedevs-project-manager')}
+          </h3>
+          {graph.length > 0 ? (
+            (() => {
+              const chartData = graph.map((day) => ({
+                date: day.date_time?.date || "",
+                label: formatPmDate(day.date_time),
+                tasks: day.tasks || 0,
+                activities: day.activities || 0,
+              }));
+              const chartConfig = {
+                tasks: { label: __("Tasks", 'wedevs-project-manager'), color: "hsl(var(--primary))" },
+                activities: { label: __("Activities", 'wedevs-project-manager'), color: "hsl(152 60% 52%)" },
+              };
+              return (
+                <ChartContainer config={chartConfig} className="h-[220px] w-full">
+                  <AreaChart data={chartData}>
+                    <defs>
+                      <linearGradient id="fillTasks" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="var(--color-tasks)" stopOpacity={0.8} />
+                        <stop offset="95%" stopColor="var(--color-tasks)" stopOpacity={0.1} />
+                      </linearGradient>
+                      <linearGradient id="fillActivities" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="var(--color-activities)" stopOpacity={0.8} />
+                        <stop offset="95%" stopColor="var(--color-activities)" stopOpacity={0.1} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="label"
+                      tickLine={false}
+                      axisLine={false}
+                      tick={{ fontSize: 10 }}
+                      interval={Math.floor(chartData.length / 5)}
+                    />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <ChartLegend content={<ChartLegendContent />} />
+                    <Area dataKey="activities" type="monotone" fill="url(#fillActivities)" stroke="var(--color-activities)" strokeWidth={2} stackId="a" />
+                    <Area dataKey="tasks" type="monotone" fill="url(#fillTasks)" stroke="var(--color-tasks)" strokeWidth={2} stackId="a" />
+                  </AreaChart>
+                </ChartContainer>
+              );
+            })()
+          ) : (
+            <p className="text-sm text-pm-text-muted py-16 text-center">{__("No activity data yet", 'wedevs-project-manager')}</p>
+          )}
+        </div>
 
-          const chartConfig = {
-            tasks: { label: __("Tasks", 'wedevs-project-manager'), color: "hsl(var(--primary))" },
-            activities: { label: __("Activities", 'wedevs-project-manager'), color: "hsl(152 60% 52%)" },
-          };
-
-          return (
-            <div className="rounded-xl border bg-card p-5">
-              <h3 className="text-sm font-semibold text-pm-text-primary mb-4 flex items-center gap-2">
-                <Activity className="h-5 w-5 text-pm-text-muted" />
-                {__("30-Day Activity", 'wedevs-project-manager')}
-              </h3>
-              <ChartContainer config={chartConfig} className="h-[200px] w-full">
-                <AreaChart data={chartData}>
-                  <defs>
-                    <linearGradient id="fillTasks" x1="0" y1="0" x2="0" y2="1">
-                      <stop
-                        offset="5%"
-                        stopColor="var(--color-tasks)"
-                        stopOpacity={0.8}
-                      />
-                      <stop
-                        offset="95%"
-                        stopColor="var(--color-tasks)"
-                        stopOpacity={0.1}
-                      />
-                    </linearGradient>
-                    <linearGradient
-                      id="fillActivities"
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="1"
-                    >
-                      <stop
-                        offset="5%"
-                        stopColor="var(--color-activities)"
-                        stopOpacity={0.8}
-                      />
-                      <stop
-                        offset="95%"
-                        stopColor="var(--color-activities)"
-                        stopOpacity={0.1}
-                      />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid vertical={false} strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="label"
-                    tickLine={false}
-                    axisLine={false}
-                    tick={{ fontSize: 10 }}
-                    interval={Math.floor(chartData.length / 5)}
-                  />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <ChartLegend content={<ChartLegendContent />} />
-                  <Area
-                    dataKey="activities"
-                    type="monotone"
-                    fill="url(#fillActivities)"
-                    stroke="var(--color-activities)"
-                    strokeWidth={2}
-                    stackId="a"
-                  />
-                  <Area
-                    dataKey="tasks"
-                    type="monotone"
-                    fill="url(#fillTasks)"
-                    stroke="var(--color-tasks)"
-                    strokeWidth={2}
-                    stackId="a"
-                  />
-                </AreaChart>
-              </ChartContainer>
+        {/* Recent Documents */}
+        <div className="rounded-xl border bg-card p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base font-semibold text-pm-text-primary flex items-center gap-2">
+              <FileText className="h-5 w-5 text-pm-text-muted" />
+              {__("Recent Documents", 'wedevs-project-manager')}
+            </h3>
+            <button type="button" onClick={() => navigate(`/projects/${projectId}/files`)} className="text-[13px] font-medium text-pm-accent hover:underline">
+              {__("Show All", 'wedevs-project-manager')}
+            </button>
+          </div>
+          {documents.length > 0 ? (
+            <div className="overflow-x-auto -mx-1">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-[11px] uppercase tracking-wider text-pm-text-muted/70 border-b">
+                    <th className="text-left font-semibold py-2 px-2">{__("Document", 'wedevs-project-manager')}</th>
+                    <th className="text-left font-semibold py-2 px-2">{__("Type", 'wedevs-project-manager')}</th>
+                    <th className="text-left font-semibold py-2 px-2">{__("Date", 'wedevs-project-manager')}</th>
+                    <th className="text-left font-semibold py-2 px-2">{__("Created by", 'wedevs-project-manager')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {documents.map((f) => {
+                    const name = f.meta?.title || f.name || f.title || __("File", 'wedevs-project-manager');
+                    const ext = f.file_extension ? String(f.file_extension).toUpperCase() : (f.type === "image" ? __("Image", 'wedevs-project-manager') : __("File", 'wedevs-project-manager'));
+                    const creator = f.creator?.data;
+                    return (
+                      <tr key={f.id} className="border-b border-border/40 last:border-0">
+                        <td className="py-2.5 px-2">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <FileText className="h-4 w-4 text-pm-text-muted shrink-0" />
+                            <span className="truncate text-pm-text-primary">{name}</span>
+                          </div>
+                        </td>
+                        <td className="py-2.5 px-2">
+                          <span className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-[11px] font-medium text-pm-text-muted uppercase">{ext}</span>
+                        </td>
+                        <td className="py-2.5 px-2 text-[13px] text-pm-text-muted tabular-nums whitespace-nowrap">
+                          {formatPmDate(f.attached_at, { month: "short", day: "numeric", year: "numeric" }) || "—"}
+                        </td>
+                        <td className="py-2.5 px-2">
+                          {creator ? (
+                            <span className="inline-flex items-center gap-1.5 min-w-0">
+                              <UserAvatar user={creator} size="sm" />
+                              <span className="truncate text-[13px] text-pm-text-primary">{creator.display_name}</span>
+                            </span>
+                          ) : <span className="text-[13px] text-pm-text-muted">—</span>}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
-          );
-        })()}
+          ) : (
+            <p className="text-sm text-pm-text-muted py-8 text-center">{__("No documents yet", 'wedevs-project-manager')}</p>
+          )}
+        </div>
+      </div>
+
+      {/* Milestones */}
+      <div className="rounded-xl border bg-card p-5">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-base font-semibold text-pm-text-primary flex items-center gap-2">
+            <Milestone className="h-5 w-5 text-pm-text-muted" />
+            {__("Milestones", 'wedevs-project-manager')}
+          </h3>
+          <button type="button" onClick={() => navigate(`/projects/${projectId}/milestones`)} className="text-[13px] font-medium text-pm-accent hover:underline">
+            {__("Show All", 'wedevs-project-manager')}
+          </button>
+        </div>
+        {milestones.length > 0 ? (
+          <div className="overflow-x-auto -mx-1">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-[11px] uppercase tracking-wider text-pm-text-muted/70 border-b">
+                  <th className="text-left font-semibold py-2 px-2 w-10">{__("No", 'wedevs-project-manager')}</th>
+                  <th className="text-left font-semibold py-2 px-2">{__("Milestone", 'wedevs-project-manager')}</th>
+                  <th className="text-left font-semibold py-2 px-2">{__("Planned Date", 'wedevs-project-manager')}</th>
+                  <th className="text-left font-semibold py-2 px-2">{__("Tasks", 'wedevs-project-manager')}</th>
+                  <th className="text-left font-semibold py-2 px-2">{__("Status", 'wedevs-project-manager')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {milestones.map((m, i) => {
+                  const done = m.status === 1 || m.status === "1" || m.status === "complete";
+                  return (
+                    <tr key={m.id} className="border-b border-border/40 last:border-0">
+                      <td className="py-2.5 px-2 text-[13px] text-pm-text-muted tabular-nums">{i + 1}</td>
+                      <td className="py-2.5 px-2 text-pm-text-primary truncate max-w-[220px]">{m.title}</td>
+                      <td className="py-2.5 px-2 text-[13px] text-pm-text-muted tabular-nums whitespace-nowrap">
+                        {formatPmDate(m.achieve_date, { month: "short", day: "numeric", year: "numeric" }) || "—"}
+                      </td>
+                      <td className="py-2.5 px-2 text-[13px] text-pm-text-muted tabular-nums whitespace-nowrap">
+                        {(m.task_count?.completed ?? 0)}/{(m.task_count?.total ?? 0)}
+                      </td>
+                      <td className="py-2.5 px-2">
+                        <span className={cn("inline-flex items-center rounded-md px-2 py-0.5 text-[12px] font-medium", done ? "bg-emerald-50 text-emerald-600" : "bg-amber-50 text-amber-700")}>
+                          {done ? __("Complete", 'wedevs-project-manager') : __("Pending", 'wedevs-project-manager')}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="text-sm text-pm-text-muted py-8 text-center">{__("No milestones yet", 'wedevs-project-manager')}</p>
+        )}
+      </div>
 
       {/* Members */}
       <div className="rounded-xl border bg-card p-5">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-pm-text-primary flex items-center gap-2">
+          <h3 className="text-base font-semibold text-pm-text-primary flex items-center gap-2">
             <Users className="h-5 w-5 text-pm-text-muted" />
             {__("Team Members", 'wedevs-project-manager')}
             <span className="text-[14px] bg-muted px-1.5 py-0.5 rounded-full tabular-nums font-normal">

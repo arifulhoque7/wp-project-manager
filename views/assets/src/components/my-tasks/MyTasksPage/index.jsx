@@ -32,6 +32,10 @@ import {
 } from "@components/ui/select";
 import {
   CheckSquare,
+  ListChecks,
+  FolderKanban,
+  Tag,
+  Users,
   AlertTriangle,
   CheckCircle,
   Activity,
@@ -78,7 +82,7 @@ import {
 } from "./constants";
 import { parseActivityMessage } from "./utils";
 import { resolveActivityUrl } from "@lib/activity-links";
-import MyTaskRow from "./parts/MyTaskRow";
+import MyTaskRow, { MYTASK_GRID } from "./parts/MyTaskRow";
 import NewTaskSheet from "./parts/NewTaskSheet";
 
 export default function MyTasksPage() {
@@ -413,7 +417,7 @@ export default function MyTasksPage() {
   };
 
   return (
-    <div className="max-w-[1400px] mx-auto p-4 sm:p-6 space-y-6">
+    <div className="w-full p-4 sm:p-6 space-y-6">
       <div className="flex flex-wrap items-center gap-4">
         <UserAvatar
           user={{
@@ -465,36 +469,8 @@ export default function MyTasksPage() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {[
-          { label: __("Current", 'wedevs-project-manager'),     count: counts.current,     icon: CheckSquare,    color: "text-emerald-500 bg-emerald-50" },
-          { label: __("Outstanding", 'wedevs-project-manager'), count: counts.outstanding, icon: AlertTriangle,  color: "text-red-500 bg-red-50" },
-          { label: __("Completed", 'wedevs-project-manager'),   count: counts.complete,    icon: CheckCircle,    color: "text-blue-500 bg-blue-50" },
-        ].map((s) => (
-          <div
-            key={s.label}
-            className="rounded-xl border bg-card p-4 flex items-center gap-3"
-          >
-            <div className={`p-2 rounded-lg ${s.color.split(" ")[1]}`}>
-              <s.icon className={`h-5 w-5 ${s.color.split(" ")[0]}`} />
-            </div>
-            <div>
-              {!user ? (
-                <Skeleton className="h-7 w-10 mb-1" />
-              ) : (
-                <p className="text-2xl font-bold text-pm-text-primary tabular-nums">
-                  {s.count}
-                </p>
-              )}
-              <p className="text-[15px] text-pm-text-muted font-medium">
-                {s.label}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="inline-flex max-w-full items-center rounded-lg bg-muted/60 p-1 gap-0.5 overflow-x-auto scrollbar-none">
+      {/* View tabs — on top (segmented) */}
+      <div className="inline-flex max-w-full items-center rounded-lg border border-pm-border bg-muted/60 p-1 gap-0.5 overflow-x-auto scrollbar-none">
         {TABS.map((tab) => {
           const isActive = activeTab === tab.key;
           const Icon = tab.icon;
@@ -540,12 +516,34 @@ export default function MyTasksPage() {
         overviewLoading ? (
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-32 rounded-xl" />
+              <Skeleton key={i} className="h-32 rounded-lg" />
             ))}
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="rounded-xl border bg-card p-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                { label: __("Current", 'wedevs-project-manager'),     count: counts.current,     icon: CheckSquare,    color: "text-emerald-500 bg-emerald-50" },
+                { label: __("Outstanding", 'wedevs-project-manager'), count: counts.outstanding, icon: AlertTriangle,  color: "text-red-500 bg-red-50" },
+                { label: __("Completed", 'wedevs-project-manager'),   count: counts.complete,    icon: CheckCircle,    color: "text-blue-500 bg-blue-50" },
+              ].map((s) => (
+                <div key={s.label} className="rounded-xl border bg-card p-5 flex items-center gap-4">
+                  <div className={`p-3 rounded-xl ${s.color.split(" ")[1]}`}>
+                    <s.icon className={`h-6 w-6 ${s.color.split(" ")[0]}`} />
+                  </div>
+                  <div>
+                    {!user ? (
+                      <Skeleton className="h-8 w-12 mb-1" />
+                    ) : (
+                      <p className="text-3xl font-bold text-pm-text-primary tabular-nums leading-none mb-1">{s.count}</p>
+                    )}
+                    <p className="text-[15px] text-pm-text-muted font-medium">{s.label}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="rounded-lg border bg-card p-4">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-sm font-semibold text-pm-text-primary flex items-center gap-2">
                   <Filter className="h-4 w-4" />
@@ -581,8 +579,8 @@ export default function MyTasksPage() {
             </div>
 
             <div className="rounded-xl border bg-card p-6">
-              <h3 className="text-sm font-semibold text-pm-text-primary mb-4">
-                {__("At a Glance", 'wedevs-project-manager')}
+              <h3 className="text-base font-semibold text-pm-text-primary mb-4">
+                {__("Status overview", 'wedevs-project-manager')}
               </h3>
               <div className="flex flex-wrap items-center gap-8">
                 <div className="w-[200px] h-[200px]">
@@ -615,16 +613,19 @@ export default function MyTasksPage() {
                     { label: __("Outstanding", 'wedevs-project-manager'), count: counts.outstanding, color: "#EB5A46" },
                     { label: __("Completed", 'wedevs-project-manager'),   count: counts.complete,    color: "#0090D9" },
                   ].map((item) => (
-                    <div key={item.label} className="flex items-center gap-3">
+                    <div key={item.label} className="flex items-center gap-3 min-w-[240px]">
                       <span
                         className="h-3.5 w-3.5 rounded-sm shrink-0"
                         style={{ background: item.color }}
                       />
-                      <span className="text-sm text-pm-text-primary w-24">
+                      <span className="text-[15px] text-pm-text-primary w-28">
                         {item.label}
                       </span>
-                      <span className="text-sm font-bold text-pm-text-primary tabular-nums">
+                      <span className="text-[15px] font-bold text-pm-text-primary tabular-nums">
                         {item.count} {__("Tasks", 'wedevs-project-manager')}
+                      </span>
+                      <span className="ml-auto text-[15px] font-semibold text-pm-text-muted tabular-nums">
+                        {(() => { const t = counts.current + counts.outstanding + counts.complete; return t ? Math.round((item.count / t) * 100) : 0 })()}%
                       </span>
                     </div>
                   ))}
@@ -633,7 +634,7 @@ export default function MyTasksPage() {
             </div>
 
             {graph.length > 0 && (
-              <div className="rounded-xl border bg-card p-6">
+              <div className="rounded-lg border bg-card p-6">
                 <h3 className="text-sm font-semibold text-pm-text-primary mb-4">
                   {__("Activity Trend", 'wedevs-project-manager')}
                 </h3>
@@ -663,7 +664,7 @@ export default function MyTasksPage() {
               </div>
             )}
 
-            <div className="rounded-xl border bg-card">
+            <div className="rounded-lg border bg-card">
               <div className="flex items-center justify-between px-4 py-3 border-b border-pm-border">
                 <h3 className="text-sm font-semibold text-pm-text-primary flex items-center gap-2">
                   <CalendarIcon className="h-5 w-5 text-pm-accent" />
@@ -746,7 +747,7 @@ export default function MyTasksPage() {
       ) : activeTab === "reports" ? (
         reportLoading ? (
           <div className="space-y-3">
-            {[1, 2, 3].map((i) => <Skeleton key={i} className="h-32 rounded-xl" />)}
+            {[1, 2, 3].map((i) => <Skeleton key={i} className="h-32 rounded-lg" />)}
           </div>
         ) : !reportData ? (
           <div className="space-y-4">
@@ -839,7 +840,7 @@ export default function MyTasksPage() {
               }));
 
               const renderChart = (data, title) => (
-                <div className="rounded-xl border bg-card p-4 flex-1 min-w-[250px]">
+                <div className="rounded-lg border bg-card p-4 flex-1 min-w-[250px]">
                   <h4 className="text-sm font-semibold text-pm-text-primary mb-2">{title}</h4>
                   {data.length > 0 ? (
                     <div className="h-[200px]">
@@ -879,7 +880,7 @@ export default function MyTasksPage() {
               return (
                 <>
                   {allProj.length > 0 && (
-                    <div className="rounded-xl border bg-card overflow-x-auto">
+                    <div className="rounded-lg border bg-card overflow-x-auto">
                       <h4 className="text-sm font-semibold text-pm-text-primary px-4 py-3 border-b">{__("Projects", 'wedevs-project-manager')}</h4>
                       <table className="w-full text-sm">
                         <thead><tr className="border-b text-sm text-pm-text-muted">
@@ -905,7 +906,7 @@ export default function MyTasksPage() {
                   )}
 
                   {Array.isArray(taskTypes) && taskTypes.length > 0 && (
-                    <div className="rounded-xl border bg-card overflow-x-auto">
+                    <div className="rounded-lg border bg-card overflow-x-auto">
                       <h4 className="text-sm font-semibold text-pm-text-primary px-4 py-3 border-b">{__("Task type", 'wedevs-project-manager')}</h4>
                       <table className="w-full text-sm">
                         <thead><tr className="border-b text-sm text-pm-text-muted">
@@ -927,7 +928,7 @@ export default function MyTasksPage() {
                   )}
 
                   {subtasksAll.length > 0 && (
-                    <div className="rounded-xl border bg-card overflow-x-auto">
+                    <div className="rounded-lg border bg-card overflow-x-auto">
                       <h4 className="text-sm font-semibold text-pm-text-primary px-4 py-3 border-b">{__("Subtasks", 'wedevs-project-manager')}</h4>
                       <table className="w-full text-sm">
                         <thead><tr className="border-b text-sm text-pm-text-muted">
@@ -1065,7 +1066,7 @@ export default function MyTasksPage() {
           )}
 
           {loading ? (
-            <div className="rounded-xl border bg-card overflow-hidden">
+            <div className="rounded-lg border bg-card overflow-hidden">
               <div className="hidden md:grid grid-cols-12 gap-2 px-4 py-2 bg-muted/30 border-b">
                 <Skeleton className="col-span-5 h-3 w-12" />
                 <Skeleton className="col-span-2 h-3 w-16" />
@@ -1097,25 +1098,31 @@ export default function MyTasksPage() {
               </p>
             </div>
           ) : (
-            <div className="rounded-xl border bg-card overflow-hidden">
-              <div className="hidden md:grid grid-cols-12 gap-2 px-4 py-2 bg-muted/30 border-b text-[14px] font-semibold uppercase tracking-wider text-pm-text-muted/70">
-                <div className="col-span-5">{__("Task", 'wedevs-project-manager')}</div>
-                <div className="col-span-2">{__("Task List", 'wedevs-project-manager')}</div>
-                <div className="col-span-2">{__("Project", 'wedevs-project-manager')}</div>
-                <div className="col-span-2">
-                  {activeTab === "complete" ? __("Completed", 'wedevs-project-manager') : __("Due Date", 'wedevs-project-manager')}
+            <div className="rounded-lg border bg-card overflow-hidden">
+              <div className="overflow-x-auto">
+                <div className="min-w-[760px]">
+                  <div className={cn("grid gap-2 px-4 py-2 bg-muted/30 border-b text-[11px] font-semibold uppercase tracking-wider text-pm-text-muted/70", MYTASK_GRID)}>
+                    <div className="flex items-center gap-1.5"><ListChecks className="h-3.5 w-3.5" />{__("Task", 'wedevs-project-manager')}</div>
+                    <div className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" />{__("Type", 'wedevs-project-manager')}</div>
+                    <div className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" />{__("Labels", 'wedevs-project-manager')}</div>
+                    <div className="flex items-center gap-1.5"><FolderKanban className="h-3.5 w-3.5" />{__("Project", 'wedevs-project-manager')}</div>
+                    <div className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5" />{__("Assignee", 'wedevs-project-manager')}</div>
+                    <div className="flex items-center gap-1.5">
+                      <CalendarIcon className="h-3.5 w-3.5" />
+                      {activeTab === "complete" ? __("Completed", 'wedevs-project-manager') : __("Due Date", 'wedevs-project-manager')}
+                    </div>
+                  </div>
+                  {tasks.map((task) => (
+                    <MyTaskRow
+                      key={task.id}
+                      task={task}
+                      projectTitle={task.project?.data?.title || ""}
+                      onToggle={handleToggleTask}
+                      onOpen={() => handleOpenTask(task)}
+                    />
+                  ))}
                 </div>
-                <div className="col-span-1"></div>
               </div>
-              {tasks.map((task) => (
-                <MyTaskRow
-                  key={task.id}
-                  task={task}
-                  projectTitle={task.project?.data?.title || ""}
-                  onToggle={handleToggleTask}
-                  onOpen={handleOpenTask}
-                />
-              ))}
             </div>
           )}
 
@@ -1218,7 +1225,7 @@ export default function MyTasksPage() {
                     key={act.id || i}
                     className="flex items-start gap-3 py-3 px-4 bg-card rounded-lg border border-border/50 hover:shadow-sm transition-all"
                   >
-                    <UserAvatar user={actor} size="lg" className="mt-0.5" fallbackClassName="bg-pm-accent/10 text-pm-accent" />
+                    <UserAvatar user={actor} size="lg" className="mt-0.5" />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-0.5">
                         <button

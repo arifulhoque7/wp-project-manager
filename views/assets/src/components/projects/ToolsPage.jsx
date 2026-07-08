@@ -239,7 +239,7 @@ function TrelloImportCard() {
 export default function ToolsPage() {
 
   return (
-    <div className="max-w-[1400px] mx-auto p-4 sm:p-6 space-y-6">
+    <div className="w-full p-4 sm:p-6 space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-pm-text">{__('Import Tools', 'wedevs-project-manager')}</h1>
         <p className="text-sm text-muted-foreground mt-1">

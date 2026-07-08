@@ -61,7 +61,7 @@ export default function CalendarPage() {
   };
 
   return (
-    <div className="max-w-[1400px] mx-auto p-4 sm:p-6 space-y-6">
+    <div className="w-full p-4 sm:p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -78,7 +78,7 @@ export default function CalendarPage() {
       </div>
 
       {/* Calendar preview card */}
-      <div className="group relative rounded-xl border bg-card overflow-hidden">
+      <div className="group relative rounded-lg border bg-card overflow-hidden">
         <div className="p-6">
           {/* Calendar mockup */}
           <div className="space-y-4">
@@ -184,7 +184,7 @@ export default function CalendarPage() {
         {/* Pro overlay */}
         {!isPro && (
           <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex flex-col items-center justify-center cursor-pointer rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
+            className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex flex-col items-center justify-center cursor-pointer rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
             onClick={() => setOpen(true)}
           >
             <div className="bg-pm-surface rounded-2xl px-8 py-6 shadow-xl text-center">

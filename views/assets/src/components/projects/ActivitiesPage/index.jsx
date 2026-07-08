@@ -96,7 +96,7 @@ export default function ActivitiesPage() {
   }, [activities, total]);
 
   return (
-    <div className="max-w-[1400px] mx-auto p-4 sm:p-6 space-y-5">
+    <div className="w-full p-4 sm:p-6 space-y-5">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-pm-text">{__('Activities', 'wedevs-project-manager')}</h1>
@@ -106,7 +106,7 @@ export default function ActivitiesPage() {
       </div>
 
       {!isPro ? (
-        <div className="group relative rounded-xl border bg-card overflow-hidden">
+        <div className="group relative rounded-lg border bg-card overflow-hidden">
           <div className="p-6 space-y-5">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[
@@ -115,7 +115,7 @@ export default function ActivitiesPage() {
                 { label: __('Created', 'wedevs-project-manager'), value: '—', icon: PlusCircle, color: 'text-blue-500 bg-blue-50' },
                 { label: __('Updated', 'wedevs-project-manager'), value: '—', icon: RefreshCw,  color: 'text-amber-500 bg-amber-50' },
               ].map(stat => (
-                <div key={stat.label} className="rounded-xl border bg-muted/20 p-4 flex items-center gap-3">
+                <div key={stat.label} className="rounded-lg border bg-muted/20 p-4 flex items-center gap-3">
                   <div className={`p-2 rounded-lg ${stat.color.split(' ')[1]}`}>
                     <stat.icon className={`h-5 w-5 ${stat.color.split(' ')[0]}`} />
                   </div>
@@ -127,7 +127,7 @@ export default function ActivitiesPage() {
               ))}
             </div>
 
-            <div className="rounded-xl border bg-card">
+            <div className="rounded-lg border bg-card">
               <div className="p-4 space-y-4">
                 {['Today', 'Yesterday'].map(date => (
                   <div key={date}>
@@ -153,7 +153,7 @@ export default function ActivitiesPage() {
                         return (
                           <div key={i} className="flex items-start gap-3 py-3 px-4 hover:bg-pm-hover/50 rounded-lg transition-colors opacity-70">
                             <Avatar className="h-8 w-8 shrink-0 mt-0.5">
-                              <AvatarFallback className="text-[15px] font-semibold bg-pm-accent/10 text-pm-accent">
+                              <AvatarFallback className="text-[15px] font-semibold bg-pm-accent-light text-pm-accent">
                                 {item.actor.split(' ').map(n => n[0]).join('')}
                               </AvatarFallback>
                             </Avatar>
@@ -180,7 +180,7 @@ export default function ActivitiesPage() {
           </div>
 
           <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex flex-col items-center justify-center cursor-pointer rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
+            className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex flex-col items-center justify-center cursor-pointer rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
             onClick={() => setOpen(true)}
           >
             <div className="bg-pm-surface rounded-2xl px-8 py-6 shadow-xl text-center">
@@ -233,7 +233,7 @@ export default function ActivitiesPage() {
               { label: __('Created', 'wedevs-project-manager'), value: stats.creates, icon: PlusCircle, color: 'text-blue-500 bg-blue-50' },
               { label: __('Updated', 'wedevs-project-manager'), value: stats.updates, icon: RefreshCw,  color: 'text-amber-500 bg-amber-50' },
             ].map(stat => (
-              <div key={stat.label} className="rounded-xl border bg-card p-4 flex items-center gap-3">
+              <div key={stat.label} className="rounded-lg border bg-card p-4 flex items-center gap-3">
                 <div className={`p-2 rounded-lg ${stat.color.split(' ')[1]}`}>
                   <stat.icon className={`h-5 w-5 ${stat.color.split(' ')[0]}`} />
                 </div>
@@ -245,7 +245,7 @@ export default function ActivitiesPage() {
             ))}
           </div>
 
-          <div className="rounded-xl border bg-card">
+          <div className="rounded-lg border bg-card">
             <div className="p-4 space-y-4">
               {grouped.map(group => (
                 <div key={group.dateRaw}>

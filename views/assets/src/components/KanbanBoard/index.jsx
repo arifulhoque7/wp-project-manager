@@ -210,14 +210,14 @@ export default function KanbanBoard() {
 
   if (loading) {
     return (
-      <div className="max-w-[1400px] mx-auto p-6">
+      <div className="w-full p-6">
         <div className="flex gap-4 overflow-x-auto pb-4">
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="min-w-[280px] space-y-2">
-              <Skeleton className="h-10 w-full rounded-xl" />
-              <Skeleton className="h-20 w-full rounded-xl" />
-              <Skeleton className="h-20 w-full rounded-xl" />
-              <Skeleton className="h-16 w-full rounded-xl opacity-50" />
+              <Skeleton className="h-10 w-full rounded-lg" />
+              <Skeleton className="h-20 w-full rounded-lg" />
+              <Skeleton className="h-20 w-full rounded-lg" />
+              <Skeleton className="h-16 w-full rounded-lg opacity-50" />
             </div>
           ))}
         </div>
