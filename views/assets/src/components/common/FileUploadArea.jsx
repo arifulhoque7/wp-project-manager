@@ -19,7 +19,7 @@ function FileThumbnail({ file }) {
   }, [file])
   if (preview) return <img src={preview} alt="" className="h-8 w-8 rounded object-cover shrink-0" />
   const Icon = fileIcon(file)
-  return <Icon className="h-3.5 w-3.5 text-pm-text-muted" />
+  return <Icon className="h-3.5 w-3.5 text-pm-text-muted shrink-0" />
 }
 
 export default function FileUploadArea({ files = [], onFilesChange, compact = false }) {
@@ -80,11 +80,11 @@ export default function FileUploadArea({ files = [], onFilesChange, compact = fa
       {files.length > 0 && (
         <div className="space-y-1.5">
           {files.map((f, i) => (
-            <div key={i} className="flex items-center gap-2 bg-muted/30 rounded-md px-3 py-1.5">
+            <div key={i} className="flex items-center gap-2 bg-muted/30 rounded-md px-3 py-1.5 min-w-0">
               <FileThumbnail file={f} />
-              <span className="text-sm text-pm-text-primary flex-1 truncate">{f.name}</span>
-              <span className="text-[13px] text-pm-text-muted tabular-nums">{(f.size / 1024).toFixed(0)} KB</span>
-              <button type="button" onClick={() => handleRemove(i)} className="text-pm-text-muted hover:text-destructive">
+              <span className="text-sm text-pm-text-primary flex-1 min-w-0 truncate">{f.name}</span>
+              <span className="text-[13px] text-pm-text-muted tabular-nums shrink-0">{(f.size / 1024).toFixed(0)} KB</span>
+              <button type="button" onClick={() => handleRemove(i)} className="text-pm-text-muted hover:text-destructive shrink-0">
                 <X className="h-4 w-4" />
               </button>
             </div>
