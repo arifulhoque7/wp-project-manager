@@ -304,19 +304,18 @@ export default function FilesPage() {
                       type="button"
                       onClick={() => setSelectedId(r.id)}
                       className={cn(
-                        "shrink-0 w-40 rounded-xl border bg-card p-3 text-left transition-all hover:border-pm-accent/50",
-                        active ? "border-pm-accent bg-pm-accent-light/40 shadow-sm" : "border-pm-border",
+                        "shrink-0 w-48 rounded-xl border bg-card p-2 text-left transition-all hover:border-pm-accent/50",
+                        active ? "border-pm-accent bg-pm-accent-light/30 shadow-sm" : "border-pm-border",
                       )}
                     >
-                      <div className={cn("h-20 rounded-lg flex items-center justify-center overflow-hidden mb-2", r.thumbUrl ? "bg-muted/40" : r.iconBg)}>
+                      <div className={cn("h-24 rounded-lg flex items-center justify-center overflow-hidden mb-2", r.thumbUrl ? "bg-muted/40" : r.iconBg)}>
                         {r.thumbUrl ? (
                           <img src={r.thumbUrl} alt={r.fileName} className="w-full h-full object-cover" />
                         ) : (
-                          <Icon className={cn("h-8 w-8", r.iconColor)} />
+                          <Icon className={cn("h-12 w-12", r.iconColor)} />
                         )}
                       </div>
-                      <p className="text-[13px] font-medium text-pm-text-primary truncate">{r.fileName}</p>
-                      <p className="text-[11px] text-pm-text-muted uppercase mt-0.5">{r.typeLabel}</p>
+                      <p className="text-sm font-medium text-pm-text-primary truncate px-1 pb-0.5">{r.fileName}</p>
                     </button>
                   );
                 })}
