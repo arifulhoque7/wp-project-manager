@@ -205,7 +205,7 @@ export default function DiscussionsPage() {
     <>
     <ConfirmDialog />
     <div className="w-full p-4 sm:p-6">
-      <div className="grid grid-cols-[300px_minmax(0,1fr)] lg:grid-cols-[360px_minmax(0,1fr)] gap-4 lg:gap-6 items-start">
+      <div className="grid grid-cols-[340px_minmax(0,1fr)] lg:grid-cols-[400px_minmax(0,1fr)] gap-4 lg:gap-6 items-start">
         {/* LEFT — discussions list */}
         <div className="flex flex-col min-w-0 gap-4">
           <div className="flex items-center justify-between flex-wrap gap-2">
