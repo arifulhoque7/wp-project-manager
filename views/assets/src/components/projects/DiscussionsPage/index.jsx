@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import BackButton from "@components/common/BackButton";
 import { useApi } from "@hooks/useApi";
@@ -63,6 +63,38 @@ export default function DiscussionsPage() {
   const canViewPrivateDiscussion = isManager || userCan("view_private_message");
 
   const [discussions, setDiscussions] = useState([]);
+
+  // Resizable split: left list width (px), draggable divider, persisted.
+  const gridRef = useRef(null);
+  const [leftW, setLeftW] = useState(() => {
+    try {
+      const s = window.localStorage.getItem('pm-disc-left-w');
+      const n = s ? parseInt(s, 10) : NaN;
+      return Number.isFinite(n) ? Math.min(1000, Math.max(280, n)) : null;
+    } catch { return null; }
+  });
+  const leftWRef = useRef(leftW);
+  useEffect(() => { leftWRef.current = leftW; }, [leftW]);
+  const startResize = useCallback((e) => {
+    e.preventDefault();
+    const move = (ev) => {
+      if (!gridRef.current) return;
+      const left = gridRef.current.getBoundingClientRect().left;
+      const w = Math.min(1000, Math.max(280, ev.clientX - left));
+      setLeftW(w);
+    };
+    const up = () => {
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+      if (Number.isFinite(leftWRef.current)) { try { window.localStorage.setItem('pm-disc-left-w', String(Math.round(leftWRef.current))); } catch { /* ignore */ } }
+    };
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  }, []);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -205,9 +237,9 @@ export default function DiscussionsPage() {
     <>
     <ConfirmDialog />
     <div className="w-full p-4 sm:p-6">
-      <div className="grid grid-cols-[340px_minmax(0,1fr)] lg:grid-cols-[400px_minmax(0,1fr)] gap-4 lg:gap-6 items-start">
+      <div ref={gridRef} className="flex items-stretch">
         {/* LEFT — discussions list */}
-        <div className="flex flex-col min-w-0 gap-4">
+        <div className="flex flex-col min-w-0 gap-4 shrink-0" style={{ width: leftW == null ? '50%' : leftW }}>
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-3">
               <BackButton fallback={`/projects/${projectId}/task-lists`} />
@@ -421,8 +453,20 @@ export default function DiscussionsPage() {
           )}
         </div>
 
+        {/* Resizable divider */}
+        <div
+          onMouseDown={startResize}
+          role="separator"
+          aria-orientation="vertical"
+          title={__("Drag to resize", 'wedevs-project-manager')}
+          className="group relative w-4 shrink-0 cursor-col-resize flex items-stretch justify-center select-none"
+        >
+          <div className="w-px bg-pm-border group-hover:bg-pm-accent group-active:bg-pm-accent transition-colors" />
+          <div className="absolute top-1/2 -translate-y-1/2 h-8 w-1 rounded-full bg-pm-border/0 group-hover:bg-pm-accent transition-colors" />
+        </div>
+
         {/* RIGHT — conversation panel */}
-        <div className="flex flex-col min-w-0">
+        <div className="flex flex-col min-w-0 flex-1">
           {discussionId ? (
             <DiscussionDetailPage key={discussionId} />
           ) : (
