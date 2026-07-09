@@ -41,6 +41,7 @@ import { formatPmDate } from "@lib/pm-utils";
 import {
   getFileIcon,
   getFileIconColor,
+  getFileIconBg,
   getAttachedLabel,
   getAttachedURL,
   getDownloadPermissionUrl,
@@ -111,6 +112,7 @@ export default function FilesPage() {
         id: f.id,
         Icon: getFileIcon(iconType),
         iconColor: getFileIconColor(iconType),
+        iconBg: getFileIconBg(iconType),
         fileName: f.meta?.title || f.name || f.title || __("File", 'wedevs-project-manager'),
         typeLabel: ext || (f.type === "image" ? __("Image", 'wedevs-project-manager') : __("File", 'wedevs-project-manager')),
         uploaded: f.attached_at,
@@ -306,7 +308,7 @@ export default function FilesPage() {
                         active ? "border-pm-accent bg-pm-accent-light/40 shadow-sm" : "border-pm-border",
                       )}
                     >
-                      <div className="h-20 rounded-lg bg-muted/40 flex items-center justify-center overflow-hidden mb-2">
+                      <div className={cn("h-20 rounded-lg flex items-center justify-center overflow-hidden mb-2", r.thumbUrl ? "bg-muted/40" : r.iconBg)}>
                         {r.thumbUrl ? (
                           <img src={r.thumbUrl} alt={r.fileName} className="w-full h-full object-cover" />
                         ) : (
@@ -355,7 +357,7 @@ export default function FilesPage() {
                         >
                           {/* File Name */}
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className="w-9 h-9 rounded-lg bg-muted/50 flex items-center justify-center shrink-0 overflow-hidden">
+                            <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center shrink-0 overflow-hidden", r.thumbUrl ? "bg-muted/50" : r.iconBg)}>
                               {r.thumbUrl ? (
                                 <img src={r.thumbUrl} alt={r.fileName} className="w-full h-full object-cover rounded-lg" />
                               ) : (
