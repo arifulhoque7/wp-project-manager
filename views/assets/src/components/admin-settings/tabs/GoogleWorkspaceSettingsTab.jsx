@@ -109,7 +109,7 @@ export default function GoogleWorkspaceSettingsTab() {
   }
 
   return (
-    <div className="max-w-2xl">
+    <div className="w-full">
       <div className="mb-5 flex items-start justify-between gap-3">
         <div>
           <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">

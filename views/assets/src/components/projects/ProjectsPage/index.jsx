@@ -401,7 +401,6 @@ export default function ProjectsPage() {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       {projects.map((project) => {
         const progress = projectProgress(project);
-        const projectColor = project.color_code || statusColor(project);
         const meta = getMeta(project);
 
         return (
@@ -409,9 +408,6 @@ export default function ProjectsPage() {
             key={project.id}
             className="group relative flex flex-col rounded-xl border bg-card overflow-hidden hover:shadow-lg hover:-translate-y-0.5 hover:border-pm-border/80 transition-all duration-200"
           >
-            {/* Accent bar */}
-            <div className="h-1.5 w-full shrink-0" style={{ backgroundColor: projectColor }} />
-
             <div className="flex flex-1 flex-col gap-3 p-5">
               {/* Header: title + actions */}
               <div className="flex items-start justify-between gap-2">
@@ -782,7 +778,7 @@ export default function ProjectsPage() {
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
-          <div className="flex items-center gap-1.5 h-9 w-[180px] max-w-full rounded-md border border-pm-border bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent">
+          <div className="flex items-center gap-1.5 h-8 flex-1 min-w-[160px] max-w-[240px] rounded-md border border-input bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent">
             <Search className="h-4 w-4 text-pm-text-muted shrink-0" />
             <input
               type="text"
@@ -796,7 +792,7 @@ export default function ProjectsPage() {
             value={categoryId !== undefined ? String(categoryId) : "__all__"}
             onValueChange={handleCategoryChange}
           >
-            <SelectTrigger className="w-[160px] h-9 text-sm">
+            <SelectTrigger className="h-8 w-auto sm:w-[160px] text-sm">
               <SelectValue placeholder={__("All Categories", 'wedevs-project-manager')} />
             </SelectTrigger>
             <SelectContent>
@@ -810,7 +806,7 @@ export default function ProjectsPage() {
           </Select>
 
           <Select value={orderBy} onValueChange={handleSortChange}>
-            <SelectTrigger className="w-[160px] h-9 text-sm">
+            <SelectTrigger className="h-8 w-auto sm:w-[160px] text-sm">
               <SelectValue placeholder={__("Sort By", 'wedevs-project-manager')} />
             </SelectTrigger>
             <SelectContent>

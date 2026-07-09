@@ -9,7 +9,6 @@ import { useProApi } from "@hooks/useProApi";
 import { useToast } from "@hooks/useToast";
 import { usePermissions } from "@hooks/usePermissions";
 import { Button } from "@components/ui/button";
-import { Input } from "@components/ui/input";
 import { DatePicker } from "@components/ui/date-picker";
 import { Skeleton } from "@components/ui/skeleton";
 import { Badge } from "@components/ui/badge";
@@ -48,6 +47,7 @@ import {
   ChevronRight,
   Calendar as CalendarIcon,
   Crown,
+  Search,
 } from "lucide-react";
 import {
   PieChart,
@@ -446,7 +446,7 @@ export default function MyTasksPage() {
               setShowReportDateError(false);
             }}
           >
-            <SelectTrigger className="h-9 w-[220px] text-sm shrink-0">
+            <SelectTrigger className="h-8 w-full sm:w-[220px] text-sm shrink-0">
               <SelectValue placeholder={__("Select User", 'wedevs-project-manager')} />
             </SelectTrigger>
             <SelectContent>
@@ -561,7 +561,7 @@ export default function MyTasksPage() {
                   <DatePicker
                     value={overviewStartDate}
                     onChange={(v) => setOverviewStartDate(v)}
-                    className="h-8 text-sm w-40"
+                    className="h-8 text-sm w-auto sm:w-40"
                   />
                 </div>
                 <div className="space-y-1">
@@ -569,7 +569,7 @@ export default function MyTasksPage() {
                   <DatePicker
                     value={overviewEndDate}
                     onChange={(v) => setOverviewEndDate(v)}
-                    className="h-8 text-sm w-40"
+                    className="h-8 text-sm w-auto sm:w-40"
                   />
                 </div>
                 <Button size="sm" className="h-8 text-sm" onClick={() => setAppliedFilterDates({ start: overviewStartDate, end: overviewEndDate })}>
@@ -751,18 +751,18 @@ export default function MyTasksPage() {
           </div>
         ) : !reportData ? (
           <div className="space-y-4">
-            <div className="flex flex-wrap items-end gap-3">
+            <div className="rounded-lg border border-pm-accent/20 bg-card p-4 flex flex-wrap items-end gap-4">
               <div className="space-y-1">
                 <label className={cn("text-[14px] font-medium uppercase", showReportDateError && !reportStart ? "text-red-500" : "text-pm-text-muted")}>
                   {__("Start Date", 'wedevs-project-manager')}<span className="text-red-500 ml-0.5">*</span>
                 </label>
-                <DatePicker value={reportStart} onChange={(v) => { setReportStart(v); setShowReportDateError(false) }} className={cn("h-8 text-sm w-36", showReportDateError && !reportStart && "border-red-500 ring-1 ring-red-500")} />
+                <DatePicker value={reportStart} onChange={(v) => { setReportStart(v); setShowReportDateError(false) }} className={cn("h-8 text-sm w-auto sm:w-36", showReportDateError && !reportStart && "border-red-500 ring-1 ring-red-500")} />
               </div>
               <div className="space-y-1">
                 <label className={cn("text-[14px] font-medium uppercase", showReportDateError && !reportEnd ? "text-red-500" : "text-pm-text-muted")}>
                   {__("End Date", 'wedevs-project-manager')}<span className="text-red-500 ml-0.5">*</span>
                 </label>
-                <DatePicker value={reportEnd} onChange={(v) => { setReportEnd(v); setShowReportDateError(false) }} className={cn("h-8 text-sm w-36", showReportDateError && !reportEnd && "border-red-500 ring-1 ring-red-500")} />
+                <DatePicker value={reportEnd} onChange={(v) => { setReportEnd(v); setShowReportDateError(false) }} className={cn("h-8 text-sm w-auto sm:w-36", showReportDateError && !reportEnd && "border-red-500 ring-1 ring-red-500")} />
               </div>
               <Button size="sm" className="h-8" onClick={fetchReport}>{__("Run Report", 'wedevs-project-manager')}</Button>
             </div>
@@ -773,18 +773,18 @@ export default function MyTasksPage() {
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="flex flex-wrap items-end gap-3">
+            <div className="rounded-lg border border-pm-accent/20 bg-card p-4 flex flex-wrap items-end gap-4">
               <div className="space-y-1">
                 <label className={cn("text-[14px] font-medium uppercase", showReportDateError && !reportStart ? "text-red-500" : "text-pm-text-muted")}>
                   {__("Start Date", 'wedevs-project-manager')}<span className="text-red-500 ml-0.5">*</span>
                 </label>
-                <DatePicker value={reportStart} onChange={(v) => { setReportStart(v); setShowReportDateError(false) }} className={cn("h-8 text-sm w-36", showReportDateError && !reportStart && "border-red-500 ring-1 ring-red-500")} />
+                <DatePicker value={reportStart} onChange={(v) => { setReportStart(v); setShowReportDateError(false) }} className={cn("h-8 text-sm w-auto sm:w-36", showReportDateError && !reportStart && "border-red-500 ring-1 ring-red-500")} />
               </div>
               <div className="space-y-1">
                 <label className={cn("text-[14px] font-medium uppercase", showReportDateError && !reportEnd ? "text-red-500" : "text-pm-text-muted")}>
                   {__("End Date", 'wedevs-project-manager')}<span className="text-red-500 ml-0.5">*</span>
                 </label>
-                <DatePicker value={reportEnd} onChange={(v) => { setReportEnd(v); setShowReportDateError(false) }} className={cn("h-8 text-sm w-36", showReportDateError && !reportEnd && "border-red-500 ring-1 ring-red-500")} />
+                <DatePicker value={reportEnd} onChange={(v) => { setReportEnd(v); setShowReportDateError(false) }} className={cn("h-8 text-sm w-auto sm:w-36", showReportDateError && !reportEnd && "border-red-500 ring-1 ring-red-500")} />
               </div>
               <Button size="sm" className="h-8" onClick={fetchReport}>{__("Run Report", 'wedevs-project-manager')}</Button>
             </div>
@@ -961,22 +961,25 @@ export default function MyTasksPage() {
         )
       ) : activeTab !== "activities" ? (
         <div className="space-y-4">
-          <div className="flex items-center gap-3 flex-wrap">
-            <Input
-              value={searchTitle}
-              onChange={(e) => setSearchTitle(e.target.value)}
-              placeholder={__("Search by Task Title", 'wedevs-project-manager')}
-              className="h-9 text-sm w-full sm:max-w-[220px]"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") fetchTasks(1);
-              }}
-            />
+          <div className="rounded-lg border bg-card px-3 py-2.5 flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-1.5 flex-1 min-w-[160px] max-w-[240px] h-8 rounded-md border border-input bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent">
+              <Search className="h-4 w-4 text-pm-text-muted shrink-0" />
+              <input
+                value={searchTitle}
+                onChange={(e) => setSearchTitle(e.target.value)}
+                placeholder={__("Search by Task Title", 'wedevs-project-manager')}
+                className="flex-1 min-w-0 h-full bg-transparent text-sm text-pm-text-primary placeholder:text-muted-foreground focus:outline-none !border-0 !p-0 !shadow-none"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") fetchTasks(1);
+                }}
+              />
+            </div>
 
             <Select
               value={filterProjectId || "all"}
               onValueChange={(val) => setFilterProjectId(val === "all" ? "" : val)}
             >
-              <SelectTrigger className="h-9 text-sm w-full sm:w-[180px]">
+              <SelectTrigger className="h-8 text-sm w-full sm:w-[180px]">
                 <SelectValue placeholder={__("All Projects", 'wedevs-project-manager')} />
               </SelectTrigger>
               <SelectContent>
@@ -994,14 +997,14 @@ export default function MyTasksPage() {
                 <DatePicker
                   value={taskStartDate}
                   onChange={(v) => { setTaskStartDate(v); setTaskDateError(""); }}
-                  className="h-9 text-sm w-[150px]"
+                  className="h-8 text-sm w-auto sm:w-[150px]"
                   aria-label={__("Start Date", 'wedevs-project-manager')}
                 />
                 <span className="text-pm-text-muted text-sm">{__("to", 'wedevs-project-manager')}</span>
                 <DatePicker
                   value={taskEndDate}
                   onChange={(v) => { setTaskEndDate(v); setTaskDateError(""); }}
-                  className="h-9 text-sm w-[150px]"
+                  className="h-8 text-sm w-auto sm:w-[150px]"
                   aria-label={__("End Date", 'wedevs-project-manager')}
                 />
               </>
@@ -1019,7 +1022,7 @@ export default function MyTasksPage() {
                 setTaskDateError("");
                 fetchTasks(1);
               }}
-              className="gap-1.5"
+              className="gap-1.5 h-8 text-sm"
             >
               <Filter className="h-4 w-4" />
               {__("Filter", 'wedevs-project-manager')}
@@ -1046,7 +1049,7 @@ export default function MyTasksPage() {
             <div className="ml-auto flex items-center gap-1 text-sm text-pm-text-muted">
               <span>{__("Sort:", 'wedevs-project-manager')}</span>
               <Select value={sortBy} onValueChange={(val) => setSortBy(val)}>
-                <SelectTrigger className="h-8 text-sm w-[140px]">
+                <SelectTrigger className="h-8 text-sm w-auto sm:w-[140px]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -1100,9 +1103,11 @@ export default function MyTasksPage() {
           ) : (
             <div className="rounded-lg border bg-card overflow-hidden">
               <div className="overflow-x-auto">
-                <div className="min-w-[760px]">
-                  <div className={cn("grid gap-2 px-4 py-2 bg-muted/30 border-b text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70", MYTASK_GRID)}>
+                <div className="min-w-[1040px]">
+                  <div className={cn("grid gap-2 px-4 py-2.5 bg-muted/30 border-b text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70", MYTASK_GRID)}>
                     <div className="flex items-center gap-1.5"><ListChecks className="h-3.5 w-3.5" />{__("Task", 'wedevs-project-manager')}</div>
+                    <div className="flex items-center gap-1.5"><Activity className="h-3.5 w-3.5" />{__("Status", 'wedevs-project-manager')}</div>
+                    <div className="flex items-center gap-1.5"><AlertTriangle className="h-3.5 w-3.5" />{__("Priority", 'wedevs-project-manager')}</div>
                     <div className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" />{__("Type", 'wedevs-project-manager')}</div>
                     <div className="flex items-center gap-1.5"><Tag className="h-3.5 w-3.5" />{__("Labels", 'wedevs-project-manager')}</div>
                     <div className="flex items-center gap-1.5"><FolderKanban className="h-3.5 w-3.5" />{__("Project", 'wedevs-project-manager')}</div>

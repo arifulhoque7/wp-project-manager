@@ -21,6 +21,7 @@ export default function MilestoneFilterBar({ filter, sort, counts, onFilterChang
         {filterTabs.map((tab) => {
           const count = counts[tab.key] ?? 0;
           const isActive = filter === tab.key;
+          const TabIcon = tab.icon;
 
           return (
             <button
@@ -34,6 +35,7 @@ export default function MilestoneFilterBar({ filter, sort, counts, onFilterChang
                   : "text-pm-text-muted hover:text-pm-text-primary",
               )}
             >
+              {TabIcon && <TabIcon className="h-4 w-4" />}
               {tab.label}
               <span
                 className="inline-flex items-center justify-center rounded-full px-1.5 min-w-[18px] h-[18px] text-[14px] font-semibold tabular-nums transition-colors"

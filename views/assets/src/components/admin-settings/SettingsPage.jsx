@@ -7,7 +7,7 @@ import { cn } from '@lib/utils'
 import { useFilter } from '@hooks/useSlot'
 import {
   Settings, Mail, ListTodo, Bot, Radio,
-  FileText, ShoppingCart, PanelLeftClose, PanelLeftOpen,
+  FileText, ShoppingCart,
 } from 'lucide-react'
 import { DriveMonoGlyph as GoogleWorkspaceNavIcon } from '@components/google-workspace/GoogleIcons'
 
@@ -69,15 +69,6 @@ const getProTabConfig = () => ({
 const SettingsPage = () => {
   const { isPro } = usePermissions()
   const [activeTab, setActiveTab] = useState('general')
-  const [collapsed, setCollapsed] = useState(
-    localStorage.getItem('pm-settings-sidebar-collapsed') === 'true'
-  )
-
-  function toggleCollapse() {
-    const next = !collapsed
-    setCollapsed(next)
-    localStorage.setItem('pm-settings-sidebar-collapsed', String(next))
-  }
   const PRO_TAB_CONFIG = useMemo(() => getProTabConfig(), [])
 
   // Woo Project tab component — injected by pm-pro via filter (only when module is active)
@@ -143,76 +134,46 @@ const SettingsPage = () => {
   const ActiveComponent = activeTab === 'woo-project' ? WooProjectComponent : tabComponents[activeTab]
 
   return (
-    <div className="pm-settings-page flex h-full overflow-hidden">
+    <div className="pm-settings-page flex flex-col h-full overflow-hidden">
 
-      {/* ── Settings sub-nav (internal sidebar) ────────────── */}
-      <aside
-        className="shrink-0 bg-pm-surface border-r border-pm-border flex flex-col transition-all duration-200"
-        style={{ width: collapsed ? 56 : 200, minWidth: collapsed ? 56 : 200, maxWidth: collapsed ? 56 : 200 }}
-      >
-        <div className={cn('flex items-center pt-5 pb-3', collapsed ? 'justify-center px-2' : 'justify-between px-4')}>
-          {!collapsed && (
-            <h1 className="text-pm-text font-semibold text-base">
-              {__('Settings', 'wedevs-project-manager')}
-            </h1>
-          )}
-          <button
-            type="button"
-            className="p-1 rounded hover:bg-pm-hover text-pm-text-muted hover:text-pm-text transition-colors"
-            title={collapsed ? __('Expand sidebar', 'wedevs-project-manager') : __('Collapse sidebar', 'wedevs-project-manager')}
-            onClick={toggleCollapse}
-          >
-            {collapsed ? <PanelLeftOpen className="w-5 h-5" /> : <PanelLeftClose className="w-5 h-5" />}
-          </button>
-        </div>
+      {/* ── Settings top nav (segmented) ───────────────────── */}
+      <div className="shrink-0 bg-pm-surface border-b border-pm-border px-4 pt-4 pb-2">
+        <h1 className="text-pm-text font-semibold text-base mb-2">
+          {__('Settings', 'wedevs-project-manager')}
+        </h1>
+        <nav className="inline-flex max-w-full items-center gap-0.5 overflow-x-auto rounded-lg border border-pm-border bg-muted/60 p-1 scrollbar-none">
+          {tabGroups.flatMap(g => g.tabs).map((tab) => {
+            const Icon = tab.icon
+            const isActive = activeTab === tab.key
+            const needsPro = tab.pro && !isPro
 
-        <nav className={cn('flex-1 overflow-y-auto pb-4 pt-1', collapsed ? 'px-1.5' : 'px-2')}>
-          {tabGroups.map((group) => (
-            <div key={group.title} className="mb-4">
-              {!collapsed && (
-                <p className="text-[14px] font-medium text-pm-text-muted uppercase tracking-wider px-2 mb-1.5">
-                  {group.title}
-                </p>
-              )}
-
-              {group.tabs.map((tab) => {
-                const Icon = tab.icon
-                const isActive = activeTab === tab.key
-                const needsPro = tab.pro && !isPro
-
-                return (
-                  <button
-                    key={tab.key}
-                    type="button"
-                    title={collapsed ? tab.label : undefined}
-                    className={cn(
-                      'w-full flex items-center rounded-lg transition-colors text-left mb-1 group/tab',
-                      collapsed ? 'justify-center px-0 py-2' : 'gap-3 px-3 py-2.5',
-                      isActive
-                        ? 'bg-pm-accent/10 text-pm-accent font-medium'
-                        : 'text-pm-text-muted hover:bg-pm-hover hover:text-pm-text'
-                    )}
-                    onClick={() => setActiveTab(tab.key)}
-                  >
-                    <Icon
-                      className={cn(
-                        'w-5 h-5 shrink-0',
-                        isActive ? 'text-pm-accent' : 'text-pm-text-muted'
-                      )}
-                    />
-                    {!collapsed && (
-                      <>
-                        <span className="flex-1 truncate text-[15px]">{tab.label}</span>
-                        {needsPro && <span className="shrink-0 opacity-0 group-hover/tab:opacity-100 transition-opacity"><ProBadge /></span>}
-                      </>
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-          ))}
+            return (
+              <button
+                key={tab.key}
+                type="button"
+                className={cn(
+                  'group/tab flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-medium whitespace-nowrap transition-all duration-200 shrink-0',
+                  isActive
+                    ? 'bg-background text-pm-text-primary shadow-sm'
+                    : 'text-pm-text-muted hover:text-pm-text-primary',
+                )}
+                onClick={() => setActiveTab(tab.key)}
+              >
+                <Icon className={cn(
+                  'w-4 h-4 shrink-0',
+                  isActive ? 'text-pm-accent' : 'text-pm-text-muted group-hover/tab:text-pm-text',
+                )} />
+                {tab.label}
+                {needsPro && (
+                  <span className="max-w-0 overflow-hidden whitespace-nowrap group-hover/tab:max-w-fit group-hover/tab:ml-1 transition-all">
+                    <ProBadge />
+                  </span>
+                )}
+              </button>
+            )
+          })}
         </nav>
-      </aside>
+      </div>
 
       {/* ── Content area ──────────────────────────────────── */}
       <main className="flex-1 overflow-y-auto bg-pm-surface-muted">
@@ -229,7 +190,7 @@ const SettingsPage = () => {
                   <div className="h-32 w-full bg-pm-border/30 rounded-lg animate-pulse" />
                 </div>
               ) : (
-                <div className="max-w-[840px] mx-auto p-8 space-y-4">
+                <div className="w-full p-4 sm:p-6 space-y-4">
                   {[1, 2, 3, 4].map((i) => (
                     <div key={i} className="h-14 w-full bg-pm-border/30 rounded-lg animate-pulse" />
                   ))}
@@ -237,9 +198,15 @@ const SettingsPage = () => {
               )
             }
           >
-            <div className={activeTab === 'woo-project' ? '' : 'max-w-[840px] mx-auto p-8'}>
+            {activeTab === 'woo-project' ? (
               <ActiveComponent />
-            </div>
+            ) : (
+              <div className="w-full p-4 sm:p-6">
+                <div className="rounded-xl border bg-card p-4 sm:p-6 shadow-sm">
+                  <ActiveComponent />
+                </div>
+              </div>
+            )}
           </Suspense>
         ) : null}
       </main>

@@ -11,7 +11,6 @@ import { useCurrentProject } from "@hooks/useCurrentProject";
 import { useProModal } from "@components/common/ProUpgradeModal";
 import ProBadge from "@components/common/ProBadge";
 import { Button } from "@components/ui/button";
-import { Input } from "@components/ui/input";
 import { Skeleton } from "@components/ui/skeleton";
 import { cn } from "@lib/utils";
 import {
@@ -27,6 +26,8 @@ import {
   Link as LinkIcon,
   Search,
   ArrowUpDown,
+  FolderOpen,
+  User as UserIcon,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -161,8 +162,8 @@ export default function FilesPage() {
   );
 
   const TABS = [
-    { key: "all", label: __("All Files", 'wedevs-project-manager') },
-    { key: "mine", label: __("My Files", 'wedevs-project-manager') },
+    { key: "all", label: __("All Files", 'wedevs-project-manager'), icon: FolderOpen },
+    { key: "mine", label: __("My Files", 'wedevs-project-manager'), icon: UserIcon },
   ];
 
   return (
@@ -208,28 +209,32 @@ export default function FilesPage() {
       {/* Toolbar: tabs + search */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="inline-flex items-center gap-0.5 rounded-lg border border-pm-border bg-muted/60 p-1">
-          {TABS.map((t) => (
-            <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className={cn(
-                "rounded-md px-3 py-1.5 text-[13px] font-medium transition-all",
-                tab === t.key
-                  ? "bg-background text-pm-text-primary shadow-sm"
-                  : "text-pm-text-muted hover:text-pm-text-primary",
-              )}
-            >
-              {t.label}
-            </button>
-          ))}
+          {TABS.map((t) => {
+            const TabIcon = t.icon;
+            return (
+              <button
+                key={t.key}
+                onClick={() => setTab(t.key)}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-medium transition-all",
+                  tab === t.key
+                    ? "bg-background text-pm-text-primary shadow-sm"
+                    : "text-pm-text-muted hover:text-pm-text-primary",
+                )}
+              >
+                {TabIcon && <TabIcon className="h-4 w-4" />}
+                {t.label}
+              </button>
+            );
+          })}
         </div>
-        <div className="relative w-full max-w-[260px]">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-pm-text-muted" />
-          <Input
+        <div className="flex items-center gap-1.5 w-full sm:w-auto sm:flex-1 min-w-[160px] max-w-[260px] h-8 rounded-md border border-input bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent">
+          <Search className="h-4 w-4 text-pm-text-muted shrink-0" />
+          <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={__("Search files", 'wedevs-project-manager')}
-            className="h-9 pl-8 text-sm"
+            className="flex-1 min-w-0 h-full bg-transparent text-sm text-pm-text-primary placeholder:text-muted-foreground focus:outline-none !border-0 !p-0 !shadow-none"
           />
         </div>
       </div>

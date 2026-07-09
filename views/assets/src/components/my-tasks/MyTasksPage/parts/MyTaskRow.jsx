@@ -6,7 +6,7 @@ import TaskLabelBadges from "@components/tasks/TaskLabelBadges";
 import TaskStatusCircle from "@components/common/TaskStatusCircle";
 import { isPrivate } from "@lib/pm-utils";
 import { cn } from "@lib/utils";
-import { MessageSquare, Lock, Layers, Calendar } from "lucide-react";
+import { MessageSquare, Lock, Layers, Calendar, CheckCircle2, Clock } from "lucide-react";
 import {
   isTaskComplete,
   formatPmDate,
@@ -14,9 +14,9 @@ import {
 } from "@lib/pm-utils";
 
 // Shared column grid — header (MyTasksPage) + rows must match.
-// Task | Type | Labels | Project | Assignee | Due
+// Task | Status | Priority | Type | Labels | Project | Assignee | Due
 export const MYTASK_GRID =
-  "grid-cols-[minmax(200px,2.2fr)_84px_minmax(90px,1fr)_minmax(110px,1.1fr)_100px_minmax(120px,1.1fr)]";
+  "grid-cols-[minmax(200px,2.2fr)_104px_96px_84px_minmax(90px,1fr)_minmax(110px,1.1fr)_100px_minmax(120px,1.1fr)]";
 
 export default function MyTaskRow({ task, projectTitle, onToggle, onOpen }) {
   const complete = isTaskComplete(task.status);
@@ -36,8 +36,20 @@ export default function MyTaskRow({ task, projectTitle, onToggle, onOpen }) {
   const overdue = isOverdue(task.due_date, task.status);
   const project = projectTitle || task.project?.data?.title || "";
 
+  // Backend priority: 1 = High, 2 = Medium, 3 = Low (0/null = none).
+  const priorityPill = task.priority === 1
+    ? "bg-red-100 text-red-700"
+    : task.priority === 2
+      ? "bg-amber-100 text-amber-700"
+      : "bg-emerald-100 text-emerald-700";
+  const priorityLabel = task.priority === 1
+    ? __("High", 'wedevs-project-manager')
+    : task.priority === 2
+      ? __("Medium", 'wedevs-project-manager')
+      : __("Low", 'wedevs-project-manager');
+
   return (
-    <div className={cn("grid items-center gap-2 px-4 py-2.5 border-b border-border/40 last:border-b-0 hover:bg-muted/20 transition-colors group", MYTASK_GRID)}>
+    <div className={cn("grid items-center gap-2 px-4 py-3 border-b border-border/40 last:border-b-0 hover:bg-muted/20 transition-colors group", MYTASK_GRID)}>
       {/* Task */}
       <div className="flex items-center gap-2 min-w-0">
         <button type="button" onClick={handleToggle} disabled={toggling} className="shrink-0">
@@ -66,6 +78,30 @@ export default function MyTaskRow({ task, projectTitle, onToggle, onOpen }) {
         )}
         {isPrivate(task.meta?.privacy) && (
           <Lock className="h-4 w-4 text-amber-500 shrink-0" />
+        )}
+      </div>
+
+      {/* Status */}
+      <div className="min-w-0">
+        <span
+          className={cn(
+            "inline-flex items-center gap-1 rounded-md px-2.5 py-0.5 text-[12px] font-semibold",
+            complete ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700",
+          )}
+        >
+          {complete ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Clock className="h-3.5 w-3.5" />}
+          {complete ? __("Completed", 'wedevs-project-manager') : __("Pending", 'wedevs-project-manager')}
+        </span>
+      </div>
+
+      {/* Priority */}
+      <div className="min-w-0">
+        {task.priority > 0 ? (
+          <span className={cn("inline-flex items-center rounded-md px-2.5 py-0.5 text-[12px] font-medium", priorityPill)}>
+            {priorityLabel}
+          </span>
+        ) : (
+          <span className="text-[13px] text-pm-text-muted">—</span>
         )}
       </div>
 

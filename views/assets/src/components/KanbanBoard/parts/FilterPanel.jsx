@@ -2,7 +2,6 @@ import { __ } from '@wordpress/i18n';
 import React, { useEffect, useMemo, useState } from "react";
 import { useApi } from "@hooks/useApi";
 import { Button } from "@components/ui/button";
-import { Input } from "@components/ui/input";
 import {
   Select,
   SelectContent,
@@ -10,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@components/ui/select";
-import { Filter, X } from "lucide-react";
+import { Filter, X, Search } from "lucide-react";
 
 const api = useApi();
 
@@ -72,18 +71,21 @@ export default function FilterPanel({
   if (!open) return null;
   return (
     <div className="flex flex-wrap items-center gap-2 p-3 bg-muted/30 rounded-lg border mb-3">
-      <Input
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder={__("Search title (min 3 chars)...", 'wedevs-project-manager')}
-        className="h-8 text-sm w-48"
-        onKeyDown={(e) => e.key === "Enter" && handleApply()}
-      />
+      <div className="flex items-center gap-1.5 flex-1 min-w-[160px] max-w-[240px] h-8 rounded-md border border-input bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent">
+        <Search className="h-4 w-4 text-pm-text-muted shrink-0" />
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder={__("Search title (min 3 chars)...", 'wedevs-project-manager')}
+          className="flex-1 min-w-0 h-full bg-transparent text-sm text-pm-text-primary placeholder:text-muted-foreground focus:outline-none !border-0 !p-0 !shadow-none"
+          onKeyDown={(e) => e.key === "Enter" && handleApply()}
+        />
+      </div>
       <Select
         value={userId || "all"}
         onValueChange={(v) => setUserId(v === "all" ? "" : v)}
       >
-        <SelectTrigger className="h-8 text-sm w-40">
+        <SelectTrigger className="h-8 text-sm w-auto sm:w-40">
           <SelectValue placeholder={__("All Users", 'wedevs-project-manager')} />
         </SelectTrigger>
         <SelectContent>
@@ -102,7 +104,7 @@ export default function FilterPanel({
         value={listId || "all"}
         onValueChange={(v) => setListId(v === "all" ? "" : v)}
       >
-        <SelectTrigger className="h-8 text-sm w-40">
+        <SelectTrigger className="h-8 text-sm w-auto sm:w-40">
           <SelectValue placeholder={__("All Lists", 'wedevs-project-manager')} />
         </SelectTrigger>
         <SelectContent>
@@ -118,7 +120,7 @@ export default function FilterPanel({
         value={dueDate || "all"}
         onValueChange={(v) => setDueDate(v === "all" ? "" : v)}
       >
-        <SelectTrigger className="h-8 text-sm w-40">
+        <SelectTrigger className="h-8 text-sm w-auto sm:w-40">
           <SelectValue placeholder={__("Any Due Date", 'wedevs-project-manager')} />
         </SelectTrigger>
         <SelectContent>
@@ -134,7 +136,7 @@ export default function FilterPanel({
         value={status || "all"}
         onValueChange={(v) => setStatus(v === "all" ? "" : v)}
       >
-        <SelectTrigger className="h-8 text-sm w-36">
+        <SelectTrigger className="h-8 text-sm w-auto sm:w-36">
           <SelectValue placeholder={__("All Status", 'wedevs-project-manager')} />
         </SelectTrigger>
         <SelectContent>

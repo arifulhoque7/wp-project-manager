@@ -339,10 +339,7 @@ export function AppSidebar() {
         title={item.label}
       >
         <Icon className={cn('shrink-0', collapsed ? 'w-[18px] h-[18px]' : 'w-5 h-5', !collapsed && item.key === 'google-workspace' && 'self-start mt-[3px]', isActive ? 'text-pm-accent' : 'text-pm-text-muted')} />
-        {collapsed
-          ? <span className={cn('text-[10px] font-medium leading-none', isActive ? 'text-pm-accent' : 'text-pm-text-muted')}>{item.short ?? item.label}</span>
-          : <TruncText className="text-[15px]">{item.label}</TruncText>
-        }
+        {!collapsed && <TruncText className="text-[15px]">{item.label}</TruncText>}
         {!collapsed && item.pro && <span className="shrink-0 opacity-0 group-hover/nav:opacity-100 transition-opacity"><ProBadge /></span>}
       </Link>
     )
@@ -384,19 +381,16 @@ export function AppSidebar() {
             className={cn('rounded-sm shrink-0', collapsed ? 'h-3 w-3' : 'h-2 w-2')}
             style={{ backgroundColor: color }}
           />
-          {collapsed
-            ? <span className="text-[10px] font-medium leading-none text-pm-text-muted w-full text-center truncate px-0.5">
-                {project.title.substring(0, 4)}
-              </span>
-            : <>
-                <TruncText className={cn('text-[15px]', isActive && 'font-medium')}>
-                  {project.title}
-                </TruncText>
-                {project.favourite && (
-                  <Star className="h-3.5 w-3.5 shrink-0 fill-yellow-400 text-yellow-400" />
-                )}
-              </>
-          }
+          {!collapsed && (
+            <>
+              <TruncText className={cn('text-[15px]', isActive && 'font-medium')}>
+                {project.title}
+              </TruncText>
+              {project.favourite && (
+                <Star className="h-3.5 w-3.5 shrink-0 fill-yellow-400 text-yellow-400" />
+              )}
+            </>
+          )}
         </button>
 
         {/* Sub-nav (expanded, not collapsed) */}
