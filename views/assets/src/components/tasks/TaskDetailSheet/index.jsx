@@ -732,7 +732,7 @@ export default function TaskDetailSheet() {
 
             <div className="px-6 py-5">
               <div className="flex items-center justify-between mb-3">
-                <h4 className="flex items-center gap-1.5 text-sm font-medium uppercase tracking-wide text-muted-foreground/70"><FileText className="h-4 w-4" />{__('Description', 'wedevs-project-manager')}</h4>
+                <h4 className="flex items-center gap-1.5 text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70"><FileText className="h-4 w-4" />{__('Description', 'wedevs-project-manager')}</h4>
                 {!editingDesc && canEditTask(currentTask) && (
                   <Button
                     size="sm"

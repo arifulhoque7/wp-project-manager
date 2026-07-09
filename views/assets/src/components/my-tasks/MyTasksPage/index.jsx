@@ -542,7 +542,7 @@ export default function MyTasksPage() {
               ))}
             </div>
 
-            <div className="rounded-lg border bg-card p-4">
+            <div className="rounded-xl border bg-card p-4">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-sm font-medium text-pm-text-primary flex items-center gap-2">
                   <Filter className="h-4 w-4" />
@@ -556,7 +556,7 @@ export default function MyTasksPage() {
               </div>
               <div className="flex items-end gap-3 flex-wrap">
                 <div className="space-y-1">
-                  <label className="text-[11px] font-medium uppercase text-pm-text-muted">{__('From', 'wedevs-project-manager')}</label>
+                  <label className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70">{__('From', 'wedevs-project-manager')}</label>
                   <DatePicker
                     value={overviewStartDate}
                     onChange={(v) => setOverviewStartDate(v)}
@@ -564,7 +564,7 @@ export default function MyTasksPage() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[11px] font-medium uppercase text-pm-text-muted">{__('To', 'wedevs-project-manager')}</label>
+                  <label className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70">{__('To', 'wedevs-project-manager')}</label>
                   <DatePicker
                     value={overviewEndDate}
                     onChange={(v) => setOverviewEndDate(v)}
@@ -633,7 +633,7 @@ export default function MyTasksPage() {
             </div>
 
             {graph.length > 0 && (
-              <div className="rounded-lg border bg-card p-6">
+              <div className="rounded-xl border bg-card p-6">
                 <h3 className="text-sm font-medium text-pm-text-primary mb-4">
                   {__("Activity Trend", 'wedevs-project-manager')}
                 </h3>
@@ -663,7 +663,7 @@ export default function MyTasksPage() {
               </div>
             )}
 
-            <div className="rounded-lg border bg-card">
+            <div className="rounded-xl border bg-card">
               <div className="flex items-center justify-between px-4 py-3 border-b border-pm-border">
                 <h3 className="text-sm font-medium text-pm-text-primary flex items-center gap-2">
                   <CalendarIcon className="h-5 w-5 text-pm-accent" />
@@ -684,7 +684,7 @@ export default function MyTasksPage() {
               </div>
               <div className="grid grid-cols-7 border-b border-pm-border">
                 {calDays.map((d) => (
-                  <div key={d} className="text-center py-2 text-[14px] font-medium uppercase text-pm-text-muted">{d}</div>
+                  <div key={d} className="text-center py-2 text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70">{d}</div>
                 ))}
               </div>
               <div className="grid grid-cols-7">
@@ -750,15 +750,15 @@ export default function MyTasksPage() {
           </div>
         ) : !reportData ? (
           <div className="space-y-4">
-            <div className="rounded-lg border border-pm-accent/20 bg-card p-4 flex flex-wrap items-end gap-4">
+            <div className="rounded-xl border border-pm-accent/20 bg-card p-4 flex flex-wrap items-end gap-4">
               <div className="space-y-1">
-                <label className={cn("text-[14px] font-medium uppercase", showReportDateError && !reportStart ? "text-red-500" : "text-pm-text-muted")}>
+                <label className={cn("text-[12px] font-medium uppercase tracking-wide", showReportDateError && !reportStart ? "text-red-500" : "text-muted-foreground/70")}>
                   {__("Start Date", 'wedevs-project-manager')}<span className="text-red-500 ml-0.5">*</span>
                 </label>
                 <DatePicker value={reportStart} onChange={(v) => { setReportStart(v); setShowReportDateError(false) }} className={cn("h-8 text-sm w-auto sm:w-36", showReportDateError && !reportStart && "border-red-500 ring-1 ring-red-500")} />
               </div>
               <div className="space-y-1">
-                <label className={cn("text-[14px] font-medium uppercase", showReportDateError && !reportEnd ? "text-red-500" : "text-pm-text-muted")}>
+                <label className={cn("text-[12px] font-medium uppercase tracking-wide", showReportDateError && !reportEnd ? "text-red-500" : "text-muted-foreground/70")}>
                   {__("End Date", 'wedevs-project-manager')}<span className="text-red-500 ml-0.5">*</span>
                 </label>
                 <DatePicker value={reportEnd} onChange={(v) => { setReportEnd(v); setShowReportDateError(false) }} className={cn("h-8 text-sm w-auto sm:w-36", showReportDateError && !reportEnd && "border-red-500 ring-1 ring-red-500")} />
@@ -772,15 +772,15 @@ export default function MyTasksPage() {
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="rounded-lg border border-pm-accent/20 bg-card p-4 flex flex-wrap items-end gap-4">
+            <div className="rounded-xl border border-pm-accent/20 bg-card p-4 flex flex-wrap items-end gap-4">
               <div className="space-y-1">
-                <label className={cn("text-[14px] font-medium uppercase", showReportDateError && !reportStart ? "text-red-500" : "text-pm-text-muted")}>
+                <label className={cn("text-[12px] font-medium uppercase tracking-wide", showReportDateError && !reportStart ? "text-red-500" : "text-muted-foreground/70")}>
                   {__("Start Date", 'wedevs-project-manager')}<span className="text-red-500 ml-0.5">*</span>
                 </label>
                 <DatePicker value={reportStart} onChange={(v) => { setReportStart(v); setShowReportDateError(false) }} className={cn("h-8 text-sm w-auto sm:w-36", showReportDateError && !reportStart && "border-red-500 ring-1 ring-red-500")} />
               </div>
               <div className="space-y-1">
-                <label className={cn("text-[14px] font-medium uppercase", showReportDateError && !reportEnd ? "text-red-500" : "text-pm-text-muted")}>
+                <label className={cn("text-[12px] font-medium uppercase tracking-wide", showReportDateError && !reportEnd ? "text-red-500" : "text-muted-foreground/70")}>
                   {__("End Date", 'wedevs-project-manager')}<span className="text-red-500 ml-0.5">*</span>
                 </label>
                 <DatePicker value={reportEnd} onChange={(v) => { setReportEnd(v); setShowReportDateError(false) }} className={cn("h-8 text-sm w-auto sm:w-36", showReportDateError && !reportEnd && "border-red-500 ring-1 ring-red-500")} />
@@ -807,11 +807,11 @@ export default function MyTasksPage() {
               const avgTaskPerDay = totalTasks > 0 ? (totalTasks / days).toFixed(1) : "0";
               return (
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="inline-flex items-center gap-1.5 bg-teal-600 text-white text-sm font-medium px-2.5 py-1 rounded-full"><Clock className="h-3.5 w-3.5" />{__("Total Estimation Hours", 'wedevs-project-manager')} <span className="bg-white/20 px-1.5 rounded">{fmtTime(totalEst)}</span></span>
-                  <span className="inline-flex items-center gap-1.5 bg-blue-600 text-white text-sm font-medium px-2.5 py-1 rounded-full">{__("Completed Task Count", 'wedevs-project-manager')} <span className="bg-white/20 px-1.5 rounded">{completedTasks}</span></span>
-                  <span className="inline-flex items-center gap-1.5 bg-amber-600 text-white text-sm font-medium px-2.5 py-1 rounded-full">{__("Avg. Hour Per-task", 'wedevs-project-manager')} <span className="bg-white/20 px-1.5 rounded">{avgPerTask}</span></span>
-                  <span className="inline-flex items-center gap-1.5 bg-cyan-600 text-white text-sm font-medium px-2.5 py-1 rounded-full">{__("Avg. Work Hour Per-day", 'wedevs-project-manager')} <span className="bg-white/20 px-1.5 rounded">{avgPerDay}</span></span>
-                  <span className="inline-flex items-center gap-1.5 bg-violet-600 text-white text-sm font-medium px-2.5 py-1 rounded-full">{__("Avg. Task Per-day", 'wedevs-project-manager')} <span className="bg-white/20 px-1.5 rounded">{avgTaskPerDay}</span></span>
+                  <span className="inline-flex items-center gap-1.5 bg-teal-500/15 text-teal-600 text-[11px] font-medium px-2.5 py-1 rounded-md"><Clock className="h-3.5 w-3.5" />{__("Total Estimation Hours", 'wedevs-project-manager')} <span className="bg-white/20 px-1.5 rounded">{fmtTime(totalEst)}</span></span>
+                  <span className="inline-flex items-center gap-1.5 bg-blue-500/15 text-blue-600 text-[11px] font-medium px-2.5 py-1 rounded-md">{__("Completed Task Count", 'wedevs-project-manager')} <span className="bg-white/20 px-1.5 rounded">{completedTasks}</span></span>
+                  <span className="inline-flex items-center gap-1.5 bg-amber-500/15 text-amber-600 text-[11px] font-medium px-2.5 py-1 rounded-md">{__("Avg. Hour Per-task", 'wedevs-project-manager')} <span className="bg-white/20 px-1.5 rounded">{avgPerTask}</span></span>
+                  <span className="inline-flex items-center gap-1.5 bg-cyan-500/15 text-cyan-600 text-[11px] font-medium px-2.5 py-1 rounded-md">{__("Avg. Work Hour Per-day", 'wedevs-project-manager')} <span className="bg-white/20 px-1.5 rounded">{avgPerDay}</span></span>
+                  <span className="inline-flex items-center gap-1.5 bg-violet-500/15 text-violet-600 text-[11px] font-medium px-2.5 py-1 rounded-md">{__("Avg. Task Per-day", 'wedevs-project-manager')} <span className="bg-white/20 px-1.5 rounded">{avgTaskPerDay}</span></span>
                 </div>
               );
             })()}
@@ -839,7 +839,7 @@ export default function MyTasksPage() {
               }));
 
               const renderChart = (data, title) => (
-                <div className="rounded-lg border bg-card p-4 flex-1 min-w-[250px]">
+                <div className="rounded-xl border bg-card p-4 flex-1 min-w-[250px]">
                   <h4 className="text-sm font-medium text-pm-text-primary mb-2">{title}</h4>
                   {data.length > 0 ? (
                     <div className="h-[200px]">
@@ -879,7 +879,7 @@ export default function MyTasksPage() {
               return (
                 <>
                   {allProj.length > 0 && (
-                    <div className="rounded-lg border bg-card overflow-x-auto">
+                    <div className="rounded-xl border bg-card overflow-x-auto">
                       <h4 className="text-sm font-medium text-pm-text-primary px-4 py-3 border-b">{__("Projects", 'wedevs-project-manager')}</h4>
                       <table className="w-full text-sm">
                         <thead><tr className="border-b text-sm text-pm-text-muted">
@@ -905,7 +905,7 @@ export default function MyTasksPage() {
                   )}
 
                   {Array.isArray(taskTypes) && taskTypes.length > 0 && (
-                    <div className="rounded-lg border bg-card overflow-x-auto">
+                    <div className="rounded-xl border bg-card overflow-x-auto">
                       <h4 className="text-sm font-medium text-pm-text-primary px-4 py-3 border-b">{__("Task type", 'wedevs-project-manager')}</h4>
                       <table className="w-full text-sm">
                         <thead><tr className="border-b text-sm text-pm-text-muted">
@@ -927,7 +927,7 @@ export default function MyTasksPage() {
                   )}
 
                   {subtasksAll.length > 0 && (
-                    <div className="rounded-lg border bg-card overflow-x-auto">
+                    <div className="rounded-xl border bg-card overflow-x-auto">
                       <h4 className="text-sm font-medium text-pm-text-primary px-4 py-3 border-b">{__("Subtasks", 'wedevs-project-manager')}</h4>
                       <table className="w-full text-sm">
                         <thead><tr className="border-b text-sm text-pm-text-muted">
@@ -960,7 +960,7 @@ export default function MyTasksPage() {
         )
       ) : activeTab !== "activities" ? (
         <div className="space-y-4">
-          <div className="rounded-lg border bg-card px-3 py-2.5 flex items-center gap-2 flex-wrap">
+          <div className="rounded-xl border bg-card px-3 py-2.5 flex items-center gap-2 flex-wrap">
             <div className="flex items-center gap-1.5 flex-1 min-w-[160px] max-w-[240px] h-8 rounded-md border border-input bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent">
               <Search className="h-4 w-4 text-pm-text-muted shrink-0" />
               <input
@@ -1068,7 +1068,7 @@ export default function MyTasksPage() {
           )}
 
           {loading ? (
-            <div className="rounded-lg border bg-card overflow-hidden">
+            <div className="rounded-xl border bg-card overflow-hidden">
               <div className="hidden md:grid grid-cols-12 gap-2 px-4 py-2 bg-muted/30 border-b">
                 <Skeleton className="col-span-5 h-3 w-12" />
                 <Skeleton className="col-span-2 h-3 w-16" />
@@ -1100,7 +1100,7 @@ export default function MyTasksPage() {
               </p>
             </div>
           ) : (
-            <div className="rounded-lg border bg-card overflow-hidden">
+            <div className="rounded-xl border bg-card overflow-hidden">
               <div className="overflow-x-auto">
                 <div className="min-w-[1040px]">
                   <div className={cn("grid gap-2 px-4 py-2.5 bg-muted/30 border-b text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70", MYTASK_GRID)}>
@@ -1240,7 +1240,7 @@ export default function MyTasksPage() {
                         <button
                           type="button"
                           onClick={() => navigate('/my-tasks')}
-                          className="font-semibold text-pm-text-primary hover:text-pm-accent transition-colors cursor-pointer align-baseline"
+                          className="font-medium text-pm-text-primary hover:text-pm-accent transition-colors cursor-pointer align-baseline"
                         >
                           {actor.display_name || 'Unknown'}
                         </button>{' '}

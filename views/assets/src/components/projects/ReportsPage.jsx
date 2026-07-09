@@ -92,7 +92,7 @@ export default function ReportsPage() {
           return (
             <div
               key={r.id}
-              className="group relative rounded-lg border bg-card overflow-hidden hover:shadow-md transition-shadow"
+              className="group relative rounded-xl border bg-card overflow-hidden hover:border-border/80 transition-colors"
             >
               <div className="p-5 text-center space-y-3">
                 {/* Icon */}

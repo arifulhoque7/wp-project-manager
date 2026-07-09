@@ -115,7 +115,7 @@ export default function PreviewStep({ data, onSave, saving, onBack }) {
 
       <div className="max-h-[420px] overflow-y-auto space-y-4 pr-1">
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+          <label className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70">
             {__('Project Name', 'wedevs-project-manager')}
           </label>
           <Input

@@ -77,7 +77,7 @@ export default function ActivityItem({ act, projectId: fallbackProjectId }) {
           <button
             type="button"
             onClick={handleActorClick}
-            className="font-semibold text-pm-text-primary hover:text-pm-accent transition-colors cursor-pointer align-baseline"
+            className="font-medium text-pm-text-primary hover:text-pm-accent transition-colors cursor-pointer align-baseline"
           >
             {actor.display_name || 'Unknown'}
           </button>{' '}

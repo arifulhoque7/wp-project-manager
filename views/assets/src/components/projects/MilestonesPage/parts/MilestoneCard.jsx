@@ -161,7 +161,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
   return (
     <>
     <ConfirmDialog />
-    <Card className="overflow-hidden hover:shadow-sm transition-shadow">
+    <Card className="overflow-hidden rounded-xl hover:shadow-sm transition-shadow">
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
           <button

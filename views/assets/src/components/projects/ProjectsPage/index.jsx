@@ -406,7 +406,7 @@ export default function ProjectsPage() {
         return (
           <div
             key={project.id}
-            className="group relative flex flex-col rounded-xl border bg-card overflow-hidden hover:shadow-lg hover:-translate-y-0.5 hover:border-pm-border/80 transition-all duration-200"
+            className="group relative flex flex-col rounded-xl border bg-card overflow-hidden hover:border-pm-border/80 transition-all duration-200"
           >
             <div className="flex flex-1 flex-col gap-3 p-5">
               {/* Header: title + actions */}
@@ -505,7 +505,7 @@ export default function ProjectsPage() {
   const renderListView = () => {
     const groups = groupByStatus(projects);
     return (
-      <div className="rounded-lg border bg-card overflow-x-auto">
+      <div className="rounded-xl border bg-card overflow-x-auto">
         <table className="w-full text-sm min-w-[820px]">
           <thead>
             <tr className="border-b bg-muted/30">
@@ -566,7 +566,7 @@ export default function ProjectsPage() {
                             style={{ backgroundColor: projectColor }}
                           />
                           <span
-                            className="font-semibold text-pm-text-primary truncate cursor-pointer hover:text-pm-accent transition-colors"
+                            className="font-medium text-pm-text-primary truncate cursor-pointer hover:text-pm-accent transition-colors"
                             role="button"
                             tabIndex={0}
                             onClick={() =>

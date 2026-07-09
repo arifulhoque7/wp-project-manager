@@ -209,7 +209,7 @@ export default function MilestonesPage() {
   }), [milestones, upcoming, atRisk, overdue, completed, noDate]);
 
   return (
-    <div className="w-full p-4 sm:p-6 space-y-5">
+    <div className="w-full p-4 sm:p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <BackButton fallback={`/projects/${projectId}/task-lists`} />

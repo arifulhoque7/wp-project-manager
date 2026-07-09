@@ -570,23 +570,25 @@ export default function DiscussionDetailPage() {
 
         {/* Composer */}
         <div className="space-y-2 pt-1">
-          <div className="flex items-end gap-2 rounded-xl border border-pm-border bg-card p-2 focus-within:border-pm-accent/60 transition-colors">
+          <div className="rounded-xl border border-pm-border bg-card overflow-hidden focus-within:border-pm-accent/60 transition-colors">
             <RichTextEditor
               content={newComment}
               onChange={setNewComment}
               placeholder={__("Write a comment...", 'wedevs-project-manager')}
-              minHeight="40px"
-              className="flex-1 border-0"
+              minHeight="48px"
+              className="border-0 rounded-none"
               users={projectUsers}
             />
-            <Button
-              size="icon"
-              className="h-9 w-9 shrink-0 rounded-lg"
-              onClick={handleAddComment}
-              disabled={!newComment.trim() || submitting}
-            >
-              <Send className="h-4 w-4" />
-            </Button>
+            <div className="flex justify-end px-2 pb-2">
+              <Button
+                size="icon"
+                className="h-9 w-9 shrink-0 rounded-lg"
+                onClick={handleAddComment}
+                disabled={!newComment.trim() || submitting}
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
           <FileUploadArea
             files={commentFiles}

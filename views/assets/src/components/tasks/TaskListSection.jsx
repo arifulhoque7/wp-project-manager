@@ -340,7 +340,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
   }, [api, projectId, list.id, incompleteTasks, completeTasks, dispatch, toast, __])
 
   return (
-    <div className="rounded-lg border bg-card">
+    <div className="rounded-xl border bg-card">
       <ConfirmDialog />
       {/* Section header */}
       <div className="flex items-center gap-2 px-4 py-2.5 bg-muted/30 border-b">

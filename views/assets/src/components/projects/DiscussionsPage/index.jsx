@@ -247,7 +247,7 @@ export default function DiscussionsPage() {
                 {__("Discussions", 'wedevs-project-manager')}
               </h1>
               {discussions.length > 0 && (
-                <span className="text-sm text-pm-text-muted bg-muted/60 px-2 py-0.5 rounded-full tabular-nums">
+                <span className="text-sm text-pm-text-muted bg-muted/60 px-2 py-0.5 rounded-md tabular-nums">
                   {discussions.length}
                 </span>
               )}
@@ -344,7 +344,7 @@ export default function DiscussionsPage() {
                 return (
                   <div
                     key={d.id}
-                    className={`rounded-lg border transition-all cursor-pointer group ${active ? 'border-pm-accent bg-pm-accent-light/40 shadow-sm' : 'border-pm-border bg-card hover:border-pm-accent/40 hover:bg-muted/30'}`}
+                    className={`rounded-xl border transition-all cursor-pointer group ${active ? 'border-pm-accent bg-pm-accent-light/40 shadow-sm' : 'border-pm-border bg-card hover:border-pm-accent/40 hover:bg-muted/30'}`}
                     onClick={() => navigate(`/projects/${projectId}/discussions/${d.id}`)}
                   >
                     <div className="p-3.5">

@@ -375,7 +375,7 @@ export default function ProjectOverview() {
           <button
             key={s.label}
             type="button"
-            className="flex-1 min-w-[120px] rounded-lg border bg-pm-surface px-3 py-3 flex items-center gap-3 hover:shadow-md hover:border-border/80 transition-all"
+            className="flex-1 min-w-[120px] rounded-xl border bg-card px-3 py-3 flex items-center gap-3 hover:border-border/80 transition-all"
             onClick={() =>
               s.route && navigate(`/projects/${projectId}/${s.route}`)
             }
