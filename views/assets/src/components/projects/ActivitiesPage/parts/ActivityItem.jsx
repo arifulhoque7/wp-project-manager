@@ -95,7 +95,7 @@ export default function ActivityItem({ act, projectId: fallbackProjectId }) {
           {marks && <span className="ml-1 align-middle">{marks}</span>}
         </p>
         {timeStr && (
-          <span className="shrink-0 whitespace-nowrap text-[13px] text-pm-text-muted/60 pt-0.5">{timeStr}</span>
+          <span className="shrink-0 whitespace-nowrap text-[13px] text-muted-foreground/70 pt-0.5">{timeStr}</span>
         )}
       </div>
     </div>

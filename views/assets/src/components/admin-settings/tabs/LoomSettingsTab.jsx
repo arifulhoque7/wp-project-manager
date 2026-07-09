@@ -65,7 +65,7 @@ const LoomSettingsTab = () => {
       <div>
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-sm font-semibold text-pm-text-primary flex items-center gap-2">
+            <h2 className="text-sm font-medium text-pm-text-primary flex items-center gap-2">
               <LoomLogo className="w-5 h-5 text-pm-accent" />
               {__('Loom Integration', 'wedevs-project-manager')}
             </h2>
@@ -84,7 +84,7 @@ const LoomSettingsTab = () => {
     <form onSubmit={onSubmit}>
       <div className="flex items-start justify-between">
         <div>
-          <h2 className="text-sm font-semibold text-pm-text-primary flex items-center gap-2">
+          <h2 className="text-sm font-medium text-pm-text-primary flex items-center gap-2">
             <LoomLogo className="w-5 h-5 text-pm-accent" />
             {__('Loom Integration', 'wedevs-project-manager')}
           </h2>

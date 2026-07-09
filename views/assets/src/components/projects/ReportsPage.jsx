@@ -105,7 +105,7 @@ export default function ReportsPage() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-sm font-semibold text-pm-text-primary">
+                <h3 className="text-sm font-medium text-pm-text-primary">
                   {r.title}
                   {!isPro && <ProBadge className="ml-2 align-middle" />}
                 </h3>
@@ -142,7 +142,7 @@ export default function ReportsPage() {
                 >
                   <div className="flex items-center gap-2 bg-pm-surface rounded-full px-4 py-2 shadow-lg">
                     <Crown className="h-5 w-5 text-orange-500" />
-                    <span className="text-sm font-semibold text-pm-text-primary">
+                    <span className="text-sm font-medium text-pm-text-primary">
                       {__("Upgrade to Pro", 'wedevs-project-manager')}
                     </span>
                   </div>

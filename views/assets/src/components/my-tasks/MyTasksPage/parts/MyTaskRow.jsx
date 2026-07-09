@@ -85,7 +85,7 @@ export default function MyTaskRow({ task, projectTitle, onToggle, onOpen }) {
       <div className="min-w-0">
         <span
           className={cn(
-            "inline-flex items-center gap-1 rounded-md px-2.5 py-0.5 text-[12px] font-semibold",
+            "inline-flex items-center gap-1 rounded-md px-2.5 py-0.5 text-[12px] font-medium",
             complete ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700",
           )}
         >
@@ -108,7 +108,7 @@ export default function MyTaskRow({ task, projectTitle, onToggle, onOpen }) {
       {/* Type */}
       <div className="min-w-0">
         {task.type?.title ? (
-          <Badge variant="outline" className="max-w-full truncate text-[12px] px-2.5 py-0.5 h-auto font-normal text-muted-foreground">
+          <Badge variant="outline" className="max-w-full truncate text-[11px] px-2 py-0.5 h-auto font-normal text-muted-foreground">
             {task.type.title}
           </Badge>
         ) : (

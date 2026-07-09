@@ -255,7 +255,7 @@ export default function CategoriesPage() {
       ) : (
         <div className="rounded-lg border bg-card overflow-hidden">
           {/* Table header */}
-          <div className="grid grid-cols-12 gap-4 items-center px-4 py-2.5 bg-muted/30 border-b text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70">
+          <div className="grid grid-cols-12 gap-4 items-center px-4 py-2.5 bg-muted/30 border-b text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70">
             <div className="col-span-1">
               <Checkbox
                 checked={

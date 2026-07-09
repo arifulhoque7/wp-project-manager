@@ -113,7 +113,7 @@ export default function AutomationModal({
                   "Choose a preset to automate your kanbanboard and sync with Task Lists", 'wedevs-project-manager',
                 )}
               </p>
-              <Label className="text-sm font-semibold">
+              <Label className="text-sm font-medium">
                 {__("Move Tasks", 'wedevs-project-manager')}
               </Label>
               <Select value={moveType} onValueChange={setMoveType}>
@@ -267,7 +267,7 @@ export default function AutomationModal({
             </div>
 
             <div className="space-y-2">
-              <Label className="text-sm font-semibold">
+              <Label className="text-sm font-medium">
                 {__("Assign User", 'wedevs-project-manager')}
               </Label>
               <p className="text-[15px] text-pm-text-muted">
@@ -304,7 +304,7 @@ export default function AutomationModal({
             </div>
 
             <div className="space-y-2">
-              <Label className="text-sm font-semibold">
+              <Label className="text-sm font-medium">
                 {__("Change task status", 'wedevs-project-manager')}
               </Label>
               <div className="flex flex-col gap-2">

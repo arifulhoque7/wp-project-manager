@@ -42,7 +42,6 @@ const TaskListsPage   = React.lazy(() => import('@components/tasks/TaskListsPage
 const SingleTaskListPage = React.lazy(() => import('@components/tasks/SingleTaskListPage'))
 const ProjectOverview = React.lazy(() => import('@components/projects/ProjectOverview'))
 const DiscussionsPage = React.lazy(() => import('@components/projects/DiscussionsPage'))
-const DiscussionDetailPage = React.lazy(() => import('@components/projects/DiscussionsPage/DiscussionDetailPage'))
 const MilestonesPage  = React.lazy(() => import('@components/projects/MilestonesPage'))
 const FilesPage       = React.lazy(() => import('@components/projects/FilesPage'))
 const ActivitiesPage  = React.lazy(() => import('@components/projects/ActivitiesPage'))
@@ -116,7 +115,7 @@ function AppRoutes() {
         <Route path="projects/:projectId/task-lists/:listId/tasks/:taskId" element={<ProjectRoute><SingleTaskListPage /><TaskDeepLinkOpener /></ProjectRoute>} />
         <Route path="projects/:projectId/overview" element={<ProjectRoute><ProjectOverview /></ProjectRoute>} />
         <Route path="projects/:projectId/discussions" element={<ProjectRoute><DiscussionsPage /></ProjectRoute>} />
-        <Route path="projects/:projectId/discussions/:discussionId" element={<ProjectRoute><DiscussionDetailPage /></ProjectRoute>} />
+        <Route path="projects/:projectId/discussions/:discussionId" element={<ProjectRoute><DiscussionsPage /></ProjectRoute>} />
         <Route path="projects/:projectId/milestones" element={<ProjectRoute><MilestonesPage /></ProjectRoute>} />
         <Route path="projects/:projectId/milestones/tasks/:taskId" element={<ProjectRoute><MilestonesPage /><TaskDeepLinkOpener /></ProjectRoute>} />
         <Route path="projects/:projectId/files" element={<ProjectRoute><FilteredPage filterName="route.files.element" fallback={FilesPage} /></ProjectRoute>} />

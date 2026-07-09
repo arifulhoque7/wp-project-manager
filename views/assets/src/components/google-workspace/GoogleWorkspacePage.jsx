@@ -142,7 +142,7 @@ export default function GoogleWorkspacePage() {
       </section>
 
       {/* Connected services — one card per Google feature. */}
-      <h2 className="text-sm font-semibold text-pm-text-primary">{__('Connected services', 'wedevs-project-manager')}</h2>
+      <h2 className="text-sm font-medium text-pm-text-primary">{__('Connected services', 'wedevs-project-manager')}</h2>
 
       {/* Google Drive (free) — admin master gate + per-user on/off */}
       <section className={`rounded-lg border border-gray-200 bg-white p-5${!status.drive_enabled ? ' opacity-70' : ''}`}>
@@ -150,7 +150,7 @@ export default function GoogleWorkspacePage() {
           <div className="flex items-start gap-3">
             <GoogleDriveColorGlyph width="20" height="20" />
             <div>
-              <div className="text-sm font-semibold text-pm-text-primary">{__('Google Drive', 'wedevs-project-manager')}</div>
+              <div className="text-sm font-medium text-pm-text-primary">{__('Google Drive', 'wedevs-project-manager')}</div>
               <div className="text-xs text-gray-500 mt-0.5">{__('Attach Drive files to tasks, comments, discussions and files.', 'wedevs-project-manager')}</div>
             </div>
           </div>

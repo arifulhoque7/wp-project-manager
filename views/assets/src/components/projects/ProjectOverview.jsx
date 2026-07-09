@@ -383,7 +383,7 @@ export default function ProjectOverview() {
       {/* Progress */}
       <div className="rounded-xl border bg-card p-5 space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-pm-text-primary">
+          <h3 className="text-sm font-medium text-pm-text-primary">
             {__("Overall Progress", 'wedevs-project-manager')}
           </h3>
           <span className="text-lg font-bold text-pm-accent tabular-nums">
@@ -405,7 +405,7 @@ export default function ProjectOverview() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Progress Over Time */}
         <div className="rounded-xl border bg-card p-5">
-          <h3 className="text-sm font-semibold text-pm-text-primary mb-4 flex items-center gap-2">
+          <h3 className="text-sm font-medium text-pm-text-primary mb-4 flex items-center gap-2">
             <Activity className="h-4 w-4 text-pm-text-muted" />
             {__("Progress Over Time", 'wedevs-project-manager')}
           </h3>
@@ -458,7 +458,7 @@ export default function ProjectOverview() {
         {/* Recent Documents */}
         <div className="rounded-xl border bg-card p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-pm-text-primary flex items-center gap-2">
+            <h3 className="text-sm font-medium text-pm-text-primary flex items-center gap-2">
               <FileText className="h-4 w-4 text-pm-text-muted" />
               {__("Recent Documents", 'wedevs-project-manager')}
             </h3>
@@ -470,7 +470,7 @@ export default function ProjectOverview() {
             <div className="overflow-x-auto -mx-1">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70 border-b">
+                  <tr className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70 border-b">
                     <th className="text-left font-semibold py-2 px-2">{__("Document", 'wedevs-project-manager')}</th>
                     <th className="text-left font-semibold py-2 px-2">{__("Type", 'wedevs-project-manager')}</th>
                     <th className="text-left font-semibold py-2 px-2">{__("Date", 'wedevs-project-manager')}</th>
@@ -519,7 +519,7 @@ export default function ProjectOverview() {
       {/* Milestones */}
       <div className="rounded-xl border bg-card p-5">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-pm-text-primary flex items-center gap-2">
+          <h3 className="text-sm font-medium text-pm-text-primary flex items-center gap-2">
             <Milestone className="h-4 w-4 text-pm-text-muted" />
             {__("Milestones", 'wedevs-project-manager')}
           </h3>
@@ -531,7 +531,7 @@ export default function ProjectOverview() {
           <div className="overflow-x-auto -mx-1">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70 border-b">
+                <tr className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70 border-b">
                   <th className="text-left font-semibold py-2 px-2 w-10">{__("No", 'wedevs-project-manager')}</th>
                   <th className="text-left font-semibold py-2 px-2">{__("Milestone", 'wedevs-project-manager')}</th>
                   <th className="text-left font-semibold py-2 px-2">{__("Planned Date", 'wedevs-project-manager')}</th>
@@ -571,7 +571,7 @@ export default function ProjectOverview() {
       {/* Members */}
       <div className="rounded-xl border bg-card p-5">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-pm-text-primary flex items-center gap-2">
+          <h3 className="text-sm font-medium text-pm-text-primary flex items-center gap-2">
             <Users className="h-4 w-4 text-pm-text-muted" />
             {__("Team Members", 'wedevs-project-manager')}
             <span className="text-[14px] bg-muted px-1.5 py-0.5 rounded-full tabular-nums font-normal">

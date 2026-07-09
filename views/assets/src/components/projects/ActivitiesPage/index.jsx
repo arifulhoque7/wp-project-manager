@@ -132,7 +132,7 @@ export default function ActivitiesPage() {
                 {['Today', 'Yesterday'].map(date => (
                   <div key={date}>
                     <div className="flex items-center gap-3 mb-3 px-1">
-                      <h3 className="text-sm font-bold uppercase tracking-wider text-pm-text-muted/70 whitespace-nowrap">
+                      <h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground/70 whitespace-nowrap">
                         {date}
                       </h3>
                       <Separator className="flex-1" />
@@ -159,7 +159,7 @@ export default function ActivitiesPage() {
                             </Avatar>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-0.5">
-                                <span className="text-sm font-semibold text-pm-text">{item.actor}</span>
+                                <span className="text-sm font-medium text-pm-text">{item.actor}</span>
                                 <Badge variant="outline" className={cn('text-[14px] px-1.5 py-0 h-4 font-medium border-0 text-white', badgeColor)}>
                                   {badgeLabel}
                                 </Badge>
@@ -250,7 +250,7 @@ export default function ActivitiesPage() {
               {grouped.map(group => (
                 <div key={group.dateRaw}>
                   <div className="flex items-center gap-3 mb-2 px-1">
-                    <h3 className="text-sm font-bold uppercase tracking-wider text-pm-text-muted/70 whitespace-nowrap">
+                    <h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground/70 whitespace-nowrap">
                       {group.date}
                     </h3>
                     <Separator className="flex-1" />

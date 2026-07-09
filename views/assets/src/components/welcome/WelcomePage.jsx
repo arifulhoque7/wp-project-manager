@@ -191,7 +191,7 @@ function SectionHeading({ kicker, title, subtitle }) {
   return (
     <div className="text-center mb-8">
       {kicker && (
-        <span className="inline-block text-xs font-semibold uppercase tracking-wider text-primary mb-2">
+        <span className="inline-block text-xs font-medium uppercase tracking-wide text-primary mb-2">
           {kicker}
         </span>
       )}

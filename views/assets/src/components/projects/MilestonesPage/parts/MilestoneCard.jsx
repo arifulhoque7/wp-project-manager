@@ -185,7 +185,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
             <div className="flex items-center gap-2 flex-wrap">
               <h4
                 className={cn(
-                  "text-sm font-semibold",
+                  "text-sm font-medium",
                   isComplete
                     ? "text-pm-text-muted line-through"
                     : "text-pm-text-primary",
@@ -355,7 +355,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                     {/* Type */}
                     <div className="min-w-0">
                       {task.type?.title ? (
-                        <Badge variant="outline" className="max-w-full truncate text-[12px] px-2.5 py-0.5 h-auto font-normal text-muted-foreground">{task.type.title}</Badge>
+                        <Badge variant="outline" className="max-w-full truncate text-[11px] px-2 py-0.5 h-auto font-normal text-muted-foreground">{task.type.title}</Badge>
                       ) : (<span className="text-[13px] text-pm-text-muted">—</span>)}
                     </div>
                     {/* Labels */}
@@ -404,7 +404,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                 );
               };
               const gridHeader = (
-                <div className={cn("grid gap-2 px-4 py-2 border-b bg-muted/20 text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70", TASK_GRID)}>
+                <div className={cn("grid gap-2 px-4 py-2 border-b bg-muted/20 text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70", TASK_GRID)}>
                   <div className="flex items-center gap-1.5"><ListChecks className="h-4 w-4" />{__("Task", 'wedevs-project-manager')}</div>
                   <div className="flex items-center gap-1.5"><Tag className="h-4 w-4" />{__("Type", 'wedevs-project-manager')}</div>
                   <div className="flex items-center gap-1.5"><Tag className="h-4 w-4" />{__("Labels", 'wedevs-project-manager')}</div>
@@ -424,7 +424,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                     className="flex items-center gap-1 mb-2 w-full text-left"
                   >
                     <ChevronDown className={cn("h-4 w-4 text-pm-text-muted/70 transition-transform", !tasksExpanded && "-rotate-90")} />
-                    <h5 className="text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70 flex items-center gap-1">
+                    <h5 className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70 flex items-center gap-1">
                       <ListChecks className="h-4 w-4" />
                       {__("Tasks", 'wedevs-project-manager')}
                       <span className="text-[10px] font-normal">({directTasks.length})</span>
@@ -434,7 +434,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                     <div className="space-y-3">
                       {incompleteTasks.length > 0 && (
                         <div>
-                          <div className="inline-flex items-center gap-1.5 rounded-md bg-amber-100 text-amber-700 px-2.5 py-0.5 text-[12px] font-bold uppercase tracking-wider mb-1.5"><Clock className="h-4 w-4" />{__("Pending", 'wedevs-project-manager')} ({incompleteTasks.length})</div>
+                          <div className="inline-flex items-center gap-1.5 rounded-md bg-amber-100 text-amber-700 px-2.5 py-0.5 text-[12px] font-medium uppercase tracking-wide mb-1.5"><Clock className="h-4 w-4" />{__("Pending", 'wedevs-project-manager')} ({incompleteTasks.length})</div>
                           <div className="rounded-lg border bg-card overflow-hidden">
                             <div className="overflow-x-auto"><div className="min-w-[1120px]">
                               {gridHeader}
@@ -445,7 +445,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                       )}
                       {completedTasks.length > 0 && (
                         <div>
-                          <div className="inline-flex items-center gap-1.5 rounded-md bg-emerald-100 text-emerald-700 px-2.5 py-0.5 text-[12px] font-bold uppercase tracking-wider mb-1.5"><CheckCircle className="h-4 w-4" />{__("Completed", 'wedevs-project-manager')} ({completedTasks.length})</div>
+                          <div className="inline-flex items-center gap-1.5 rounded-md bg-emerald-100 text-emerald-700 px-2.5 py-0.5 text-[12px] font-medium uppercase tracking-wide mb-1.5"><CheckCircle className="h-4 w-4" />{__("Completed", 'wedevs-project-manager')} ({completedTasks.length})</div>
                           <div className="rounded-lg border bg-card overflow-hidden">
                             <div className="overflow-x-auto"><div className="min-w-[1120px]">
                               {gridHeader}
@@ -462,7 +462,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
 
             {discussions.length > 0 && (
               <div>
-                <div className="inline-flex items-center gap-1.5 rounded-md bg-blue-100 text-blue-700 px-2.5 py-0.5 text-[12px] font-bold uppercase tracking-wider mb-1.5">
+                <div className="inline-flex items-center gap-1.5 rounded-md bg-blue-100 text-blue-700 px-2.5 py-0.5 text-[12px] font-medium uppercase tracking-wide mb-1.5">
                   <MessageSquare className="h-4 w-4" />
                   {__("Discussions", 'wedevs-project-manager')} ({discussions.length})
                 </div>

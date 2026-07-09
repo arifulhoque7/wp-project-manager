@@ -590,7 +590,7 @@ export function AppSidebar() {
             <div className="mx-auto mb-2.5 flex h-10 w-10 items-center justify-center rounded-lg bg-pm-accent text-white shadow-sm">
               <Crown className="h-5 w-5" />
             </div>
-            <p className="text-[13px] font-semibold text-pm-text-primary">
+            <p className="text-[13px] font-medium text-pm-text-primary">
               {__('Become Pro Access', 'wedevs-project-manager')}
             </p>
             <p className="mt-1 text-[11px] leading-snug text-pm-text-muted">
@@ -598,7 +598,7 @@ export function AppSidebar() {
             </p>
             <button
               onClick={() => navigate('/premium')}
-              className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-pm-text-primary px-3 py-2 text-[12px] font-semibold text-white transition-colors hover:bg-pm-text"
+              className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-pm-text-primary px-3 py-2 text-[12px] font-medium text-white transition-colors hover:bg-pm-text"
             >
               <Sparkles className="h-3.5 w-3.5" />
               {__('Upgrade Pro', 'wedevs-project-manager')}
@@ -627,7 +627,7 @@ export function AppSidebar() {
               />
               {planLabel && (
                 <span className="flex items-center gap-1.5 whitespace-nowrap">
-                  <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary">
+                  <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
                     {planLabel}
                   </span>
                   {proVersion && (

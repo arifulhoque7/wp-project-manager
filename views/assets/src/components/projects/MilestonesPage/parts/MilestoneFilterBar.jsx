@@ -38,7 +38,7 @@ export default function MilestoneFilterBar({ filter, sort, counts, onFilterChang
               {TabIcon && <TabIcon className="h-4 w-4" />}
               {tab.label}
               <span
-                className="inline-flex items-center justify-center rounded-full px-1.5 min-w-[18px] h-[18px] text-[14px] font-semibold tabular-nums transition-colors"
+                className="inline-flex items-center justify-center rounded-full px-1.5 min-w-[18px] h-[18px] text-[14px] font-medium tabular-nums transition-colors"
                 style={isActive ? { backgroundColor: tab.color + '15', color: tab.color } : { color: 'var(--pm-text-muted)' }}
               >
                 {count}

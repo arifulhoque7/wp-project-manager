@@ -466,7 +466,7 @@ export default function ProjectsPage() {
                       <ListChecks className="h-4 w-4 shrink-0" />
                       {(meta?.total_complete_tasks ?? 0)}/{(meta?.total_tasks ?? 0)} {__("tasks", 'wedevs-project-manager')}
                     </span>
-                    <span className="text-[12px] font-semibold text-pm-text-primary tabular-nums">
+                    <span className="text-[12px] font-medium text-pm-text-primary tabular-nums">
                       {progress}%
                     </span>
                   </div>
@@ -484,7 +484,7 @@ export default function ProjectsPage() {
                     )}
                   </div>
                   <span
-                    className="inline-flex items-center gap-1.5 text-[12px] font-semibold px-2.5 py-0.5 rounded-md shrink-0"
+                    className="inline-flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-0.5 rounded-md shrink-0"
                     style={{ backgroundColor: statusPill(project).bg, color: statusPill(project).text }}
                   >
                     <span
@@ -509,19 +509,19 @@ export default function ProjectsPage() {
         <table className="w-full text-sm min-w-[820px]">
           <thead>
             <tr className="border-b bg-muted/30">
-              <th className="text-left px-5 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70">
+              <th className="text-left px-5 py-2.5 text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70">
                 {__("Project Name", 'wedevs-project-manager')}
               </th>
-              <th className="text-left px-4 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70">
+              <th className="text-left px-4 py-2.5 text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70">
                 {__("Description", 'wedevs-project-manager')}
               </th>
-              <th className="text-left px-4 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70 whitespace-nowrap">
+              <th className="text-left px-4 py-2.5 text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70 whitespace-nowrap">
                 {__("Deadline", 'wedevs-project-manager')}
               </th>
-              <th className="text-left px-4 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70 w-40">
+              <th className="text-left px-4 py-2.5 text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70 w-40">
                 {__("Progress", 'wedevs-project-manager')}
               </th>
-              <th className="text-left px-4 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70">
+              <th className="text-left px-4 py-2.5 text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70">
                 {__("Members", 'wedevs-project-manager')}
               </th>
               <th className="px-4 py-2.5 w-10"></th>
@@ -539,7 +539,7 @@ export default function ProjectsPage() {
                       aria-expanded={!isCollapsed}
                     >
                       <span
-                        className="inline-flex items-center rounded-md px-2.5 py-0.5 text-[12px] font-semibold uppercase tracking-wide"
+                        className="inline-flex items-center rounded-md px-2.5 py-0.5 text-[12px] font-medium uppercase tracking-wide"
                         style={{ backgroundColor: group.pill.bg, color: group.pill.text }}
                       >
                         {group.label} ({group.items.length})
@@ -767,7 +767,7 @@ export default function ProjectsPage() {
                 )}
                 {tab.label}
                 <span
-                  className="inline-flex items-center justify-center rounded-full px-1.5 min-w-[18px] h-[18px] text-[14px] font-semibold tabular-nums transition-colors"
+                  className="inline-flex items-center justify-center rounded-full px-1.5 min-w-[18px] h-[18px] text-[14px] font-medium tabular-nums transition-colors"
                   style={isActive ? { backgroundColor: tab.color + '15', color: tab.color } : { color: 'var(--pm-text-muted)' }}
                 >
                   {count}
@@ -785,7 +785,7 @@ export default function ProjectsPage() {
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
               placeholder={__('Search projects...', 'wedevs-project-manager')}
-              className="flex-1 min-w-0 h-full bg-transparent text-sm placeholder:text-pm-text-muted/60 focus:outline-none !border-0 !p-0 !shadow-none"
+              className="flex-1 min-w-0 h-full bg-transparent text-sm placeholder:text-muted-foreground/70 focus:outline-none !border-0 !p-0 !shadow-none"
             />
           </div>
           <Select

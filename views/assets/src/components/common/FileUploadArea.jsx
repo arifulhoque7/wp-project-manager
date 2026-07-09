@@ -72,7 +72,7 @@ export default function FileUploadArea({ files = [], onFilesChange, compact = fa
       >
         <Paperclip className="h-5 w-5 text-pm-text-muted/50 mx-auto mb-1.5" />
         <p className="text-sm text-pm-text-muted">{__('Click to attach files', 'wedevs-project-manager')}</p>
-        <p className="text-[13px] text-pm-text-muted/60 mt-0.5">{__('or drag and drop', 'wedevs-project-manager')}</p>
+        <p className="text-[13px] text-muted-foreground/70 mt-0.5">{__('or drag and drop', 'wedevs-project-manager')}</p>
       </div>
       <input ref={inputRef} type="file" multiple className="hidden" onChange={handleSelect} />
 

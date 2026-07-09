@@ -19,7 +19,7 @@ function KanbanMock() {
     <div className="flex flex-col sm:flex-row gap-3 p-5" style={{ minHeight: '420px', alignItems: 'flex-start' }}>
       {cols.map(col => (
         <div key={col.title} className="flex-1 rounded-lg bg-pm-surface-muted overflow-hidden">
-          <div className="px-3 py-2 text-white text-sm font-semibold flex justify-between" style={{ background: col.color }}>
+          <div className="px-3 py-2 text-white text-sm font-medium flex justify-between" style={{ background: col.color }}>
             {col.title} <span className="bg-white/30 rounded-full px-1.5 text-[14px]">{col.tasks.length}</span>
           </div>
           <div className="p-2">
@@ -145,7 +145,7 @@ function SprintsMock() {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full" style={{ background: s.color }} />
-                <span className="text-sm font-semibold text-pm-text-primary">{s.name}</span>
+                <span className="text-sm font-medium text-pm-text-primary">{s.name}</span>
                 <span className={`px-2 py-0.5 rounded-full text-[14px] font-medium ${s.status === 'Active' ? 'bg-pm-accent/15 text-pm-accent' : 'bg-green-500/15 text-green-500'}`}>{s.status}</span>
               </div>
               <span className="text-[15px] text-pm-text-muted">{s.dates}</span>
@@ -174,7 +174,7 @@ function WooProjectMock() {
           <div className="h-8 w-8 rounded-lg bg-pm-accent/15 flex items-center justify-center shrink-0">
             <svg className="h-4 w-4 text-pm-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
           </div>
-          <span className="text-sm font-semibold text-pm-text-primary truncate">{__('WooCommerce Project Mapping', 'wedevs-project-manager')}</span>
+          <span className="text-sm font-medium text-pm-text-primary truncate">{__('WooCommerce Project Mapping', 'wedevs-project-manager')}</span>
         </div>
         <div className="px-3 py-1.5 rounded-md bg-pm-accent text-white text-sm font-medium">{__('+ Add Product', 'wedevs-project-manager')}</div>
       </div>
@@ -218,7 +218,7 @@ function TemplatesMock() {
           <div className="h-8 w-8 rounded-lg bg-pm-accent/15 flex items-center justify-center shrink-0">
             <LayoutTemplate className="h-4 w-4 text-pm-accent" />
           </div>
-          <span className="text-sm font-semibold text-pm-text-primary truncate">{__('Project Templates', 'wedevs-project-manager')}</span>
+          <span className="text-sm font-medium text-pm-text-primary truncate">{__('Project Templates', 'wedevs-project-manager')}</span>
         </div>
         <div className="px-3 py-1.5 rounded-md bg-pm-accent text-white text-sm font-medium">{__('+ New Template', 'wedevs-project-manager')}</div>
       </div>
@@ -233,7 +233,7 @@ function TemplatesMock() {
                 <span className="px-2 py-0.5 rounded-full text-[12px] font-medium bg-pm-accent/10 text-pm-accent">{__('System', 'wedevs-project-manager')}</span>
               )}
             </div>
-            <div className="text-sm font-semibold text-pm-text-primary mb-1">{t.name}</div>
+            <div className="text-sm font-medium text-pm-text-primary mb-1">{t.name}</div>
             <p className="text-[13px] text-pm-text-muted leading-snug mb-3 grow">{t.desc}</p>
             <div className="flex items-center gap-4 text-[13px] text-pm-text-muted pt-2 border-t border-pm-border">
               <div className="flex items-center gap-1">

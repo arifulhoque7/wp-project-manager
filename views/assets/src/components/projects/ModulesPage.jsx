@@ -157,7 +157,7 @@ export default function ModulesPage() {
                 </div>
 
                 {/* Title + description */}
-                <h3 className="text-sm font-semibold text-pm-text-primary mb-1.5">
+                <h3 className="text-sm font-medium text-pm-text-primary mb-1.5">
                   {m.name}
                 </h3>
                 <p className="text-sm text-pm-text-muted leading-relaxed">
@@ -173,7 +173,7 @@ export default function ModulesPage() {
                 >
                   <div className="flex items-center gap-2 bg-pm-surface rounded-full px-4 py-2 shadow-lg">
                     <Crown className="h-5 w-5 text-orange-500" />
-                    <span className="text-sm font-semibold text-pm-text-primary">
+                    <span className="text-sm font-medium text-pm-text-primary">
                       {__("Upgrade to Pro", 'wedevs-project-manager')}
                     </span>
                   </div>

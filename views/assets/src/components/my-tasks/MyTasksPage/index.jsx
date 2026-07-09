@@ -491,13 +491,13 @@ export default function MyTasksPage() {
               <Icon className="h-4 w-4" />
               {tab.label}
               {tab.pro && !isPro && (
-                <span className="inline-flex items-center gap-0.5 bg-pm-accent/10 text-pm-accent text-[11px] font-semibold px-1.5 py-0.5 rounded">
+                <span className="inline-flex items-center gap-0.5 bg-pm-accent/10 text-pm-accent text-[11px] font-medium px-1.5 py-0.5 rounded">
                   <Crown className="h-3 w-3" />PRO
                 </span>
               )}
               {count !== undefined && (
                 <span
-                  className={`inline-flex items-center justify-center rounded-full px-1.5 min-w-[18px] h-[18px] text-[14px] font-semibold tabular-nums ${
+                  className={`inline-flex items-center justify-center rounded-full px-1.5 min-w-[18px] h-[18px] text-[14px] font-medium tabular-nums ${
                     isActive
                       ? "bg-pm-accent/10 text-pm-accent"
                       : "text-pm-text-muted/70"
@@ -544,7 +544,7 @@ export default function MyTasksPage() {
 
             <div className="rounded-lg border bg-card p-4">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-sm font-semibold text-pm-text-primary flex items-center gap-2">
+                <span className="text-sm font-medium text-pm-text-primary flex items-center gap-2">
                   <Filter className="h-4 w-4" />
                   {__('Activity Filter', 'wedevs-project-manager')}
                 </span>
@@ -578,7 +578,7 @@ export default function MyTasksPage() {
             </div>
 
             <div className="rounded-xl border bg-card p-6">
-              <h3 className="text-sm font-semibold text-pm-text-primary mb-4">
+              <h3 className="text-sm font-medium text-pm-text-primary mb-4">
                 {__("Status overview", 'wedevs-project-manager')}
               </h3>
               <div className="flex flex-wrap items-center gap-8">
@@ -634,7 +634,7 @@ export default function MyTasksPage() {
 
             {graph.length > 0 && (
               <div className="rounded-lg border bg-card p-6">
-                <h3 className="text-sm font-semibold text-pm-text-primary mb-4">
+                <h3 className="text-sm font-medium text-pm-text-primary mb-4">
                   {__("Activity Trend", 'wedevs-project-manager')}
                 </h3>
                 <div className="h-[220px]">
@@ -665,7 +665,7 @@ export default function MyTasksPage() {
 
             <div className="rounded-lg border bg-card">
               <div className="flex items-center justify-between px-4 py-3 border-b border-pm-border">
-                <h3 className="text-sm font-semibold text-pm-text-primary flex items-center gap-2">
+                <h3 className="text-sm font-medium text-pm-text-primary flex items-center gap-2">
                   <CalendarIcon className="h-5 w-5 text-pm-accent" />
                   {__("Calendar", 'wedevs-project-manager')}
                 </h3>
@@ -679,12 +679,12 @@ export default function MyTasksPage() {
                   <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => setCalDate(new Date(calYear, calMonth + 1, 1))}>
                     <ChevronRight className="h-5 w-5" />
                   </Button>
-                  <span className="text-sm font-semibold min-w-[140px] text-center">{calMonths[calMonth]} {calYear}</span>
+                  <span className="text-sm font-medium min-w-[140px] text-center">{calMonths[calMonth]} {calYear}</span>
                 </div>
               </div>
               <div className="grid grid-cols-7 border-b border-pm-border">
                 {calDays.map((d) => (
-                  <div key={d} className="text-center py-2 text-[14px] font-semibold uppercase text-pm-text-muted">{d}</div>
+                  <div key={d} className="text-center py-2 text-[14px] font-medium uppercase text-pm-text-muted">{d}</div>
                 ))}
               </div>
               <div className="grid grid-cols-7">
@@ -789,7 +789,7 @@ export default function MyTasksPage() {
             </div>
 
             <div className="flex items-center gap-3">
-              <span className="text-sm font-semibold">{__("User Name", 'wedevs-project-manager')}</span>
+              <span className="text-sm font-medium">{__("User Name", 'wedevs-project-manager')}</span>
               <span className="text-sm bg-muted px-2.5 py-1 rounded">{user?.display_name || "—"}</span>
             </div>
 
@@ -840,7 +840,7 @@ export default function MyTasksPage() {
 
               const renderChart = (data, title) => (
                 <div className="rounded-lg border bg-card p-4 flex-1 min-w-[250px]">
-                  <h4 className="text-sm font-semibold text-pm-text-primary mb-2">{title}</h4>
+                  <h4 className="text-sm font-medium text-pm-text-primary mb-2">{title}</h4>
                   {data.length > 0 ? (
                     <div className="h-[200px]">
                       <ResponsiveContainer width="100%" height="100%">
@@ -880,7 +880,7 @@ export default function MyTasksPage() {
                 <>
                   {allProj.length > 0 && (
                     <div className="rounded-lg border bg-card overflow-x-auto">
-                      <h4 className="text-sm font-semibold text-pm-text-primary px-4 py-3 border-b">{__("Projects", 'wedevs-project-manager')}</h4>
+                      <h4 className="text-sm font-medium text-pm-text-primary px-4 py-3 border-b">{__("Projects", 'wedevs-project-manager')}</h4>
                       <table className="w-full text-sm">
                         <thead><tr className="border-b text-sm text-pm-text-muted">
                           <th className="text-left px-4 py-2">{__("Project", 'wedevs-project-manager')}</th>
@@ -906,7 +906,7 @@ export default function MyTasksPage() {
 
                   {Array.isArray(taskTypes) && taskTypes.length > 0 && (
                     <div className="rounded-lg border bg-card overflow-x-auto">
-                      <h4 className="text-sm font-semibold text-pm-text-primary px-4 py-3 border-b">{__("Task type", 'wedevs-project-manager')}</h4>
+                      <h4 className="text-sm font-medium text-pm-text-primary px-4 py-3 border-b">{__("Task type", 'wedevs-project-manager')}</h4>
                       <table className="w-full text-sm">
                         <thead><tr className="border-b text-sm text-pm-text-muted">
                           <th className="text-left px-4 py-2">{__("Task type", 'wedevs-project-manager')}</th>
@@ -928,7 +928,7 @@ export default function MyTasksPage() {
 
                   {subtasksAll.length > 0 && (
                     <div className="rounded-lg border bg-card overflow-x-auto">
-                      <h4 className="text-sm font-semibold text-pm-text-primary px-4 py-3 border-b">{__("Subtasks", 'wedevs-project-manager')}</h4>
+                      <h4 className="text-sm font-medium text-pm-text-primary px-4 py-3 border-b">{__("Subtasks", 'wedevs-project-manager')}</h4>
                       <table className="w-full text-sm">
                         <thead><tr className="border-b text-sm text-pm-text-muted">
                           <th className="text-left px-4 py-2">{__("Completed At", 'wedevs-project-manager')}</th>
@@ -1103,7 +1103,7 @@ export default function MyTasksPage() {
             <div className="rounded-lg border bg-card overflow-hidden">
               <div className="overflow-x-auto">
                 <div className="min-w-[1040px]">
-                  <div className={cn("grid gap-2 px-4 py-2.5 bg-muted/30 border-b text-[12px] font-semibold uppercase tracking-wider text-pm-text-muted/70", MYTASK_GRID)}>
+                  <div className={cn("grid gap-2 px-4 py-2.5 bg-muted/30 border-b text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70", MYTASK_GRID)}>
                     <div className="flex items-center gap-1.5"><ListChecks className="h-3.5 w-3.5" />{__("Task", 'wedevs-project-manager')}</div>
                     <div className="flex items-center gap-1.5"><Activity className="h-3.5 w-3.5" />{__("Status", 'wedevs-project-manager')}</div>
                     <div className="flex items-center gap-1.5"><AlertTriangle className="h-3.5 w-3.5" />{__("Priority", 'wedevs-project-manager')}</div>
@@ -1257,7 +1257,7 @@ export default function MyTasksPage() {
                         )}
                       </p>
                       {timeStr && (
-                        <span className="shrink-0 whitespace-nowrap text-[13px] text-pm-text-muted/60 pt-0.5">{timeStr}</span>
+                        <span className="shrink-0 whitespace-nowrap text-[13px] text-muted-foreground/70 pt-0.5">{timeStr}</span>
                       )}
                     </div>
                   </div>

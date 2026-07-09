@@ -234,7 +234,7 @@ export default function KanbanBoardColumn({
                   {board.title}
                 </span>
               )}
-              <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded-md bg-muted text-pm-text-muted shrink-0">
+              <span className="text-[11px] font-medium px-1.5 py-0.5 rounded-md bg-muted text-pm-text-muted shrink-0">
                 {taskCount}
               </span>
             </div>

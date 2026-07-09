@@ -68,7 +68,7 @@ function MockActivityItem({ item }) {
           <button
             type="button"
             onClick={() => navigate('/my-tasks')}
-            className="text-sm font-semibold text-pm-text hover:text-pm-accent transition-colors cursor-pointer"
+            className="text-sm font-medium text-pm-text hover:text-pm-accent transition-colors cursor-pointer"
           >
             {item.user}
           </button>
@@ -143,7 +143,7 @@ export default function ProgressPage() {
             {MOCK_ACTIVITIES.map((group) => (
               <div key={group.date}>
                 <div className="flex items-center gap-3 mb-2 px-1">
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-pm-text-muted/70">{group.date}</h3>
+                  <h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground/70">{group.date}</h3>
                   <Separator className="flex-1" />
                 </div>
                 <div className="space-y-0.5">

@@ -113,7 +113,7 @@ export default function InvoiceSettingsTab() {
 
       <div className="rounded-lg border border-pm-border bg-pm-surface mb-5">
         <div className="px-5 py-3 bg-muted/30 border-b border-pm-border">
-          <h3 className="text-sm font-semibold text-pm-text-primary">{__('Appearance', 'wedevs-project-manager')}</h3>
+          <h3 className="text-sm font-medium text-pm-text-primary">{__('Appearance', 'wedevs-project-manager')}</h3>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-pm-border">
           <div>
@@ -139,7 +139,7 @@ export default function InvoiceSettingsTab() {
 
       <div className="rounded-lg border border-pm-border bg-pm-surface mb-5">
         <div className="px-5 py-3 bg-muted/30 border-b border-pm-border">
-          <h3 className="text-sm font-semibold text-pm-text-primary">{__('Payment Gateways', 'wedevs-project-manager')}</h3>
+          <h3 className="text-sm font-medium text-pm-text-primary">{__('Payment Gateways', 'wedevs-project-manager')}</h3>
         </div>
 
         <div className="border-b border-pm-border">
@@ -149,7 +149,7 @@ export default function InvoiceSettingsTab() {
                 <span className="text-blue-600 font-bold text-sm">PP</span>
               </div>
               <div className="min-w-0">
-                <Label className="text-sm font-semibold">{__('PayPal', 'wedevs-project-manager')}</Label>
+                <Label className="text-sm font-medium">{__('PayPal', 'wedevs-project-manager')}</Label>
                 <p className="text-[15px] text-pm-text-muted">{__('Accept payments via PayPal', 'wedevs-project-manager')}</p>
               </div>
             </div>
@@ -183,7 +183,7 @@ export default function InvoiceSettingsTab() {
                 <span className="text-purple-600 font-bold text-sm">S</span>
               </div>
               <div className="min-w-0">
-                <Label className="text-sm font-semibold">{__('Stripe', 'wedevs-project-manager')}</Label>
+                <Label className="text-sm font-medium">{__('Stripe', 'wedevs-project-manager')}</Label>
                 <p className="text-[15px] text-pm-text-muted">{__('Accept credit card payments via Stripe', 'wedevs-project-manager')}</p>
               </div>
             </div>
@@ -232,7 +232,7 @@ export default function InvoiceSettingsTab() {
 
       <div className="rounded-lg border border-pm-border bg-pm-surface mb-5">
         <div className="px-5 py-3 bg-muted/30 border-b border-pm-border">
-          <h3 className="text-sm font-semibold text-pm-text-primary">{__('Invoice Defaults', 'wedevs-project-manager')}</h3>
+          <h3 className="text-sm font-medium text-pm-text-primary">{__('Invoice Defaults', 'wedevs-project-manager')}</h3>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-pm-border">
           <div>
@@ -279,7 +279,7 @@ export default function InvoiceSettingsTab() {
 
       <div className="rounded-lg border border-pm-border bg-pm-surface mb-5">
         <div className="px-5 py-3 bg-muted/30 border-b border-pm-border">
-          <h3 className="text-sm font-semibold text-pm-text-primary">{__('Organization', 'wedevs-project-manager')}</h3>
+          <h3 className="text-sm font-medium text-pm-text-primary">{__('Organization', 'wedevs-project-manager')}</h3>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-pm-border">
           <Label className="text-sm font-medium">{__('Organization Name', 'wedevs-project-manager')}</Label>

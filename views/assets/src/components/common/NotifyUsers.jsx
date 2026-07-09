@@ -33,7 +33,7 @@ export default function NotifyUsers({ users = [], value = [], onChange, classNam
   return (
     <div className={`rounded-lg border bg-card p-3 ${className}`}>
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-sm font-semibold text-pm-text-primary">
+        <h4 className="text-sm font-medium text-pm-text-primary">
           {__("Notify users", 'wedevs-project-manager')}
         </h4>
         <label className="flex items-center gap-1.5 text-xs text-pm-text-muted cursor-pointer">

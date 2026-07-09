@@ -167,7 +167,7 @@ const GeneralTab = () => {
       {isPro && (
         <div className="rounded-lg border border-pm-border bg-pm-surface mt-5">
           <div className="px-5 py-3 bg-muted/30 border-b border-pm-border">
-            <h3 className="text-sm font-semibold text-pm-text-primary">{__('Pro Settings', 'wedevs-project-manager')}</h3>
+            <h3 className="text-sm font-medium text-pm-text-primary">{__('Pro Settings', 'wedevs-project-manager')}</h3>
           </div>
 
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between px-5 py-4">

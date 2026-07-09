@@ -161,7 +161,7 @@ export function PromoBanner({ placement = 'projects' }) {
               </span>
             </span>
           )}
-          <span className="text-sm font-semibold text-pm-text-primary truncate">
+          <span className="text-sm font-medium text-pm-text-primary truncate">
             {promo.title}
           </span>
           {daysLeft != null && (

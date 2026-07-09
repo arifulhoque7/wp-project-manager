@@ -125,7 +125,7 @@ export default function MilestoneField({ task, projectId, api, canEdit = true })
           )}
         >
           <span>{saving ? __('Saving...', 'wedevs-project-manager') : (currentMilestone?.title || __('None', 'wedevs-project-manager'))}</span>
-          {canEdit && <ChevronDown className="h-3.5 w-3.5 text-pm-text-muted/60 shrink-0" />}
+          {canEdit && <ChevronDown className="h-3.5 w-3.5 text-muted-foreground/70 shrink-0" />}
         </button>
 
         {canEdit && currentMilestone && !saving && (

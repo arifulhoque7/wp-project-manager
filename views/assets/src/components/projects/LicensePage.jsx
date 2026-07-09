@@ -132,7 +132,7 @@ export default function LicensePage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={__('Enter your purchase email address...', 'wedevs-project-manager')}
                   type="email"
-                  className="flex-1 min-w-0 h-full bg-transparent text-sm placeholder:text-pm-text-muted/60 focus:outline-none !border-0 !p-0 !shadow-none"
+                  className="flex-1 min-w-0 h-full bg-transparent text-sm placeholder:text-muted-foreground/70 focus:outline-none !border-0 !p-0 !shadow-none"
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -142,7 +142,7 @@ export default function LicensePage() {
                     value={key}
                     onChange={(e) => setKey(e.target.value)}
                     placeholder={__('Enter license key...', 'wedevs-project-manager')}
-                    className="flex-1 min-w-0 h-full bg-transparent text-sm placeholder:text-pm-text-muted/60 focus:outline-none !border-0 !p-0 !shadow-none"
+                    className="flex-1 min-w-0 h-full bg-transparent text-sm placeholder:text-muted-foreground/70 focus:outline-none !border-0 !p-0 !shadow-none"
                     onKeyDown={(e) => e.key === 'Enter' && handleActivate()}
                   />
                 </div>

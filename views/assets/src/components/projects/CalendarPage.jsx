@@ -84,7 +84,7 @@ export default function CalendarPage() {
           <div className="space-y-4">
             {/* Month header */}
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-pm-text-primary">
+              <h3 className="text-sm font-medium text-pm-text-primary">
                 {currentDate.toLocaleDateString("en-US", {
                   month: "long",
                   year: "numeric",

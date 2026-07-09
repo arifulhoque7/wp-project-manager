@@ -239,7 +239,7 @@ export default function TaskRow({ task, projectId, listId, draggable: isDraggabl
       {/* Col 2 — Type */}
       <div className="min-w-0">
         {task.type?.title ? (
-          <Badge variant="outline" className="max-w-full truncate text-[12px] px-2.5 py-0.5 h-auto font-normal text-muted-foreground">
+          <Badge variant="outline" className="max-w-full truncate text-[11px] px-2 py-0.5 h-auto font-normal text-muted-foreground">
             {task.type.title}
           </Badge>
         ) : (

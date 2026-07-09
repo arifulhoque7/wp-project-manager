@@ -10,7 +10,7 @@ export default function GroupHeader({ label, count, groupKey }) {
   return (
     <h3
       className={cn(
-        "text-sm font-semibold uppercase tracking-wider flex items-center gap-1.5",
+        "text-sm font-medium uppercase tracking-wide flex items-center gap-1.5",
         cfg.color,
       )}
     >

@@ -358,7 +358,7 @@ export default function SingleTaskListPage() {
 
       {/* ── Discussion ── */}
       <div className="rounded-lg border bg-card p-4 space-y-4">
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-pm-text-muted flex items-center gap-1.5">
+        <h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground/70 flex items-center gap-1.5">
           <MessageSquare className="h-4 w-4" />{__('Discussion', 'wedevs-project-manager')}
           {comments.length > 0 && (
             <span className="text-[14px] bg-muted px-1.5 py-0.5 rounded-full tabular-nums">{comments.length}</span>

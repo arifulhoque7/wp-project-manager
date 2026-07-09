@@ -188,7 +188,7 @@ export default function PremiumPage() {
             >
               <f.icon className={`h-5 w-5 ${f.fg}`} />
             </div>
-            <h3 className="text-sm font-semibold text-pm-text-primary mb-1">
+            <h3 className="text-sm font-medium text-pm-text-primary mb-1">
               {f.title}
             </h3>
             <p className="text-sm text-pm-text-muted leading-relaxed mb-2">
@@ -228,7 +228,7 @@ export default function PremiumPage() {
                   <m.icon className="h-5 w-5 text-pm-accent" />
                 </div>
                 <div className="min-w-0">
-                  <h4 className="text-sm font-semibold text-pm-text-primary mb-0.5">
+                  <h4 className="text-sm font-medium text-pm-text-primary mb-0.5">
                     {m.title}
                   </h4>
                   <p className="text-[15px] text-pm-text-muted leading-relaxed">

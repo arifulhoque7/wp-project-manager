@@ -74,7 +74,7 @@ export default function TaskTypeField({ task, projectId, dispatch, api, canEdit 
             canEdit && 'hover:text-pm-accent'
           )}>
             {currentType ? currentType.title : (canEdit ? __('Add type', 'wedevs-project-manager') : __('—', 'wedevs-project-manager'))}
-            {canEdit && <ChevronDown className="h-3.5 w-3.5 text-pm-text-muted/60 shrink-0" />}
+            {canEdit && <ChevronDown className="h-3.5 w-3.5 text-muted-foreground/70 shrink-0" />}
           </button>
         </PopoverTrigger>
         <PopoverContent className="w-44 p-2" align="start">

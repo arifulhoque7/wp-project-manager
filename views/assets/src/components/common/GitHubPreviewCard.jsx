@@ -101,7 +101,7 @@ export default function GitHubPreviewCard({ previewData, loading, url, onRefresh
           <GitHubLogo className="h-4 w-4" />
           <span>GitHub</span>
           {previewData.repository?.full_name && (
-            <span className="text-pm-text-muted/60">&middot; {previewData.repository.full_name}</span>
+            <span className="text-muted-foreground/70">&middot; {previewData.repository.full_name}</span>
           )}
         </div>
         <div className="flex items-center gap-1">

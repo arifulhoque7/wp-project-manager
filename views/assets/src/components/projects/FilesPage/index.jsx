@@ -262,7 +262,7 @@ export default function FilesPage() {
           <div className="overflow-x-auto">
             <div className="min-w-[900px]">
               {/* Header */}
-              <div className={cn("grid gap-3 px-4 py-2.5 bg-muted/30 border-b text-[12px] font-semibold uppercase tracking-wider", FILES_GRID)}>
+              <div className={cn("grid gap-3 px-4 py-2.5 bg-muted/30 border-b text-[12px] font-medium uppercase tracking-wide", FILES_GRID)}>
                 <SortHead label={__("File Name", 'wedevs-project-manager')} sortKey="name" />
                 <SortHead label={__("Type", 'wedevs-project-manager')} sortKey="type" />
                 <SortHead label={__("Uploaded", 'wedevs-project-manager')} sortKey="uploaded" />

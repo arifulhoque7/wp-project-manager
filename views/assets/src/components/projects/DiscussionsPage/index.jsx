@@ -43,9 +43,10 @@ import ProBadge from "@components/common/ProBadge";
 import { usePermissions } from "@hooks/usePermissions";
 import { useCurrentProject } from "@hooks/useCurrentProject";
 import DiscussionFiles from "./parts/DiscussionFiles";
+import DiscussionDetailPage from "./DiscussionDetailPage";
 
 export default function DiscussionsPage() {
-  const { projectId } = useParams();
+  const { projectId, discussionId } = useParams();
   const navigate = useNavigate();
   const api = useApi();
   const dispatch = useAppDispatch();
@@ -100,6 +101,14 @@ export default function DiscussionsPage() {
     fetchDiscussions();
   }, [fetchDiscussions]);
 
+  // Desktop master-detail: auto-open the first discussion so the right pane
+  // isn't empty on load. On narrow screens keep the list-only view.
+  useEffect(() => {
+    if (discussionId || loading || !discussions.length) return;
+    if (typeof window !== 'undefined' && window.innerWidth < 640) return;
+    navigate(`/projects/${projectId}/discussions/${discussions[0].id}`, { replace: true });
+  }, [discussionId, loading, discussions, projectId, navigate]);
+
   useEffect(() => {
     if (showForm && milestones.length === 0) {
       api
@@ -139,10 +148,9 @@ export default function DiscussionsPage() {
         setFormNotifyUsers([]);
         setShowForm(false);
         toast.success(__("Discussion created", 'wedevs-project-manager'));
+        await fetchDiscussions();
         if (newDisc?.id) {
           navigate(`/projects/${projectId}/discussions/${newDisc.id}`);
-        } else {
-          await fetchDiscussions();
         }
       } catch {
         toast.error(__("Failed to create discussion", 'wedevs-project-manager'));
@@ -160,12 +168,15 @@ export default function DiscussionsPage() {
       try {
         await api.post(`projects/${projectId}/discussion-boards/${id}/delete`);
         setDiscussions((prev) => prev.filter((d) => d.id !== id));
+        if (String(id) === String(discussionId)) {
+          navigate(`/projects/${projectId}/discussions`);
+        }
         toast.success(__("Discussion deleted", 'wedevs-project-manager'));
       } catch {
         toast.error(__("Failed to delete", 'wedevs-project-manager'));
       }
     },
-    [api, projectId, toast, __]
+    [api, projectId, discussionId, navigate, toast, __]
   );
 
   const handleTogglePrivacy = useCallback(
@@ -193,228 +204,237 @@ export default function DiscussionsPage() {
   return (
     <>
     <ConfirmDialog />
-    <div className="w-full p-4 sm:p-6 space-y-5">
-      <div className="flex items-center justify-between flex-wrap gap-2">
-        <div className="flex items-center gap-3">
-          <BackButton fallback={`/projects/${projectId}/task-lists`} />
-          <h1 className="text-xl font-bold text-pm-text-primary">
-            {__("Discussions", 'wedevs-project-manager')}
-          </h1>
-          {discussions.length > 0 && (
-            <span className="text-sm text-pm-text-muted bg-muted/60 px-2 py-0.5 rounded-full tabular-nums">
-              {discussions.length}
-            </span>
-          )}
-        </div>
-        {canCreateDiscussion && (
-          <Button size="sm" className="gap-1.5" onClick={() => setShowForm((v) => !v)}>
-            <Plus className="h-5 w-5" />
-            {__("New Discussion", 'wedevs-project-manager')}
-          </Button>
-        )}
-      </div>
-
-      {showForm && (
-        <form onSubmit={handleCreate} className="rounded-lg border bg-card p-4 space-y-3">
-          <Input
-            autoFocus
-            value={formTitle}
-            onChange={(e) => setFormTitle(e.target.value)}
-            placeholder={__("Enter message title", 'wedevs-project-manager')}
-            className="h-9 text-sm"
-          />
-          <RichTextEditor
-            content={formDesc}
-            onChange={setFormDesc}
-            placeholder={__("Description...", 'wedevs-project-manager')}
-            minHeight="80px"
-            users={project?.assignees?.data ?? []}
-          />
-          <Select value={formMilestone} onValueChange={setFormMilestone}>
-            <SelectTrigger className="h-9 text-sm w-full sm:w-[200px]">
-              <SelectValue placeholder={__("- Milestone -", 'wedevs-project-manager')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="-1">{__("- Milestone -", 'wedevs-project-manager')}</SelectItem>
-              {milestones.map((m) => (
-                <SelectItem key={m.id} value={String(m.id)}>
-                  {m.title}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <FileUploadArea files={formFiles} onFilesChange={setFormFiles} />
-          <CommentLinkActions projectId={projectId} onInsert={(html) => setFormDesc(prev => (prev || '') + html)} />
-          <NotifyUsers
-            users={project?.assignees?.data ?? []}
-            value={formNotifyUsers}
-            onChange={setFormNotifyUsers}
-          />
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              type="button"
-              onClick={() => {
-                setShowForm(false);
-                setFormTitle("");
-                setFormDesc("");
-                setFormMilestone("-1");
-                setFormNotifyUsers([]);
-              }}
-            >
-              {__("Cancel", 'wedevs-project-manager')}
-            </Button>
-            <Button size="sm" type="submit" disabled={!formTitle.trim() || creating}>
-              {creating ? __("Creating...", 'wedevs-project-manager') : __("Add Message", 'wedevs-project-manager')}
-            </Button>
+    <div className="w-full p-4 sm:p-6">
+      <div className="grid grid-cols-[300px_minmax(0,1fr)] lg:grid-cols-[360px_minmax(0,1fr)] gap-4 lg:gap-6 items-start">
+        {/* LEFT — discussions list */}
+        <div className="flex flex-col min-w-0 gap-4">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-3">
+              <BackButton fallback={`/projects/${projectId}/task-lists`} />
+              <h1 className="text-xl font-bold text-pm-text-primary">
+                {__("Discussions", 'wedevs-project-manager')}
+              </h1>
+              {discussions.length > 0 && (
+                <span className="text-sm text-pm-text-muted bg-muted/60 px-2 py-0.5 rounded-full tabular-nums">
+                  {discussions.length}
+                </span>
+              )}
+            </div>
+            {canCreateDiscussion && (
+              <Button size="sm" className="gap-1.5" onClick={() => setShowForm((v) => !v)}>
+                <Plus className="h-5 w-5" />
+                {__("New", 'wedevs-project-manager')}
+              </Button>
+            )}
           </div>
-        </form>
-      )}
 
-      {loading ? (
-        <div className="space-y-3">
-          {[1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-20 rounded-lg" />
-          ))}
-        </div>
-      ) : discussions.length === 0 ? (
-        <div className="text-center py-16">
-          <MessageSquare className="h-14 w-14 text-muted-foreground/30 mx-auto mb-3" />
-          <h3 className="text-sm font-medium text-pm-text-primary mb-1">
-            {__("No discussions yet", 'wedevs-project-manager')}
-          </h3>
-          <p className="text-sm text-pm-text-muted">
-            {__("Start a conversation about this project.", 'wedevs-project-manager')}
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-2">
-          {discussions.map((d) => {
-            const isPrivate = checkPrivate(d.meta?.privacy);
-            const commentCount = d.meta?.total_comments ?? d.comments?.data?.length ?? 0;
-
-            return (
-              <div
-                key={d.id}
-                className="rounded-lg border bg-card hover:shadow-sm transition-shadow cursor-pointer group"
-                onClick={() => navigate(`/projects/${projectId}/discussions/${d.id}`)}
-              >
-                <div className="p-4 flex items-start gap-3">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-semibold text-pm-text-primary group-hover:text-pm-accent transition-colors">
-                        {d.title}
-                      </h3>
-                      {isPrivate && <Lock className="h-3.5 w-3.5 text-pm-text-muted shrink-0" />}
-                    </div>
-                    {(() => {
-                      const descText = typeof d.description === 'string'
-                        ? d.description
-                        : (d.description?.content || d.description?.html || "");
-                      if (!descText) return null;
-                      return (
-                        <p className="text-sm text-pm-text-muted mt-0.5 line-clamp-2">
-                          {descText.replace(/<[^>]*>/g, "")}
-                        </p>
-                      );
-                    })()}
-                    <div className="flex items-center gap-2 mt-1.5 text-[13px] text-pm-text-muted">
-                      {d.creator?.data && (
-                        <span className="flex items-center gap-1">
-                          <UserAvatar user={d.creator.data} size="sm" />
-                          {d.creator.data.display_name}
-                        </span>
-                      )}
-                      <span>·</span>
-                      <span>{formatPmDateTime(d.created_at)}</span>
-                      {d.milestone?.data && (
-                        <>
-                          <span>·</span>
-                          <button
-                            type="button"
-                            className="text-pm-accent hover:underline"
-                            onClick={(e) => { e.stopPropagation(); navigate(`/projects/${projectId}/milestones`); }}
-                          >
-                            {d.milestone.data.title}
-                          </button>
-                        </>
-                      )}
-                    </div>
-                    <DiscussionFiles files={d.files} />
-                  </div>
-
-                  <div className="flex items-center gap-2 shrink-0" onClick={(e) => e.stopPropagation()}>
-                    {commentCount > 0 && (
-                      <span className="flex items-center gap-0.5 text-[13px] text-pm-text-muted">
-                        <MessageSquare className="h-3.5 w-3.5" />
-                        {commentCount}
-                      </span>
-                    )}
-                    {canEditDiscussion(d) && (
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-7 w-7">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              navigate(`/projects/${projectId}/discussions/${d.id}`);
-                            }}
-                          >
-                            <Pencil className="h-4 w-4 mr-2" />
-                            {__("Edit", 'wedevs-project-manager')}
-                          </DropdownMenuItem>
-                          {canViewPrivateDiscussion && (
-                            <DropdownMenuItem
-                              onClick={(e) => isPro && handleTogglePrivacy(e, d)}
-                              disabled={!isPro}
-                            >
-                              {isPrivate ? (
-                                <><Unlock className="h-4 w-4 mr-2" />{__("Make Public", 'wedevs-project-manager')}</>
-                              ) : (
-                                <><Lock className="h-4 w-4 mr-2" />{__("Make Private", 'wedevs-project-manager')}</>
-                              )}
-                              {!isPro && <ProBadge className="ml-auto" />}
-                            </DropdownMenuItem>
-                          )}
-                          <DropdownMenuItem
-                            className="text-destructive focus:text-destructive"
-                            onClick={(e) => handleDelete(e, d.id)}
-                          >
-                            <Trash2 className="h-4 w-4 mr-2" />
-                            {__("Delete", 'wedevs-project-manager')}
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    )}
-                    <ChevronRight className="h-4 w-4 text-pm-text-muted/50" />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-
-          {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 pt-2">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => (
+          {showForm && (
+            <form onSubmit={handleCreate} className="rounded-lg border bg-card p-4 space-y-3">
+              <Input
+                autoFocus
+                value={formTitle}
+                onChange={(e) => setFormTitle(e.target.value)}
+                placeholder={__("Enter message title", 'wedevs-project-manager')}
+                className="h-9 text-sm"
+              />
+              <RichTextEditor
+                content={formDesc}
+                onChange={setFormDesc}
+                placeholder={__("Description...", 'wedevs-project-manager')}
+                minHeight="80px"
+                users={project?.assignees?.data ?? []}
+              />
+              <Select value={formMilestone} onValueChange={setFormMilestone}>
+                <SelectTrigger className="h-9 text-sm w-full">
+                  <SelectValue placeholder={__("- Milestone -", 'wedevs-project-manager')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="-1">{__("- Milestone -", 'wedevs-project-manager')}</SelectItem>
+                  {milestones.map((m) => (
+                    <SelectItem key={m.id} value={String(m.id)}>
+                      {m.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FileUploadArea files={formFiles} onFilesChange={setFormFiles} />
+              <CommentLinkActions projectId={projectId} onInsert={(html) => setFormDesc(prev => (prev || '') + html)} />
+              <NotifyUsers
+                users={project?.assignees?.data ?? []}
+                value={formNotifyUsers}
+                onChange={setFormNotifyUsers}
+              />
+              <div className="flex gap-2">
                 <Button
-                  key={pg}
-                  variant={pg === page ? "default" : "outline"}
+                  variant="outline"
                   size="sm"
-                  className="h-7 w-7 p-0 text-sm"
-                  onClick={() => fetchDiscussions(pg)}
+                  type="button"
+                  onClick={() => {
+                    setShowForm(false);
+                    setFormTitle("");
+                    setFormDesc("");
+                    setFormMilestone("-1");
+                    setFormNotifyUsers([]);
+                  }}
                 >
-                  {pg}
+                  {__("Cancel", 'wedevs-project-manager')}
                 </Button>
+                <Button size="sm" type="submit" disabled={!formTitle.trim() || creating}>
+                  {creating ? __("Creating...", 'wedevs-project-manager') : __("Add Message", 'wedevs-project-manager')}
+                </Button>
+              </div>
+            </form>
+          )}
+
+          {loading ? (
+            <div className="space-y-3">
+              {[1, 2, 3].map((i) => (
+                <Skeleton key={i} className="h-20 rounded-lg" />
               ))}
+            </div>
+          ) : discussions.length === 0 ? (
+            <div className="text-center py-16">
+              <MessageSquare className="h-14 w-14 text-muted-foreground/30 mx-auto mb-3" />
+              <h3 className="text-sm font-medium text-pm-text-primary mb-1">
+                {__("No discussions yet", 'wedevs-project-manager')}
+              </h3>
+              <p className="text-sm text-pm-text-muted">
+                {__("Start a conversation about this project.", 'wedevs-project-manager')}
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {discussions.map((d) => {
+                const isPrivate = checkPrivate(d.meta?.privacy);
+                const commentCount = d.meta?.total_comments ?? d.comments?.data?.length ?? 0;
+                const active = String(d.id) === String(discussionId);
+
+                return (
+                  <div
+                    key={d.id}
+                    className={`rounded-lg border transition-all cursor-pointer group ${active ? 'border-pm-accent bg-pm-accent-light/40 shadow-sm' : 'border-pm-border bg-card hover:border-pm-accent/40 hover:bg-muted/30'}`}
+                    onClick={() => navigate(`/projects/${projectId}/discussions/${d.id}`)}
+                  >
+                    <div className="p-3.5">
+                      <div className="flex items-start gap-2">
+                        <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                          <h3 className={`min-w-0 truncate text-sm font-medium transition-colors ${active ? 'text-pm-accent' : 'text-pm-text-primary group-hover:text-pm-accent'}`}>
+                            {d.title}
+                          </h3>
+                          {isPrivate && <Lock className="h-3.5 w-3.5 text-pm-text-muted shrink-0" />}
+                        </div>
+                        {canEditDiscussion(d) && (
+                          <div className="shrink-0 -mr-1.5 -mt-1" onClick={(e) => e.stopPropagation()}>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon" className="h-6 w-6">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(`/projects/${projectId}/discussions/${d.id}`);
+                                  }}
+                                >
+                                  <Pencil className="h-4 w-4 mr-2" />
+                                  {__("Open", 'wedevs-project-manager')}
+                                </DropdownMenuItem>
+                                {canViewPrivateDiscussion && (
+                                  <DropdownMenuItem
+                                    onClick={(e) => isPro && handleTogglePrivacy(e, d)}
+                                    disabled={!isPro}
+                                  >
+                                    {isPrivate ? (
+                                      <><Unlock className="h-4 w-4 mr-2" />{__("Make Public", 'wedevs-project-manager')}</>
+                                    ) : (
+                                      <><Lock className="h-4 w-4 mr-2" />{__("Make Private", 'wedevs-project-manager')}</>
+                                    )}
+                                    {!isPro && <ProBadge className="ml-auto" />}
+                                  </DropdownMenuItem>
+                                )}
+                                <DropdownMenuItem
+                                  className="text-destructive focus:text-destructive"
+                                  onClick={(e) => handleDelete(e, d.id)}
+                                >
+                                  <Trash2 className="h-4 w-4 mr-2" />
+                                  {__("Delete", 'wedevs-project-manager')}
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+                        )}
+                      </div>
+
+                      {(() => {
+                        const descText = typeof d.description === 'string'
+                          ? d.description
+                          : (d.description?.content || d.description?.html || "");
+                        if (!descText) return null;
+                        return (
+                          <p className="text-[13px] text-pm-text-muted mt-1 line-clamp-2">
+                            {descText.replace(/<[^>]*>/g, "")}
+                          </p>
+                        );
+                      })()}
+
+                      <div className="flex items-center gap-1.5 mt-2 text-[12px] text-pm-text-muted">
+                        {d.creator?.data && (
+                          <span className="flex items-center gap-1 min-w-0">
+                            <UserAvatar user={d.creator.data} size="sm" />
+                            <span className="truncate max-w-[120px]">{d.creator.data.display_name}</span>
+                          </span>
+                        )}
+                        <span className="shrink-0">·</span>
+                        <span className="shrink-0 whitespace-nowrap">{formatPmDateTime(d.created_at)}</span>
+                        {commentCount > 0 && (
+                          <span className="ml-auto shrink-0 flex items-center gap-0.5">
+                            <MessageSquare className="h-3.5 w-3.5" />
+                            {commentCount}
+                          </span>
+                        )}
+                      </div>
+
+                      <DiscussionFiles files={d.files} />
+                    </div>
+                  </div>
+                );
+              })}
+
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-2 pt-2">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => (
+                    <Button
+                      key={pg}
+                      variant={pg === page ? "default" : "outline"}
+                      size="sm"
+                      className="h-7 w-7 p-0 text-sm"
+                      onClick={() => fetchDiscussions(pg)}
+                    >
+                      {pg}
+                    </Button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
-      )}
+
+        {/* RIGHT — conversation panel */}
+        <div className="flex flex-col min-w-0">
+          {discussionId ? (
+            <DiscussionDetailPage key={discussionId} />
+          ) : (
+            <div className="w-full flex flex-col items-center justify-center text-center rounded-xl border border-dashed border-pm-border py-24 px-6">
+              <MessageSquare className="h-12 w-12 text-muted-foreground/30 mb-3" />
+              <p className="text-sm text-pm-text-muted">
+                {__("Select a discussion to view the conversation.", 'wedevs-project-manager')}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
     </>
   );

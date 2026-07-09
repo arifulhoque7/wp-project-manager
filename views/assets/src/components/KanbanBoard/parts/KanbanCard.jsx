@@ -75,7 +75,7 @@ export default function KanbanCard({ task, boardId, onRemove }) {
       {/* Top pills — collapses to nothing when the task has no meta */}
       <div className="flex items-center gap-1.5 flex-wrap pr-6 mb-2 empty:hidden">
         {task.type?.title && (
-          <span className="inline-flex items-center rounded-md border border-pm-border px-2.5 py-0.5 text-[12px] font-medium text-pm-text-muted">
+          <span className="inline-flex items-center rounded-md border border-pm-border px-2 py-0.5 text-[11px] font-normal text-pm-text-muted">
             {task.type.title}
           </span>
         )}
@@ -94,7 +94,7 @@ export default function KanbanCard({ task, boardId, onRemove }) {
       </div>
 
       {/* Title */}
-      <h4 className="text-sm font-semibold text-pm-text-primary leading-snug line-clamp-2 pr-6" title={task.title}>
+      <h4 className="text-sm font-medium text-pm-text-primary leading-snug line-clamp-2 pr-6" title={task.title}>
         {task.title}
       </h4>
 

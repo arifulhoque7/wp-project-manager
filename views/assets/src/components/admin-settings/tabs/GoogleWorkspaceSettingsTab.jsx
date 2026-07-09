@@ -112,7 +112,7 @@ export default function GoogleWorkspaceSettingsTab() {
     <div className="w-full">
       <div className="mb-5 flex items-start justify-between gap-3">
         <div>
-          <h2 className="text-sm font-semibold text-pm-text-primary flex items-center gap-2">
+          <h2 className="text-sm font-medium text-pm-text-primary flex items-center gap-2">
             <GoogleMonoGlyph className="h-5 w-5 text-pm-accent" />
             {__('Google Workspace', 'wedevs-project-manager')}
           </h2>
@@ -167,7 +167,7 @@ export default function GoogleWorkspaceSettingsTab() {
         </div>
       )}
 
-      <h3 className="text-sm font-semibold text-pm-text-primary mt-6 mb-2">{__('API credentials & keys', 'wedevs-project-manager')}</h3>
+      <h3 className="text-sm font-medium text-pm-text-primary mt-6 mb-2">{__('API credentials & keys', 'wedevs-project-manager')}</h3>
 
       <div className="rounded-lg border border-gray-200 bg-white p-5">
         <div className="mb-4">
