@@ -515,31 +515,39 @@ export default function MyTasksPage() {
         overviewLoading ? (
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-32 rounded-lg" />
+              <Skeleton key={i} className="h-32 rounded-xl" />
             ))}
           </div>
         ) : (
           <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {[
-                { label: __("Current", 'wedevs-project-manager'),     count: counts.current,     icon: CheckSquare,    color: "text-emerald-500 bg-emerald-50" },
-                { label: __("Outstanding", 'wedevs-project-manager'), count: counts.outstanding, icon: AlertTriangle,  color: "text-red-500 bg-red-50" },
-                { label: __("Completed", 'wedevs-project-manager'),   count: counts.complete,    icon: CheckCircle,    color: "text-blue-500 bg-blue-50" },
-              ].map((s) => (
-                <div key={s.label} className="rounded-xl border bg-card p-5 flex items-center gap-4">
-                  <div className={`p-3 rounded-xl ${s.color.split(" ")[1]}`}>
-                    <s.icon className={`h-6 w-6 ${s.color.split(" ")[0]}`} />
-                  </div>
-                  <div>
-                    {!user ? (
-                      <Skeleton className="h-8 w-12 mb-1" />
-                    ) : (
-                      <p className="text-3xl font-bold text-pm-text-primary tabular-nums leading-none mb-1">{s.count}</p>
+              {(() => {
+                const totalTasks = counts.current + counts.outstanding + counts.complete;
+                return [
+                  { label: __("Current", 'wedevs-project-manager'),     count: counts.current,     icon: CheckSquare,    color: "text-emerald-500 bg-emerald-50" },
+                  { label: __("Outstanding", 'wedevs-project-manager'), count: counts.outstanding, icon: AlertTriangle,  color: "text-red-500 bg-red-50" },
+                  { label: __("Completed", 'wedevs-project-manager'),   count: counts.complete,    icon: CheckCircle,    color: "text-blue-500 bg-blue-50" },
+                ].map((s) => (
+                  <div key={s.label} className="rounded-xl border bg-card p-5 flex items-center gap-4">
+                    <div className={`p-3 rounded-xl ${s.color.split(" ")[1]}`}>
+                      <s.icon className={`h-6 w-6 ${s.color.split(" ")[0]}`} />
+                    </div>
+                    <div className="min-w-0">
+                      {!user ? (
+                        <Skeleton className="h-8 w-12 mb-1" />
+                      ) : (
+                        <p className="text-3xl font-bold text-pm-text-primary tabular-nums leading-none mb-1">{s.count}</p>
+                      )}
+                      <p className="text-[13px] text-pm-text-muted font-medium">{s.label}</p>
+                    </div>
+                    {totalTasks > 0 && (
+                      <span className="ml-auto text-[12px] font-medium text-muted-foreground/70 tabular-nums self-start">
+                        {Math.round((s.count / totalTasks) * 100)}%
+                      </span>
                     )}
-                    <p className="text-[15px] text-pm-text-muted font-medium">{s.label}</p>
                   </div>
-                </div>
-              ))}
+                ));
+              })()}
             </div>
 
             <div className="rounded-xl border bg-card p-4">
@@ -617,13 +625,13 @@ export default function MyTasksPage() {
                         className="h-3.5 w-3.5 rounded-sm shrink-0"
                         style={{ background: item.color }}
                       />
-                      <span className="text-[15px] text-pm-text-primary w-28">
+                      <span className="text-sm text-pm-text-primary w-28">
                         {item.label}
                       </span>
-                      <span className="text-[15px] font-bold text-pm-text-primary tabular-nums">
+                      <span className="text-sm font-medium text-pm-text-primary tabular-nums">
                         {item.count} {__("Tasks", 'wedevs-project-manager')}
                       </span>
-                      <span className="ml-auto text-[15px] font-semibold text-pm-text-muted tabular-nums">
+                      <span className="ml-auto text-sm font-medium text-pm-text-muted tabular-nums">
                         {(() => { const t = counts.current + counts.outstanding + counts.complete; return t ? Math.round((item.count / t) * 100) : 0 })()}%
                       </span>
                     </div>
