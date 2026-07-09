@@ -163,7 +163,7 @@ export const KanbanCards = ({
 };
 
 export const KanbanHeader = ({ className, ...props }) => (
-  <div className={cn("m-0 font-semibold text-sm", className)} {...props} />
+  <div className={cn("m-0 font-semibold text-sm text-pm-text-primary", className)} {...props} />
 );
 
 export const KanbanProvider = ({

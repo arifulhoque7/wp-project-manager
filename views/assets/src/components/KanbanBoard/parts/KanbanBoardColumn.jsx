@@ -227,7 +227,7 @@ export default function KanbanBoardColumn({
                 />
               ) : (
                 <span
-                  className="font-semibold text-[13px] truncate cursor-pointer select-none text-pm-text-primary"
+                  className="font-semibold text-sm truncate cursor-pointer select-none text-pm-text-primary"
                   onDoubleClick={() => canManage && setEditing(true)}
                   title={canManage ? __("Double-click to rename", 'wedevs-project-manager') : ""}
                 >

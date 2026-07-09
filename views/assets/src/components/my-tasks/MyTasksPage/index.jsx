@@ -11,7 +11,6 @@ import { usePermissions } from "@hooks/usePermissions";
 import { Button } from "@components/ui/button";
 import { DatePicker } from "@components/ui/date-picker";
 import { Skeleton } from "@components/ui/skeleton";
-import { Badge } from "@components/ui/badge";
 import {
   Pagination,
   PaginationContent,
@@ -579,7 +578,7 @@ export default function MyTasksPage() {
             </div>
 
             <div className="rounded-xl border bg-card p-6">
-              <h3 className="text-base font-semibold text-pm-text-primary mb-4">
+              <h3 className="text-sm font-semibold text-pm-text-primary mb-4">
                 {__("Status overview", 'wedevs-project-manager')}
               </h3>
               <div className="flex flex-wrap items-center gap-8">
@@ -1209,10 +1208,13 @@ export default function MyTasksPage() {
               {activities.map((act, i) => {
                 const Icon = ACTIVITY_ICON_MAP[act.action] || Activity;
                 const actor = act.actor?.data || {};
-                const actionType = act.action_type || 'update';
-                const badgeColor = ACTIVITY_COLOR_MAP[actionType] || 'bg-pm-text-muted';
-                const badgeLabel = ACTIVITY_LABELS[actionType] || actionType;
                 const timeStr = act.committed_at?.time?.slice(0, 5) || '';
+                const a = act.action || '';
+                const t = act.action_type || 'update';
+                const tone = (a.startsWith('delete') || t === 'delete') ? 'bg-red-50 text-red-600'
+                  : (a.includes('comment') || a.includes('reply')) ? 'bg-violet-50 text-violet-600'
+                  : (a.startsWith('create') || a === 'complete_task' || t === 'create') ? 'bg-emerald-50 text-emerald-600'
+                  : 'bg-blue-50 text-blue-600';
 
                 const actUrl = resolveActivityUrl(act);
 
@@ -1228,41 +1230,35 @@ export default function MyTasksPage() {
                 return (
                   <div
                     key={act.id || i}
-                    className="flex items-start gap-3 py-3 px-4 bg-card rounded-lg border border-border/50 hover:shadow-sm transition-all"
+                    className="flex items-start gap-3 py-2.5 px-4 hover:bg-pm-hover/50 rounded-lg transition-colors"
                   >
-                    <UserAvatar user={actor} size="lg" className="mt-0.5" />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5">
+                    <div className={cn('h-7 w-7 rounded-full flex items-center justify-center shrink-0 mt-0.5', tone)}>
+                      <Icon className="h-3.5 w-3.5" />
+                    </div>
+                    <div className="flex-1 min-w-0 flex items-start gap-2">
+                      <p className="flex-1 min-w-0 text-sm leading-snug">
                         <button
                           type="button"
                           onClick={() => navigate('/my-tasks')}
-                          className="text-sm font-semibold text-pm-text hover:text-pm-accent transition-colors cursor-pointer"
+                          className="font-semibold text-pm-text-primary hover:text-pm-accent transition-colors cursor-pointer align-baseline"
                         >
                           {actor.display_name || 'Unknown'}
-                        </button>
-                        <Badge variant="outline" className={cn('text-[14px] px-1.5 py-0 h-4 font-medium border-0 text-white', badgeColor)}>
-                          {badgeLabel}
-                        </Badge>
-                      </div>
-                      {actUrl ? (
-                        <button
-                          type="button"
-                          onClick={handleResourceClick}
-                          className="text-sm text-pm-text-muted leading-snug hover:text-pm-accent transition-colors cursor-pointer text-left"
-                        >
-                          {parseActivityMessage(act)}
-                        </button>
-                      ) : (
-                        <p className="text-sm text-pm-text-muted leading-snug">
-                          {parseActivityMessage(act)}
-                        </p>
-                      )}
+                        </button>{' '}
+                        {actUrl ? (
+                          <button
+                            type="button"
+                            onClick={handleResourceClick}
+                            className="text-pm-text-muted hover:text-pm-accent transition-colors cursor-pointer text-left align-baseline"
+                          >
+                            {parseActivityMessage(act)}
+                          </button>
+                        ) : (
+                          <span className="text-pm-text-muted">{parseActivityMessage(act)}</span>
+                        )}
+                      </p>
                       {timeStr && (
-                        <span className="text-[15px] text-pm-text-muted/50 mt-1 inline-block">{timeStr}</span>
+                        <span className="shrink-0 whitespace-nowrap text-[13px] text-pm-text-muted/60 pt-0.5">{timeStr}</span>
                       )}
-                    </div>
-                    <div className="shrink-0 mt-1">
-                      <Icon className="h-5 w-5 text-pm-text-muted/40" />
                     </div>
                   </div>
                 );

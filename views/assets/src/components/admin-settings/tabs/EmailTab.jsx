@@ -39,7 +39,7 @@ const EmailTab = () => {
 
   return (
     <form onSubmit={onSubmit}>
-      <h2 className="text-lg font-semibold text-pm-text mb-1">
+      <h2 className="text-lg font-semibold text-pm-text-primary mb-1">
         {__('Email Settings', 'wedevs-project-manager')}
       </h2>
       <p className="text-sm text-pm-text-muted mb-5">

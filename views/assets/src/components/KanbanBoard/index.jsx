@@ -229,7 +229,7 @@ export default function KanbanBoard() {
     <div className="max-w-[1900px] mx-auto px-6 pt-4 pb-6 h-full">
       <ConfirmDialog />
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-base font-semibold text-pm-text tracking-tight">
+        <h2 className="text-lg font-semibold text-pm-text-primary">
           {__("Kanban Board", 'wedevs-project-manager')}
         </h2>
         <div className="flex items-center gap-2">

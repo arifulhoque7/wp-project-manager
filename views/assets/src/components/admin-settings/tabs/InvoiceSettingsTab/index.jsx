@@ -108,7 +108,7 @@ export default function InvoiceSettingsTab() {
 
   return (
     <form onSubmit={onSubmit}>
-      <h2 className="text-lg font-semibold text-pm-text mb-1">{__('Invoice Settings', 'wedevs-project-manager')}</h2>
+      <h2 className="text-lg font-semibold text-pm-text-primary mb-1">{__('Invoice Settings', 'wedevs-project-manager')}</h2>
       <p className="text-sm text-pm-text-muted mb-5">{__('Configure invoice appearance and payment gateways', 'wedevs-project-manager')}</p>
 
       <div className="rounded-lg border border-pm-border bg-pm-surface mb-5">

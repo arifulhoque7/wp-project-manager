@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@components/ui/popover';
-import { Check, ListTodo, X } from 'lucide-react';
+import { Check, ChevronDown, ListTodo, X } from 'lucide-react';
 
 export default function TaskTypeField({ task, projectId, dispatch, api, canEdit = true }) {
   const [open, setOpen] = useState(false);
@@ -61,7 +61,7 @@ export default function TaskTypeField({ task, projectId, dispatch, api, canEdit 
   }, [saving, task, projectId, api, dispatch, canEdit]);
 
   return (
-    <div className="flex items-center h-8 px-2 rounded-md hover:bg-muted/40 transition-colors">
+    <div className="flex items-center min-h-10 px-2 rounded-md hover:bg-muted/40 transition-colors">
       <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
         <ListTodo className="h-4 w-4" /><span className="text-sm">{__('Type', 'wedevs-project-manager')}</span>
       </div>
@@ -69,13 +69,12 @@ export default function TaskTypeField({ task, projectId, dispatch, api, canEdit 
       <Popover open={open} onOpenChange={(v) => { setOpen(v); if (v) loadTypes(); }}>
         <PopoverTrigger asChild>
           <button disabled={!canEdit} className={cn(
-            'text-sm transition-colors',
-            currentType
-              ? 'text-pm-text-primary bg-muted/50 px-2 py-0.5 rounded'
-              : 'text-pm-text-muted',
-            canEdit && (currentType ? 'hover:bg-muted' : 'hover:text-pm-accent')
+            'inline-flex items-center gap-1 text-sm transition-colors',
+            currentType ? 'text-pm-text-primary' : 'text-pm-text-muted',
+            canEdit && 'hover:text-pm-accent'
           )}>
             {currentType ? currentType.title : (canEdit ? __('Add type', 'wedevs-project-manager') : __('—', 'wedevs-project-manager'))}
+            {canEdit && <ChevronDown className="h-3.5 w-3.5 text-pm-text-muted/60 shrink-0" />}
           </button>
         </PopoverTrigger>
         <PopoverContent className="w-44 p-2" align="start">

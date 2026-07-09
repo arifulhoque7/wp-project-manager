@@ -107,7 +107,7 @@ export default function MilestoneField({ task, projectId, api, canEdit = true })
   };
 
   return (
-    <div className="flex items-center h-8 px-2 rounded-md hover:bg-muted/40 transition-colors">
+    <div className="flex items-center min-h-10 px-2 rounded-md hover:bg-muted/40 transition-colors">
       <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
         <MilestoneIcon className="h-4 w-4" />
         <span className="text-sm">{__('Milestone', 'wedevs-project-manager')}</span>
@@ -125,7 +125,7 @@ export default function MilestoneField({ task, projectId, api, canEdit = true })
           )}
         >
           <span>{saving ? __('Saving...', 'wedevs-project-manager') : (currentMilestone?.title || __('None', 'wedevs-project-manager'))}</span>
-          {canEdit && <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-60" />}
+          {canEdit && <ChevronDown className="h-3.5 w-3.5 text-pm-text-muted/60 shrink-0" />}
         </button>
 
         {canEdit && currentMilestone && !saving && (

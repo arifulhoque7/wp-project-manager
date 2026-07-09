@@ -185,7 +185,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
             <div className="flex items-center gap-2 flex-wrap">
               <h4
                 className={cn(
-                  "text-base font-semibold",
+                  "text-sm font-semibold",
                   isComplete
                     ? "text-pm-text-muted line-through"
                     : "text-pm-text-primary",

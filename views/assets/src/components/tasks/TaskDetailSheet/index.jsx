@@ -44,18 +44,14 @@ import {
 import {
   Calendar,
   Users,
-  MessageSquare,
   Check,
   Maximize2,
   Minimize2,
   MoreHorizontal,
   Trash2,
   Link2,
-  Activity,
   X,
   Plus,
-  Eye,
-  EyeOff,
   Layers,
   Pencil,
   FileText,
@@ -77,6 +73,7 @@ import TaskTypeField from './parts/fields/TaskTypeField'
 import MilestoneField from './parts/fields/MilestoneField'
 import ProInlineProperties from './parts/ProInlineProperties'
 import ProSubtasksSection from './parts/ProSubtasksSection'
+import ProBadge from '@components/common/ProBadge'
 
 function extractMentionedUsers(html) {
   const parser = new DOMParser()
@@ -116,7 +113,7 @@ export default function TaskDetailSheet() {
   const projectId = storeProjectId || currentTask?.project_id || currentTask?.project?.id
   const isProContext = !storeProjectId && (currentTask?.project_id || currentTask?.project?.id)
   const project = useCurrentProject(projectId)
-  const { canEditTask, canEditComment, userCan } = usePermissions(project)
+  const { canEditTask, canEditComment, userCan, isPro } = usePermissions(project)
   const canEditCurrentTask = currentTask ? canEditTask(currentTask) : false
 
   const [editingTitle, setEditingTitle] = useState(false)
@@ -541,7 +538,7 @@ export default function TaskDetailSheet() {
 
             <Separator />
 
-            <div className="px-6 pt-6 pb-5 space-y-5">
+            <div className="px-6 pt-5 pb-5 space-y-3">
               <SheetHeader className="space-y-1.5">
                 <SheetDescription asChild>
                   <div className="flex items-center gap-2 text-[13px] text-muted-foreground min-w-0">
@@ -582,7 +579,7 @@ export default function TaskDetailSheet() {
                 </div>
               </SheetHeader>
 
-              <div className="space-y-1 pt-1">
+              <div className="flex flex-col gap-1">
                 <div className="flex items-center h-10 px-2 rounded-md hover:bg-muted/40 transition-colors cursor-pointer" onClick={handleToggleStatus}>
                   <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
                     <Check className="h-4 w-4" /><span className="text-sm">{__('Status', 'wedevs-project-manager')}</span>
@@ -627,8 +624,8 @@ export default function TaskDetailSheet() {
                   )}
                 </div>
 
-                <div className="flex items-start min-h-10 px-2 rounded-md hover:bg-muted/40 transition-colors py-1">
-                  <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0 pt-0.5">
+                <div className="flex items-center min-h-10 px-2 rounded-md hover:bg-muted/40 transition-colors">
+                  <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
                     <Users className="h-4 w-4" /><span className="text-sm">{__('Assignees', 'wedevs-project-manager')}</span>
                   </div>
                   <div className="flex-1">
@@ -776,7 +773,7 @@ export default function TaskDetailSheet() {
             <div className="px-6 pt-4">
               <div className="flex items-center gap-6 border-b border-pm-border">
                 {[
-                  { key: 'subtasks', label: __('Subtasks', 'wedevs-project-manager'), count: 0 },
+                  { key: 'subtasks', label: __('Subtasks', 'wedevs-project-manager'), count: 0, pro: !isPro },
                   { key: 'comments', label: __('Comments', 'wedevs-project-manager'), count: comments.length },
                   { key: 'activities', label: __('Activities', 'wedevs-project-manager'), count: 0 },
                 ].map(t => (
@@ -788,6 +785,7 @@ export default function TaskDetailSheet() {
                   >
                     {t.label}
                     {t.count > 0 && <span className="text-[12px] bg-muted px-1.5 py-0.5 rounded-md tabular-nums font-medium">{t.count}</span>}
+                    {t.pro && <ProBadge />}
                     {detailTab === t.key && <span className="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-pm-accent" />}
                   </button>
                 ))}

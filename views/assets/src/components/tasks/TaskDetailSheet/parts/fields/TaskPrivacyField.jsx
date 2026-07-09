@@ -33,7 +33,7 @@ export default function TaskPrivacyField({ task, projectId, dispatch, api }) {
   if (!isPro) {
     return (
       <ProGate feature={__('Privacy', 'wedevs-project-manager')}>
-        <div className="flex items-center h-8 px-2 rounded-md hover:bg-muted/40 transition-colors">
+        <div className="flex items-center min-h-10 px-2 rounded-md hover:bg-muted/40 transition-colors">
           <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
             <Shield className="h-4 w-4" /><span className="text-sm">{__('Privacy', 'wedevs-project-manager')}</span>
           </div>
@@ -44,7 +44,7 @@ export default function TaskPrivacyField({ task, projectId, dispatch, api }) {
   }
 
   return (
-    <div className="flex items-center h-8 px-2 rounded-md hover:bg-muted/40 transition-colors">
+    <div className="flex items-center min-h-10 px-2 rounded-md hover:bg-muted/40 transition-colors">
       <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
         <Shield className="h-4 w-4" /><span className="text-sm">{__('Privacy', 'wedevs-project-manager')}</span>
       </div>

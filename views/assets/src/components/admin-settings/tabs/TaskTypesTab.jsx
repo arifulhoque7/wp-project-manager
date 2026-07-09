@@ -108,7 +108,7 @@ const TaskTypesTab = () => {
       <ConfirmDialog />
       <div className="flex items-start justify-between">
         <div>
-          <h2 className="text-base font-semibold text-pm-text">{__('Task Types', 'wedevs-project-manager')}</h2>
+          <h2 className="text-lg font-semibold text-pm-text-primary mb-1">{__('Task Types', 'wedevs-project-manager')}</h2>
           <p className="text-sm text-pm-text-muted mt-0.5">{__('Define custom task types for your projects.', 'wedevs-project-manager')}</p>
         </div>
         <Button size="sm" className="gap-1.5" onClick={() => setShowNewForm(!showNewForm)}>
@@ -121,7 +121,7 @@ const TaskTypesTab = () => {
         {showNewForm && (
           <>
             <div className="px-5 py-4 bg-pm-surface-muted space-y-3">
-              <h3 className="text-sm font-medium text-pm-text">{__('Create Task Type', 'wedevs-project-manager')}</h3>
+              <h3 className="text-sm font-semibold text-pm-text-primary">{__('Create Task Type', 'wedevs-project-manager')}</h3>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
                 <div className="flex-1">
                   <Label className="text-sm mb-1 block">{__('Name', 'wedevs-project-manager')}</Label>
