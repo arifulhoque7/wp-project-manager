@@ -42,6 +42,7 @@ import {
   getFileIcon,
   getFileIconColor,
   getFileIconBg,
+  getFileIconHover,
   getAttachedLabel,
   getAttachedURL,
   getDownloadPermissionUrl,
@@ -113,6 +114,7 @@ export default function FilesPage() {
         Icon: getFileIcon(iconType),
         iconColor: getFileIconColor(iconType),
         iconBg: getFileIconBg(iconType),
+        iconHover: getFileIconHover(iconType),
         fileName: f.meta?.title || f.name || f.title || __("File", 'wedevs-project-manager'),
         typeLabel: ext || (f.type === "image" ? __("Image", 'wedevs-project-manager') : __("File", 'wedevs-project-manager')),
         uploaded: f.attached_at,
@@ -304,15 +306,15 @@ export default function FilesPage() {
                       type="button"
                       onClick={() => setSelectedId(r.id)}
                       className={cn(
-                        "shrink-0 w-48 rounded-xl border bg-card p-2 text-left transition-all hover:border-pm-accent/50",
+                        "group shrink-0 w-48 rounded-xl border bg-card p-2 text-left transition-all hover:border-pm-accent/50",
                         active ? "border-pm-accent bg-pm-accent-light/30 shadow-sm" : "border-pm-border",
                       )}
                     >
-                      <div className={cn("h-24 rounded-lg flex items-center justify-center overflow-hidden mb-2", r.thumbUrl ? "bg-muted/40" : r.iconBg)}>
+                      <div className={cn("h-24 rounded-lg flex items-center justify-center overflow-hidden mb-2 transition-colors", r.thumbUrl ? "bg-muted/40" : cn("bg-muted/40", r.iconHover.bg))}>
                         {r.thumbUrl ? (
                           <img src={r.thumbUrl} alt={r.fileName} className="w-full h-full object-cover" />
                         ) : (
-                          <Icon className={cn("h-12 w-12", r.iconColor)} />
+                          <Icon className={cn("h-12 w-12 text-pm-text-muted transition-colors", r.iconHover.text)} />
                         )}
                       </div>
                       <p className="text-sm font-medium text-pm-text-primary truncate px-1 pb-0.5">{r.fileName}</p>
