@@ -1,4 +1,4 @@
-import { __ } from '@wordpress/i18n';
+import { __, _n, sprintf } from '@wordpress/i18n';
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "@hooks/useApi";
@@ -330,7 +330,6 @@ export default function ProjectOverview() {
           : st === "archived"
             ? { label: __("Archived", 'wedevs-project-manager'), cls: "bg-muted text-pm-text-muted" }
             : { label: __("Active", 'wedevs-project-manager'), cls: "bg-blue-100 text-blue-700" };
-        const owner = assignees[0];
         return (
           <div className="rounded-xl border bg-card p-4 flex flex-wrap items-center gap-4">
             <div className="h-14 w-14 rounded-lg bg-pm-accent/10 flex items-center justify-center shrink-0">
@@ -343,14 +342,26 @@ export default function ProjectOverview() {
                   <CheckCircle className="h-4 w-4" />{pill.label}
                 </span>
               </div>
-              <div className="flex items-center gap-3 flex-wrap mt-1.5 text-[13px] text-pm-text-muted">
-                <span className="inline-flex items-center gap-1">
+              <div className="flex items-center gap-4 flex-wrap mt-2 text-[13px] text-pm-text-muted">
+                <span className="inline-flex items-center gap-1.5">
                   <CalendarIcon className="h-4 w-4" />
                   {formatPmDate(project.created_at, { month: "short", day: "numeric", year: "numeric" }) || "—"}
                   {project.est_completion_date ? ` – ${formatPmDate(project.est_completion_date, { month: "short", day: "numeric", year: "numeric" })}` : ""}
                 </span>
-                {owner && (
-                  <span className="inline-flex items-center gap-1.5"><UserAvatar user={owner} size="sm" />{owner.display_name}</span>
+                {assignees.length > 0 && (
+                  <span className="inline-flex items-center gap-2">
+                    <span className="flex items-center -space-x-2">
+                      {assignees.slice(0, 5).map((u) => (
+                        <UserAvatar key={u.id} user={u} size="sm" className="border-2 border-card" title={u.display_name} />
+                      ))}
+                      {assignees.length > 5 && (
+                        <span className="inline-flex items-center justify-center h-7 w-7 rounded-full border-2 border-card bg-muted text-[11px] font-medium text-pm-text-muted">
+                          +{assignees.length - 5}
+                        </span>
+                      )}
+                    </span>
+                    <span>{sprintf(_n('%d member', '%d members', assignees.length, 'wedevs-project-manager'), assignees.length)}</span>
+                  </span>
                 )}
               </div>
             </div>
@@ -471,10 +482,10 @@ export default function ProjectOverview() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70 border-b">
-                    <th className="text-left font-semibold py-2 px-2">{__("Document", 'wedevs-project-manager')}</th>
-                    <th className="text-left font-semibold py-2 px-2">{__("Type", 'wedevs-project-manager')}</th>
-                    <th className="text-left font-semibold py-2 px-2">{__("Date", 'wedevs-project-manager')}</th>
-                    <th className="text-left font-semibold py-2 px-2">{__("Created by", 'wedevs-project-manager')}</th>
+                    <th className="text-left font-medium py-2 px-2">{__("Document", 'wedevs-project-manager')}</th>
+                    <th className="text-left font-medium py-2 px-2">{__("Type", 'wedevs-project-manager')}</th>
+                    <th className="text-left font-medium py-2 px-2">{__("Date", 'wedevs-project-manager')}</th>
+                    <th className="text-left font-medium py-2 px-2">{__("Created by", 'wedevs-project-manager')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -532,11 +543,11 @@ export default function ProjectOverview() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70 border-b">
-                  <th className="text-left font-semibold py-2 px-2 w-10">{__("No", 'wedevs-project-manager')}</th>
-                  <th className="text-left font-semibold py-2 px-2">{__("Milestone", 'wedevs-project-manager')}</th>
-                  <th className="text-left font-semibold py-2 px-2">{__("Planned Date", 'wedevs-project-manager')}</th>
-                  <th className="text-left font-semibold py-2 px-2">{__("Tasks", 'wedevs-project-manager')}</th>
-                  <th className="text-left font-semibold py-2 px-2">{__("Status", 'wedevs-project-manager')}</th>
+                  <th className="text-left font-medium py-2 px-2 w-10">{__("No", 'wedevs-project-manager')}</th>
+                  <th className="text-left font-medium py-2 px-2">{__("Milestone", 'wedevs-project-manager')}</th>
+                  <th className="text-left font-medium py-2 px-2">{__("Planned Date", 'wedevs-project-manager')}</th>
+                  <th className="text-left font-medium py-2 px-2">{__("Tasks", 'wedevs-project-manager')}</th>
+                  <th className="text-left font-medium py-2 px-2">{__("Status", 'wedevs-project-manager')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -574,7 +585,7 @@ export default function ProjectOverview() {
           <h3 className="text-sm font-medium text-pm-text-primary flex items-center gap-2">
             <Users className="h-4 w-4 text-pm-text-muted" />
             {__("Team Members", 'wedevs-project-manager')}
-            <span className="text-[14px] bg-muted px-1.5 py-0.5 rounded-full tabular-nums font-normal">
+            <span className="text-[12px] bg-muted px-1.5 py-0.5 rounded-md tabular-nums font-medium text-pm-text-muted">
               {assignees.length}
             </span>
           </h3>
@@ -688,7 +699,7 @@ export default function ProjectOverview() {
                   <p className="text-sm font-medium text-pm-text-primary truncate">
                     {user.display_name}
                   </p>
-                  <p className="text-[15px] text-pm-text-muted truncate">
+                  <p className="text-[13px] text-pm-text-muted truncate">
                     {user.email}
                   </p>
                 </div>

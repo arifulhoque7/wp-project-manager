@@ -57,6 +57,9 @@ import {
   FileText,
   Loader2,
   Video,
+  ListChecks,
+  MessageSquare,
+  Activity,
 } from 'lucide-react'
 import { DriveMonoGlyph } from '@components/google-workspace/GoogleIcons'
 import {
@@ -773,9 +776,9 @@ export default function TaskDetailSheet() {
             <div className="px-6 pt-4">
               <div className="flex items-center gap-6 border-b border-pm-border">
                 {[
-                  { key: 'subtasks', label: __('Subtasks', 'wedevs-project-manager'), count: 0, pro: !isPro },
-                  { key: 'comments', label: __('Comments', 'wedevs-project-manager'), count: comments.length },
-                  { key: 'activities', label: __('Activities', 'wedevs-project-manager'), count: 0 },
+                  { key: 'subtasks', label: __('Subtasks', 'wedevs-project-manager'), count: 0, pro: !isPro, icon: ListChecks },
+                  { key: 'comments', label: __('Comments', 'wedevs-project-manager'), count: comments.length, icon: MessageSquare },
+                  { key: 'activities', label: __('Activities', 'wedevs-project-manager'), count: 0, icon: Activity },
                 ].map(t => (
                   <button
                     key={t.key}
@@ -783,6 +786,7 @@ export default function TaskDetailSheet() {
                     onClick={() => { setDetailTab(t.key); if (t.key === 'activities' && !showActivities) handleLoadActivities() }}
                     className={cn('relative -mb-px flex items-center gap-1.5 pb-3 text-sm font-medium transition-colors', detailTab === t.key ? 'text-pm-text-primary' : 'text-pm-text-muted hover:text-pm-text')}
                   >
+                    {t.icon && <t.icon className="h-4 w-4" />}
                     {t.label}
                     {t.count > 0 && <span className="text-[12px] bg-muted px-1.5 py-0.5 rounded-md tabular-nums font-medium">{t.count}</span>}
                     {t.pro && <ProBadge />}
