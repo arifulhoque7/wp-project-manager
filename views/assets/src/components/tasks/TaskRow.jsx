@@ -249,7 +249,7 @@ export default function TaskRow({ task, projectId, listId, draggable: isDraggabl
 
       {/* Col 3 — Labels */}
       <div className="flex items-center gap-1 flex-wrap min-w-0 overflow-hidden">
-        <TaskLabelBadges task={task} variant="full" />
+        {showLabels && <TaskLabelBadges task={task} variant="full" />}
       </div>
 
       {/* Col 4 — Description */}

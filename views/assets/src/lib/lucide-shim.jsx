@@ -15,7 +15,7 @@ import {
   AlignLeftIcon as Hi_AlignLeftIcon,
   AlignRightIcon as Hi_AlignRightIcon,
   Archive01Icon as Hi_Archive01Icon,
-  ArchiveXIcon as Hi_ArchiveXIcon,
+  Cancel01Icon as Hi_Cancel01Icon,
   ArrowLeft01Icon as Hi_ArrowLeft01Icon,
   ArrowLeftRightIcon as Hi_ArrowLeftRightIcon,
   ArrowRight01Icon as Hi_ArrowRight01Icon,
@@ -23,22 +23,22 @@ import {
   ArrowUpRight01Icon as Hi_ArrowUpRight01Icon,
   Attachment01Icon as Hi_Attachment01Icon,
   BadgeInfoIcon as Hi_BadgeInfoIcon,
-  BadgeMinusIcon as Hi_BadgeMinusIcon,
-  BadgePlusIcon as Hi_BadgePlusIcon,
+  MinusSignIcon as Hi_MinusSignIcon,
+  PlusSignIcon as Hi_PlusSignIcon,
   BarChartIcon as Hi_BarChartIcon,
   BellIcon as Hi_BellIcon,
-  BitcoinReceiptIcon as Hi_BitcoinReceiptIcon,
-  BitcoinSendIcon as Hi_BitcoinSendIcon,
+  Invoice01Icon as Hi_Invoice01Icon,
+  MailSend01Icon as Hi_MailSend01Icon,
   BoldIcon as Hi_BoldIcon,
   BookOpen01Icon as Hi_BookOpen01Icon,
   BotIcon as Hi_BotIcon,
-  BotMessageSquareIcon as Hi_BotMessageSquareIcon,
+  BubbleChatIcon as Hi_BubbleChatIcon,
   BoxIcon as Hi_BoxIcon,
   Brain01Icon as Hi_Brain01Icon,
   Calendar01Icon as Hi_Calendar01Icon,
   CalendarClockIcon as Hi_CalendarClockIcon,
   CalendarRangeIcon as Hi_CalendarRangeIcon,
-  ChatUnlock01Icon as Hi_ChatUnlock01Icon,
+  SquareUnlock01Icon as Hi_SquareUnlock01Icon,
   CheckIcon as Hi_CheckIcon,
   CheckListIcon as Hi_CheckListIcon,
   ChevronDownIcon as Hi_ChevronDownIcon,
@@ -103,7 +103,7 @@ import {
   LayoutGridIcon as Hi_LayoutGridIcon,
   LeftToRightListBulletIcon as Hi_LeftToRightListBulletIcon,
   LeftToRightListNumberIcon as Hi_LeftToRightListNumberIcon,
-  LightbulbOffIcon as Hi_LightbulbOffIcon,
+  Idea01Icon as Hi_Idea01Icon,
   Link01Icon as Hi_Link01Icon,
   LoaderPinwheelIcon as Hi_LoaderPinwheelIcon,
   LockIcon as Hi_LockIcon,
@@ -132,7 +132,7 @@ import {
   QuoteDownIcon as Hi_QuoteDownIcon,
   Radio01Icon as Hi_Radio01Icon,
   RedoIcon as Hi_RedoIcon,
-  RefreshCwOffIcon as Hi_RefreshCwOffIcon,
+  RefreshIcon as Hi_RefreshIcon,
   RepeatIcon as Hi_RepeatIcon,
   Rocket01Icon as Hi_Rocket01Icon,
   RotateCcwSquareIcon as Hi_RotateCcwSquareIcon,
@@ -145,7 +145,7 @@ import {
   SlackIcon as Hi_SlackIcon,
   SparklesIcon as Hi_SparklesIcon,
   Square01Icon as Hi_Square01Icon,
-  SquareLockCheck01Icon as Hi_SquareLockCheck01Icon,
+  CheckmarkSquare01Icon as Hi_CheckmarkSquare01Icon,
   StarIcon as Hi_StarIcon,
   Sun01Icon as Hi_Sun01Icon,
   Table01Icon as Hi_Table01Icon,
@@ -209,7 +209,7 @@ export const CalendarRange = /*#__PURE__*/ make(Hi_CalendarRangeIcon);
 export const Check = /*#__PURE__*/ make(Hi_CheckIcon);
 export const CheckCircle = /*#__PURE__*/ make(Hi_CircleCheckIcon);
 export const CheckCircle2 = /*#__PURE__*/ make(Hi_CircleCheckIcon);
-export const CheckSquare = /*#__PURE__*/ make(Hi_SquareLockCheck01Icon);
+export const CheckSquare = /*#__PURE__*/ make(Hi_CheckmarkSquare01Icon);
 export const ChevronDown = /*#__PURE__*/ make(Hi_ChevronDownIcon);
 export const ChevronDownIcon = /*#__PURE__*/ make(Hi_ChevronDownIcon);
 export const ChevronLeft = /*#__PURE__*/ make(Hi_ChevronLeftIcon);
@@ -274,7 +274,7 @@ export const LayoutDashboard = /*#__PURE__*/ make(Hi_Layout01Icon);
 export const LayoutGrid = /*#__PURE__*/ make(Hi_LayoutGridIcon);
 export const LayoutList = /*#__PURE__*/ make(Hi_LeftToRightListBulletIcon);
 export const LayoutTemplate = /*#__PURE__*/ make(Hi_DashboardSquare02Icon);
-export const Lightbulb = /*#__PURE__*/ make(Hi_LightbulbOffIcon);
+export const Lightbulb = /*#__PURE__*/ make(Hi_Idea01Icon);
 export const Link = /*#__PURE__*/ make(Hi_Link01Icon);
 export const Link2 = /*#__PURE__*/ make(Hi_Link01Icon);
 export const List = /*#__PURE__*/ make(Hi_CheckListIcon);
@@ -288,11 +288,11 @@ export const Mail = /*#__PURE__*/ make(Hi_Mail01Icon);
 export const Maximize2 = /*#__PURE__*/ make(Hi_Maximize01Icon);
 export const Megaphone = /*#__PURE__*/ make(Hi_Megaphone01Icon);
 export const Menu = /*#__PURE__*/ make(Hi_Menu01Icon);
-export const MessageSquare = /*#__PURE__*/ make(Hi_BotMessageSquareIcon);
+export const MessageSquare = /*#__PURE__*/ make(Hi_BubbleChatIcon);
 export const MessagesSquare = /*#__PURE__*/ make(Hi_Message02Icon);
 export const Milestone = /*#__PURE__*/ make(Hi_Flag03Icon);
 export const Minimize2 = /*#__PURE__*/ make(Hi_Minimize01Icon);
-export const Minus = /*#__PURE__*/ make(Hi_BadgeMinusIcon);
+export const Minus = /*#__PURE__*/ make(Hi_MinusSignIcon);
 export const Monitor = /*#__PURE__*/ make(Hi_MonitorDotIcon);
 export const Moon = /*#__PURE__*/ make(Hi_Moon01Icon);
 export const MoreHorizontal = /*#__PURE__*/ make(Hi_MoreHorizontalIcon);
@@ -307,22 +307,22 @@ export const Pencil = /*#__PURE__*/ make(Hi_PencilIcon);
 export const PieChart = /*#__PURE__*/ make(Hi_PieChart01Icon);
 export const Play = /*#__PURE__*/ make(Hi_PlayIcon);
 export const Plug = /*#__PURE__*/ make(Hi_Plug01Icon);
-export const Plus = /*#__PURE__*/ make(Hi_BadgePlusIcon);
+export const Plus = /*#__PURE__*/ make(Hi_PlusSignIcon);
 export const PlusCircle = /*#__PURE__*/ make(Hi_CirclePlusIcon);
-export const PlusIcon = /*#__PURE__*/ make(Hi_BadgePlusIcon);
+export const PlusIcon = /*#__PURE__*/ make(Hi_PlusSignIcon);
 export const Presentation = /*#__PURE__*/ make(Hi_Presentation01Icon);
 export const Puzzle = /*#__PURE__*/ make(Hi_PuzzleIcon);
 export const Quote = /*#__PURE__*/ make(Hi_QuoteDownIcon);
 export const Radio = /*#__PURE__*/ make(Hi_Radio01Icon);
-export const Receipt = /*#__PURE__*/ make(Hi_BitcoinReceiptIcon);
+export const Receipt = /*#__PURE__*/ make(Hi_Invoice01Icon);
 export const Redo = /*#__PURE__*/ make(Hi_RedoIcon);
-export const RefreshCw = /*#__PURE__*/ make(Hi_RefreshCwOffIcon);
+export const RefreshCw = /*#__PURE__*/ make(Hi_RefreshIcon);
 export const RemoveFormatting = /*#__PURE__*/ make(Hi_TextClearIcon);
 export const Repeat = /*#__PURE__*/ make(Hi_RepeatIcon);
 export const Rocket = /*#__PURE__*/ make(Hi_Rocket01Icon);
 export const RotateCcw = /*#__PURE__*/ make(Hi_RotateCcwSquareIcon);
 export const Search = /*#__PURE__*/ make(Hi_Search01Icon);
-export const Send = /*#__PURE__*/ make(Hi_BitcoinSendIcon);
+export const Send = /*#__PURE__*/ make(Hi_MailSend01Icon);
 export const Settings = /*#__PURE__*/ make(Hi_Settings01Icon);
 export const Settings2 = /*#__PURE__*/ make(Hi_Settings01Icon);
 export const Shield = /*#__PURE__*/ make(Hi_Shield01Icon);
@@ -347,7 +347,7 @@ export const Underline = /*#__PURE__*/ make(Hi_TextUnderlineIcon);
 export const Undo = /*#__PURE__*/ make(Hi_UndoIcon);
 export const Undo2 = /*#__PURE__*/ make(Hi_Undo02Icon);
 export const Unlink = /*#__PURE__*/ make(Hi_Unlink01Icon);
-export const Unlock = /*#__PURE__*/ make(Hi_ChatUnlock01Icon);
+export const Unlock = /*#__PURE__*/ make(Hi_SquareUnlock01Icon);
 export const Upload = /*#__PURE__*/ make(Hi_Upload01Icon);
 export const User = /*#__PURE__*/ make(Hi_UserIcon);
 export const UserPlus = /*#__PURE__*/ make(Hi_UserAdd01Icon);
@@ -357,7 +357,7 @@ export const Users2 = /*#__PURE__*/ make(Hi_UserGroupIcon);
 export const Video = /*#__PURE__*/ make(Hi_Video01Icon);
 export const Wallet = /*#__PURE__*/ make(Hi_Wallet01Icon);
 export const Wrench = /*#__PURE__*/ make(Hi_Wrench01Icon);
-export const X = /*#__PURE__*/ make(Hi_ArchiveXIcon);
+export const X = /*#__PURE__*/ make(Hi_Cancel01Icon);
 export const XCircle = /*#__PURE__*/ make(Hi_CircleXIcon);
 export const Youtube = /*#__PURE__*/ make(Hi_YoutubeIcon);
 export const Zap = /*#__PURE__*/ make(Hi_ZapIcon);
