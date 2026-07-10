@@ -12,6 +12,7 @@ import {
 } from '@components/ui/sheet';
 import { AiMagic, Maximize2, Minimize2, RotateCcw } from 'lucide-react';
 import { Button } from '@components/ui/button';
+import { DEFAULT_LABEL_COLOR } from '@lib/colorPresets';
 import { cn } from '@/lib/utils';
 import ChatComposer from './parts/ChatComposer';
 import StructurePreview from './parts/StructurePreview';
@@ -159,6 +160,7 @@ const AiCreateDialog = ({ open, onOpenChange }) => {
         title: projectData.title,
         description: projectData.description,
         status: 'incomplete',
+        color_code: projectData.color_code || DEFAULT_LABEL_COLOR,
       });
       const projectId = projectRes?.data?.id;
       if (!projectId) {

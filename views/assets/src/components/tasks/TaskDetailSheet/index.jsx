@@ -561,7 +561,7 @@ export default function TaskDetailSheet() {
             <div className="flex flex-1 min-h-0">
 
             {/* LEFT — task header + properties */}
-            <aside className="w-[340px] shrink-0 overflow-y-auto border-r border-pm-border px-5 py-5 space-y-4">
+            <aside className="w-[400px] shrink-0 overflow-y-auto border-r border-pm-border px-5 py-5 space-y-4">
               <div className="space-y-1.5">
                 <div className="flex items-center gap-2 text-[13px] text-muted-foreground min-w-0">
                   {(currentTask.project?.data?.title || currentTask.project?.title) && (
