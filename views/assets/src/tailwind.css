@@ -646,6 +646,39 @@ ol[data-sonner-toaster],
   z-index: 99999 !important;
 }
 
+/* ── Countdown progress bar under each toast (Laravel-Forge style) ──
+   A thin bar shrinks 100% → 0 over the toast's own duration
+   (--pm-toast-duration, set per toast in useToast.js). Pauses on hover to
+   match Sonner pausing its dismiss timer. Falls back to Sonner's 4s default. ── */
+[data-sonner-toast] {
+  overflow: hidden;
+}
+[data-sonner-toast]::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4px;
+  transform-origin: left center;
+  background: currentColor;
+  opacity: 0.75;
+  pointer-events: none;
+  animation: pm-toast-progress var(--pm-toast-duration, 4000ms) linear forwards;
+}
+[data-sonner-toast]:hover::after,
+[data-sonner-toaster]:hover [data-sonner-toast]::after {
+  animation-play-state: paused;
+}
+/* No countdown on persistent loading toasts (they stay until resolved). */
+[data-sonner-toast][data-type="loading"]::after {
+  display: none;
+}
+@keyframes pm-toast-progress {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
 /* ── Logged-in/admin-bar mode — bump PM portals above
      WP admin bar (z-index 99999) and optional WP sidebar ── */
 body.pm-mode-wordpress [data-state].fixed,
