@@ -9,6 +9,8 @@ import {
   closeEditSheet,
 } from '@store/projectsSlice'
 import { cn } from '@lib/utils'
+import { ColorPicker } from '@components/ui/color-picker'
+import { DEFAULT_LABEL_COLOR } from '@lib/colorPresets'
 import { useToast } from '@hooks/useToast'
 import { applyFilters } from '@hooks/useSlot'
 import ProTemplateField from '@components/projects/ProTemplateField'
@@ -76,6 +78,7 @@ export function ProjectCreateSheet() {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [categoryId, setCategoryId] = useState('')
+  const [color, setColor] = useState(DEFAULT_LABEL_COLOR)
   const [notifyUsers, setNotifyUsers] = useState(false)
   const [titleError, setTitleError] = useState('')
 
@@ -122,6 +125,7 @@ export function ProjectCreateSheet() {
         setDescription(typeof desc === 'string' ? desc : '')
         const catId = editProject.categories?.data?.[0]?.id
         setCategoryId(catId ? String(catId) : '')
+        setColor(editProject.color_code || DEFAULT_LABEL_COLOR)
         setNotifyUsers(false)
 
         const assignees = editProject.assignees?.data || []
@@ -139,6 +143,7 @@ export function ProjectCreateSheet() {
         setTitle('')
         setDescription('')
         setCategoryId('')
+        setColor(DEFAULT_LABEL_COLOR)
         setNotifyUsers(false)
         setSelectedUsers([])
       }
@@ -259,6 +264,8 @@ export function ProjectCreateSheet() {
 
     if (notifyUsers) payload.notify_users = true
 
+    if (color) payload.color_code = color
+
     try {
       if (isEditMode) {
         await dispatch(updateProject({ ...payload, projectId: editProject.id })).unwrap()
@@ -272,7 +279,7 @@ export function ProjectCreateSheet() {
     } catch {
       toast.error(isEditMode ? __('Failed to update project', 'wedevs-project-manager') : __('Failed to create project', 'wedevs-project-manager'))
     }
-  }, [dispatch, title, description, categoryId, selectedUsers, notifyUsers, toast, __, isEditMode, editProject])
+  }, [dispatch, title, description, categoryId, color, selectedUsers, notifyUsers, toast, __, isEditMode, editProject])
 
   // ── Render ──────────────────────────────────────────────
 
@@ -341,6 +348,16 @@ export function ProjectCreateSheet() {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          {/* Color */}
+          <div className="space-y-2">
+            <Label>{__('Project Color', 'wedevs-project-manager')}</Label>
+            <ColorPicker
+              value={color}
+              onChange={(c) => setColor(c || DEFAULT_LABEL_COLOR)}
+              className="w-full justify-start"
+            />
           </div>
 
           {/* Description */}

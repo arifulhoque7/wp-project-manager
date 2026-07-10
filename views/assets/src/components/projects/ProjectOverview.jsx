@@ -47,7 +47,8 @@ import {
   SelectValue,
 } from "@components/ui/select";
 import { useAppDispatch, useAppSelector } from "@store/index";
-import { fetchRoles } from "@store/projectsSlice";
+import { fetchRoles, openEditSheet } from "@store/projectsSlice";
+import { ProjectCreateSheet } from "@components/projects/ProjectCreateSheet";
 import CreateUserDialog from "@components/common/CreateUserDialog";
 import { Area, AreaChart, XAxis, CartesianGrid } from "recharts";
 import {
@@ -99,9 +100,9 @@ export default function ProjectOverview() {
   useEffect(() => { dispatch(fetchRoles()); }, [dispatch]);
 
   // Vue 2 fetches: GET projects/{id}?with=overview_graph
-  useEffect(() => {
+  const loadProject = useCallback((showLoader = true) => {
     if (!projectId) return;
-    setLoading(true);
+    if (showLoader) setLoading(true);
     api
       .get(`projects/${projectId}`, { with: "overview_graph" })
       .then((res) => {
@@ -113,7 +114,17 @@ export default function ProjectOverview() {
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [projectId]);
+  }, [projectId, api]);
+
+  useEffect(() => { loadProject(); }, [projectId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Refetch when the edit sheet closes (after saving project changes).
+  const editSheetOpen = useAppSelector((s) => s.projects.editSheetOpen);
+  const prevEditOpen = useRef(false);
+  useEffect(() => {
+    if (prevEditOpen.current && !editSheetOpen) loadProject(false);
+    prevEditOpen.current = editSheetOpen;
+  }, [editSheetOpen, loadProject]);
 
   const handleMemberSearch = useCallback((value) => {
     setMemberSearch(value);
@@ -332,7 +343,7 @@ export default function ProjectOverview() {
           <h1 className="text-xl font-bold text-pm-text-primary truncate">{__("Projects", 'wedevs-project-manager')}</h1>
         </div>
         {canManageMembers && (
-          <Button size="sm" className="h-9 gap-1.5 shrink-0" onClick={() => navigate(`/projects/${projectId}/settings`)}>
+          <Button size="sm" className="h-9 gap-1.5 shrink-0" onClick={() => dispatch(openEditSheet(project))}>
             <Pencil className="h-4 w-4" />{__("Edit", 'wedevs-project-manager')}
           </Button>
         )}
@@ -348,8 +359,14 @@ export default function ProjectOverview() {
             : { label: __("Active", 'wedevs-project-manager'), cls: "bg-blue-100 text-blue-700" };
         return (
           <div className="rounded-xl border bg-card p-4 flex flex-wrap items-center gap-4">
-            <div className="h-14 w-14 rounded-lg bg-pm-accent/10 flex items-center justify-center shrink-0">
-              <ClipboardList className="h-7 w-7 text-pm-accent" />
+            <div
+              className={cn("h-14 w-14 rounded-lg flex items-center justify-center shrink-0", !project.color_code && "bg-pm-accent/10")}
+              style={project.color_code ? { backgroundColor: `${project.color_code}1a` } : undefined}
+            >
+              <ClipboardList
+                className={cn("h-7 w-7", !project.color_code && "text-pm-accent")}
+                style={project.color_code ? { color: project.color_code } : undefined}
+              />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
@@ -379,7 +396,121 @@ export default function ProjectOverview() {
                     <span>{sprintf(_n('%d member', '%d members', assignees.length, 'wedevs-project-manager'), assignees.length)}</span>
                   </span>
                 )}
+          {canManageMembers && (
+          <Popover
+            open={memberPopover}
+            onOpenChange={(open) => {
+              setMemberPopover(open);
+              if (!open) {
+                setPendingUser(null);
+                setPendingRoleId(null);
+                setMemberSearch('');
+                setMemberResults([]);
+              }
+            }}
+          >
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                title={__("Add member", 'wedevs-project-manager')}
+                className="inline-flex items-center justify-center h-7 w-7 rounded-full border border-dashed border-pm-border text-pm-text-muted hover:text-pm-accent hover:border-pm-accent transition-colors"
+              >
+                <Plus className="h-4 w-4" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[300px] p-0" align="start">
+              {!pendingUser ? (
+                <Command shouldFilter={false}>
+                  <CommandInput placeholder={__("Search users...", 'wedevs-project-manager')} value={memberSearch} onValueChange={handleMemberSearch} />
+                  <CommandList>
+                    {searchingMembers && (
+                      <div className="flex items-center justify-center py-4 text-sm text-muted-foreground">
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />{__("Searching...", 'wedevs-project-manager')}
+                      </div>
+                    )}
+                    {!searchingMembers && memberSearch.trim().length >= 2 && memberResults.length === 0 && (
+                      <div className="px-3 py-4 text-center space-y-2">
+                        <p className="text-sm text-muted-foreground">
+                          {__("No user found named", 'wedevs-project-manager')}{' '}
+                          <span className="font-medium text-pm-text-primary">&quot;{memberSearch}&quot;</span>
+                        </p>
+                        <Button
+                          type="button"
+                          size="sm"
+                          onClick={() => { setMemberPopover(false); setCreateUserOpen(true); }}
+                        >
+                          <UserPlus className="h-4 w-4 mr-1" />{__("Create User", 'wedevs-project-manager')}
+                        </Button>
+                      </div>
+                    )}
+                    {memberResults.length > 0 && (
+                      <CommandGroup>
+                        {memberResults.map(u => (
+                          <CommandItem key={u.id} value={String(u.id)} onSelect={() => handleSelectUserForAdd(u)} className="cursor-pointer">
+                            <UserAvatar user={u} size="md" className="mr-2" />
+                            <span className="text-sm truncate flex-1">{u.display_name}</span>
+                            <Plus className="h-4 w-4 text-muted-foreground" />
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    )}
+                  </CommandList>
+                </Command>
+              ) : (
+                <div className="p-3 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <UserAvatar user={pendingUser} size="md" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{pendingUser.display_name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{pendingUser.email}</p>
+                    </div>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground">{__("Role", 'wedevs-project-manager')}</label>
+                    <Select
+                      value={pendingRoleId ? String(pendingRoleId) : ''}
+                      onValueChange={(val) => setPendingRoleId(Number(val))}
+                    >
+                      <SelectTrigger className="h-8 text-sm">
+                        <SelectValue placeholder={__("Select role", 'wedevs-project-manager')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {roles.map((role) => (
+                          <SelectItem key={role.id} value={String(role.id)}>
+                            {role.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex justify-end gap-2 pt-1">
+                    <Button variant="ghost" size="sm" onClick={() => { setPendingUser(null); setPendingRoleId(null); }}>
+                      {__("Back", 'wedevs-project-manager')}
+                    </Button>
+                    <Button size="sm" onClick={handleConfirmAddMember} disabled={!pendingRoleId}>
+                      {__("Add", 'wedevs-project-manager')}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </PopoverContent>
+          </Popover>
+          )}
               </div>
+            </div>
+
+            <div className="w-full">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[13px] text-pm-text-muted">
+                  {sprintf(__('Project progress · %1$d of %2$d tasks done', 'wedevs-project-manager'), completeTasks, totalTasks)}
+                </span>
+                <span className="text-sm font-semibold text-pm-text-primary">{progress}%</span>
+              </div>
+              <Progress
+                value={progress}
+                className="h-1.5 bg-muted"
+                indicatorStyle={project.color_code ? { backgroundColor: project.color_code } : undefined}
+              />
             </div>
           </div>
         );
@@ -405,27 +536,6 @@ export default function ProjectOverview() {
             </div>
           </button>
         ))}
-      </div>
-
-      {/* Progress */}
-      <div className="rounded-xl border bg-card p-5 space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium text-pm-text-primary">
-            {__("Overall Progress", 'wedevs-project-manager')}
-          </h3>
-          <span className="text-lg font-bold text-pm-accent tabular-nums">
-            {progress}%
-          </span>
-        </div>
-        <Progress value={progress} className="h-3" />
-        <div className="flex items-center justify-between text-sm text-pm-text-muted">
-          <span>
-            {completeTasks} {__("completed", 'wedevs-project-manager')}
-          </span>
-          <span>
-            {incompleteTasks} {__("remaining", 'wedevs-project-manager')}
-          </span>
-        </div>
       </div>
 
       {/* Progress Over Time + Recent Documents */}
@@ -605,103 +715,7 @@ export default function ProjectOverview() {
               {assignees.length}
             </span>
           </h3>
-          {canManageMembers && (
-          <Popover
-            open={memberPopover}
-            onOpenChange={(open) => {
-              setMemberPopover(open);
-              if (!open) {
-                setPendingUser(null);
-                setPendingRoleId(null);
-                setMemberSearch('');
-                setMemberResults([]);
-              }
-            }}
-          >
-            <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="h-7 text-sm gap-1.5">
-                <UserPlus className="h-4 w-4" />
-                {__("Add", 'wedevs-project-manager')}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[300px] p-0" align="end">
-              {!pendingUser ? (
-                <Command shouldFilter={false}>
-                  <CommandInput placeholder={__("Search users...", 'wedevs-project-manager')} value={memberSearch} onValueChange={handleMemberSearch} />
-                  <CommandList>
-                    {searchingMembers && (
-                      <div className="flex items-center justify-center py-4 text-sm text-muted-foreground">
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />{__("Searching...", 'wedevs-project-manager')}
-                      </div>
-                    )}
-                    {!searchingMembers && memberSearch.trim().length >= 2 && memberResults.length === 0 && (
-                      <div className="px-3 py-4 text-center space-y-2">
-                        <p className="text-sm text-muted-foreground">
-                          {__("No user found named", 'wedevs-project-manager')}{' '}
-                          <span className="font-medium text-pm-text-primary">&quot;{memberSearch}&quot;</span>
-                        </p>
-                        <Button
-                          type="button"
-                          size="sm"
-                          onClick={() => { setMemberPopover(false); setCreateUserOpen(true); }}
-                        >
-                          <UserPlus className="h-4 w-4 mr-1" />{__("Create User", 'wedevs-project-manager')}
-                        </Button>
-                      </div>
-                    )}
-                    {memberResults.length > 0 && (
-                      <CommandGroup>
-                        {memberResults.map(u => (
-                          <CommandItem key={u.id} value={String(u.id)} onSelect={() => handleSelectUserForAdd(u)} className="cursor-pointer">
-                            <UserAvatar user={u} size="md" className="mr-2" />
-                            <span className="text-sm truncate flex-1">{u.display_name}</span>
-                            <Plus className="h-4 w-4 text-muted-foreground" />
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    )}
-                  </CommandList>
-                </Command>
-              ) : (
-                <div className="p-3 space-y-3">
-                  <div className="flex items-center gap-2">
-                    <UserAvatar user={pendingUser} size="md" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">{pendingUser.display_name}</p>
-                      <p className="text-xs text-muted-foreground truncate">{pendingUser.email}</p>
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-muted-foreground">{__("Role", 'wedevs-project-manager')}</label>
-                    <Select
-                      value={pendingRoleId ? String(pendingRoleId) : ''}
-                      onValueChange={(val) => setPendingRoleId(Number(val))}
-                    >
-                      <SelectTrigger className="h-8 text-sm">
-                        <SelectValue placeholder={__("Select role", 'wedevs-project-manager')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {roles.map((role) => (
-                          <SelectItem key={role.id} value={String(role.id)}>
-                            {role.title}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex justify-end gap-2 pt-1">
-                    <Button variant="ghost" size="sm" onClick={() => { setPendingUser(null); setPendingRoleId(null); }}>
-                      {__("Back", 'wedevs-project-manager')}
-                    </Button>
-                    <Button size="sm" onClick={handleConfirmAddMember} disabled={!pendingRoleId}>
-                      {__("Add", 'wedevs-project-manager')}
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </PopoverContent>
-          </Popover>
-          )}
+
         </div>
         {assignees.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -773,6 +787,9 @@ export default function ProjectOverview() {
           handleSelectUserForAdd(created);
         }}
       />
+
+      <ProjectCreateSheet />
     </div>
   );
 }
+

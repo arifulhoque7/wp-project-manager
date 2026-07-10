@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { useState } from 'react'
-import { Outlet, useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { PageTransition } from '@components/common/PageTransition'
 import { usePermissions } from '@hooks/usePermissions'
 import { cn } from '@lib/utils'
 import { UserAvatar } from '@components/common/UserAvatar'
@@ -146,7 +147,7 @@ export function FrontendLayout() {
       <div className="flex min-h-[calc(100vh-56px)]">
         {!hideSidebar && <AppSidebar />}
         <main className="flex-1 min-w-0 overflow-auto m-2 rounded-xl border border-pm-border bg-pm-surface shadow-sm">
-          <Outlet />
+          <PageTransition />
         </main>
       </div>
     </div>

@@ -142,6 +142,19 @@ export function AppSidebar() {
     localStorage.setItem('pm-sidebar-collapsed', String(next))
   }
 
+  // Refetch sidebar projects after a project is created/edited (e.g. color change)
+  const editSheetOpen = useSelector((s) => s.projects.editSheetOpen)
+  const createSheetOpen = useSelector((s) => s.projects.createSheetOpen)
+  const [reloadKey, setReloadKey] = useState(0)
+  const prevSheets = useRef({ edit: false, create: false })
+  useEffect(() => {
+    const p = prevSheets.current
+    if ((p.edit && !editSheetOpen) || (p.create && !createSheetOpen)) {
+      setReloadKey((k) => k + 1)
+    }
+    prevSheets.current = { edit: editSheetOpen, create: createSheetOpen }
+  }, [editSheetOpen, createSheetOpen])
+
   // Fetch ALL projects for sidebar (never affected by page filters)
   useEffect(() => {
     let cancelled = false
@@ -150,10 +163,11 @@ export function AppSidebar() {
       let all = []
       try {
         while (true) {
-          const res = await api.get('projects', {
+          // Use advanced/projects (Project_Transformer) so color_code is returned;
+          // the plain `projects` helper endpoint omits it.
+          const res = await api.get('advanced/projects', {
             per_page: 100,
             page,
-            select: 'id, title, status, favourite, color_code',
             with: 'assignees',
           })
           const data = res.data ?? []
@@ -166,7 +180,7 @@ export function AppSidebar() {
     }
     fetchAll()
     return () => { cancelled = true }
-  }, [])
+  }, [reloadKey]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Detect active project from URL and auto-expand it
   const activeProjectId = useMemo(() => {
@@ -333,7 +347,7 @@ export function AppSidebar() {
           'w-full flex items-center min-w-0 rounded-lg transition-colors text-left mb-1 group/nav',
           collapsed ? 'flex-col justify-center px-0 py-2 gap-0.5' : 'gap-3 px-3 py-2.5',
           isActive
-            ? 'bg-pm-accent/10 text-pm-accent font-medium'
+            ? 'bg-pm-accent-light text-pm-accent font-medium'
             : 'text-pm-text-muted hover:bg-pm-hover hover:text-pm-text',
         )}
         title={item.label}
@@ -348,7 +362,8 @@ export function AppSidebar() {
   function renderProjectItem(project) {
     const isExpanded = expandedProjects.has(project.id)
     const isActive = activeProjectId === project.id
-    const color = project.color_code || statusColor(project)
+    // Show the actual project color only — no status-color fallback (neutral dot when unset).
+    const color = project.color_code || '#111827'
 
     return (
       <div key={project.id} className="mb-0.5">
@@ -358,7 +373,7 @@ export function AppSidebar() {
             'w-full flex items-center min-w-0 rounded-lg transition-colors text-left mb-0.5',
             collapsed ? 'flex-col justify-center px-0 py-2 gap-0.5' : 'gap-2 pl-2.5 pr-2 py-2',
             isActive
-              ? 'bg-pm-accent/5 text-pm-text-primary'
+              ? 'bg-pm-accent-light text-pm-accent font-medium'
               : 'text-pm-text-muted hover:bg-pm-hover hover:text-pm-text',
           )}
           title={project.title}
@@ -411,7 +426,7 @@ export function AppSidebar() {
                     "after:content-[''] after:absolute after:left-1 after:top-1/2 after:h-px after:w-3 after:bg-pm-border",
                     'last:before:h-1/2',
                     subActive
-                      ? 'bg-pm-accent/10 text-pm-accent font-medium'
+                      ? 'bg-pm-accent-light text-pm-accent font-medium'
                       : 'text-pm-text-muted hover:bg-pm-hover hover:text-pm-text',
                   )}
                 >
@@ -479,7 +494,7 @@ export function AppSidebar() {
           {/* Main nav */}
           <div className="mb-3">
             {!collapsed && (
-              <p className="text-[14px] font-medium text-pm-text-muted uppercase tracking-wider px-2 mb-1.5">
+              <p className="text-[11px] font-semibold text-pm-text-muted/60 uppercase tracking-[0.08em] px-2 mb-1.5">
                 {__('Workspace', 'wedevs-project-manager')}
               </p>
             )}
@@ -494,7 +509,7 @@ export function AppSidebar() {
                   className="w-full flex items-center justify-between px-2 mb-1.5 group/sec"
                   onClick={() => setShowFavourites(v => !v)}
                 >
-                  <p className="text-[14px] font-medium text-pm-text-muted uppercase tracking-wider">
+                  <p className="text-[11px] font-semibold text-pm-text-muted/60 uppercase tracking-[0.08em]">
                     {__('Favourites', 'wedevs-project-manager')}
                   </p>
                   <ChevronDown className="h-3.5 w-3.5 text-pm-text-muted/40 transition-transform duration-200" style={{ transform: showFavourites ? 'rotate(0deg)' : 'rotate(-90deg)' }} />
@@ -514,7 +529,7 @@ export function AppSidebar() {
                   className="w-full flex items-center justify-between px-2 mb-1.5 group/sec"
                   onClick={() => setShowRecent(v => !v)}
                 >
-                  <p className="text-[14px] font-medium text-pm-text-muted uppercase tracking-wider">
+                  <p className="text-[11px] font-semibold text-pm-text-muted/60 uppercase tracking-[0.08em]">
                     {__('Recent', 'wedevs-project-manager')}
                   </p>
                   <ChevronDown className="h-3.5 w-3.5 text-pm-text-muted/40 transition-transform duration-200" style={{ transform: showRecent ? 'rotate(0deg)' : 'rotate(-90deg)' }} />
@@ -529,7 +544,7 @@ export function AppSidebar() {
           {/* Views */}
           <div className="mb-3">
             {!collapsed ? (
-              <p className="text-[14px] font-medium text-pm-text-muted uppercase tracking-wider px-2 mb-1.5">
+              <p className="text-[11px] font-semibold text-pm-text-muted/60 uppercase tracking-[0.08em] px-2 mb-1.5">
                 {__('Views', 'wedevs-project-manager')}
               </p>
             ) : (
@@ -542,7 +557,7 @@ export function AppSidebar() {
           {!isFrontend && (
           <div className="mb-3">
             {!collapsed ? (
-              <p className="text-[14px] font-medium text-pm-text-muted uppercase tracking-wider px-2 mb-1.5">
+              <p className="text-[11px] font-semibold text-pm-text-muted/60 uppercase tracking-[0.08em] px-2 mb-1.5">
                 {__('Modules', 'wedevs-project-manager')}
               </p>
             ) : (
@@ -565,7 +580,7 @@ export function AppSidebar() {
           {isAdmin && (
             <div className="mb-3">
               {!collapsed ? (
-                <p className="text-[14px] font-medium text-pm-text-muted uppercase tracking-wider px-2 mb-1.5">
+                <p className="text-[11px] font-semibold text-pm-text-muted/60 uppercase tracking-[0.08em] px-2 mb-1.5">
                   {__('Administration', 'wedevs-project-manager')}
                 </p>
               ) : (

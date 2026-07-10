@@ -96,6 +96,13 @@
   --pm-accent-light:       #ECE7F3;
   --pm-text:               #27272A;
   --pm-text-muted:         #71717A;
+  /* RGB channels so Tailwind /opacity modifiers work (hex vars above kept for direct var() use) */
+  --pm-surface-muted-rgb:  244 244 245;
+  --pm-border-rgb:         228 228 231;
+  --pm-hover-rgb:          244 244 245;
+  --pm-accent-rgb:         111 86 163;
+  --pm-accent-light-rgb:   236 231 243;
+  --pm-text-muted-rgb:     113 113 122;
   --pm-text-primary:       #18181B;
 }
 
@@ -146,6 +153,13 @@
   --pm-accent-light:       #2A2140;
   --pm-text:               #CBD5E1;
   --pm-text-muted:         #7B8DB0;
+  /* RGB channels (dark) for Tailwind /opacity modifiers */
+  --pm-surface-muted-rgb:  16 24 40;
+  --pm-border-rgb:         42 58 92;
+  --pm-hover-rgb:          30 45 72;
+  --pm-accent-rgb:         155 130 201;
+  --pm-accent-light-rgb:   42 33 64;
+  --pm-text-muted-rgb:     123 141 176;
   --pm-text-primary:       #F1F5F9;
 
   /* ── Tailwind Typography (prose) — override for dark mode ── */
@@ -690,6 +704,39 @@ ol[data-sonner-toaster],
 @keyframes pm-toast-progress {
   from { transform: scaleX(1); }
   to   { transform: scaleX(0); }
+}
+
+/* ── Page transitions — on navigation the page fades and its top-level
+   sections cascade in, so components arrive smoothly instead of snapping. ── */
+.pm-page-transition {
+  animation: pm-fade-in 200ms ease both;
+}
+/* Stagger the page root's direct sections (root = `<div class="p-6 space-y-6">`). */
+.pm-page-transition > * > * {
+  animation: pm-page-in 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.pm-page-transition > * > *:nth-child(1) { animation-delay: 30ms; }
+.pm-page-transition > * > *:nth-child(2) { animation-delay: 75ms; }
+.pm-page-transition > * > *:nth-child(3) { animation-delay: 120ms; }
+.pm-page-transition > * > *:nth-child(4) { animation-delay: 165ms; }
+.pm-page-transition > * > *:nth-child(5) { animation-delay: 210ms; }
+.pm-page-transition > * > *:nth-child(n+6) { animation-delay: 240ms; }
+@keyframes pm-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes pm-page-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* Overlays (task sheet, dialogs, popovers, toasts) portal out of the page and
+   must never inherit page motion — guard in case one ever renders inline. */
+.pm-page-transition [role="dialog"],
+.pm-page-transition [data-radix-popper-content-wrapper],
+.pm-page-transition [data-sonner-toaster] { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .pm-page-transition,
+  .pm-page-transition > * > * { animation: none; }
 }
 
 /* ── Logged-in/admin-bar mode — bump PM portals above

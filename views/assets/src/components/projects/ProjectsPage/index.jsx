@@ -462,7 +462,11 @@ export default function ProjectsPage() {
                       {progress}%
                     </span>
                   </div>
-                  <Progress value={progress} className="h-1.5" />
+                  <Progress
+                    value={progress}
+                    className="h-1.5"
+                    indicatorStyle={project.color_code ? { backgroundColor: project.color_code } : undefined}
+                  />
                 </div>
 
                 <div className="flex items-center justify-between gap-2 pt-3 border-t border-pm-border/50">
@@ -606,7 +610,11 @@ export default function ProjectsPage() {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <Progress value={progress} className="h-1 flex-1" />
+                          <Progress
+                            value={progress}
+                            className="h-1 flex-1"
+                            indicatorStyle={project.color_code ? { backgroundColor: project.color_code } : undefined}
+                          />
                           <span className="text-[12px] font-medium text-pm-text-muted tabular-nums w-8 text-right">
                             {progress}%
                           </span>

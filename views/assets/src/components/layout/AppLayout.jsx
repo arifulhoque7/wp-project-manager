@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Outlet } from 'react-router-dom'
+import { PageTransition } from '@components/common/PageTransition'
 import { AppSidebar } from './AppSidebar'
 import { TopBar } from './TopBar'
 import { ProjectSubNavBar } from './ProjectSubNavBar'
@@ -20,7 +20,7 @@ export function AppLayout() {
         <TopBar />
         {!hideSubNav && <ProjectSubNavBar />}
         <main className="flex-1 overflow-y-auto">
-          <Outlet />
+          <PageTransition />
         </main>
       </div>
     </div>

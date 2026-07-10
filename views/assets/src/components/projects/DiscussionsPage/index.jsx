@@ -134,14 +134,6 @@ export default function DiscussionsPage() {
     fetchDiscussions();
   }, [fetchDiscussions]);
 
-  // Desktop master-detail: auto-open the first discussion so the right pane
-  // isn't empty on load. On narrow screens keep the list-only view.
-  useEffect(() => {
-    if (discussionId || loading || !discussions.length) return;
-    if (typeof window !== 'undefined' && window.innerWidth < 640) return;
-    navigate(`/projects/${projectId}/discussions/${discussions[0].id}`, { replace: true });
-  }, [discussionId, loading, discussions, projectId, navigate]);
-
   useEffect(() => {
     if (showForm && milestones.length === 0) {
       api
