@@ -31,6 +31,7 @@ export default function KanbanDndBoard({
   newColTitle,
   setNewColTitle,
   onCreateBoard,
+  boardBg = false,
 }) {
   const dispatch = useAppDispatch();
 
@@ -161,6 +162,7 @@ export default function KanbanDndBoard({
               onSaveAutomation={onSaveAutomation}
               onTaskCreated={handleTaskCreated}
               onAddExistingTask={onAddExistingTask}
+              boardBg={boardBg}
             />
           )}
         </KanbanProvider>

@@ -19,6 +19,8 @@ import {
   ArrowLeft01Icon as Hi_ArrowLeft01Icon,
   ArrowLeftRightIcon as Hi_ArrowLeftRightIcon,
   ArrowRight01Icon as Hi_ArrowRight01Icon,
+  ArrowUp01Icon as Hi_ArrowUp01Icon,
+  AiMagicIcon as Hi_AiMagicIcon,
   ArrowUpDownIcon as Hi_ArrowUpDownIcon,
   ArrowUpRight01Icon as Hi_ArrowUpRight01Icon,
   Attachment01Icon as Hi_Attachment01Icon,
@@ -192,6 +194,7 @@ export const Archive = /*#__PURE__*/ make(Hi_Archive01Icon);
 export const ArrowLeft = /*#__PURE__*/ make(Hi_ArrowLeft01Icon);
 export const ArrowRight = /*#__PURE__*/ make(Hi_ArrowRight01Icon);
 export const ArrowRightLeft = /*#__PURE__*/ make(Hi_ArrowLeftRightIcon);
+export const ArrowUp = /*#__PURE__*/ make(Hi_ArrowUp01Icon);
 export const ArrowUpDown = /*#__PURE__*/ make(Hi_ArrowUpDownIcon);
 export const ArrowUpRight = /*#__PURE__*/ make(Hi_ArrowUpRight01Icon);
 export const BarChart = /*#__PURE__*/ make(Hi_BarChartIcon);
@@ -331,6 +334,9 @@ export const ShieldX = /*#__PURE__*/ make(Hi_ShieldBanIcon);
 export const ShoppingCart = /*#__PURE__*/ make(Hi_ShoppingCart01Icon);
 export const Slack = /*#__PURE__*/ make(Hi_SlackIcon);
 export const Sparkles = /*#__PURE__*/ make(Hi_SparklesIcon);
+// Proper AI-branded mark (used by the AI Project Generator), distinct from the
+// plain Sparkles glyph.
+export const AiMagic = /*#__PURE__*/ make(Hi_AiMagicIcon);
 export const Square = /*#__PURE__*/ make(Hi_Square01Icon);
 export const Star = /*#__PURE__*/ make(Hi_StarIcon);
 export const Strikethrough = /*#__PURE__*/ make(Hi_TextStrikethroughIcon);

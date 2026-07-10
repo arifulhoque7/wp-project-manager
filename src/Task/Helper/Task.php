@@ -387,7 +387,7 @@ class Task {
 	        2 => 'high',
 	    ];
 
-	    return $items[$priorities];
+	    return isset( $items[$priorities] ) ? $items[$priorities] : 'low';
     }
 
     public static function status( $status ) {
@@ -399,7 +399,7 @@ class Task {
 	        2 => 'pending',
 	    ];
 
-	    return $items[$status];
+	    return isset( $items[$status] ) ? $items[$status] : 'incomplete';
     }
 
     public static function recurrency( $recurrency ) {

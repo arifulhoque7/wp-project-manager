@@ -20,7 +20,16 @@ import { useProjectAssignees } from "@hooks/useProjectAssignees";
 import TaskDetailSheet from "@components/tasks/TaskDetailSheet";
 import { Button } from "@components/ui/button";
 import { Skeleton } from "@components/ui/skeleton";
-import { Filter } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@components/ui/dialog";
+import FileUploadArea from "@components/common/FileUploadArea";
+import { Filter, Image as ImageIcon, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import FilterPanel from "./parts/FilterPanel";
 import KanbanDndBoard from "./parts/KanbanDndBoard";
@@ -38,6 +47,65 @@ export default function KanbanBoard() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [defaultListId, setDefaultListId] = useState("");
   const users = useProjectAssignees(projectId);
+
+  // Board background image (Trello-style), stored per user in project meta and
+  // uploaded through our own file-upload dialog. Default is the plain surface.
+  const [boardBg, setBoardBg] = useState("");
+  const [boardBgId, setBoardBgId] = useState(0);
+  const [bgDialogOpen, setBgDialogOpen] = useState(false);
+  const [bgFiles, setBgFiles] = useState([]);
+  const [bgUploading, setBgUploading] = useState(false);
+
+  useEffect(() => {
+    if (!projectId) return;
+    let active = true;
+    api.get(`projects/${projectId}/kanboard-background`)
+      .then((res) => {
+        if (!active) return;
+        setBoardBg(res?.data?.background || res?.background || "");
+        setBoardBgId(res?.data?.attachment_id || res?.attachment_id || 0);
+      })
+      .catch(() => {});
+    return () => { active = false; };
+  }, [projectId]);
+
+  const persistBg = useCallback((url, attachmentId = 0) => {
+    setBoardBg(url);
+    setBoardBgId(attachmentId);
+    api.post(`projects/${projectId}/kanboard-background`, { background: url, attachment_id: attachmentId })
+      .catch(() => toast.error(__("Couldn't save background", 'wedevs-project-manager')));
+  }, [projectId]);
+
+  const handleBgUpload = useCallback(async () => {
+    const file = bgFiles[0];
+    if (!file) return;
+    setBgUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await api.upload(`projects/${projectId}/kanboard-background/upload`, fd);
+      const url = res?.data?.url || res?.url;
+      const attachmentId = res?.data?.attachment_id || res?.attachment_id || 0;
+      if (!url) throw new Error("no url");
+      persistBg(url, attachmentId);
+      setBgDialogOpen(false);
+      setBgFiles([]);
+      toast.success(__("Board background updated", 'wedevs-project-manager'));
+    } catch {
+      toast.error(__("Upload failed", 'wedevs-project-manager'));
+    } finally {
+      setBgUploading(false);
+    }
+  }, [bgFiles, projectId, persistBg]);
+
+  const clearBoardBg = useCallback(async () => {
+    const ok = await confirm(
+      __("Remove the board background image? The uploaded image will be deleted.", 'wedevs-project-manager'),
+      __("Remove background", 'wedevs-project-manager'),
+    );
+    if (!ok) return;
+    persistBg("", 0); // server deletes the previously stored asset
+  }, [persistBg, confirm]);
 
   const loadAllBoards = useCallback(() => {
     if (!projectId) return;
@@ -235,13 +303,49 @@ export default function KanbanBoard() {
   }
 
   return (
-    <div className="max-w-[1900px] mx-auto px-6 pt-4 pb-6 h-full">
+    <div
+      className={cn(
+        "max-w-[1900px] mx-auto px-6 pt-4 pb-6 h-full bg-cover bg-center bg-no-repeat",
+        boardBg && "rounded-xl",
+      )}
+      style={boardBg ? { backgroundImage: `url("${boardBg}")` } : undefined}
+    >
       <ConfirmDialog />
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-pm-text-primary">
+        <h2
+          className={cn(
+            "text-lg font-semibold text-pm-text-primary",
+            boardBg && "rounded-lg bg-pm-surface/90 px-3 py-1.5 shadow-sm backdrop-blur",
+          )}
+        >
           {__("Kanban Board", 'wedevs-project-manager')}
         </h2>
         <div className="flex items-center gap-2">
+          {canManage && (
+            <>
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-8 text-xs gap-1.5 border-pm-border text-pm-text hover:bg-pm-surface-muted"
+                onClick={() => setBgDialogOpen(true)}
+                title={__("Set board background", 'wedevs-project-manager')}
+              >
+                <ImageIcon className="h-3.5 w-3.5" />
+                {__("Background", 'wedevs-project-manager')}
+              </Button>
+              {boardBg && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-8 w-8 p-0 text-pm-text-muted hover:text-pm-text-primary"
+                  onClick={clearBoardBg}
+                  title={__("Remove background", 'wedevs-project-manager')}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
+            </>
+          )}
           <Button
             size="sm"
             variant="outline"
@@ -280,8 +384,26 @@ export default function KanbanBoard() {
         newColTitle={newColTitle}
         setNewColTitle={setNewColTitle}
         onCreateBoard={handleCreateBoard}
+        boardBg={!!boardBg}
       />
       <TaskDetailSheet />
+
+      <Dialog open={bgDialogOpen} onOpenChange={(o) => { setBgDialogOpen(o); if (!o) setBgFiles([]); }}>
+        <DialogContent className="sm:max-w-md" data-pm-dialog>
+          <DialogHeader>
+            <DialogTitle>{__("Board background", 'wedevs-project-manager')}</DialogTitle>
+          </DialogHeader>
+          <FileUploadArea files={bgFiles} onFilesChange={(f) => setBgFiles(f.slice(-1))} />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setBgDialogOpen(false); setBgFiles([]); }}>
+              {__("Cancel", 'wedevs-project-manager')}
+            </Button>
+            <Button onClick={handleBgUpload} disabled={!bgFiles.length || bgUploading}>
+              {bgUploading ? __("Uploading…", 'wedevs-project-manager') : __("Set background", 'wedevs-project-manager')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

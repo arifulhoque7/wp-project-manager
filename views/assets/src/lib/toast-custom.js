@@ -2,6 +2,7 @@ import { createElement } from 'react'
 import { __ } from '@wordpress/i18n'
 import { toast } from 'sonner'
 import ToastCard from '@components/common/ToastCard'
+import ToastSteps from '@components/common/ToastSteps'
 
 // Short fallback description per type so every toast has a supporting line.
 // Caller-provided `description` always wins. Evaluated lazily so locale is ready.
@@ -41,6 +42,98 @@ function patchType(type) {
         }),
       { ...data, duration }
     )
+  }
+}
+
+// Download progress toast — renders through the same ToastCard so downloads
+// match the app toaster, with a determinate bar + live percentage. Returns a
+// handle the download pipeline drives. Persistent (duration: Infinity) until
+// done/error, then auto-dismisses.
+let _dlSeq = 0
+
+export function createDownloadToast(name) {
+  const id = `pm-download-${++_dlSeq}`
+  let state = { name, status: 'downloading', progress: 0, indeterminate: true }
+
+  const paint = () => {
+    const done = state.status === 'done'
+    const error = state.status === 'error'
+    const active = state.status === 'downloading'
+    const pct = Math.round(state.progress || 0)
+    const duration = active ? Infinity : (error ? 6000 : 3000)
+
+    const description = error
+      ? (state.error || __('Download failed', 'wedevs-project-manager'))
+      : done
+        ? __('Downloaded', 'wedevs-project-manager')
+        : state.indeterminate
+          ? __('Preparing…', 'wedevs-project-manager')
+          : `${__('Downloading…', 'wedevs-project-manager')} ${pct}%`
+
+    toast.custom(
+      () =>
+        createElement(ToastCard, {
+          type: error ? 'error' : done ? 'success' : 'loading',
+          title: name,
+          description,
+          progress: error || (active && state.indeterminate) ? null : (done ? 100 : pct),
+          duration,
+          onDismiss: () => toast.dismiss(id),
+        }),
+      { id, duration },
+    )
+  }
+
+  paint()
+
+  return {
+    progress(p, indeterminate = false) {
+      state = { ...state, status: 'downloading', progress: p, indeterminate }
+      paint()
+    },
+    done() {
+      state = { ...state, status: 'done', progress: 100, indeterminate: false }
+      paint()
+    },
+    error(msg) {
+      state = { ...state, status: 'error', error: msg }
+      paint()
+    },
+    dismiss() { toast.dismiss(id) },
+  }
+}
+
+// Multi-step "server flow" toast — a checklist that advances one step at a
+// time (create project → task lists → tasks). Returns a handle the caller
+// drives. Persistent until done()/fail(), then auto-dismisses.
+let _stepSeq = 0
+
+export function createStepsToast(title, labels, { icon } = {}) {
+  const id = `pm-steps-${++_stepSeq}`
+  let steps = labels.map((label) => ({ label, status: 'pending' }))
+
+  const paint = (duration = Infinity) => {
+    toast.custom(
+      () => createElement(ToastSteps, { title, icon, steps, onDismiss: () => toast.dismiss(id) }),
+      { id, duration },
+    )
+  }
+  paint()
+
+  const setStatus = (i, status) => {
+    steps = steps.map((s, idx) => (idx === i ? { ...s, status } : s))
+  }
+
+  return {
+    start(i) { setStatus(i, 'active'); paint() },
+    complete(i) { setStatus(i, 'done'); paint() },
+    setLabel(i, label) { steps = steps.map((s, idx) => (idx === i ? { ...s, label } : s)); paint() },
+    error(i, label) {
+      steps = steps.map((s, idx) => (idx === i ? { ...s, status: 'error', label: label || s.label } : s))
+      paint(6000)
+    },
+    done() { paint(3000) },
+    dismiss() { toast.dismiss(id) },
   }
 }
 

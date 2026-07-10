@@ -25,13 +25,16 @@ export default function ToastCard({
   action,
   cancel,
   duration = 4000,
+  progress = null, // 0–100 for a determinate bar (downloads); null = none
   onDismiss,
   closeButton = true,
 }) {
   const conf = MAP[type] || MAP.info
   const Icon = conf.Icon
   const isLoading = type === 'loading'
-  const showFill = !isLoading && Number.isFinite(duration)
+  const hasProgress = progress != null && Number.isFinite(progress)
+  // Time-based drain only when there's no explicit progress bar.
+  const showFill = !isLoading && Number.isFinite(duration) && !hasProgress
 
   const handle = (fn) => (e) => {
     fn?.(e)
@@ -113,6 +116,15 @@ export default function ToastCard({
           </button>
         )}
       </div>
+
+      {hasProgress && (
+        <div className="relative z-10 h-1 w-full bg-muted">
+          <div
+            className="h-full transition-[width] duration-200 ease-out"
+            style={{ width: `${Math.max(0, Math.min(100, progress))}%`, background: conf.color }}
+          />
+        </div>
+      )}
     </div>
   )
 }

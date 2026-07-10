@@ -920,67 +920,94 @@ export default function TaskDetailSheet() {
               )}
 
               {detailTab === 'activities' && (
-                <div className="px-6 py-4 space-y-2">
+                <div className="px-6 py-4">
                   {loadingActivities ? (
-                    <div className="space-y-2">
-                      <Skeleton className="h-4 w-full" />
-                      <Skeleton className="h-4 w-3/4" />
-                      <Skeleton className="h-4 w-1/2" />
-                    </div>
-                  ) : activities.length > 0 ? (
-                    activities.map((act, i) => {
-                      const actActor = act.actor?.data;
-                      const actUrl = resolveActivityUrl(act);
-                      const handleActClick = () => {
-                        if (!actUrl) return;
-                        if (actUrl.openTaskSheet) {
-                          dispatch(openTaskSheet({ id: actUrl.taskId, project_id: actUrl.projectId, task_list_id: actUrl.listId }));
-                        } else {
-                          dispatch(closeTaskSheet());
-                          navigate(actUrl.path);
-                        }
-                      };
-                      return (
-                        <div key={act.id || i} className="flex gap-2 text-sm text-pm-text">
-                          <span className="h-1.5 w-1.5 rounded-full bg-pm-text-muted mt-1.5 shrink-0" />
-                          <div>
-                            {actActor?.id && (
-                              <button
-                                type="button"
-                                onClick={() => { dispatch(closeTaskSheet()); navigate('/my-tasks'); }}
-                                className="font-medium text-pm-text hover:text-pm-accent transition-colors cursor-pointer mr-1"
-                              >
-                                {actActor.display_name}
-                              </button>
-                            )}
-                            {actUrl ? (
-                              <button
-                                type="button"
-                                onClick={handleActClick}
-                                className="text-pm-text hover:text-pm-accent transition-colors cursor-pointer"
-                              >
-                                {parseActivityMessage(act) || act.action}
-                              </button>
-                            ) : (
-                              <span className="text-pm-text">{parseActivityMessage(act) || act.action}</span>
-                            )}
-                            {(act.action === 'attach_drive_file' || act.meta?.has_drive) && (
-                              act.action === 'attach_drive_file' && act.meta?.file_url ? (
-                                <a href={act.meta.file_url} target="_blank" rel="noopener noreferrer" title={act.meta.file_name || __('Google Drive file', 'wedevs-project-manager')} className="ml-1.5 inline-flex align-middle text-pm-text-muted/35 hover:text-pm-accent">
-                                  <DriveMonoGlyph className="h-4 w-4" />
-                                </a>
-                              ) : (
-                                <DriveMonoGlyph className="ml-1.5 inline-flex align-middle h-4 w-4 text-pm-text-muted/30" title={__('Google Drive', 'wedevs-project-manager')} />
-                              )
-                            )}
-                            {act.meta?.has_meet && (
-                              <Video className="ml-1.5 inline-flex align-middle h-4 w-4 text-pm-text-muted/30" title={__('Google Meet', 'wedevs-project-manager')} />
-                            )}
-                            {act.committed_at && <span className="ml-1.5 text-[14px]">· {formatPmDateTime(act.committed_at)}</span>}
+                    <div className="space-y-4">
+                      {[0, 1, 2].map((i) => (
+                        <div key={i} className="flex gap-3">
+                          <Skeleton className="h-7 w-7 rounded-full shrink-0" />
+                          <div className="flex-1 space-y-1.5 pt-0.5">
+                            <Skeleton className="h-3.5 w-3/4" />
+                            <Skeleton className="h-3 w-1/4" />
                           </div>
                         </div>
-                      );
-                    })
+                      ))}
+                    </div>
+                  ) : activities.length > 0 ? (
+                    <div>
+                      {activities.map((act, i) => {
+                        const actActor = act.actor?.data;
+                        const isLast = i === activities.length - 1;
+                        const actUrl = resolveActivityUrl(act);
+                        const handleActClick = () => {
+                          if (!actUrl) return;
+                          if (actUrl.openTaskSheet) {
+                            dispatch(openTaskSheet({ id: actUrl.taskId, project_id: actUrl.projectId, task_list_id: actUrl.listId }));
+                          } else {
+                            dispatch(closeTaskSheet());
+                            navigate(actUrl.path);
+                          }
+                        };
+                        return (
+                          <div key={act.id || i} className="flex gap-3">
+                            {/* Avatar rail with connector */}
+                            <div className="flex flex-col items-center shrink-0">
+                              {actActor ? (
+                                <UserAvatar user={actActor} size="sm" />
+                              ) : (
+                                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-muted">
+                                  <Activity className="h-3.5 w-3.5 text-pm-text-muted" />
+                                </span>
+                              )}
+                              {!isLast && <div className="my-1 w-px flex-1 bg-pm-border" />}
+                            </div>
+
+                            {/* Content */}
+                            <div className={cn('min-w-0 flex-1', isLast ? 'pb-0' : 'pb-4')}>
+                              <div className="text-sm leading-snug text-pm-text">
+                                {actActor?.id && (
+                                  <button
+                                    type="button"
+                                    onClick={() => { dispatch(closeTaskSheet()); navigate('/my-tasks'); }}
+                                    className="font-medium text-pm-text-primary hover:text-pm-accent transition-colors cursor-pointer mr-1"
+                                  >
+                                    {actActor.display_name}
+                                  </button>
+                                )}
+                                {actUrl ? (
+                                  <button
+                                    type="button"
+                                    onClick={handleActClick}
+                                    className="text-left text-pm-text-muted hover:text-pm-accent transition-colors cursor-pointer"
+                                  >
+                                    {parseActivityMessage(act) || act.action}
+                                  </button>
+                                ) : (
+                                  <span className="text-pm-text-muted">{parseActivityMessage(act) || act.action}</span>
+                                )}
+                                {(act.action === 'attach_drive_file' || act.meta?.has_drive) && (
+                                  act.action === 'attach_drive_file' && act.meta?.file_url ? (
+                                    <a href={act.meta.file_url} target="_blank" rel="noopener noreferrer" title={act.meta.file_name || __('Google Drive file', 'wedevs-project-manager')} className="ml-1.5 inline-flex align-middle text-pm-text-muted/35 hover:text-pm-accent">
+                                      <DriveMonoGlyph className="h-4 w-4" />
+                                    </a>
+                                  ) : (
+                                    <DriveMonoGlyph className="ml-1.5 inline-flex align-middle h-4 w-4 text-pm-text-muted/30" title={__('Google Drive', 'wedevs-project-manager')} />
+                                  )
+                                )}
+                                {act.meta?.has_meet && (
+                                  <Video className="ml-1.5 inline-flex align-middle h-4 w-4 text-pm-text-muted/30" title={__('Google Meet', 'wedevs-project-manager')} />
+                                )}
+                              </div>
+                              {act.committed_at && (
+                                <div className="mt-0.5 text-[12px] text-pm-text-muted/70 tabular-nums">
+                                  {formatPmDateTime(act.committed_at)}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   ) : (
                     <p className="text-sm text-pm-text-muted italic">{__('No activity yet', 'wedevs-project-manager')}</p>
                   )}

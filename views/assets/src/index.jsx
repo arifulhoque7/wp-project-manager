@@ -34,6 +34,7 @@ import { registerSlot, registerFilter, applyFilters, doAction, addAction, Slot, 
 import { registerRoute, useRegisteredRoutes } from '@/router/routeRegistry'
 import { registerNavItem, useRegisteredNavItems } from '@hooks/useNavRegistry'
 import { sanitizeHtml } from '@lib/sanitize'
+import * as downloadLib from '@lib/download'
 import './tailwind.css'
 
 // ── Free pages (always loaded) ──────────────────────────
@@ -348,12 +349,21 @@ window.PM = {
     LoomPreviewContainer:   require('@components/common/LoomPreviewContainer'),
   },
 
+  // Shared download-with-progress API (renders the progress popup). Pro routes
+  // its CSV/PDF exports through this so users get 0–100% feedback.
+  download: {
+    file: downloadLib.downloadFile,
+    blob: downloadLib.downloadBlob,
+    saveBlob: downloadLib.saveBlob,
+  },
+
   // Shared utilities for pro plugin
   utils: {
     urlStrippers: require('@/lib/url-strippers'),
     sanitize: require('@lib/sanitize'),
     pmUtils: require('@lib/pm-utils'),
     googleLinks: require('@lib/google-links'),
+    download: downloadLib,
   },
 
   // Re-export Radix UI primitives so pro uses the SAME context instances.

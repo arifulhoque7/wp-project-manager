@@ -62,6 +62,7 @@ export default function KanbanBoardColumn({
   onSaveAutomation,
   onTaskCreated,
   onAddExistingTask,
+  boardBg = false,
 }) {
   const dispatch = useAppDispatch();
   const { canManage, canCreate } = usePermissions();
@@ -206,7 +207,7 @@ export default function KanbanBoardColumn({
 
   return (
     <>
-      <KanbanBoardDnd id={column.id}>
+      <KanbanBoardDnd id={column.id} className={boardBg ? "bg-pm-surface border-pm-border shadow-sm" : undefined}>
         <KanbanHeaderDnd className="!p-0">
           <div className="flex items-center justify-between w-full px-3 py-2.5">
             <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -327,16 +328,16 @@ export default function KanbanBoardColumn({
         )}
 
         {canCreate && (
-          <div className="p-2 border-t border-pm-border/60">
+          <div className="mt-2 px-2 pb-2.5 pt-2.5 border-t border-pm-border/60">
             {addingTask ? (
-              <div className="rounded-md bg-pm-surface border border-pm-border shadow-sm p-2 space-y-2 focus-within:border-pm-accent/40 focus-within:ring-2 focus-within:ring-pm-accent/10 transition-all">
+              <div className="rounded-lg bg-pm-surface border border-pm-border shadow-sm p-3 space-y-2.5 transition-colors focus-within:border-pm-accent/50">
                 <textarea
                   value={newTaskTitle}
                   onChange={(e) => setNewTaskTitle(e.target.value)}
                   placeholder={__("What needs to be done?", 'wedevs-project-manager')}
                   autoFocus
-                  rows={2}
-                  className="w-full text-[13px] font-medium text-pm-text-primary placeholder:text-pm-text-muted bg-transparent outline-none border-none resize-none p-0 leading-snug"
+                  rows={3}
+                  className="w-full min-h-[88px] text-[13px] font-medium text-pm-text-primary placeholder:text-pm-text-muted bg-transparent outline-none border-none resize-none p-0 leading-snug"
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                       e.preventDefault();
