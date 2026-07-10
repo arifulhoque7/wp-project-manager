@@ -1,4 +1,4 @@
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import React, { useEffect, useCallback, useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@store/index'
@@ -299,6 +299,11 @@ export default function TaskDetailSheet() {
 
   const handleDateSave = useCallback(async () => {
     if (!currentTask || !projectId || !canEditCurrentTask) return
+    // Local validation: due date can't be before start date.
+    if (startDate && dueDate && dueDate < startDate) {
+      toast.warning(__('Due date cannot be earlier than the start date', 'wedevs-project-manager'))
+      return
+    }
     try {
       await dispatch(updateTask({
         projectId, taskId: currentTask.id,
@@ -331,7 +336,11 @@ export default function TaskDetailSheet() {
         data: { assignees: newAssignees },
       })).unwrap()
       dispatch(fetchTask({ projectId, taskId: currentTask.id }))
-      toast.success(__('Assignee added', 'wedevs-project-manager'))
+      toast.success(
+        __('Assignee added', 'wedevs-project-manager'),
+        sprintf(__('%s was assigned to this task.', 'wedevs-project-manager'), user.display_name),
+        { user }
+      )
     } catch {
       toast.error(__('Failed to add assignee', 'wedevs-project-manager'))
     }
@@ -341,6 +350,8 @@ export default function TaskDetailSheet() {
 
   const handleRemoveAssignee = useCallback(async (userId) => {
     if (!currentTask || !projectId) return
+    const removedUser = projectMembers.find(u => parseInt(u.id) === parseInt(userId))
+    const removedName = removedUser?.display_name
     const remainingIds = assignees.map(a => a.assigned_to ?? a.id).filter(id => parseInt(id) !== parseInt(userId))
     try {
       const assigneePayload = remainingIds.length > 0 ? remainingIds : [-1]
@@ -349,11 +360,17 @@ export default function TaskDetailSheet() {
         data: { assignees: assigneePayload },
       })).unwrap()
       dispatch(fetchTask({ projectId, taskId: currentTask.id }))
-      toast.success(__('Assignee removed', 'wedevs-project-manager'))
+      toast.success(
+        __('Assignee removed', 'wedevs-project-manager'),
+        removedName
+          ? sprintf(__('%s was removed from this task.', 'wedevs-project-manager'), removedName)
+          : undefined,
+        removedUser ? { user: removedUser } : undefined
+      )
     } catch {
       toast.error(__('Failed to remove assignee', 'wedevs-project-manager'))
     }
-  }, [dispatch, projectId, currentTask, assignees, toast, __])
+  }, [dispatch, projectId, currentTask, assignees, projectMembers, toast, __])
 
   const handleSubmitComment = useCallback(async () => {
     if (!currentTask || !projectId || !newComment.trim()) return
@@ -603,6 +620,7 @@ export default function TaskDetailSheet() {
                       <DatePicker
                         value={startDate}
                         onChange={(v) => setStartDate(v)}
+                        max={dueDate || undefined}
                         placeholder={__('Start', 'wedevs-project-manager')}
                         className="h-7 w-auto min-w-[140px]"
                       />
@@ -610,6 +628,7 @@ export default function TaskDetailSheet() {
                       <DatePicker
                         value={dueDate}
                         onChange={(v) => setDueDate(v)}
+                        min={startDate || undefined}
                         placeholder={__('Due', 'wedevs-project-manager')}
                         className="h-7 w-auto min-w-[140px]"
                       />

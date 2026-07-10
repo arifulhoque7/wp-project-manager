@@ -17,6 +17,7 @@ import * as ReactRouterDom from 'react-router-dom'
 import * as ReduxToolkit from '@reduxjs/toolkit'
 import { HashRouter, Routes, Route, Navigate, useParams } from 'react-router-dom'
 import * as SonnerLib from 'sonner'
+import '@lib/toast-custom' // patch Sonner → custom ToastCard (full-body countdown) app-wide
 const { Toaster } = SonnerLib
 import { store, injectReducer, resetProjectState } from '@store/index'
 import { fetchTask, openTaskSheet, closeTaskSheet, markTaskModified } from '@store/tasksSlice'
@@ -187,7 +188,7 @@ function App() {
       const descNode = message
         ? <span className="pm-pusher-toast" dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColor(message)) }} />
         : null
-      SonnerLib.toast(titleNode || descNode, {
+      SonnerLib.toast.message(titleNode || descNode, {
         description: titleNode && descNode ? descNode : undefined,
       })
     }

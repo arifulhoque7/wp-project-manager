@@ -646,33 +646,46 @@ ol[data-sonner-toaster],
   z-index: 99999 !important;
 }
 
-/* ── Countdown progress bar under each toast (Laravel-Forge style) ──
-   A thin bar shrinks 100% → 0 over the toast's own duration
-   (--pm-toast-duration, set per toast in useToast.js). Pauses on hover to
-   match Sonner pausing its dismiss timer. Falls back to Sonner's 4s default. ── */
+/* ── Full-body countdown fill on custom toasts (see ToastCard.jsx) ──
+   The .pm-toast-fill layer drains left → right over the toast's duration.
+   Pause it on toaster hover to match Sonner pausing its dismiss timer. ── */
+[data-sonner-toaster]:hover .pm-toast-fill {
+  animation-play-state: paused !important;
+}
+
+/* Sonner's toaster is an <ol>; WP admin's list styling leaks a "1." marker
+   onto the toast <li> (portal is outside the app's list reset). Kill it. */
+[data-sonner-toaster],
+[data-sonner-toaster] li,
 [data-sonner-toast] {
-  overflow: hidden;
+  list-style: none !important;
 }
-[data-sonner-toast]::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 4px;
-  transform-origin: left center;
-  background: currentColor;
-  opacity: 0.75;
-  pointer-events: none;
-  animation: pm-toast-progress var(--pm-toast-duration, 4000ms) linear forwards;
+[data-sonner-toaster] li::marker,
+[data-sonner-toast]::marker {
+  content: '' !important;
 }
-[data-sonner-toast]:hover::after,
-[data-sonner-toaster]:hover [data-sonner-toast]::after {
-  animation-play-state: paused;
+
+/* Toasts render in a document.body portal — OUTSIDE #wedevs-project-manager —
+   so WP admin's global button styling (border + box-shadow + focus box) leaks
+   onto our toast buttons. Neutralize it here. */
+.pm-toast button {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  outline: none;
+  min-height: 0;
+  line-height: normal;
+  text-shadow: none;
 }
-/* No countdown on persistent loading toasts (they stay until resolved). */
-[data-sonner-toast][data-type="loading"]::after {
-  display: none;
+.pm-toast button:hover,
+.pm-toast button:focus,
+.pm-toast button:active,
+.pm-toast button:focus-visible {
+  box-shadow: none;
+  outline: none;
+}
+.pm-toast button:focus-visible {
+  box-shadow: 0 0 0 2px hsl(var(--ring));
 }
 @keyframes pm-toast-progress {
   from { transform: scaleX(1); }
