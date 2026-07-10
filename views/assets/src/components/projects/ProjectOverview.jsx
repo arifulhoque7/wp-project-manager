@@ -168,7 +168,11 @@ export default function ProjectOverview() {
         ...prev,
         assignees: { data: [...(prev.assignees?.data ?? []), userWithRole] },
       }));
-      toast.success(__('Member added', 'wedevs-project-manager'));
+      toast.success(
+        __('Member added', 'wedevs-project-manager'),
+        sprintf(__('%s was added to the project.', 'wedevs-project-manager'), userWithRole.display_name),
+        { user: userWithRole }
+      );
     } catch { toast.error(__('Failed to add member', 'wedevs-project-manager')); }
   }, [api, projectId, project, toast, __, pendingUser, pendingRoleId, roles]);
 
@@ -186,6 +190,7 @@ export default function ProjectOverview() {
         assignees: allAssignees,
       });
       const roleObj = roles.find(r => r.id === newRoleId);
+      const target = (project?.assignees?.data ?? []).find(u => parseInt(u.id) === parseInt(userId));
       setProject(prev => ({
         ...prev,
         assignees: {
@@ -196,12 +201,19 @@ export default function ProjectOverview() {
           ),
         },
       }));
-      toast.success(__('Role updated', 'wedevs-project-manager'));
+      toast.success(
+        __('Role updated', 'wedevs-project-manager'),
+        target && roleObj
+          ? sprintf(__('%1$s is now %2$s.', 'wedevs-project-manager'), target.display_name, roleObj.title)
+          : undefined,
+        target ? { user: target } : undefined
+      );
     } catch { toast.error(__('Failed to update role', 'wedevs-project-manager')); }
   }, [api, projectId, project, toast, __, roles]);
 
   const handleRemoveMember = useCallback(async (userId) => {
     try {
+      const target = (project?.assignees?.data ?? []).find(u => parseInt(u.id) === parseInt(userId));
       const remaining = (project?.assignees?.data ?? []).filter(u => parseInt(u.id) !== parseInt(userId));
       const allAssignees = remaining.map(u => ({
         user_id: u.id,
@@ -216,7 +228,11 @@ export default function ProjectOverview() {
         ...prev,
         assignees: { data: (prev.assignees?.data ?? []).filter(u => parseInt(u.id) !== parseInt(userId)) },
       }));
-      toast.success(__('Member removed', 'wedevs-project-manager'));
+      toast.success(
+        __('Member removed', 'wedevs-project-manager'),
+        target ? sprintf(__('%s was removed from the project.', 'wedevs-project-manager'), target.display_name) : undefined,
+        target ? { user: target } : undefined
+      );
     } catch { toast.error(__('Failed to remove member', 'wedevs-project-manager')); }
   }, [api, projectId, project, toast, __]);
 

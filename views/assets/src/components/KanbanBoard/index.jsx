@@ -91,7 +91,10 @@ export default function KanbanBoard() {
   };
 
   const handleUpdateBoard = (boardId, payload) =>
-    dispatch(updateBoard({ projectId, boardId, payload }));
+    dispatch(updateBoard({ projectId, boardId, payload }))
+      .unwrap()
+      .then(() => toast.success(__("Column updated", 'wedevs-project-manager')))
+      .catch(() => toast.error(__("Failed to update column", 'wedevs-project-manager')));
   const handleDeleteBoard = async (boardId) => {
     const ok = await confirm(__("Delete this column?", 'wedevs-project-manager'), __("Delete Column", 'wedevs-project-manager'));
     if (!ok) return;
@@ -106,6 +109,7 @@ export default function KanbanBoard() {
 
   const handleColorChange = (boardId, color) => {
     dispatch(setBoardColor({ projectId, boardId, color: color || "" }));
+    toast.success(__("Column color updated", 'wedevs-project-manager'));
   };
 
   const handleMoveTask = useCallback(
@@ -161,15 +165,20 @@ export default function KanbanBoard() {
 
   const handleSaveAutomation = useCallback(
     async (boardId, actions) => {
-      await dispatch(
-        saveAutomation({
-          projectId,
-          boardId,
-          automation: { board_id: boardId, data: actions },
-        }),
-      ).unwrap();
+      try {
+        await dispatch(
+          saveAutomation({
+            projectId,
+            boardId,
+            automation: { board_id: boardId, data: actions },
+          }),
+        ).unwrap();
+        toast.success(__("Automation saved", 'wedevs-project-manager'));
+      } catch {
+        toast.error(__("Failed to save automation", 'wedevs-project-manager'));
+      }
     },
-    [dispatch, projectId],
+    [dispatch, projectId, __],
   );
 
   const handleFilter = useCallback(

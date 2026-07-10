@@ -4,6 +4,7 @@ import { updateCurrentTaskMeta } from '@store/tasksSlice';
 import { updateTaskPrivacy } from '@store/taskListsSlice';
 import { cn } from '@lib/utils';
 import { usePermissions } from '@hooks/usePermissions';
+import { useToast } from '@hooks/useToast';
 import ProGate from '@components/common/ProGate';
 import ProBadge from '@components/common/ProBadge';
 import { Shield, Eye, EyeOff } from 'lucide-react';
@@ -11,6 +12,7 @@ import { isPrivate } from '@lib/pm-utils';
 
 export default function TaskPrivacyField({ task, projectId, dispatch, api }) {
   const { isPro } = usePermissions();
+  const toast = useToast();
   const taskPrivate = isPrivate(task?.meta?.privacy);
   const [toggling, setToggling] = useState(false);
 
@@ -22,13 +24,16 @@ export default function TaskPrivacyField({ task, projectId, dispatch, api }) {
     dispatch(updateCurrentTaskMeta({ privacy: newPrivacy }));
     api.post(`projects/${projectId}/tasks/privacy/${task.id}`, {
       is_private: newPrivacy,
+    }).then(() => {
+      toast.success(newPrivacy ? __('Task set to private', 'wedevs-project-manager') : __('Task set to public', 'wedevs-project-manager'));
     }).catch(() => {
       const revert = taskPrivate ? 1 : 0;
       dispatch(updateTaskPrivacy({ taskId: task.id, privacy: revert }));
       dispatch(updateCurrentTaskMeta({ privacy: revert }));
+      toast.error(__('Failed to update task privacy', 'wedevs-project-manager'));
     })
     .finally(() => setToggling(false));
-  }, [taskPrivate, task, projectId, api, dispatch, toggling]);
+  }, [taskPrivate, task, projectId, api, dispatch, toggling, toast, __]);
 
   if (!isPro) {
     return (

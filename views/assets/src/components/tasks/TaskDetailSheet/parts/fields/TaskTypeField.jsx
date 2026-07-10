@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import React, { useCallback, useEffect, useState } from 'react';
 import { fetchTask } from '@store/tasksSlice';
+import { useToast } from '@hooks/useToast';
 import { cn } from '@lib/utils';
 import {
   Popover,
@@ -10,6 +11,7 @@ import {
 import { Check, ChevronDown, ListTodo, X } from 'lucide-react';
 
 export default function TaskTypeField({ task, projectId, dispatch, api, canEdit = true }) {
+  const toast = useToast();
   const [open, setOpen] = useState(false);
   const [types, setTypes] = useState([]);
   const [loadingTypes, setLoadingTypes] = useState(false);
@@ -43,9 +45,10 @@ export default function TaskTypeField({ task, projectId, dispatch, api, canEdit 
     }).then(() => {
       dispatch(fetchTask({ projectId, taskId: task.id }));
       setOpen(false);
-    }).catch(() => {})
+      toast.success(typeId ? __('Task type updated', 'wedevs-project-manager') : __('Task type removed', 'wedevs-project-manager'));
+    }).catch(() => toast.error(__('Failed to update task type', 'wedevs-project-manager')))
     .finally(() => setSaving(false));
-  }, [saving, currentType, task, projectId, api, dispatch, canEdit]);
+  }, [saving, currentType, task, projectId, api, dispatch, canEdit, toast, __]);
 
   const handleClear = useCallback(() => {
     if (!canEdit || saving) return;
@@ -56,7 +59,8 @@ export default function TaskTypeField({ task, projectId, dispatch, api, canEdit 
     }).then(() => {
       dispatch(fetchTask({ projectId, taskId: task.id }));
       setOpen(false);
-    }).catch(() => {})
+      toast.success(__('Task type removed', 'wedevs-project-manager'));
+    }).catch(() => toast.error(__('Failed to update task type', 'wedevs-project-manager')))
     .finally(() => setSaving(false));
   }, [saving, task, projectId, api, dispatch, canEdit]);
 

@@ -164,6 +164,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
     dispatch(updateListPrivacy({ listId: list.id, privacy: next }))
     try {
       await api.post(`projects/${projectId}/task-lists/privacy/${list.id}`, { is_private: next })
+      toast.success(next ? __('List set to private', 'wedevs-project-manager') : __('List set to public', 'wedevs-project-manager'))
     } catch {
       dispatch(updateListPrivacy({ listId: list.id, privacy: next ? 0 : 1 }))
       toast.error(__('Failed to update list privacy', 'wedevs-project-manager'))
@@ -276,6 +277,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
 
     try {
       await dispatch(sortTasks({ projectId, listId: list.id, taskId: moved.id, orders, receive: 0 })).unwrap()
+      toast.success(__('Tasks reordered', 'wedevs-project-manager'))
     } catch {
       // Undo the optimistic move by reversing the splice
       dispatch(reorderTasksLocal({ listId: list.id, fromIndex: toIdx, toIndex: fromIdx }))

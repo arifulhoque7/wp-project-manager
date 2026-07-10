@@ -101,6 +101,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
       try {
         await api.post(`projects/${projectId}/tasks/${task.id}/change-status`, { status: newStatus });
         dispatch(fetchMilestones({ projectId }));
+        toast.success(newStatus === 1 ? __("Task completed", 'wedevs-project-manager') : __("Task reopened", 'wedevs-project-manager'));
       } catch {
         toast.error(__("Failed to update task status", 'wedevs-project-manager'));
       }
@@ -153,6 +154,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
           isPrivate: newPrivacy,
         }),
       ).unwrap();
+      toast.success(newPrivacy ? __("Milestone set to private", 'wedevs-project-manager') : __("Milestone set to public", 'wedevs-project-manager'));
     } catch {
       toast.error(__("Failed to update", 'wedevs-project-manager'));
     }

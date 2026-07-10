@@ -1,4 +1,4 @@
-import { __ } from '@wordpress/i18n'
+import { __, sprintf } from '@wordpress/i18n'
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch } from '@store/index'
 import { createUser } from '@store/projectsSlice'
@@ -44,7 +44,12 @@ export default function CreateUserDialog({ open, onOpenChange, defaultSeed = '',
     try {
       const created = await dispatch(createUser(form)).unwrap()
       if (!created?.id) throw new Error('no_id_returned')
-      toast.success(__('User created', 'wedevs-project-manager'))
+      const createdName = created.display_name || `${form.first_name} ${form.last_name}`.trim() || form.username
+      toast.success(
+        __('User created', 'wedevs-project-manager'),
+        sprintf(__('%s was added as a user.', 'wedevs-project-manager'), createdName),
+        { user: { ...created, display_name: createdName } }
+      )
       onOpenChange?.(false)
       onCreated?.(created)
     } catch (err) {

@@ -88,11 +88,15 @@ export default function TaskListsPage() {
     const [moved] = reordered.splice(fromIdx, 1);
     reordered.splice(toIdx, 0, moved);
     const orders = reordered.map((l, i) => ({ id: l.id, index: i }));
-    dispatch(reorderLists({ projectId, orders }));
+    dispatch(reorderLists({ projectId, orders }))
+      .then((action) => {
+        if (action.error) toast.error(__('Failed to reorder lists', 'wedevs-project-manager'))
+        else toast.success(__('Lists reordered', 'wedevs-project-manager'))
+      });
 
     dragListIdx.current = null;
     setDragOverIdx(null);
-  }, [dispatch, lists, projectId]);
+  }, [dispatch, lists, projectId, toast, __]);
 
   const handleListDragEnd = useCallback(() => {
     dragListIdx.current = null;
