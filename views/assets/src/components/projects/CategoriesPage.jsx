@@ -5,6 +5,7 @@ import { useToast } from "@hooks/useToast";
 import { useConfirm } from "@hooks/useConfirm";
 import { usePermissions } from "@hooks/usePermissions";
 import { Button } from "@components/ui/button";
+import { PaginationNav } from "@components/ui/pagination";
 import { Input } from "@components/ui/input";
 import { Label } from "@components/ui/label";
 import { Checkbox } from "@components/ui/checkbox";
@@ -330,21 +331,12 @@ export default function CategoriesPage() {
       )}
 
       {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => (
-            <Button
-              key={pg}
-              variant={pg === page ? "default" : "outline"}
-              size="sm"
-              className="h-8 w-8 p-0 text-sm"
-              onClick={() => fetchCategories(pg)}
-            >
-              {pg}
-            </Button>
-          ))}
-        </div>
-      )}
+      <PaginationNav
+        page={page}
+        totalPages={totalPages}
+        onPageChange={fetchCategories}
+        className="pt-2"
+      />
 
       {/* Create / Edit Sheet */}
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>

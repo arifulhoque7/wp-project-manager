@@ -6,6 +6,7 @@ import { useApi } from "@hooks/useApi";
 import { useToast } from "@hooks/useToast";
 import { useConfirm } from "@hooks/useConfirm";
 import { Button } from "@components/ui/button";
+import { PaginationNav } from "@components/ui/pagination";
 import { Input } from "@components/ui/input";
 import RichTextEditor from "@components/common/RichTextEditor";
 import { Skeleton } from "@components/ui/skeleton";
@@ -434,21 +435,12 @@ export default function DiscussionsPage() {
                 );
               })}
 
-              {totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 pt-2">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => (
-                    <Button
-                      key={pg}
-                      variant={pg === page ? "default" : "outline"}
-                      size="sm"
-                      className="h-7 w-7 p-0 text-sm"
-                      onClick={() => fetchDiscussions(pg)}
-                    >
-                      {pg}
-                    </Button>
-                  ))}
-                </div>
-              )}
+              <PaginationNav
+                page={page}
+                totalPages={totalPages}
+                onPageChange={fetchDiscussions}
+                className="pt-2"
+              />
             </div>
           )}
         </div>

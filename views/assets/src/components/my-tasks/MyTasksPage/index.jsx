@@ -12,13 +12,7 @@ import { Button } from "@components/ui/button";
 import { DatePicker } from "@components/ui/date-picker";
 import { Skeleton } from "@components/ui/skeleton";
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
+  PaginationNav,
 } from "@components/ui/pagination";
 import { UserAvatar } from '@components/common/UserAvatar';
 import {
@@ -1138,63 +1132,12 @@ export default function MyTasksPage() {
             </div>
           )}
 
-          {taskTotalPages > 1 &&
-            (() => {
-              const pages = [];
-              for (let i = 1; i <= taskTotalPages; i++) {
-                if (
-                  i === 1 ||
-                  i === taskTotalPages ||
-                  (i >= taskPage - 1 && i <= taskPage + 1)
-                ) {
-                  pages.push(i);
-                } else if (pages[pages.length - 1] !== "ellipsis") {
-                  pages.push("ellipsis");
-                }
-              }
-              return (
-                <Pagination className="mt-4">
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious
-                        onClick={() => taskPage > 1 && fetchTasks(taskPage - 1)}
-                        className={
-                          taskPage <= 1 ? "pointer-events-none opacity-50" : ""
-                        }
-                      />
-                    </PaginationItem>
-                    {pages.map((page, idx) =>
-                      page === "ellipsis" ? (
-                        <PaginationItem key={`e-${idx}`}>
-                          <PaginationEllipsis />
-                        </PaginationItem>
-                      ) : (
-                        <PaginationItem key={page}>
-                          <PaginationLink
-                            isActive={page === taskPage}
-                            onClick={() => fetchTasks(page)}
-                          >
-                            {page}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ),
-                    )}
-                    <PaginationItem>
-                      <PaginationNext
-                        onClick={() =>
-                          taskPage < taskTotalPages && fetchTasks(taskPage + 1)
-                        }
-                        className={
-                          taskPage >= taskTotalPages
-                            ? "pointer-events-none opacity-50"
-                            : ""
-                        }
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              );
-            })()}
+          <PaginationNav
+            page={taskPage}
+            totalPages={taskTotalPages}
+            onPageChange={fetchTasks}
+            className="mt-4"
+          />
         </div>
       ) : (
         <div className="space-y-0">

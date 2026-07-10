@@ -21,10 +21,7 @@ import { Input } from "@components/ui/input";
 import RichTextEditor from "@components/common/RichTextEditor";
 import { Checkbox } from "@components/ui/checkbox";
 import { Skeleton } from "@components/ui/skeleton";
-import {
-  Pagination, PaginationContent, PaginationItem,
-  PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis,
-} from "@components/ui/pagination";
+import { PaginationNav } from "@components/ui/pagination";
 import { Plus, ChevronsUpDown, ListTodo } from "lucide-react";
 import ProBadge from "@components/common/ProBadge";
 import BackButton from '@components/common/BackButton';
@@ -401,48 +398,13 @@ export default function TaskListsPage() {
       )}
 
       {/* Task list pagination */}
-      {!loading && listsMeta.total_pages > 1 && (
-        <Pagination className="mt-4">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                onClick={() => handlePageChange(listsMeta.current_page - 1)}
-                className={listsMeta.current_page <= 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
-              />
-            </PaginationItem>
-            {Array.from({ length: listsMeta.total_pages }, (_, i) => i + 1).map((page) => {
-              const current = listsMeta.current_page
-              const total = listsMeta.total_pages
-              // Show first, last, current, and neighbors; ellipsis for gaps
-              if (page === 1 || page === total || (page >= current - 1 && page <= current + 1)) {
-                return (
-                  <PaginationItem key={page}>
-                    <PaginationLink
-                      isActive={page === current}
-                      onClick={() => handlePageChange(page)}
-                      className="cursor-pointer"
-                    >
-                      {page}
-                    </PaginationLink>
-                  </PaginationItem>
-                )
-              }
-              if (page === 2 && current > 3) {
-                return <PaginationItem key="start-ellipsis"><PaginationEllipsis /></PaginationItem>
-              }
-              if (page === total - 1 && current < total - 2) {
-                return <PaginationItem key="end-ellipsis"><PaginationEllipsis /></PaginationItem>
-              }
-              return null
-            })}
-            <PaginationItem>
-              <PaginationNext
-                onClick={() => handlePageChange(listsMeta.current_page + 1)}
-                className={listsMeta.current_page >= listsMeta.total_pages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+      {!loading && (
+        <PaginationNav
+          page={listsMeta.current_page}
+          totalPages={listsMeta.total_pages}
+          onPageChange={handlePageChange}
+          className="mt-4"
+        />
       )}
 
       {/* Task detail sheet */}

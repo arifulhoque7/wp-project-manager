@@ -56,15 +56,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@components/ui/tooltip";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@components/ui/pagination";
+import { PaginationNav } from "@components/ui/pagination";
 
 import {
   Plus,
@@ -643,67 +635,14 @@ export default function ProjectsPage() {
     [dispatch],
   );
 
-  const renderPagination = () => {
-    if (totalPages <= 1) return null;
-
-    const pages = [];
-    for (let i = 1; i <= totalPages; i++) {
-      if (
-        i === 1 ||
-        i === totalPages ||
-        (i >= currentPage - 1 && i <= currentPage + 1)
-      ) {
-        pages.push(i);
-      } else if (pages[pages.length - 1] !== "ellipsis") {
-        pages.push("ellipsis");
-      }
-    }
-
-    return (
-      <Pagination className="mt-6">
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              onClick={() => currentPage > 1 && goToPage(currentPage - 1)}
-              disabled={currentPage <= 1}
-              className={cn(
-                currentPage <= 1 && "pointer-events-none opacity-50",
-              )}
-            />
-          </PaginationItem>
-
-          {pages.map((page, idx) =>
-            page === "ellipsis" ? (
-              <PaginationItem key={`ellipsis-${idx}`}>
-                <PaginationEllipsis />
-              </PaginationItem>
-            ) : (
-              <PaginationItem key={page}>
-                <PaginationLink
-                  isActive={page === currentPage}
-                  onClick={() => goToPage(page)}
-                >
-                  {page}
-                </PaginationLink>
-              </PaginationItem>
-            ),
-          )}
-
-          <PaginationItem>
-            <PaginationNext
-              onClick={() =>
-                currentPage < totalPages && goToPage(currentPage + 1)
-              }
-              disabled={currentPage >= totalPages}
-              className={cn(
-                currentPage >= totalPages && "pointer-events-none opacity-50",
-              )}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
-    );
-  };
+  const renderPagination = () => (
+    <PaginationNav
+      page={currentPage}
+      totalPages={totalPages}
+      onPageChange={goToPage}
+      className="mt-6"
+    />
+  );
 
   return (
     <div className="w-full p-4 sm:p-6 space-y-6">
