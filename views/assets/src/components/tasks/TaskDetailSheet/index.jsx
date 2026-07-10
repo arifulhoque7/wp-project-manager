@@ -2,7 +2,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import React, { useEffect, useCallback, useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@store/index'
-import { closeTaskSheet, fetchTask, updateTask, changeTaskStatus, addTaskComment, updateTaskComment, deleteTaskComment, deleteTask } from '@store/tasksSlice'
+import { openTaskSheet, closeTaskSheet, fetchTask, updateTask, changeTaskStatus, addTaskComment, updateTaskComment, deleteTaskComment, deleteTask } from '@store/tasksSlice'
 import { toggleTaskInList, removeTaskFromList } from '@store/taskListsSlice'
 import { useApi } from '@hooks/useApi'
 import { cn } from '@lib/utils'
@@ -11,12 +11,10 @@ import { usePermissions } from '@hooks/usePermissions'
 import { useCurrentProject } from '@hooks/useCurrentProject'
 import { useConfirm } from '@hooks/useConfirm'
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-} from '@components/ui/sheet'
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from '@components/ui/dialog'
 import { Button } from '@components/ui/button'
 import { Input } from '@components/ui/input'
 import RichTextEditor from '@components/common/RichTextEditor'
@@ -510,25 +508,26 @@ export default function TaskDetailSheet() {
   return (
     <>
     <ConfirmDialog />
-    <Sheet open={taskSheetOpen} onOpenChange={handleClose}>
-      <SheetContent
-        side="right"
+    <Dialog open={taskSheetOpen} onOpenChange={handleClose}>
+      <DialogContent
+        data-pm-dialog
         className={cn(
-          'overflow-y-auto p-0 transition-all duration-300',
-          fullscreen ? 'w-full sm:max-w-full' : 'w-full sm:max-w-[760px]',
+          'flex flex-col gap-0 overflow-hidden p-0 border-pm-border transition-all duration-200',
+          fullscreen ? 'w-[98vw] max-w-[98vw] h-[96vh]' : 'w-[95vw] max-w-6xl h-[88vh]',
         )}
         onPointerDownOutside={(e) => { if (isGooglePickerInteraction(e)) e.preventDefault() }}
         onInteractOutside={(e) => { if (isGooglePickerInteraction(e)) e.preventDefault() }}
         onFocusOutside={(e) => { if (isGooglePickerInteraction(e)) e.preventDefault() }}
       >
+        <DialogTitle className="sr-only">{currentTask?.title || __('Task details', 'wedevs-project-manager')}</DialogTitle>
         {loading && !currentTask ? (
-          <div className="flex items-center justify-center py-20">
+          <div className="flex flex-1 items-center justify-center py-20">
             <Loader2 className="h-8 w-8 animate-spin text-pm-accent" />
           </div>
         ) : currentTask ? (
-          <div className={cn('flex flex-col h-full', fullscreen && 'max-w-4xl mx-auto')}>
-
-            <div className="flex items-center gap-1 px-4 pt-3 pb-1">
+          <>
+            {/* Toolbar (built-in close button sits top-right) */}
+            <div className="flex items-center gap-1 px-4 py-2.5 pr-14 shrink-0">
               <button
                 type="button"
                 onClick={() => setFullscreen(v => !v)}
@@ -558,28 +557,30 @@ export default function TaskDetailSheet() {
 
             <Separator />
 
-            <div className="px-6 pt-5 pb-5 space-y-3">
-              <SheetHeader className="space-y-1.5">
-                <SheetDescription asChild>
-                  <div className="flex items-center gap-2 text-[13px] text-muted-foreground min-w-0">
-                    {(currentTask.project?.data?.title || currentTask.project?.title) && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const pid = currentTask.project?.data?.id || currentTask.project?.id || projectId
-                          dispatch(closeTaskSheet())
-                          navigate(`/projects/${pid}/task-lists`)
-                        }}
-                        className="inline-flex items-center gap-1 font-medium text-pm-accent hover:text-pm-accent/80 transition-colors truncate min-w-0"
-                        title={currentTask.project?.data?.title || currentTask.project?.title}
-                      >
-                        <Layers className="h-4 w-4 shrink-0" />
-                        {currentTask.project?.data?.title || currentTask.project?.title}
-                      </button>
-                    )}
-                    <span className="font-mono text-[12px] text-muted-foreground/60">#{currentTask.id}</span>
-                  </div>
-                </SheetDescription>
+            {/* Two-column body */}
+            <div className="flex flex-1 min-h-0">
+
+            {/* LEFT — task header + properties */}
+            <aside className="w-[340px] shrink-0 overflow-y-auto border-r border-pm-border px-5 py-5 space-y-4">
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2 text-[13px] text-muted-foreground min-w-0">
+                  {(currentTask.project?.data?.title || currentTask.project?.title) && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const pid = currentTask.project?.data?.id || currentTask.project?.id || projectId
+                        dispatch(closeTaskSheet())
+                        navigate(`/projects/${pid}/task-lists`)
+                      }}
+                      className="inline-flex items-center gap-1 font-medium text-pm-accent hover:text-pm-accent/80 transition-colors truncate min-w-0"
+                      title={currentTask.project?.data?.title || currentTask.project?.title}
+                    >
+                      <Layers className="h-4 w-4 shrink-0" />
+                      {currentTask.project?.data?.title || currentTask.project?.title}
+                    </button>
+                  )}
+                  <span className="font-mono text-[12px] text-muted-foreground/60">#{currentTask.id}</span>
+                </div>
                 <div className="flex items-center gap-3">
                   <button type="button" onClick={handleToggleStatus} className="shrink-0 group/status">
                     <TaskStatusCircle complete={complete} size="lg" groupHover />
@@ -590,14 +591,14 @@ export default function TaskDetailSheet() {
                       className="text-lg font-semibold h-auto py-0.5 border-none shadow-none focus-visible:ring-1 flex-1"
                     />
                   ) : (
-                    <SheetTitle className={cn('text-xl font-bold leading-snug truncate', canEditTask(currentTask) && 'cursor-pointer hover:text-pm-accent transition-colors', complete && 'line-through text-pm-text-muted')}
+                    <h2 className={cn('text-lg font-bold leading-snug break-words', canEditTask(currentTask) && 'cursor-pointer hover:text-pm-accent transition-colors', complete && 'line-through text-pm-text-muted')}
                       title={currentTask.title}
                       onClick={() => canEditTask(currentTask) && setEditingTitle(true)}>
                       {currentTask.title}
-                    </SheetTitle>
+                    </h2>
                   )}
                 </div>
-              </SheetHeader>
+              </div>
 
               <div className="flex flex-col gap-1">
                 <div className="flex items-center h-10 px-2 rounded-md hover:bg-muted/40 transition-colors cursor-pointer" onClick={handleToggleStatus}>
@@ -673,9 +674,17 @@ export default function TaskDetailSheet() {
                     {canEditTask(currentTask) && showAssigneeSearch && (
                       <div className="relative mt-1.5">
                         <Input autoFocus value={assigneeQuery} onChange={e => setAssigneeQuery(e.target.value)}
-                          placeholder={__('Search members...', 'wedevs-project-manager')} className="h-7 text-sm"
+                          placeholder={__('Search members...', 'wedevs-project-manager')} className="h-7 text-sm pr-7"
                           onKeyDown={e => { if (e.key === 'Escape') { setShowAssigneeSearch(false); setAssigneeQuery('') } }}
                         />
+                        <button
+                          type="button"
+                          onClick={() => { setShowAssigneeSearch(false); setAssigneeQuery('') }}
+                          className="absolute right-1 top-1/2 -translate-y-1/2 p-0.5 rounded text-pm-text-muted hover:text-destructive hover:bg-muted transition-colors"
+                          title={__('Close', 'wedevs-project-manager')}
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
                         <div className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-lg shadow-lg z-50 max-h-72 overflow-y-auto p-1">
                           {filteredMembers.length === 0 && (
                             <div className="px-3 py-3 text-sm text-pm-text-muted">{__('No project members', 'wedevs-project-manager')}</div>
@@ -745,10 +754,10 @@ export default function TaskDetailSheet() {
                   api={api}
                 />
               </div>
-            </div>
+            </aside>
 
-            <Separator />
-
+            {/* RIGHT — description + tabs */}
+            <div className="flex-1 min-w-0 overflow-y-auto">
             <div className="px-6 py-5">
               <div className="flex items-center justify-between mb-3">
                 <h4 className="flex items-center gap-1.5 text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70"><FileText className="h-4 w-4" />{__('Description', 'wedevs-project-manager')}</h4>
@@ -1014,10 +1023,12 @@ export default function TaskDetailSheet() {
                 </div>
               )}
 
-          </div>
+            </div>
+            </div>
+          </>
         ) : null}
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
     </>
   )
 }

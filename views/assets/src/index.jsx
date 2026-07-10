@@ -11,7 +11,7 @@ if (typeof window.PM_Vars !== 'undefined' && window.PM_Vars.language?.pm?.locale
 
 import { createRoot } from 'react-dom/client'
 import { createPortal } from 'react-dom'
-import { Provider } from 'react-redux'
+import { Provider, useSelector } from 'react-redux'
 import * as ReactRedux from 'react-redux'
 import * as ReactRouterDom from 'react-router-dom'
 import * as ReduxToolkit from '@reduxjs/toolkit'
@@ -177,6 +177,21 @@ function AppRoutes() {
   )
 }
 
+// Toasts sit bottom-center everywhere. When the task detail sheet is open they
+// move to the right so they don't cover it.
+function RoutedToaster({ defaultPosition = 'bottom-center', taskSheetPosition = 'bottom-right' }) {
+  const taskSheetOpen = useSelector(s => s.tasks?.taskSheetOpen)
+  return createPortal(
+    <Toaster
+      position={taskSheetOpen ? taskSheetPosition : defaultPosition}
+      richColors
+      toastOptions={{ style: { zIndex: 99999 } }}
+      style={{ zIndex: 99999 }}
+    />,
+    document.body
+  )
+}
+
 function App() {
   useEffect(() => {
     const stripInlineColor = (html) => String(html).replace(/style="[^"]*"/gi, '')
@@ -213,10 +228,7 @@ function App() {
           </React.Suspense>
         </div>
         </ProModalProvider>
-        {createPortal(
-          <Toaster position="bottom-center" richColors toastOptions={{ style: { zIndex: 99999 } }} style={{ zIndex: 99999 }} />,
-          document.body
-        )}
+        <RoutedToaster defaultPosition="bottom-center" taskSheetPosition="bottom-right" />
       </HashRouter>
     </Provider>
   )

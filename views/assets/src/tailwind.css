@@ -439,6 +439,42 @@ body:not(.wp-admin) #wedevs-project-manager {
   background: hsl(260 31% 49% / 0.6);
 }
 
+/* ── App scrollbars — pm-accent thumb across the plugin + dialogs ──
+   Sidebar and hidden strips keep their own behavior via :not() guards. */
+#wedevs-project-manager *:not(.pm-sidebar-scroll):not(.scrollbar-none),
+[data-pm-dialog],
+[data-pm-dialog] *:not(.scrollbar-none),
+[role="dialog"][data-state] *:not(.scrollbar-none) {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--pm-accent-rgb) / 0.45) transparent;
+}
+#wedevs-project-manager *:not(.pm-sidebar-scroll):not(.scrollbar-none)::-webkit-scrollbar,
+[data-pm-dialog]::-webkit-scrollbar,
+[data-pm-dialog] *:not(.scrollbar-none)::-webkit-scrollbar,
+[role="dialog"][data-state] *:not(.scrollbar-none)::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+#wedevs-project-manager *:not(.pm-sidebar-scroll):not(.scrollbar-none)::-webkit-scrollbar-track,
+[data-pm-dialog]::-webkit-scrollbar-track,
+[data-pm-dialog] *:not(.scrollbar-none)::-webkit-scrollbar-track,
+[role="dialog"][data-state] *:not(.scrollbar-none)::-webkit-scrollbar-track {
+  background: transparent;
+}
+#wedevs-project-manager *:not(.pm-sidebar-scroll):not(.scrollbar-none)::-webkit-scrollbar-thumb,
+[data-pm-dialog]::-webkit-scrollbar-thumb,
+[data-pm-dialog] *:not(.scrollbar-none)::-webkit-scrollbar-thumb,
+[role="dialog"][data-state] *:not(.scrollbar-none)::-webkit-scrollbar-thumb {
+  background: rgb(var(--pm-accent-rgb) / 0.45);
+  border-radius: 9999px;
+}
+#wedevs-project-manager *:not(.pm-sidebar-scroll):not(.scrollbar-none)::-webkit-scrollbar-thumb:hover,
+[data-pm-dialog]::-webkit-scrollbar-thumb:hover,
+[data-pm-dialog] *:not(.scrollbar-none)::-webkit-scrollbar-thumb:hover,
+[role="dialog"][data-state] *:not(.scrollbar-none)::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--pm-accent-rgb) / 0.7);
+}
+
 /* ── Full-screen settings mode — hides WP admin chrome ───── */
 body.pm-fullscreen-settings:not(.pm-mode-wordpress) {
   overflow: hidden !important;
