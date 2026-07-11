@@ -8,10 +8,7 @@ import { UserAvatar } from '@components/common/UserAvatar'
 import { GlobalSearch } from '@components/common/GlobalSearch'
 import { AppSidebar } from '@components/layout/AppSidebar'
 import { useHideSidebar } from '@/router/routeRegistry'
-import {
-  FolderKanban, CheckSquare, Calendar, BarChart3,
-  Menu, X, LogOut, Crown, Tag,
-} from 'lucide-react'
+import { FolderKanban, CheckSquare, Calendar, BarChart3, Menu, X, LogOut, Crown, Tag } from 'lucide-react'
 
 const currentUser = typeof PM_Vars !== 'undefined' ? PM_Vars.current_user : {}
 

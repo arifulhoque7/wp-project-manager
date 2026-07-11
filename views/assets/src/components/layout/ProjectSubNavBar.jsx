@@ -3,10 +3,7 @@ import { useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { usePermissions } from '@hooks/usePermissions'
 import { useActiveProModules, isProModuleActive } from '@hooks/useActiveProModules'
-import {
-  LayoutList, Layout, MessageSquare, Milestone, FileText,
-  Activity, Columns3, GitBranch, Receipt, Settings,
-} from 'lucide-react'
+import { LayoutList, Layout, MessageSquare, Milestone, FileText, Activity, Columns3, GitBranch, Receipt, Settings } from 'lucide-react'
 import { cn } from '@lib/utils'
 import ProBadge from '@components/common/ProBadge'
 

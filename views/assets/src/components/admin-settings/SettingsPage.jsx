@@ -5,10 +5,7 @@ import ProBadge from '@components/common/ProBadge'
 import ProFeaturePlaceholder from '@components/common/ProFeaturePlaceholder'
 import { cn } from '@lib/utils'
 import { useFilter } from '@hooks/useSlot'
-import {
-  Settings, Mail, ListTodo, Bot, Radio,
-  FileText, ShoppingCart,
-} from 'lucide-react'
+import { Settings, Mail, ListTodo, Bot, Radio, FileText, ShoppingCart } from 'lucide-react'
 import { DriveMonoGlyph as GoogleWorkspaceNavIcon } from '@components/google-workspace/GoogleIcons'
 
 // Brand SVG icons for settings nav (not available as non-deprecated lucide icons)

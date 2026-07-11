@@ -5,7 +5,7 @@ import { useToast } from '@hooks/useToast';
 import { useAppDispatch } from '@store/index';
 import { markTaskModified } from '@store/tasksSlice';
 import { removeTaskFromMilestone, addTaskToMilestone } from '@store/milestonesSlice';
-import { Milestone as MilestoneIcon, ChevronDown, X, Check } from 'lucide-react';
+import { Milestone as MilestoneIcon, ChevronDown, X, Check, Loader2 } from 'lucide-react';
 
 export default function MilestoneField({ task, projectId, api, canEdit = true }) {
   const toast = useToast();
@@ -124,7 +124,7 @@ export default function MilestoneField({ task, projectId, api, canEdit = true })
             canEdit && 'hover:text-pm-accent disabled:opacity-50'
           )}
         >
-          <span>{saving ? __('Saving...', 'wedevs-project-manager') : (currentMilestone?.title || __('None', 'wedevs-project-manager'))}</span>
+          <span>{saving ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Saving...', 'wedevs-project-manager')}</> : (currentMilestone?.title || __('None', 'wedevs-project-manager'))}</span>
           {canEdit && <ChevronDown className="h-3.5 w-3.5 text-muted-foreground/70 shrink-0" />}
         </button>
 

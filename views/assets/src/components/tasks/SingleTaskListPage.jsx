@@ -15,7 +15,7 @@ import RichTextEditor from '@components/common/RichTextEditor'
 import NotifyUsers from '@components/common/NotifyUsers'
 import FileUploadArea from '@components/common/FileUploadArea'
 import CommentAttachment from '@components/common/CommentAttachment'
-import { Lock, MessageSquare, Pencil, Trash2 } from 'lucide-react'
+import { Lock, MessageSquare, Pencil, Trash2, Loader2 } from 'lucide-react'
 import BackButton from '@components/common/BackButton'
 import { formatPmDateTime, isPrivate } from '@lib/pm-utils'
 import TaskRow from './TaskRow'
@@ -316,7 +316,7 @@ export default function SingleTaskListPage() {
               disabled={loadingMore}
               onClick={() => handleLoadMore(0)}
             >
-              {loadingMore ? __('Loading...', 'wedevs-project-manager') : __('Load more tasks', 'wedevs-project-manager')}
+              {loadingMore ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Loading...', 'wedevs-project-manager')}</> : __('Load more tasks', 'wedevs-project-manager')}
             </button>
           </div>
         )}
@@ -346,7 +346,7 @@ export default function SingleTaskListPage() {
                       disabled={loadingMoreComplete}
                       onClick={() => handleLoadMore(1)}
                     >
-                      {loadingMoreComplete ? __('Loading...', 'wedevs-project-manager') : __('Load more completed', 'wedevs-project-manager')}
+                      {loadingMoreComplete ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Loading...', 'wedevs-project-manager')}</> : __('Load more completed', 'wedevs-project-manager')}
                     </button>
                   </div>
                 )}
@@ -402,7 +402,7 @@ export default function SingleTaskListPage() {
                         <FileUploadArea files={editCommentNewFiles} onFilesChange={setEditCommentNewFiles} compact />
                         <div className="flex items-center gap-2">
                           <Button size="sm" className="h-11 text-[15px]" onClick={handleUpdateComment} disabled={savingEditComment || !editCommentText.trim()}>
-                            {savingEditComment ? __('Saving...', 'wedevs-project-manager') : __('Save', 'wedevs-project-manager')}
+                            {savingEditComment ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Saving...', 'wedevs-project-manager')}</> : __('Save', 'wedevs-project-manager')}
                           </Button>
                           <Button size="sm" variant="ghost" className="h-11 text-[15px]" onClick={cancelEditComment} disabled={savingEditComment}>{__('Cancel', 'wedevs-project-manager')}</Button>
                         </div>
@@ -435,14 +435,16 @@ export default function SingleTaskListPage() {
             users={projectUsers}
           />
           <FileUploadArea files={commentFiles} onFilesChange={setCommentFiles} compact />
-          <NotifyUsers
-            users={projectUsers}
-            value={commentNotifyUsers}
-            onChange={setCommentNotifyUsers}
-          />
-          <Button size="sm" className="h-11 text-sm" onClick={handleSubmitComment} disabled={!newComment.trim() || submittingComment}>
-            {submittingComment ? __('Sending...', 'wedevs-project-manager') : __('Post Comment', 'wedevs-project-manager')}
-          </Button>
+          <div className="flex items-center gap-2 flex-wrap">
+            <NotifyUsers
+              users={projectUsers}
+              value={commentNotifyUsers}
+              onChange={setCommentNotifyUsers}
+            />
+            <Button size="sm" className="h-11 text-sm" onClick={handleSubmitComment} disabled={!newComment.trim() || submittingComment}>
+              {submittingComment ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Sending...', 'wedevs-project-manager')}</> : __('Post Comment', 'wedevs-project-manager')}
+            </Button>
+          </div>
         </div>
       </div>
 

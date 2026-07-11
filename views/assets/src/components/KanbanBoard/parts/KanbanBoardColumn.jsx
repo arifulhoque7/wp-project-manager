@@ -1,3 +1,4 @@
+import { Loader2 } from 'lucide-react'
 import { __ } from '@wordpress/i18n';
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useAppDispatch } from "@store/index";
@@ -323,7 +324,7 @@ export default function KanbanBoardColumn({
             ref={sentinelRef}
             className="px-2 py-1 text-center text-[11px] text-pm-text-muted"
           >
-            {loadingMore ? __("Loading...", 'wedevs-project-manager') : __("Scroll for more", 'wedevs-project-manager')}
+            {loadingMore ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__("Loading...", 'wedevs-project-manager')}</> : __("Scroll for more", 'wedevs-project-manager')}
           </div>
         )}
 
@@ -537,7 +538,7 @@ export default function KanbanBoardColumn({
                       disabled={creating || !newTaskTitle.trim()}
                       onClick={handleCreateTask}
                     >
-                      {creating ? __("Adding...", 'wedevs-project-manager') : __("Add task", 'wedevs-project-manager')}
+                      {creating ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__("Adding...", 'wedevs-project-manager')}</> : __("Add task", 'wedevs-project-manager')}
                     </Button>
                   </div>
                 </div>

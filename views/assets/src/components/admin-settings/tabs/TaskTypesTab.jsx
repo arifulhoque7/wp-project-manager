@@ -9,7 +9,7 @@ import { useConfirm } from '@hooks/useConfirm'
 import { Button } from '@components/ui/button'
 import { Input } from '@components/ui/input'
 import { Label } from '@components/ui/label'
-import { Plus, Pencil, Trash2, Check, X } from 'lucide-react'
+import { Plus, Pencil, Trash2, Check, X, Loader2 } from 'lucide-react'
 
 const emptyForm = { title: '', description: '', status: 1 }
 
@@ -132,7 +132,7 @@ const TaskTypesTab = () => {
                   <Input value={newForm.description} onChange={(e) => setNewForm((f) => ({ ...f, description: e.target.value }))} placeholder={__('Short description...', 'wedevs-project-manager')} />
                 </div>
                 <div className="flex gap-2 pb-0.5">
-                  <Button className="h-11 px-5" size="sm" disabled={newFormBusy} onClick={submitNew}>{newFormBusy ? __('Creating...', 'wedevs-project-manager') : __('Create', 'wedevs-project-manager')}</Button>
+                  <Button className="h-11 px-5" size="sm" disabled={newFormBusy} onClick={submitNew}>{newFormBusy ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Creating...', 'wedevs-project-manager')}</> : __('Create', 'wedevs-project-manager')}</Button>
                   <Button className="h-11 px-5" size="sm" variant="outline" disabled={newFormBusy} onClick={() => setShowNewForm(false)}>{__('Cancel', 'wedevs-project-manager')}</Button>
                 </div>
               </div>

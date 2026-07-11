@@ -6,14 +6,7 @@ import { useApi } from '@hooks/useApi'
 import { usePermissions } from '@hooks/usePermissions'
 import { useActiveProModules, isProModuleActive, isProPluginInstalled } from '@hooks/useActiveProModules'
 import ProBadge from '@components/common/ProBadge'
-import {
-  FolderKanban, CheckSquare, Calendar, BarChart3,
-  Settings, ArrowLeft, PanelLeftClose, PanelLeftOpen,
-  ChevronDown, Star, LayoutList, Layout, MessageSquare,
-  Milestone, FileText, Activity, Tag, Crown, Layers,
-  Columns3, GitBranch, Receipt, Timer, Shield, Wrench,
-  LayoutTemplate, Sparkles,
-} from 'lucide-react'
+import { FolderKanban, CheckSquare, Calendar, BarChart3, Settings, ArrowLeft, PanelLeftClose, PanelLeftOpen, ChevronDown, Star, LayoutList, Layout, MessageSquare, Milestone, FileText, Activity, Tag, Crown, Layers, Columns3, GitBranch, Receipt, Timer, Shield, Wrench, LayoutTemplate, Sparkles } from 'lucide-react'
 import { cn } from '@lib/utils'
 import { DriveMonoGlyph as GoogleDriveNavIcon } from '@components/google-workspace/GoogleIcons'
 

@@ -284,10 +284,10 @@ const AiSettingsTab = () => {
 
         <div className="flex items-center gap-3 mt-5 flex-wrap">
           <Button className="h-11 px-5" type="button" variant="outline" disabled={aiTestingConn || aiSaving} onClick={handleTestConnection}>
-            {aiTestingConn ? __('Testing...', 'wedevs-project-manager') : __('Test Connection', 'wedevs-project-manager')}
+            {aiTestingConn ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Testing...', 'wedevs-project-manager')}</> : __('Test Connection', 'wedevs-project-manager')}
           </Button>
           <Button className="h-11 px-5" type="submit" disabled={aiSaving || aiTestingConn || !isDirty}>
-            {aiSaving ? __('Saving...', 'wedevs-project-manager') : __('Save Changes', 'wedevs-project-manager')}
+            {aiSaving ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Saving...', 'wedevs-project-manager')}</> : __('Save Changes', 'wedevs-project-manager')}
           </Button>
           {isDirty && (
             <span className="text-sm text-amber-600">{__('You have unsaved changes', 'wedevs-project-manager')}</span>

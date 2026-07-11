@@ -5,10 +5,7 @@ import { __ } from '@wordpress/i18n';
 import React from 'react'
 import { cn } from '@lib/utils'
 import { Skeleton } from '@components/ui/skeleton'
-import {
-  GitPullRequest, GitPullRequestClosed, GitMerge,
-  CircleDot, CircleCheck, RefreshCw, ExternalLink,
-} from 'lucide-react'
+import { GitPullRequest, GitPullRequestClosed, GitMerge, CircleDot, CircleCheck, RefreshCw, ExternalLink } from 'lucide-react'
 
 // GitHub Octocat brand SVG (not available as non-deprecated lucide icon)
 const GitHubLogo = ({ className = '' }) => (

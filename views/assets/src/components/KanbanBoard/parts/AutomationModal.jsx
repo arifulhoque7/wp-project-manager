@@ -1,3 +1,4 @@
+import { Loader2 } from 'lucide-react'
 import { __ } from '@wordpress/i18n';
 import React, { useEffect, useState } from "react";
 import { useApi } from "@hooks/useApi";
@@ -370,7 +371,7 @@ export default function AutomationModal({
             {__("Cancel", 'wedevs-project-manager')}
           </Button>
           <Button className="h-11 px-5" size="sm" onClick={handleSave} disabled={saving}>
-            {saving ? __("Saving...", 'wedevs-project-manager') : __("Update Automation", 'wedevs-project-manager')}
+            {saving ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__("Saving...", 'wedevs-project-manager')}</> : __("Update Automation", 'wedevs-project-manager')}
           </Button>
         </DialogFooter>
       </DialogContent>

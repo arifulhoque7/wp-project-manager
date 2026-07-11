@@ -1,3 +1,4 @@
+import { Loader2 } from 'lucide-react'
 import { __ } from '@wordpress/i18n';
 import React, { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
@@ -1223,7 +1224,7 @@ export default function MyTasksPage() {
                     onClick={loadMoreActivities}
                     disabled={actLoading}
                   >
-                    {actLoading ? __("Loading...", 'wedevs-project-manager') : __("Load more", 'wedevs-project-manager')}
+                    {actLoading ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__("Loading...", 'wedevs-project-manager')}</> : __("Load more", 'wedevs-project-manager')}
                   </Button>
                 </div>
               )}

@@ -1,3 +1,4 @@
+import { Loader2 } from 'lucide-react'
 import { __ } from '@wordpress/i18n';
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -289,12 +290,12 @@ export default function DiscussionsPage() {
               </Select>
               <FileUploadArea files={formFiles} onFilesChange={setFormFiles} />
               <CommentLinkActions projectId={projectId} onInsert={(html) => setFormDesc(prev => (prev || '') + html)} />
-              <NotifyUsers
-                users={project?.assignees?.data ?? []}
-                value={formNotifyUsers}
-                onChange={setFormNotifyUsers}
-              />
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
+                <NotifyUsers
+                  users={project?.assignees?.data ?? []}
+                  value={formNotifyUsers}
+                  onChange={setFormNotifyUsers}
+                />
                 <Button
                   variant="outline"
                   size="sm"
@@ -311,7 +312,7 @@ export default function DiscussionsPage() {
                   {__("Cancel", 'wedevs-project-manager')}
                 </Button>
                 <Button size="sm" type="submit" className="h-11 px-5" disabled={!formTitle.trim() || creating}>
-                  {creating ? __("Creating...", 'wedevs-project-manager') : __("Add Message", 'wedevs-project-manager')}
+                  {creating ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__("Creating...", 'wedevs-project-manager')}</> : __("Add Message", 'wedevs-project-manager')}
                 </Button>
               </div>
             </form>

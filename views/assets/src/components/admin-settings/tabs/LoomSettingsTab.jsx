@@ -1,3 +1,4 @@
+import { Loader2 } from 'lucide-react'
 import { __ } from '@wordpress/i18n';
 /**
  * LoomSettingsTab — Loom integration settings (enable previews, oEmbed test).
@@ -108,7 +109,7 @@ const LoomSettingsTab = () => {
 
       <div className="flex items-center gap-3 mt-5">
         <Button className="h-11 px-5" type="submit" disabled={!isDirty || saving}>
-          {saving ? __('Saving...', 'wedevs-project-manager') : __('Save Changes', 'wedevs-project-manager')}
+          {saving ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Saving...', 'wedevs-project-manager')}</> : __('Save Changes', 'wedevs-project-manager')}
         </Button>
         {isDirty && !saving && (
           <span className="text-sm text-pm-text-muted">{__('You have unsaved changes', 'wedevs-project-manager')}</span>

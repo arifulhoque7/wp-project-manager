@@ -223,7 +223,7 @@ const GeneralTab = () => {
       <div className="flex items-center gap-3 mt-5">
         <Button className="h-11 px-5" type="submit" disabled={!isDirty || generalSaving}>
           {generalSaving
-            ? __('Saving...', 'wedevs-project-manager')
+            ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Saving...', 'wedevs-project-manager')}</>
             : __('Save Changes', 'wedevs-project-manager')}
         </Button>
         {isDirty && !generalSaving && (

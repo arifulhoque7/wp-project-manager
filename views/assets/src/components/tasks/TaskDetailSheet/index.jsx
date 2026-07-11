@@ -39,26 +39,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu'
-import {
-  Calendar,
-  Users,
-  Check,
-  Maximize2,
-  Minimize2,
-  MoreHorizontal,
-  Trash2,
-  Link2,
-  X,
-  Plus,
-  Layers,
-  Pencil,
-  FileText,
-  Loader2,
-  Video,
-  ListChecks,
-  MessageSquare,
-  Activity,
-} from 'lucide-react'
+import { Calendar, Users, Check, Maximize2, Minimize2, MoreHorizontal, Trash2, Link2, X, Plus, FolderKanban, Pencil, FileText, Loader2, Video, ListChecks, MessageSquare, Activity } from 'lucide-react'
 import { DriveMonoGlyph } from '@components/google-workspace/GoogleIcons'
 import {
   isTaskComplete,
@@ -561,7 +542,7 @@ export default function TaskDetailSheet() {
             <div className="flex flex-1 min-h-0">
 
             {/* LEFT — task header + properties */}
-            <aside className="w-[400px] shrink-0 overflow-y-auto border-r border-pm-border px-5 py-5 space-y-4">
+            <aside className="w-[400px] shrink-0 overflow-y-auto border-r border-pm-border px-5 py-4 space-y-2.5">
               <div className="space-y-1.5">
                 <div className="flex items-center gap-2 text-[13px] text-muted-foreground min-w-0">
                   {(currentTask.project?.data?.title || currentTask.project?.title) && (
@@ -572,10 +553,10 @@ export default function TaskDetailSheet() {
                         dispatch(closeTaskSheet())
                         navigate(`/projects/${pid}/task-lists`)
                       }}
-                      className="inline-flex items-center gap-1 font-medium text-pm-accent hover:text-pm-accent/80 transition-colors truncate min-w-0"
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-pm-accent hover:text-pm-accent/80 transition-colors truncate min-w-0"
                       title={currentTask.project?.data?.title || currentTask.project?.title}
                     >
-                      <Layers className="h-4 w-4 shrink-0" />
+                      <FolderKanban className="h-4 w-4 shrink-0" />
                       {currentTask.project?.data?.title || currentTask.project?.title}
                     </button>
                   )}
@@ -785,7 +766,7 @@ export default function TaskDetailSheet() {
                 <div className="space-y-3">
                   <RichTextEditor content={description} placeholder={__('Write a description...', 'wedevs-project-manager')} onChange={html => setDescription(html)} autofocus minHeight="100px" users={project?.assignees?.data ?? []} />
                   <div className="flex items-center gap-2">
-                    <Button size="sm" className="h-11 text-sm" onClick={handleDescSave} disabled={savingDesc}>{savingDesc ? __('Saving...', 'wedevs-project-manager') : __('Save', 'wedevs-project-manager')}</Button>
+                    <Button size="sm" className="h-11 text-sm" onClick={handleDescSave} disabled={savingDesc}>{savingDesc ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Saving...', 'wedevs-project-manager')}</> : __('Save', 'wedevs-project-manager')}</Button>
                     <Button variant="ghost" size="sm" className="h-11 text-sm" onClick={handleDescCancel}>{__('Cancel', 'wedevs-project-manager')}</Button>
                   </div>
                 </div>
@@ -889,7 +870,7 @@ export default function TaskDetailSheet() {
                               <FileUploadArea files={editCommentNewFiles} onFilesChange={setEditCommentNewFiles} compact />
                               <div className="flex items-center gap-2">
                                 <Button size="sm" className="h-11 text-[15px]" onClick={handleUpdateComment} disabled={savingEditComment || !editCommentText.trim()}>
-                                  {savingEditComment ? __('Saving...', 'wedevs-project-manager') : __('Save', 'wedevs-project-manager')}
+                                  {savingEditComment ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Saving...', 'wedevs-project-manager')}</> : __('Save', 'wedevs-project-manager')}
                                 </Button>
                                 <Button size="sm" variant="ghost" className="h-11 text-[15px]" onClick={cancelEditComment} disabled={savingEditComment}>{__('Cancel', 'wedevs-project-manager')}</Button>
                                 <CommentLinkActions projectId={projectId} onInsert={(html) => setEditCommentText(prev => (prev || '') + html)} />
@@ -926,14 +907,14 @@ export default function TaskDetailSheet() {
                   users={project?.assignees?.data ?? []}
                 />
                 <FileUploadArea files={commentFiles} onFilesChange={setCommentFiles} compact />
-                <NotifyUsers
-                  users={project?.assignees?.data ?? []}
-                  value={commentNotifyUsers}
-                  onChange={setCommentNotifyUsers}
-                />
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <NotifyUsers
+                    users={project?.assignees?.data ?? []}
+                    value={commentNotifyUsers}
+                    onChange={setCommentNotifyUsers}
+                  />
                   <Button size="sm" className="h-11 text-sm gap-1" onClick={handleSubmitComment} disabled={!newComment.trim() || submittingComment}>
-                    <Plus className="h-4 w-4" />{submittingComment ? __('Sending...', 'wedevs-project-manager') : __('Add Comment', 'wedevs-project-manager')}
+                    <Plus className="h-4 w-4" />{submittingComment ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Sending...', 'wedevs-project-manager')}</> : __('Add Comment', 'wedevs-project-manager')}
                   </Button>
                   <CommentLinkActions projectId={projectId} onInsert={(html) => setNewComment(prev => (prev || '') + html)} />
                 </div>

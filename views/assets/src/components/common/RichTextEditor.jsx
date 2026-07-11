@@ -24,32 +24,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@components/ui/tooltip'
-import {
-  Bold,
-  Italic,
-  Underline as UnderlineIcon,
-  Strikethrough,
-  List,
-  ListOrdered,
-  Quote,
-  Code,
-  Link as LinkIcon,
-  Undo,
-  Redo,
-  Minus,
-  RemoveFormatting,
-  Heading1,
-  Heading2,
-  Heading3,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  AlignJustify,
-  Table as TableIcon,
-  Image as ImageIcon,
-  Palette,
-  Highlighter,
-} from 'lucide-react'
+import { Bold, Italic, Underline as UnderlineIcon, Strikethrough, List, ListOrdered, Quote, Code, Link as LinkIcon, Undo, Redo, Minus, RemoveFormatting, Heading1, Heading2, Heading3, AlignLeft, AlignCenter, AlignRight, AlignJustify, Table as TableIcon, Image as ImageIcon, Palette, Highlighter } from 'lucide-react'
 import { createPortal } from 'react-dom'
 
 function ToolbarBtn({ icon: Icon, label, active, disabled, onClick }) {

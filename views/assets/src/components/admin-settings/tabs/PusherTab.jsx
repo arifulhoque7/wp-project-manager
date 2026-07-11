@@ -8,7 +8,7 @@ import { Button } from '@components/ui/button'
 import { Input } from '@components/ui/input'
 import { Label } from '@components/ui/label'
 import { Switch } from '@components/ui/switch'
-import { Radio, Zap, Bell } from 'lucide-react'
+import { Radio, Zap, Bell, Loader2 } from 'lucide-react'
 
 const getTriggers = () => [
   { key: 'pusher_notify_task_assign',    label: __('Task assigned',          'wedevs-project-manager'), desc: __('Notify users when assigned to a task',           'wedevs-project-manager') },
@@ -172,7 +172,7 @@ const PusherTab = () => {
 
       <div className="flex items-center gap-3 mt-5">
         <Button className="h-11 px-5" type="submit" disabled={!isDirty || pusherSaving}>
-          {pusherSaving ? __('Saving...', 'wedevs-project-manager') : __('Save Changes', 'wedevs-project-manager')}
+          {pusherSaving ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Saving...', 'wedevs-project-manager')}</> : __('Save Changes', 'wedevs-project-manager')}
         </Button>
         <Button
           type="button"
@@ -182,7 +182,7 @@ const PusherTab = () => {
           className="gap-1.5 h-11 px-5"
         >
           <Zap className="w-4 h-4" />
-          {testing ? __('Testing...', 'wedevs-project-manager') : __('Test Connection', 'wedevs-project-manager')}
+          {testing ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Testing...', 'wedevs-project-manager')}</> : __('Test Connection', 'wedevs-project-manager')}
         </Button>
         {isDirty && !pusherSaving && (
           <span className="text-sm text-pm-text-muted">{__('Save changes before testing', 'wedevs-project-manager')}</span>

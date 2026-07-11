@@ -10,7 +10,7 @@ import { cn } from '@lib/utils'
 import { isPrivate } from '@lib/pm-utils'
 import { useToast } from '@hooks/useToast'
 import { useConfirm } from '@hooks/useConfirm'
-import { Milestone as MilestoneIcon } from 'lucide-react'
+import { Milestone as MilestoneIcon, Loader2 } from 'lucide-react'
 import { Button } from '@components/ui/button'
 import { Input } from '@components/ui/input'
 import { Checkbox } from '@components/ui/checkbox'
@@ -535,7 +535,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                 disabled={loadingMore}
                 onClick={() => handleLoadMore(0)}
               >
-                {loadingMore ? __('Loading...', 'wedevs-project-manager') : __('Load more tasks', 'wedevs-project-manager')}
+                {loadingMore ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Loading...', 'wedevs-project-manager')}</> : __('Load more tasks', 'wedevs-project-manager')}
               </button>
             </div>
           )}
@@ -714,7 +714,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                   className="h-11 text-sm"
                   disabled={!newTitle.trim() || creating}
                 >
-                  {creating ? __('Adding...', 'wedevs-project-manager') : __('Add Task', 'wedevs-project-manager')}
+                  {creating ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Adding...', 'wedevs-project-manager')}</> : __('Add Task', 'wedevs-project-manager')}
                 </Button>
                 <Button
                   type="button"
@@ -759,7 +759,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                         disabled={loadingMoreComplete}
                         onClick={() => handleLoadMore(1)}
                       >
-                        {loadingMoreComplete ? __('Loading...', 'wedevs-project-manager') : __('Load more completed', 'wedevs-project-manager')}
+                        {loadingMoreComplete ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Loading...', 'wedevs-project-manager')}</> : __('Load more completed', 'wedevs-project-manager')}
                       </button>
                     </div>
                   )}

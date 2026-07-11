@@ -1,3 +1,4 @@
+import { Loader2 } from 'lucide-react'
 import { __ } from '@wordpress/i18n';
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -369,7 +370,7 @@ export default function DiscussionDetailPage() {
             <div className="flex gap-2">
               <Button size="sm" className="gap-1 h-11 px-5" onClick={handleUpdate} disabled={savingDiscussion || !editTitle.trim()}>
                 <Check className="h-3.5 w-3.5" />
-                {savingDiscussion ? __("Saving...", 'wedevs-project-manager') : __("Save", 'wedevs-project-manager')}
+                {savingDiscussion ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__("Saving...", 'wedevs-project-manager')}</> : __("Save", 'wedevs-project-manager')}
               </Button>
               <Button size="sm" variant="outline" className="gap-1 h-11 px-5" onClick={cancelEdit} disabled={savingDiscussion}>
                 <X className="h-3.5 w-3.5" />
@@ -534,7 +535,7 @@ export default function DiscussionDetailPage() {
                           disabled={savingEditComment || !editCommentText.trim()}
                         >
                           <Check className="h-3 w-3" />
-                          {savingEditComment ? __("Saving...", 'wedevs-project-manager') : __("Save", 'wedevs-project-manager')}
+                          {savingEditComment ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__("Saving...", 'wedevs-project-manager')}</> : __("Save", 'wedevs-project-manager')}
                         </Button>
                         <Button
                           size="sm"

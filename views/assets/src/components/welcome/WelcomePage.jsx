@@ -9,23 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@components/ui/dialog'
-import {
-  LayoutDashboard,
-  Activity,
-  MessageSquare,
-  ListChecks,
-  Milestone,
-  FolderOpen,
-  Play,
-  Rocket,
-  BookOpen,
-  Crown,
-  Sparkles,
-  Package,
-  ExternalLink,
-  ArrowRight,
-  CheckCircle2,
-} from 'lucide-react'
+import { LayoutDashboard, Activity, MessageSquare, ListChecks, Milestone, FolderOpen, Play, Rocket, BookOpen, Crown, Sparkles, Package, ExternalLink, ArrowRight, CheckCircle2 } from 'lucide-react'
 
 const assetsUrl = typeof PM_Vars !== 'undefined' ? PM_Vars.assets_url : ''
 

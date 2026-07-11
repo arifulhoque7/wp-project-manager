@@ -14,13 +14,7 @@ import {
   CommandItem,
   CommandList,
 } from '@components/ui/command'
-import {
-  Search,
-  FolderKanban,
-  CheckSquare,
-  LayoutList,
-  Loader2,
-} from 'lucide-react'
+import { Search, FolderKanban, CheckSquare, LayoutList, Loader2 } from 'lucide-react'
 
 export function GlobalSearch({ variant = 'topbar' }) {
   const navigate = useNavigate()

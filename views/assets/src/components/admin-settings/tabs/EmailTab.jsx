@@ -1,3 +1,4 @@
+import { Loader2 } from 'lucide-react'
 import { __ } from '@wordpress/i18n';
 import React, { useState, useCallback } from 'react'
 import { useAppDispatch, useAppSelector } from '@store/index'
@@ -130,7 +131,7 @@ const EmailTab = () => {
       <div className="flex items-center gap-3 mt-5">
         <Button className="h-11 px-5" type="submit" disabled={!isDirty || emailSaving}>
           {emailSaving
-            ? __('Saving...', 'wedevs-project-manager')
+            ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__('Saving...', 'wedevs-project-manager')}</>
             : __('Save Changes', 'wedevs-project-manager')}
         </Button>
         {isDirty && !emailSaving && (

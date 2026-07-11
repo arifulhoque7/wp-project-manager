@@ -1,3 +1,4 @@
+import { Loader2 } from 'lucide-react'
 import { __ } from '@wordpress/i18n';
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -336,7 +337,7 @@ export default function TaskListsPage() {
               size="sm"
               disabled={!newListTitle.trim() || creatingList}
             >
-              {creatingList ? __("Creating...", 'wedevs-project-manager') : __("Add List", 'wedevs-project-manager')}
+              {creatingList ? <><Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />{__("Creating...", 'wedevs-project-manager')}</> : __("Add List", 'wedevs-project-manager')}
             </Button>
           </div>
         </form>

@@ -28,23 +28,7 @@ import { Badge } from '@components/ui/badge'
 import { Progress } from '@components/ui/progress'
 import TaskLabelBadges from '@components/tasks/TaskLabelBadges'
 import TaskStatusCircle from '@components/common/TaskStatusCircle'
-import {
-  Calendar,
-  MessageSquare,
-  MoreHorizontal,
-  Lock,
-  Copy,
-  Trash2,
-  Flag,
-  ArrowRightLeft,
-  GripVertical,
-  Pencil,
-  Lock as LockIcon,
-  Unlock,
-  Crown,
-  Github,
-  Layers,
-} from 'lucide-react'
+import { Calendar, MessageSquare, MoreHorizontal, Lock, Copy, Trash2, Flag, ArrowRightLeft, GripVertical, Pencil, Lock as LockIcon, Unlock, Crown, Github, Layers } from 'lucide-react'
 import MoveTaskDialog from './MoveTaskDialog'
 import {
   isTaskComplete,
