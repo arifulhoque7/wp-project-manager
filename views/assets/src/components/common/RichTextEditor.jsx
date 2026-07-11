@@ -129,8 +129,21 @@ const MentionList = forwardRef(({ items, command, clientRect, editorElement }, r
   useEffect(() => {
     if (!clientRect) return
     const r = clientRect()
-    if (r) setPos({ top: r.bottom + 4, left: r.left })
-  }, [clientRect, items])
+    if (!r) return
+    // clientRect() is in viewport coords. When the popup is portaled into the
+    // task modal, that dialog has a CSS transform (centering) which makes
+    // position:fixed resolve against the dialog box, not the viewport — so
+    // subtract the dialog's rect to keep the popup pinned to the caret.
+    let top = r.bottom + 4
+    let left = r.left
+    const target = getMentionPortalTarget(editorElement)
+    if (target && target !== document.body) {
+      const tr = target.getBoundingClientRect()
+      top -= tr.top
+      left -= tr.left
+    }
+    setPos({ top, left })
+  }, [clientRect, items, editorElement])
 
   useImperativeHandle(ref, () => ({
     onKeyDown({ event }) {
