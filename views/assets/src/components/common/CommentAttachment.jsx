@@ -141,7 +141,7 @@ export default function CommentAttachment({ file, onRemove, className, children,
 
         {/* Media */}
         <div
-          style={isPdf ? { height: '85vh' } : undefined}
+          style={isPdf ? { height: 'calc(96vh - 8.5rem)' } : undefined}
           className={cn(
             'relative flex min-h-0 overflow-auto',
             isImage
@@ -174,7 +174,7 @@ export default function CommentAttachment({ file, onRemove, className, children,
         </div>
 
         {/* Bottom action bar — icon above label */}
-        <div className="flex shrink-0 items-center justify-center gap-1 border-t border-border bg-background px-4 py-2">
+        <div className="flex shrink-0 flex-wrap items-center justify-center gap-1 border-t border-border bg-background px-4 py-2">
           {isImage && (
             <>
               <button
