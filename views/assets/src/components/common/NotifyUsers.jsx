@@ -52,7 +52,7 @@ export default function NotifyUsers({ users = [], value = [], onChange, classNam
           <ChevronDown className="h-3.5 w-3.5 opacity-60" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-72 p-0 overflow-hidden">
+      <PopoverContent align="start" className="w-72 max-w-[calc(100vw-1rem)] p-0 overflow-hidden">
         <div className="flex items-center justify-between px-3 py-2 border-b border-pm-border">
           <span className="flex items-center gap-1.5 text-sm font-semibold text-pm-text-primary">
             <Bell className="h-4 w-4 text-pm-text-muted" />

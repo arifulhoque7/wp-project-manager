@@ -236,9 +236,9 @@ export default function DiscussionsPage() {
     <>
     <ConfirmDialog />
     <div className="w-full p-4 sm:p-6">
-      <div ref={gridRef} className="flex items-stretch">
+      <div ref={gridRef} className="flex items-stretch max-md:flex-col max-md:gap-4">
         {/* LEFT — discussions list */}
-        <div className="flex flex-col min-w-0 gap-4 shrink-0" style={{ width: leftW == null ? '50%' : leftW }}>
+        <div className="flex flex-col min-w-0 gap-4 shrink-0 max-md:!w-full" style={{ width: leftW == null ? '50%' : leftW }}>
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-3">
               <BackButton fallback={`/projects/${projectId}/task-lists`} />
@@ -450,14 +450,14 @@ export default function DiscussionsPage() {
           role="separator"
           aria-orientation="vertical"
           title={__("Drag to resize", 'wedevs-project-manager')}
-          className="group relative w-4 shrink-0 cursor-col-resize flex items-stretch justify-center select-none"
+          className="group relative w-4 shrink-0 cursor-col-resize flex items-stretch justify-center select-none max-md:hidden"
         >
           <div className="w-px bg-pm-border group-hover:bg-pm-accent group-active:bg-pm-accent transition-colors" />
           <div className="absolute top-1/2 -translate-y-1/2 h-8 w-1 rounded-full bg-pm-border/0 group-hover:bg-pm-accent transition-colors" />
         </div>
 
         {/* RIGHT — conversation panel */}
-        <div className="flex flex-col min-w-0 flex-1">
+        <div className="flex flex-col min-w-0 flex-1 max-md:w-full">
           {discussionId ? (
             <DiscussionDetailPage
               key={discussionId}

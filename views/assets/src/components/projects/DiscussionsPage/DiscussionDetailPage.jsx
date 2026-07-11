@@ -542,7 +542,7 @@ export default function DiscussionDetailPage({ onPrivacyChange, syncedPrivacy } 
                         </div>
                       )}
                       <FileUploadArea files={editCommentNewFiles} onFilesChange={setEditCommentNewFiles} compact />
-                      <div className="flex gap-1">
+                      <div className="flex flex-wrap gap-1">
                         <Button
                           size="sm"
                           className="h-11 text-[13px] gap-1 px-2"
