@@ -37,6 +37,9 @@ import {
   X,
   BarChart3,
   Clock,
+  CheckCircle2,
+  Timer,
+  TrendingUp,
   ChevronLeft,
   ChevronRight,
   Calendar as CalendarIcon,
@@ -810,12 +813,24 @@ export default function MyTasksPage() {
               const avgPerDay = fmtTime(totalWork / days);
               const avgTaskPerDay = totalTasks > 0 ? (totalTasks / days).toFixed(1) : "0";
               return (
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="inline-flex items-center gap-1.5 bg-teal-500/15 text-teal-600 text-[11px] font-medium px-2.5 py-1 rounded-md"><Clock className="h-3.5 w-3.5" />{__("Total Estimation Hours", 'wedevs-project-manager')} <span className="bg-white/20 px-1.5 rounded">{fmtTime(totalEst)}</span></span>
-                  <span className="inline-flex items-center gap-1.5 bg-blue-500/15 text-blue-600 text-[11px] font-medium px-2.5 py-1 rounded-md">{__("Completed Task Count", 'wedevs-project-manager')} <span className="bg-white/20 px-1.5 rounded">{completedTasks}</span></span>
-                  <span className="inline-flex items-center gap-1.5 bg-amber-500/15 text-amber-600 text-[11px] font-medium px-2.5 py-1 rounded-md">{__("Avg. Hour Per-task", 'wedevs-project-manager')} <span className="bg-white/20 px-1.5 rounded">{avgPerTask}</span></span>
-                  <span className="inline-flex items-center gap-1.5 bg-cyan-500/15 text-cyan-600 text-[11px] font-medium px-2.5 py-1 rounded-md">{__("Avg. Work Hour Per-day", 'wedevs-project-manager')} <span className="bg-white/20 px-1.5 rounded">{avgPerDay}</span></span>
-                  <span className="inline-flex items-center gap-1.5 bg-violet-500/15 text-violet-600 text-[11px] font-medium px-2.5 py-1 rounded-md">{__("Avg. Task Per-day", 'wedevs-project-manager')} <span className="bg-white/20 px-1.5 rounded">{avgTaskPerDay}</span></span>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                  {[
+                    { Icon: Clock, tone: 'bg-teal-500/10 text-teal-600', label: __("Total Estimation Hours", 'wedevs-project-manager'), value: fmtTime(totalEst) },
+                    { Icon: CheckCircle2, tone: 'bg-blue-500/10 text-blue-600', label: __("Completed Task Count", 'wedevs-project-manager'), value: completedTasks },
+                    { Icon: Timer, tone: 'bg-amber-500/10 text-amber-600', label: __("Avg. Hour Per-task", 'wedevs-project-manager'), value: avgPerTask },
+                    { Icon: Activity, tone: 'bg-cyan-500/10 text-cyan-600', label: __("Avg. Work Hour Per-day", 'wedevs-project-manager'), value: avgPerDay },
+                    { Icon: TrendingUp, tone: 'bg-violet-500/10 text-violet-600', label: __("Avg. Task Per-day", 'wedevs-project-manager'), value: avgTaskPerDay },
+                  ].map(({ Icon, tone, label, value }) => (
+                    <div key={label} className="rounded-xl border border-pm-border bg-card p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className={cn("flex h-7 w-7 items-center justify-center rounded-lg shrink-0", tone)}>
+                          <Icon className="h-4 w-4" />
+                        </span>
+                        <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground/70 leading-tight">{label}</span>
+                      </div>
+                      <div className="text-2xl font-bold text-pm-text-primary">{value}</div>
+                    </div>
+                  ))}
                 </div>
               );
             })()}
