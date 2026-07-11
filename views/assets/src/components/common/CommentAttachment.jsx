@@ -141,7 +141,7 @@ export default function CommentAttachment({ file, onRemove, className, children,
 
         {/* Media */}
         <div
-          style={isPdf ? { height: 'calc(96vh - 8.5rem)' } : undefined}
+          style={isPdf ? { height: '70vh' } : undefined}
           className={cn(
             'relative flex min-h-0 overflow-auto',
             isImage
