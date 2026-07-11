@@ -121,10 +121,8 @@ export default function CommentAttachment({ file, onRemove, className, children,
     <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
       <DialogContent
         data-pm-dialog
-        className={cn(
-          '!flex w-[calc(100vw-2rem)] max-w-6xl flex-col !gap-0 overflow-hidden rounded-2xl sm:rounded-2xl !p-0',
-          isPdf ? 'h-[94vh]' : 'max-h-[94vh]',
-        )}
+        style={{ maxHeight: '96vh', width: 'calc(100vw - 2rem)' }}
+        className="!flex max-w-6xl flex-col !gap-0 overflow-hidden rounded-2xl sm:rounded-2xl !p-0"
       >
         {/* Header: file identity (built-in close sits top-right) */}
         <div className="flex shrink-0 items-center gap-2.5 border-b border-border bg-background px-5 py-3 pr-14">
@@ -142,15 +140,17 @@ export default function CommentAttachment({ file, onRemove, className, children,
         </div>
 
         {/* Media */}
-        <div className={cn(
-          'relative flex min-h-0 overflow-auto',
-          isPdf && 'flex-1',
-          isImage
-            ? 'items-center justify-center bg-neutral-100 p-4 dark:bg-neutral-900'
-            : isVideo
-              ? 'items-center justify-center bg-black p-4'
-              : 'bg-neutral-100 dark:bg-neutral-900',
-        )}>
+        <div
+          style={isPdf ? { height: '85vh' } : undefined}
+          className={cn(
+            'relative flex min-h-0 overflow-auto',
+            isImage
+              ? 'items-center justify-center bg-neutral-100 p-4 dark:bg-neutral-900'
+              : isVideo
+                ? 'items-center justify-center bg-black p-4'
+                : 'bg-neutral-100 dark:bg-neutral-900',
+          )}
+        >
           {isPdf ? (
             <iframe
               src={pdfSrc}
