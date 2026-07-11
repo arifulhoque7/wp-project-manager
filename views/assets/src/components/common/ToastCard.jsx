@@ -1,3 +1,4 @@
+import { __ } from '@wordpress/i18n'
 import React from 'react'
 import { CircleCheck, CircleX, AlertTriangle, Info, Loader2, X } from 'lucide-react'
 import { UserAvatar } from '@components/common/UserAvatar'
@@ -109,7 +110,7 @@ export default function ToastCard({
           <button
             type="button"
             onClick={onDismiss}
-            aria-label="Close"
+            aria-label={__('Close', 'wedevs-project-manager')}
             className="shrink-0 -mr-1 -mt-0.5 p-1 rounded text-pm-text-muted/70 hover:text-pm-text-primary hover:bg-muted transition-colors"
           >
             <X className="h-3.5 w-3.5" />

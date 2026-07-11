@@ -182,16 +182,16 @@ export function PromoBanner({ placement = 'projects' }) {
             style={{
               background: '#6F56A3',
               color: '#fff',
-              boxShadow: '0 1px 2px rgba(124,58,237,0.25), 0 4px 12px -2px rgba(124,58,237,0.35)',
+              boxShadow: '0 1px 2px rgba(111,86,163,0.25), 0 4px 12px -2px rgba(111,86,163,0.35)',
               border: '1px solid #5E4789',
             }}
             onMouseEnter={e => {
               e.currentTarget.style.background = '#5E4789'
-              e.currentTarget.style.boxShadow = '0 1px 2px rgba(124,58,237,0.3), 0 8px 18px -2px rgba(124,58,237,0.5)'
+              e.currentTarget.style.boxShadow = '0 1px 2px rgba(111,86,163,0.3), 0 8px 18px -2px rgba(111,86,163,0.5)'
             }}
             onMouseLeave={e => {
               e.currentTarget.style.background = '#6F56A3'
-              e.currentTarget.style.boxShadow = '0 1px 2px rgba(124,58,237,0.25), 0 4px 12px -2px rgba(124,58,237,0.35)'
+              e.currentTarget.style.boxShadow = '0 1px 2px rgba(111,86,163,0.25), 0 4px 12px -2px rgba(111,86,163,0.35)'
             }}
           >
             <span>{promo.action_title || __('Upgrade to Pro', 'wedevs-project-manager')}</span>

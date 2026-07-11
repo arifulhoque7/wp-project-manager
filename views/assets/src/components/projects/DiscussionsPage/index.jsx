@@ -76,6 +76,8 @@ export default function DiscussionsPage() {
   });
   const leftWRef = useRef(leftW);
   useEffect(() => { leftWRef.current = leftW; }, [leftW]);
+  // Holds the active drag's teardown so an unmount mid-drag detaches the window listeners.
+  const dragCleanupRef = useRef(null);
   const startResize = useCallback((e) => {
     e.preventDefault();
     const move = (ev) => {
@@ -89,13 +91,16 @@ export default function DiscussionsPage() {
       document.body.style.userSelect = '';
       window.removeEventListener('mousemove', move);
       window.removeEventListener('mouseup', up);
+      dragCleanupRef.current = null;
       if (Number.isFinite(leftWRef.current)) { try { window.localStorage.setItem('pm-disc-left-w', String(Math.round(leftWRef.current))); } catch { /* ignore */ } }
     };
+    dragCleanupRef.current = up;
     document.body.style.cursor = 'col-resize';
     document.body.style.userSelect = 'none';
     window.addEventListener('mousemove', move);
     window.addEventListener('mouseup', up);
   }, []);
+  useEffect(() => () => { if (dragCleanupRef.current) dragCleanupRef.current(); }, []);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);

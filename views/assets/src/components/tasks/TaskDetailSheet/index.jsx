@@ -593,6 +593,11 @@ export default function TaskDetailSheet() {
                   ) : (
                     <h2 className={cn('text-lg font-bold leading-snug break-words', canEditTask(currentTask) && 'cursor-pointer hover:text-pm-accent transition-colors', complete && 'line-through text-pm-text-muted')}
                       title={currentTask.title}
+                      {...(canEditTask(currentTask) ? {
+                        role: 'button',
+                        tabIndex: 0,
+                        onKeyDown: e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setEditingTitle(true) } },
+                      } : {})}
                       onClick={() => canEditTask(currentTask) && setEditingTitle(true)}>
                       {currentTask.title}
                     </h2>
@@ -806,7 +811,7 @@ export default function TaskDetailSheet() {
                 {[
                   { key: 'subtasks', label: __('Subtasks', 'wedevs-project-manager'), count: 0, pro: !isPro, icon: ListChecks },
                   { key: 'comments', label: __('Comments', 'wedevs-project-manager'), count: comments.length, icon: MessageSquare },
-                  { key: 'activities', label: __('Activities', 'wedevs-project-manager'), count: 0, icon: Activity },
+                  { key: 'activities', label: __('Activities', 'wedevs-project-manager'), count: activities.length, icon: Activity },
                 ].map(t => (
                   <button
                     key={t.key}
@@ -817,7 +822,7 @@ export default function TaskDetailSheet() {
                     {t.icon && <t.icon className="h-4 w-4" />}
                     {t.label}
                     {t.count > 0 && <span className="text-[12px] bg-muted px-1.5 py-0.5 rounded-md tabular-nums font-medium">{t.count}</span>}
-                    {t.pro && <ProBadge />}
+                    {t.pro && <ProBadge interactive={false} />}
                     {detailTab === t.key && <span className="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-pm-accent" />}
                   </button>
                 ))}

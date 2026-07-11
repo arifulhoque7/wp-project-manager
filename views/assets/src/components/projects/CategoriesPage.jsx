@@ -331,12 +331,14 @@ export default function CategoriesPage() {
       )}
 
       {/* Pagination */}
-      <PaginationNav
-        page={page}
-        totalPages={totalPages}
-        onPageChange={fetchCategories}
-        className="pt-2"
-      />
+      {!loading && (
+        <PaginationNav
+          page={page}
+          totalPages={totalPages}
+          onPageChange={fetchCategories}
+          className="pt-2"
+        />
+      )}
 
       {/* Create / Edit Sheet */}
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>

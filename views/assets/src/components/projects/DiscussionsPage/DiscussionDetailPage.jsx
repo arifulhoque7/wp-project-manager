@@ -323,7 +323,7 @@ export default function DiscussionDetailPage() {
 
   const descHtml = typeof discussion.description === 'string'
     ? discussion.description
-    : (discussion.description?.html || discussion.description?.content || "");
+    : (discussion.description?.content || discussion.description?.html || "");
 
   return (
     <>

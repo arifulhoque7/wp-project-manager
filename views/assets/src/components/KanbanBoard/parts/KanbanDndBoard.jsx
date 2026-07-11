@@ -137,7 +137,7 @@ export default function KanbanDndBoard({
 
   return (
     <div className="flex gap-4 overflow-x-auto px-1 pt-1 pb-6 h-[calc(100vh-200px)]">
-      <div className="shrink-0" style={{ width: `${columns.length * 320 + (columns.length - 1) * 16}px` }}>
+      <div className="shrink-0" style={{ width: `${Math.max(0, columns.length * 320 + (columns.length - 1) * 16)}px` }}>
         <KanbanProvider
           columns={columns}
           data={kanbanData}

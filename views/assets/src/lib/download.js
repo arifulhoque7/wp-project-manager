@@ -28,32 +28,51 @@ export function saveBlob(blob, filename) {
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
-async function fetchToBlob(url, { headers, onProgress } = {}) {
-  const res = await fetch(url, { headers, credentials: 'same-origin' })
-  if (!res.ok) throw new Error(`Download failed (${res.status})`)
+async function fetchToBlob(url, { headers, onProgress, stallTimeout = 30000 } = {}) {
+  // Abort if no bytes arrive for stallTimeout ms; the timer resets on each chunk,
+  // so genuinely slow-but-progressing downloads are never killed, only stuck ones.
+  const controller = new AbortController()
+  let stalled = false
+  let timer
+  const arm = () => {
+    clearTimeout(timer)
+    timer = setTimeout(() => { stalled = true; controller.abort() }, stallTimeout)
+  }
 
-  const total = Number(res.headers.get('Content-Length')) || 0
-  // No stream or unknown length → indeterminate; just await the blob.
-  if (!res.body || !total || typeof res.body.getReader !== 'function') {
-    onProgress?.({ progress: 0, indeterminate: true })
-    const blob = await res.blob()
+  try {
+    arm()
+    const res = await fetch(url, { headers, credentials: 'same-origin', signal: controller.signal })
+    if (!res.ok) throw new Error(`Download failed (${res.status})`)
+
+    const total = Number(res.headers.get('Content-Length')) || 0
+    // No stream or unknown length → indeterminate; just await the blob.
+    if (!res.body || !total || typeof res.body.getReader !== 'function') {
+      onProgress?.({ progress: 0, indeterminate: true })
+      const blob = await res.blob()
+      onProgress?.({ progress: 100, indeterminate: false })
+      return { blob, res }
+    }
+
+    const reader = res.body.getReader()
+    const chunks = []
+    let loaded = 0
+    for (;;) {
+      const { done, value } = await reader.read()
+      if (done) break
+      arm()
+      chunks.push(value)
+      loaded += value.length
+      onProgress?.({ progress: Math.min(99, Math.round((loaded / total) * 100)), indeterminate: false })
+    }
     onProgress?.({ progress: 100, indeterminate: false })
-    return { blob, res }
+    const type = res.headers.get('Content-Type') || 'application/octet-stream'
+    return { blob: new Blob(chunks, { type }), res }
+  } catch (e) {
+    if (stalled) throw new Error('Download timed out')
+    throw e
+  } finally {
+    clearTimeout(timer)
   }
-
-  const reader = res.body.getReader()
-  const chunks = []
-  let loaded = 0
-  for (;;) {
-    const { done, value } = await reader.read()
-    if (done) break
-    chunks.push(value)
-    loaded += value.length
-    onProgress?.({ progress: Math.min(99, Math.round((loaded / total) * 100)), indeterminate: false })
-  }
-  onProgress?.({ progress: 100, indeterminate: false })
-  const type = res.headers.get('Content-Type') || 'application/octet-stream'
-  return { blob: new Blob(chunks, { type }), res }
 }
 
 // Download a server-generated file (PDF, export) with progress feedback.

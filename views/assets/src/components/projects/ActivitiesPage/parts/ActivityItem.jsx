@@ -74,18 +74,24 @@ export default function ActivityItem({ act, projectId: fallbackProjectId }) {
       </div>
       <div className="flex-1 min-w-0 flex items-start gap-2">
         <p className="flex-1 min-w-0 text-sm leading-snug">
-          <button
-            type="button"
-            onClick={handleActorClick}
-            className="font-medium text-pm-text-primary hover:text-pm-accent transition-colors cursor-pointer align-baseline"
-          >
-            {actor.display_name || 'Unknown'}
-          </button>{' '}
+          {actor.id ? (
+            <button
+              type="button"
+              onClick={handleActorClick}
+              className="border-0 bg-transparent p-0 font-medium text-pm-text-primary hover:text-pm-accent transition-colors cursor-pointer align-baseline"
+            >
+              {actor.display_name || __('Unknown', 'wedevs-project-manager')}
+            </button>
+          ) : (
+            <span className="font-medium text-pm-text-primary align-baseline">
+              {actor.display_name || __('Unknown', 'wedevs-project-manager')}
+            </span>
+          )}{' '}
           {isTask ? (
             <button
               type="button"
               onClick={handleMessageClick}
-              className="text-pm-text-muted hover:text-pm-accent transition-colors cursor-pointer text-left align-baseline"
+              className="border-0 bg-transparent p-0 text-pm-text-muted hover:text-pm-accent transition-colors cursor-pointer text-left align-baseline"
             >
               {parseMessage(act)}
             </button>

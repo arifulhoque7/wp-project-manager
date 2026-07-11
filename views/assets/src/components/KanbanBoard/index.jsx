@@ -175,9 +175,13 @@ export default function KanbanBoard() {
     }
   };
 
-  const handleColorChange = (boardId, color) => {
-    dispatch(setBoardColor({ projectId, boardId, color: color || "" }));
-    toast.success(__("Column color updated", 'wedevs-project-manager'));
+  const handleColorChange = async (boardId, color) => {
+    try {
+      await dispatch(setBoardColor({ projectId, boardId, color: color || "" })).unwrap();
+      toast.success(__("Column color updated", 'wedevs-project-manager'));
+    } catch {
+      toast.error(__("Failed to update column color", 'wedevs-project-manager'));
+    }
   };
 
   const handleMoveTask = useCallback(

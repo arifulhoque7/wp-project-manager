@@ -166,7 +166,7 @@ const SettingsPage = () => {
                 {tab.label}
                 {needsPro && (
                   <span className="max-w-0 overflow-hidden whitespace-nowrap group-hover/tab:max-w-fit group-hover/tab:ml-1 transition-all">
-                    <ProBadge />
+                    <ProBadge interactive={false} />
                   </span>
                 )}
               </button>
