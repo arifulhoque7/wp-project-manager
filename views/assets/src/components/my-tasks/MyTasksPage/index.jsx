@@ -1028,7 +1028,7 @@ export default function MyTasksPage() {
               </>
             )}
 
-            <Button className="h-11 px-5"
+            <Button
               variant="outline"
               size="sm"
               onClick={() => {
@@ -1040,7 +1040,7 @@ export default function MyTasksPage() {
                 setTaskDateError("");
                 fetchTasks(1);
               }}
-              className="gap-1.5 h-8 text-sm"
+              className="gap-1.5 h-11 px-5 text-sm shrink-0"
             >
               <Filter className="h-4 w-4" />
               {__("Filter", 'wedevs-project-manager')}
