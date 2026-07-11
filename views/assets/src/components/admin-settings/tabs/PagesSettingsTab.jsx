@@ -67,7 +67,7 @@ export default function PagesSettingsTab() {
             value={frontEndPage}
             onValueChange={(v) => { setFrontEndPage(v); setIsDirty(true) }}
           >
-            <SelectTrigger className="max-w-full w-64 h-8 text-sm">
+            <SelectTrigger className="max-w-full w-64 h-11 text-sm">
               <SelectValue placeholder={__('Select a page...', 'wedevs-project-manager')} />
             </SelectTrigger>
             <SelectContent>

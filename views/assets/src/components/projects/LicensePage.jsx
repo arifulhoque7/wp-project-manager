@@ -118,14 +118,14 @@ export default function LicensePage() {
                     ? `${license.key.substring(0, 4)}${'*'.repeat(Math.max(license.key.length - 8, 8))}${license.key.slice(-4)}`
                     : '****-****-****-****'}
                 </div>
-                <Button size="sm" variant="destructive" onClick={handleDelete}>
+                <Button size="sm" variant="destructive" className="h-11 px-5" onClick={handleDelete}>
                   <Trash2 className="h-4 w-4 mr-1" />{__('Deactivate', 'wedevs-project-manager')}
                 </Button>
               </div>
             </div>
           ) : (
             <div className="space-y-2">
-              <div className="flex items-center gap-1.5 h-9 rounded-md border border-pm-border bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent">
+              <div className="flex items-center gap-1.5 h-11 rounded-md border border-pm-border bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent/40 focus-within:border-pm-accent">
                 <Mail className="h-4 w-4 text-pm-text-muted shrink-0" />
                 <input
                   value={email}
@@ -136,7 +136,7 @@ export default function LicensePage() {
                 />
               </div>
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1.5 flex-1 h-9 rounded-md border border-pm-border bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent">
+                <div className="flex items-center gap-1.5 flex-1 h-11 rounded-md border border-pm-border bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent/40 focus-within:border-pm-accent">
                   <Key className="h-4 w-4 text-pm-text-muted shrink-0" />
                   <input
                     value={key}
@@ -146,7 +146,7 @@ export default function LicensePage() {
                     onKeyDown={(e) => e.key === 'Enter' && handleActivate()}
                   />
                 </div>
-                <Button size="sm" onClick={handleActivate} disabled={submitting || !email.trim() || !key.trim()}>
+                <Button size="sm" className="h-11 px-5" onClick={handleActivate} disabled={submitting || !email.trim() || !key.trim()}>
                   {__('Save & Activate', 'wedevs-project-manager')}
                 </Button>
               </div>

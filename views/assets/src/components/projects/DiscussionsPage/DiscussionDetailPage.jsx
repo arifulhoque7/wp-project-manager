@@ -337,7 +337,7 @@ export default function DiscussionDetailPage() {
               autoFocus
               value={editTitle}
               onChange={(e) => setEditTitle(e.target.value)}
-              className="text-base font-semibold h-9"
+              className="text-base font-semibold h-11"
             />
             <RichTextEditor
               content={editDesc}
@@ -346,7 +346,7 @@ export default function DiscussionDetailPage() {
               users={projectUsers}
             />
             <Select value={editMilestone} onValueChange={setEditMilestone}>
-              <SelectTrigger className="h-8 text-sm w-full sm:w-[200px]">
+              <SelectTrigger className="h-11 text-sm w-full sm:w-[200px]">
                 <SelectValue placeholder={__("- Milestone -", 'wedevs-project-manager')} />
               </SelectTrigger>
               <SelectContent>
@@ -482,10 +482,10 @@ export default function DiscussionDetailPage() {
                 <UserAvatar user={c.creator?.data} size="md" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[13px] font-medium text-pm-text-primary">
+                    <span className="text-sm font-semibold text-pm-text-primary">
                       {c.creator?.data?.display_name}
                     </span>
-                    <span className="text-[12px] text-pm-text-muted">
+                    <span className="text-[13px] text-pm-text-muted">
                       {formatPmDateTime(c.created_at)}
                     </span>
                     {canEditComment(c) && editingCommentId !== c.id && (
@@ -529,7 +529,7 @@ export default function DiscussionDetailPage() {
                       <div className="flex gap-1">
                         <Button
                           size="sm"
-                          className="h-6 text-[13px] gap-1 px-2"
+                          className="h-11 text-[13px] gap-1 px-2"
                           onClick={handleUpdateComment}
                           disabled={savingEditComment || !editCommentText.trim()}
                         >
@@ -539,7 +539,7 @@ export default function DiscussionDetailPage() {
                         <Button
                           size="sm"
                           variant="ghost"
-                          className="h-6 text-[13px] px-2"
+                          className="h-11 text-[13px] px-2"
                           onClick={cancelEditComment}
                           disabled={savingEditComment}
                         >
@@ -549,7 +549,7 @@ export default function DiscussionDetailPage() {
                       </div>
                     </div>
                   ) : (
-                    <div className="rounded-lg bg-muted/40 px-3.5 py-2.5">
+                    <div className="rounded-lg bg-muted/40 px-4 py-3">
                       <div
                         className="text-sm leading-relaxed prose prose-sm max-w-none text-foreground [&>*:first-child]:mt-0 [&>*:last-child]:mb-0"
                         dangerouslySetInnerHTML={{

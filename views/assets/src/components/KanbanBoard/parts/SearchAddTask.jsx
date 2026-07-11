@@ -85,7 +85,7 @@ export default function SearchAddTask({
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={__("Search by title (min 3 chars)...", 'wedevs-project-manager')}
-              className="h-9 pl-9 text-sm"
+              className="h-11 pl-9 text-sm"
               autoFocus
             />
           </div>

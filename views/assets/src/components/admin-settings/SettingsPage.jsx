@@ -154,7 +154,7 @@ const SettingsPage = () => {
                 className={cn(
                   'group/tab flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-medium whitespace-nowrap transition-all duration-200 shrink-0',
                   isActive
-                    ? 'bg-background text-pm-text-primary shadow-sm'
+                    ? 'bg-background text-pm-accent shadow-sm'
                     : 'text-pm-text-muted hover:text-pm-text-primary',
                 )}
                 onClick={() => setActiveTab(tab.key)}

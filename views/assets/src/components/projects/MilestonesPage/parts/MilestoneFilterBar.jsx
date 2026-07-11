@@ -31,14 +31,14 @@ export default function MilestoneFilterBar({ filter, sort, counts, onFilterChang
               className={cn(
                 "relative inline-flex shrink-0 items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-200",
                 isActive
-                  ? "bg-background text-pm-text-primary shadow-sm"
+                  ? "bg-background text-pm-accent shadow-sm"
                   : "text-pm-text-muted hover:text-pm-text-primary",
               )}
             >
               {TabIcon && <TabIcon className="h-4 w-4" />}
               {tab.label}
               <span
-                className="inline-flex items-center justify-center rounded-full px-1.5 min-w-[18px] h-[18px] text-[14px] font-medium tabular-nums transition-colors"
+                className="inline-flex items-center justify-center rounded-md px-1.5 min-w-[18px] h-[18px] text-[14px] font-medium tabular-nums transition-colors"
                 style={isActive ? { backgroundColor: tab.color + '15', color: tab.color } : { color: 'var(--pm-text-muted)' }}
               >
                 {count}
@@ -50,7 +50,7 @@ export default function MilestoneFilterBar({ filter, sort, counts, onFilterChang
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="h-8 gap-1.5 text-sm">
+          <Button variant="outline" size="sm" className="h-11 gap-1.5 text-sm">
             <ArrowUpDown className="h-3.5 w-3.5" />
             {sortOptions.find((s) => s.value === sort)?.label ?? __("Sort", 'wedevs-project-manager')}
           </Button>

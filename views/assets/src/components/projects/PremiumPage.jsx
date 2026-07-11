@@ -148,7 +148,7 @@ export default function PremiumPage() {
       >
         <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 30% 50%, rgba(255,255,255,0.12), transparent 70%)' }} />
         <div className="relative z-10">
-          <span className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-sm text-white text-sm font-medium px-3 py-1 rounded-full mb-3">
+          <span className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-sm text-white text-sm font-medium px-3 py-1 rounded-md mb-3">
             <Sparkles className="h-4 w-4" />
             {__("Project Manager Pro", 'wedevs-project-manager')}
           </span>

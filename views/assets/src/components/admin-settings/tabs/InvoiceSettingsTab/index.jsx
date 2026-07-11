@@ -127,7 +127,7 @@ export default function InvoiceSettingsTab() {
             <Label className="text-sm font-medium">{__('Currency', 'wedevs-project-manager')}</Label>
           </div>
           <Select value={currencyCode} onValueChange={set(setCurrencyCode)}>
-            <SelectTrigger className="w-52 h-8 text-sm">
+            <SelectTrigger className="w-52 h-11 text-sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -239,7 +239,7 @@ export default function InvoiceSettingsTab() {
             <Label className="text-sm font-medium">{__('Company Name', 'wedevs-project-manager')}</Label>
             <p className="text-sm text-pm-text-muted mt-0.5">{__('Displayed on invoices as the billing entity', 'wedevs-project-manager')}</p>
           </div>
-          <Input value={companyName} onChange={e => set(setCompanyName)(e.target.value)} className="w-64 h-8 text-sm" placeholder={__('Your Company Name', 'wedevs-project-manager')} />
+          <Input value={companyName} onChange={e => set(setCompanyName)(e.target.value)} className="w-64 h-11 text-sm" placeholder={__('Your Company Name', 'wedevs-project-manager')} />
         </div>
         <div className="px-5 py-4 border-b border-pm-border">
           <div className="flex items-center justify-between mb-1">
@@ -262,7 +262,7 @@ export default function InvoiceSettingsTab() {
             step="0.01"
             value={taxRate}
             onChange={e => set(setTaxRate)(e.target.value)}
-            className="w-32 h-8 text-sm text-right"
+            className="w-32 h-11 text-sm text-right"
             placeholder="0.00"
           />
         </div>
@@ -283,32 +283,32 @@ export default function InvoiceSettingsTab() {
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-pm-border">
           <Label className="text-sm font-medium">{__('Organization Name', 'wedevs-project-manager')}</Label>
-          <Input value={organization} onChange={e => set(setOrganization)(e.target.value)} className="w-64 h-8 text-sm" />
+          <Input value={organization} onChange={e => set(setOrganization)(e.target.value)} className="w-64 h-11 text-sm" />
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-pm-border">
           <Label className="text-sm font-medium">{__('Address Line 1', 'wedevs-project-manager')}</Label>
-          <Input value={address1} onChange={e => set(setAddress1)(e.target.value)} className="w-64 h-8 text-sm" />
+          <Input value={address1} onChange={e => set(setAddress1)(e.target.value)} className="w-64 h-11 text-sm" />
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-pm-border">
           <Label className="text-sm font-medium">{__('Address Line 2', 'wedevs-project-manager')}</Label>
-          <Input value={address2} onChange={e => set(setAddress2)(e.target.value)} className="w-64 h-8 text-sm" />
+          <Input value={address2} onChange={e => set(setAddress2)(e.target.value)} className="w-64 h-11 text-sm" />
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-pm-border">
           <Label className="text-sm font-medium">{__('City', 'wedevs-project-manager')}</Label>
-          <Input value={city} onChange={e => set(setCity)(e.target.value)} className="w-64 h-8 text-sm" />
+          <Input value={city} onChange={e => set(setCity)(e.target.value)} className="w-64 h-11 text-sm" />
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-pm-border">
           <Label className="text-sm font-medium">{__('State/Province', 'wedevs-project-manager')}</Label>
-          <Input value={state} onChange={e => set(setState)(e.target.value)} className="w-64 h-8 text-sm" />
+          <Input value={state} onChange={e => set(setState)(e.target.value)} className="w-64 h-11 text-sm" />
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between px-5 py-4 border-b border-pm-border">
           <Label className="text-sm font-medium">{__('Zip/Postal Code', 'wedevs-project-manager')}</Label>
-          <Input value={zip} onChange={e => set(setZip)(e.target.value)} className="w-40 h-8 text-sm" />
+          <Input value={zip} onChange={e => set(setZip)(e.target.value)} className="w-40 h-11 text-sm" />
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between px-5 py-4">
           <Label className="text-sm font-medium">{__('Country', 'wedevs-project-manager')}</Label>
           <Select value={countryCode} onValueChange={set(setCountryCode)}>
-            <SelectTrigger className="w-52 h-8 text-sm">
+            <SelectTrigger className="w-52 h-11 text-sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

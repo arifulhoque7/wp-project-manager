@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import React, { useEffect, useMemo, useState } from "react";
 import { useApi } from "@hooks/useApi";
+import { UserAvatar } from "@components/common/UserAvatar";
 import { Button } from "@components/ui/button";
 import {
   Select,
@@ -71,7 +72,7 @@ export default function FilterPanel({
   if (!open) return null;
   return (
     <div className="flex flex-wrap items-center gap-2 p-3 bg-muted/30 rounded-lg border mb-3">
-      <div className="flex items-center gap-1.5 flex-1 min-w-[160px] max-w-[240px] h-8 rounded-md border border-input bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent">
+      <div className="flex items-center gap-1.5 flex-1 min-w-[160px] max-w-[240px] h-11 rounded-md border border-input bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent/40 focus-within:border-pm-accent">
         <Search className="h-4 w-4 text-pm-text-muted shrink-0" />
         <input
           value={title}
@@ -85,7 +86,7 @@ export default function FilterPanel({
         value={userId || "all"}
         onValueChange={(v) => setUserId(v === "all" ? "" : v)}
       >
-        <SelectTrigger className="h-8 text-sm w-auto sm:w-40">
+        <SelectTrigger className="h-11 text-sm w-auto sm:w-40">
           <SelectValue placeholder={__("All Users", 'wedevs-project-manager')} />
         </SelectTrigger>
         <SelectContent>
@@ -95,7 +96,7 @@ export default function FilterPanel({
               key={u.id || u.user_id}
               value={String(u.id || u.user_id)}
             >
-              {u.display_name}
+              <span className="flex items-center gap-2"><UserAvatar user={u} size="sm" />{u.display_name}</span>
             </SelectItem>
           ))}
         </SelectContent>
@@ -104,7 +105,7 @@ export default function FilterPanel({
         value={listId || "all"}
         onValueChange={(v) => setListId(v === "all" ? "" : v)}
       >
-        <SelectTrigger className="h-8 text-sm w-auto sm:w-40">
+        <SelectTrigger className="h-11 text-sm w-auto sm:w-40">
           <SelectValue placeholder={__("All Lists", 'wedevs-project-manager')} />
         </SelectTrigger>
         <SelectContent>
@@ -120,7 +121,7 @@ export default function FilterPanel({
         value={dueDate || "all"}
         onValueChange={(v) => setDueDate(v === "all" ? "" : v)}
       >
-        <SelectTrigger className="h-8 text-sm w-auto sm:w-40">
+        <SelectTrigger className="h-11 text-sm w-auto sm:w-40">
           <SelectValue placeholder={__("Any Due Date", 'wedevs-project-manager')} />
         </SelectTrigger>
         <SelectContent>
@@ -136,7 +137,7 @@ export default function FilterPanel({
         value={status || "all"}
         onValueChange={(v) => setStatus(v === "all" ? "" : v)}
       >
-        <SelectTrigger className="h-8 text-sm w-auto sm:w-36">
+        <SelectTrigger className="h-11 text-sm w-auto sm:w-36">
           <SelectValue placeholder={__("All Status", 'wedevs-project-manager')} />
         </SelectTrigger>
         <SelectContent>
@@ -145,18 +146,18 @@ export default function FilterPanel({
           <SelectItem value="complete">{__("Complete", 'wedevs-project-manager')}</SelectItem>
         </SelectContent>
       </Select>
-      <Button size="sm" className="h-8" onClick={handleApply}>
+      <Button size="sm" className="h-11" onClick={handleApply}>
         <Filter className="h-4 w-4 mr-1" />
         {__("Apply", 'wedevs-project-manager')}
       </Button>
-      <Button size="sm" variant="ghost" className="h-8" onClick={handleClear}>
+      <Button size="sm" variant="ghost" className="h-11" onClick={handleClear}>
         <X className="h-4 w-4 mr-1" />
         {__("Clear", 'wedevs-project-manager')}
       </Button>
       <Button
         size="sm"
         variant="ghost"
-        className="h-8 ml-auto"
+        className="h-11 ml-auto"
         onClick={onClose}
       >
         <X className="h-4 w-4" />

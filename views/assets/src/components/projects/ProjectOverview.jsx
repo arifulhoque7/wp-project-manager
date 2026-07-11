@@ -343,7 +343,7 @@ export default function ProjectOverview() {
           <h1 className="text-xl font-bold text-pm-text-primary truncate">{__("Projects", 'wedevs-project-manager')}</h1>
         </div>
         {canManageMembers && (
-          <Button size="sm" className="h-9 gap-1.5 shrink-0" onClick={() => dispatch(openEditSheet(project))}>
+          <Button size="sm" className="h-11 px-5 gap-1.5 shrink-0" onClick={() => dispatch(openEditSheet(project))}>
             <Pencil className="h-4 w-4" />{__("Edit", 'wedevs-project-manager')}
           </Button>
         )}
@@ -388,7 +388,7 @@ export default function ProjectOverview() {
                         <UserAvatar key={u.id} user={u} size="sm" className="border-2 border-card" title={u.display_name} />
                       ))}
                       {assignees.length > 5 && (
-                        <span className="inline-flex items-center justify-center h-7 w-7 rounded-full border-2 border-card bg-muted text-[11px] font-medium text-pm-text-muted">
+                        <span className="inline-flex items-center justify-center h-7 w-7 rounded-md border-2 border-card bg-muted text-[11px] font-medium text-pm-text-muted">
                           +{assignees.length - 5}
                         </span>
                       )}
@@ -413,7 +413,7 @@ export default function ProjectOverview() {
               <button
                 type="button"
                 title={__("Add member", 'wedevs-project-manager')}
-                className="inline-flex items-center justify-center h-7 w-7 rounded-full border border-dashed border-pm-border text-pm-text-muted hover:text-pm-accent hover:border-pm-accent transition-colors"
+                className="inline-flex items-center justify-center h-7 w-7 rounded-md border border-dashed border-pm-border text-pm-text-muted hover:text-pm-accent hover:border-pm-accent transition-colors"
               >
                 <Plus className="h-4 w-4" />
               </button>
@@ -471,7 +471,7 @@ export default function ProjectOverview() {
                       value={pendingRoleId ? String(pendingRoleId) : ''}
                       onValueChange={(val) => setPendingRoleId(Number(val))}
                     >
-                      <SelectTrigger className="h-8 text-sm">
+                      <SelectTrigger className="h-11 text-sm">
                         <SelectValue placeholder={__("Select role", 'wedevs-project-manager')} />
                       </SelectTrigger>
                       <SelectContent>
@@ -607,11 +607,11 @@ export default function ProjectOverview() {
             <div className="overflow-x-auto -mx-1">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70 border-b">
-                    <th className="text-left font-medium py-2 px-2">{__("Document", 'wedevs-project-manager')}</th>
-                    <th className="text-left font-medium py-2 px-2">{__("Type", 'wedevs-project-manager')}</th>
-                    <th className="text-left font-medium py-2 px-2">{__("Date", 'wedevs-project-manager')}</th>
-                    <th className="text-left font-medium py-2 px-2">{__("Created by", 'wedevs-project-manager')}</th>
+                  <tr className="h-10 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282] border-b border-border bg-card">
+                    <th className="text-left font-normal py-2 px-2">{__("Document", 'wedevs-project-manager')}</th>
+                    <th className="text-left font-normal py-2 px-2">{__("Type", 'wedevs-project-manager')}</th>
+                    <th className="text-left font-normal py-2 px-2">{__("Date", 'wedevs-project-manager')}</th>
+                    <th className="text-left font-normal py-2 px-2">{__("Created by", 'wedevs-project-manager')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -620,7 +620,7 @@ export default function ProjectOverview() {
                     const ext = f.file_extension ? String(f.file_extension).toUpperCase() : (f.type === "image" ? __("Image", 'wedevs-project-manager') : __("File", 'wedevs-project-manager'));
                     const creator = f.creator?.data;
                     return (
-                      <tr key={f.id} className="border-b border-border/40 last:border-0">
+                      <tr key={f.id} className="border-b border-border/40 last:border-0 hover:bg-muted/40 transition-colors">
                         <td className="py-2.5 px-2">
                           <div className="flex items-center gap-2 min-w-0">
                             <FileText className="h-4 w-4 text-pm-text-muted shrink-0" />
@@ -668,19 +668,19 @@ export default function ProjectOverview() {
           <div className="overflow-x-auto -mx-1">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70 border-b">
+                <tr className="h-10 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282] border-b border-border bg-card">
                   <th className="text-left font-medium py-2 px-2 w-10">{__("No", 'wedevs-project-manager')}</th>
-                  <th className="text-left font-medium py-2 px-2">{__("Milestone", 'wedevs-project-manager')}</th>
-                  <th className="text-left font-medium py-2 px-2">{__("Planned Date", 'wedevs-project-manager')}</th>
-                  <th className="text-left font-medium py-2 px-2">{__("Tasks", 'wedevs-project-manager')}</th>
-                  <th className="text-left font-medium py-2 px-2">{__("Status", 'wedevs-project-manager')}</th>
+                  <th className="text-left font-normal py-2 px-2">{__("Milestone", 'wedevs-project-manager')}</th>
+                  <th className="text-left font-normal py-2 px-2">{__("Planned Date", 'wedevs-project-manager')}</th>
+                  <th className="text-left font-normal py-2 px-2">{__("Tasks", 'wedevs-project-manager')}</th>
+                  <th className="text-left font-normal py-2 px-2">{__("Status", 'wedevs-project-manager')}</th>
                 </tr>
               </thead>
               <tbody>
                 {milestones.map((m, i) => {
                   const done = m.status === 1 || m.status === "1" || m.status === "complete";
                   return (
-                    <tr key={m.id} className="border-b border-border/40 last:border-0">
+                    <tr key={m.id} className="border-b border-border/40 last:border-0 hover:bg-muted/40 transition-colors">
                       <td className="py-2.5 px-2 text-[13px] text-pm-text-muted tabular-nums">{i + 1}</td>
                       <td className="py-2.5 px-2 text-pm-text-primary truncate max-w-[220px]">{m.title}</td>
                       <td className="py-2.5 px-2 text-[13px] text-pm-text-muted tabular-nums whitespace-nowrap">
@@ -751,7 +751,7 @@ export default function ProjectOverview() {
                   </Select>
                 ) : (
                   user.roles?.data?.[0] && (
-                    <span className="text-[13px] text-pm-text-muted bg-muted/50 px-2 py-0.5 rounded-full">
+                    <span className="text-[13px] text-pm-text-muted bg-muted/50 px-2 py-0.5 rounded-md">
                       {user.roles.data[0].title}
                     </span>
                   )

@@ -220,7 +220,7 @@ export default function MilestonesPage() {
         {canCreateMilestone && (
           <Button
             size="sm"
-            className="gap-1.5"
+            className="gap-1.5 h-11 px-5"
             onClick={() => dispatch(openForm())}
           >
             <Plus className="h-4 w-4" />
@@ -257,7 +257,7 @@ export default function MilestonesPage() {
           {canCreateMilestone && (
             <Button
               size="sm"
-              className="gap-1.5"
+              className="gap-1.5 h-11 px-5"
               onClick={() => dispatch(openForm())}
             >
               <Plus className="h-4 w-4" />

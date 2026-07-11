@@ -67,7 +67,7 @@ function DatePicker({
           type="button"
           disabled={disabled}
           className={cn(
-            'flex h-9 w-full items-center justify-between gap-2 rounded-md border border-pm-border bg-pm-surface px-3 text-sm text-pm-text-primary disabled:opacity-50',
+            'flex h-11 w-full items-center justify-between gap-2 rounded-md border border-pm-border bg-pm-surface px-3 text-sm text-pm-text-primary disabled:opacity-50',
             !selected && 'text-pm-text-muted',
             className
           )}

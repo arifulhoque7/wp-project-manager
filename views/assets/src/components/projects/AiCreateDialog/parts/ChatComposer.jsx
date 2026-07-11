@@ -50,7 +50,7 @@ export default function ChatComposer({ onSend, disabled, placeholder, model }) {
         />
         <div className="flex items-center justify-between px-2.5 pb-2.5 pt-1">
           <span
-            className="inline-flex max-w-[240px] items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 text-[11px] font-medium text-pm-text-muted"
+            className="inline-flex max-w-[240px] items-center gap-1.5 rounded-md bg-muted px-2.5 py-1 text-[11px] font-medium text-pm-text-muted"
             title={model ? __('AI model (change in Settings)', 'wedevs-project-manager') : undefined}
           >
             <AiMagic className="h-3.5 w-3.5 shrink-0 text-pm-accent" />

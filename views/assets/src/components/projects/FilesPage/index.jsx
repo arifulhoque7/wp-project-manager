@@ -217,19 +217,19 @@ export default function FilesPage() {
 
         {!isPro && (
           <div className="flex items-center gap-2 flex-wrap">
-            <Button size="sm" variant="outline" className="h-8 text-sm group/btn" onClick={proAction}>
+            <Button size="sm" variant="outline" className="h-11 text-sm group/btn" onClick={proAction}>
               <FolderPlus className="h-4 w-4 mr-1" />{__("Create a folder", 'wedevs-project-manager')}
               <span className="opacity-0 group-hover/btn:opacity-100 transition-opacity ml-1"><ProBadge /></span>
             </Button>
-            <Button size="sm" variant="outline" className="h-8 text-sm group/btn" onClick={proAction}>
+            <Button size="sm" variant="outline" className="h-11 text-sm group/btn" onClick={proAction}>
               <Upload className="h-4 w-4 mr-1" />{__("Upload a file", 'wedevs-project-manager')}
               <span className="opacity-0 group-hover/btn:opacity-100 transition-opacity ml-1"><ProBadge /></span>
             </Button>
-            <Button size="sm" variant="outline" className="h-8 text-sm group/btn" onClick={proAction}>
+            <Button size="sm" variant="outline" className="h-11 text-sm group/btn" onClick={proAction}>
               <FilePlus className="h-4 w-4 mr-1" />{__("Create a doc", 'wedevs-project-manager')}
               <span className="opacity-0 group-hover/btn:opacity-100 transition-opacity ml-1"><ProBadge /></span>
             </Button>
-            <Button size="sm" variant="outline" className="h-8 text-sm group/btn" onClick={proAction}>
+            <Button size="sm" variant="outline" className="h-11 text-sm group/btn" onClick={proAction}>
               <Link2 className="h-4 w-4 mr-1" />{__("Link to Docs", 'wedevs-project-manager')}
               <span className="opacity-0 group-hover/btn:opacity-100 transition-opacity ml-1"><ProBadge /></span>
             </Button>
@@ -249,7 +249,7 @@ export default function FilesPage() {
                 className={cn(
                   "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-medium transition-all",
                   tab === t.key
-                    ? "bg-background text-pm-text-primary shadow-sm"
+                    ? "bg-background text-pm-accent shadow-sm"
                     : "text-pm-text-muted hover:text-pm-text-primary",
                 )}
               >
@@ -259,7 +259,7 @@ export default function FilesPage() {
             );
           })}
         </div>
-        <div className="flex items-center gap-1.5 w-full sm:w-auto sm:flex-1 min-w-[160px] max-w-[260px] h-8 rounded-md border border-input bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent">
+        <div className="flex items-center gap-1.5 w-full sm:w-auto sm:flex-1 min-w-[160px] max-w-[260px] h-11 rounded-md border border-input bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent/40 focus-within:border-pm-accent">
           <Search className="h-4 w-4 text-pm-text-muted shrink-0" />
           <input
             value={query}
@@ -502,7 +502,7 @@ export default function FilesPage() {
                   {/* Actions */}
                   <div className="flex items-center gap-2 pt-1">
                     {selected.url && (
-                      <Button size="sm" className="h-8 flex-1 text-[13px]" onClick={() => downloadRow(selected)}>
+                      <Button size="sm" className="h-11 flex-1 text-[13px]" onClick={() => downloadRow(selected)}>
                         <Download className="h-4 w-4 mr-1" />{__("Download", 'wedevs-project-manager')}
                       </Button>
                     )}

@@ -361,7 +361,7 @@ export default function SingleTaskListPage() {
         <h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground/70 flex items-center gap-1.5">
           <MessageSquare className="h-4 w-4" />{__('Discussion', 'wedevs-project-manager')}
           {comments.length > 0 && (
-            <span className="text-[14px] bg-muted px-1.5 py-0.5 rounded-full tabular-nums">{comments.length}</span>
+            <span className="text-[14px] bg-muted px-1.5 py-0.5 rounded-md tabular-nums">{comments.length}</span>
           )}
         </h3>
 
@@ -401,10 +401,10 @@ export default function SingleTaskListPage() {
                         )}
                         <FileUploadArea files={editCommentNewFiles} onFilesChange={setEditCommentNewFiles} compact />
                         <div className="flex items-center gap-2">
-                          <Button size="sm" className="h-6 text-[15px]" onClick={handleUpdateComment} disabled={savingEditComment || !editCommentText.trim()}>
+                          <Button size="sm" className="h-11 text-[15px]" onClick={handleUpdateComment} disabled={savingEditComment || !editCommentText.trim()}>
                             {savingEditComment ? __('Saving...', 'wedevs-project-manager') : __('Save', 'wedevs-project-manager')}
                           </Button>
-                          <Button size="sm" variant="ghost" className="h-6 text-[15px]" onClick={cancelEditComment} disabled={savingEditComment}>{__('Cancel', 'wedevs-project-manager')}</Button>
+                          <Button size="sm" variant="ghost" className="h-11 text-[15px]" onClick={cancelEditComment} disabled={savingEditComment}>{__('Cancel', 'wedevs-project-manager')}</Button>
                         </div>
                       </div>
                     ) : (
@@ -440,7 +440,7 @@ export default function SingleTaskListPage() {
             value={commentNotifyUsers}
             onChange={setCommentNotifyUsers}
           />
-          <Button size="sm" className="h-7 text-sm" onClick={handleSubmitComment} disabled={!newComment.trim() || submittingComment}>
+          <Button size="sm" className="h-11 text-sm" onClick={handleSubmitComment} disabled={!newComment.trim() || submittingComment}>
             {submittingComment ? __('Sending...', 'wedevs-project-manager') : __('Post Comment', 'wedevs-project-manager')}
           </Button>
         </div>

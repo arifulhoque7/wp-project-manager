@@ -184,7 +184,7 @@ const NotionSettingsTab = () => {
                 <Button type="button" variant="outline" size="icon" className="h-9 w-9 shrink-0" onClick={handleToggleShow} disabled={revealing}>
                   {revealing ? <Loader2 className="h-4 w-4 animate-spin" /> : (showToken ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />)}
                 </Button>
-                <Button type="button" variant="outline" size="sm" className="h-9 shrink-0" onClick={() => { setEditingToken(true); markDirty() }}>
+                <Button type="button" variant="outline" size="sm" className="h-11 shrink-0" onClick={() => { setEditingToken(true); markDirty() }}>
                   {__('Change', 'wedevs-project-manager')}
                 </Button>
               </>
@@ -198,7 +198,7 @@ const NotionSettingsTab = () => {
                   className="max-w-full w-56"
                 />
                 {editingToken && maskedToken && (
-                  <Button type="button" variant="outline" size="sm" className="h-9 shrink-0" onClick={() => { setEditingToken(false); setAccessToken('') }}>
+                  <Button type="button" variant="outline" size="sm" className="h-11 shrink-0" onClick={() => { setEditingToken(false); setAccessToken('') }}>
                     {__('Cancel', 'wedevs-project-manager')}
                   </Button>
                 )}

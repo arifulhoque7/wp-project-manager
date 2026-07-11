@@ -235,7 +235,7 @@ export function TopBar() {
         <Button variant="ghost" size="icon" className="h-8 w-8 relative shrink-0" onClick={() => setNotifOpen(true)}>
           <Bell className="h-5 w-5 text-pm-text-muted" />
           {unreadCount > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 h-4 min-w-[16px] flex items-center justify-center rounded-full bg-destructive text-[11px] text-white font-bold px-1">
+            <span className="absolute -top-0.5 -right-0.5 h-4 min-w-[16px] flex items-center justify-center rounded-md bg-destructive text-[11px] text-white font-bold px-1">
               {unreadCount}
             </span>
           )}

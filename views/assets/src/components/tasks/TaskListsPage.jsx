@@ -214,7 +214,7 @@ export default function TaskListsPage() {
         {__("Create your first task list to start organizing work.", 'wedevs-project-manager')}
       </p>
       {canCreateList && (
-        <Button onClick={() => setShowNewList(true)}>
+        <Button className="h-11 px-5" onClick={() => setShowNewList(true)}>
           <Plus className="h-5 w-5 mr-2" />
           {__("New Task List", 'wedevs-project-manager')}
         </Button>
@@ -234,7 +234,7 @@ export default function TaskListsPage() {
             {__("Task Lists", 'wedevs-project-manager')}
           </h1>
           {lists.length > 0 && (
-            <span className="text-sm text-pm-text-muted bg-muted/60 px-2 py-0.5 rounded-full tabular-nums">
+            <span className="text-sm text-pm-text-muted bg-muted/60 px-2 py-0.5 rounded-md tabular-nums">
               {lists.length}
             </span>
           )}
@@ -246,7 +246,7 @@ export default function TaskListsPage() {
             <Button
               variant="outline"
               size="sm"
-              className="text-sm gap-1.5 h-8 px-3"
+              className="text-sm gap-1.5 h-11 px-5"
               onClick={() =>
                 allExpanded ? dispatch(collapseAll()) : dispatch(expandAll())
               }
@@ -263,7 +263,7 @@ export default function TaskListsPage() {
           {canCreateList && (
             <Button
               size="sm"
-              className="text-sm gap-1.5 h-8 px-3"
+              className="text-sm gap-1.5 h-11 px-5"
               onClick={() => setShowNewList((v) => !v)}
             >
               <Plus className="h-4 w-4" />
@@ -284,7 +284,7 @@ export default function TaskListsPage() {
             value={newListTitle}
             onChange={(e) => setNewListTitle(e.target.value)}
             placeholder={__("Task list name", 'wedevs-project-manager')}
-            className="h-9 text-sm"
+            className="h-11 text-sm"
             onKeyDown={(e) => {
               if (e.key === "Escape") {
                 setShowNewList(false);

@@ -546,7 +546,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
               {canCreateTask && (
                 <Button
                   size="sm"
-                  className="gap-1.5"
+                  className="gap-1.5 h-11 px-5"
                   onClick={() => setShowNewTask(true)}
                 >
                   <Plus className="h-5 w-5" />
@@ -570,14 +570,14 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                   value={newTitle}
                   onChange={e => setNewTitle(e.target.value)}
                   placeholder={__('Task name...', 'wedevs-project-manager')}
-                  className="h-8 text-sm flex-1"
+                  className="h-11 text-sm flex-1"
                   onKeyDown={e => { if (e.key === 'Escape') resetForm() }}
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="h-7 text-sm px-1.5 text-pm-text-muted"
+                  className="h-11 text-sm px-1.5 text-pm-text-muted"
                   onClick={() => setExpandedForm(v => !v)}
                   title={__('More options', 'wedevs-project-manager')}
                 >
@@ -603,7 +603,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                     <DatePicker
                       value={newDueDate}
                       onChange={v => setNewDueDate(v)}
-                      className="h-8 text-sm w-40"
+                      className="h-11 text-sm w-40"
                     />
                   </div>
 
@@ -616,7 +616,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                       <select
                         value={selectedMilestone}
                         onChange={e => setSelectedMilestone(e.target.value)}
-                        className="h-8 text-sm text-foreground rounded-md border border-input bg-background px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring w-48"
+                        className="h-11 text-sm text-foreground rounded-md border border-input bg-background px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring w-48"
                       >
                         <option value="">{__('None', 'wedevs-project-manager')}</option>
                         {milestones.map(m => (
@@ -637,7 +637,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                           onFocus={() => setAssigneeOpen(true)}
                           onKeyDown={e => { if (e.key === 'Escape') setAssigneeOpen(false) }}
                           placeholder={__('Search users...', 'wedevs-project-manager')}
-                          className="h-8 text-sm"
+                          className="h-11 text-sm"
                         />
                         {assigneeOpen && assigneeResults.length > 0 && (
                           <div className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-lg shadow-lg z-50 max-h-72 overflow-y-auto p-1">
@@ -669,7 +669,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                         {selectedAssignees.map(user => (
                           <span
                             key={user.id}
-                            className="inline-flex items-center gap-1 text-sm bg-muted rounded-full pl-1 pr-2 py-0.5"
+                            className="inline-flex items-center gap-1 text-sm bg-muted rounded-md pl-1 pr-2 py-0.5"
                           >
                             <UserAvatar user={user} size="sm" />
                             {user.display_name}
@@ -711,7 +711,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                 <Button
                   type="submit"
                   size="sm"
-                  className="h-7 text-sm"
+                  className="h-11 text-sm"
                   disabled={!newTitle.trim() || creating}
                 >
                   {creating ? __('Adding...', 'wedevs-project-manager') : __('Add Task', 'wedevs-project-manager')}
@@ -720,7 +720,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="h-7 text-sm"
+                  className="h-11 text-sm"
                   onClick={resetForm}
                 >
                   {__('Cancel', 'wedevs-project-manager')}

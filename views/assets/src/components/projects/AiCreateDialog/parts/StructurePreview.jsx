@@ -107,7 +107,7 @@ export default function StructurePreview({ data, onCreate, disabled, created }) 
           </Badge>
         </div>
         {hasSelected && !created && (
-          <Button variant="destructive" size="sm" className="h-7 gap-1.5 text-sm" onClick={deleteSelected} disabled={disabled}>
+          <Button variant="destructive" size="sm" className="h-11 gap-1.5 text-sm" onClick={deleteSelected} disabled={disabled}>
             <Trash2 className="h-3.5 w-3.5" />
             {__('Delete selected', 'wedevs-project-manager')}
           </Button>
@@ -166,7 +166,7 @@ export default function StructurePreview({ data, onCreate, disabled, created }) 
 
       {!created && (
         <div className="mt-3 flex justify-end">
-          <Button onClick={handleCreate} disabled={disabled} className="gap-2">
+          <Button onClick={handleCreate} disabled={disabled} className="gap-2 h-11 px-5">
             <AiMagic className="h-4 w-4" />
             {__('Create project', 'wedevs-project-manager')}
           </Button>

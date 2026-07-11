@@ -251,7 +251,7 @@ export default function DiscussionsPage() {
               )}
             </div>
             {canCreateDiscussion && (
-              <Button size="sm" className="gap-1.5" onClick={() => setShowForm((v) => !v)}>
+              <Button size="sm" className="gap-1.5 h-11 px-5" onClick={() => setShowForm((v) => !v)}>
                 <Plus className="h-5 w-5" />
                 {__("New", 'wedevs-project-manager')}
               </Button>
@@ -265,7 +265,7 @@ export default function DiscussionsPage() {
                 value={formTitle}
                 onChange={(e) => setFormTitle(e.target.value)}
                 placeholder={__("Enter message title", 'wedevs-project-manager')}
-                className="h-9 text-sm"
+                className="h-11 text-sm"
               />
               <RichTextEditor
                 content={formDesc}
@@ -275,7 +275,7 @@ export default function DiscussionsPage() {
                 users={project?.assignees?.data ?? []}
               />
               <Select value={formMilestone} onValueChange={setFormMilestone}>
-                <SelectTrigger className="h-9 text-sm w-full">
+                <SelectTrigger className="h-11 text-sm w-full">
                   <SelectValue placeholder={__("- Milestone -", 'wedevs-project-manager')} />
                 </SelectTrigger>
                 <SelectContent>
@@ -299,6 +299,7 @@ export default function DiscussionsPage() {
                   variant="outline"
                   size="sm"
                   type="button"
+                  className="h-11 px-5"
                   onClick={() => {
                     setShowForm(false);
                     setFormTitle("");
@@ -309,7 +310,7 @@ export default function DiscussionsPage() {
                 >
                   {__("Cancel", 'wedevs-project-manager')}
                 </Button>
-                <Button size="sm" type="submit" disabled={!formTitle.trim() || creating}>
+                <Button size="sm" type="submit" className="h-11 px-5" disabled={!formTitle.trim() || creating}>
                   {creating ? __("Creating...", 'wedevs-project-manager') : __("Add Message", 'wedevs-project-manager')}
                 </Button>
               </div>
@@ -345,10 +346,10 @@ export default function DiscussionsPage() {
                     className={`rounded-xl border transition-all cursor-pointer group ${active ? 'border-pm-accent bg-pm-accent-light/40 shadow-sm' : 'border-pm-border bg-card hover:border-pm-accent/40 hover:bg-muted/30'}`}
                     onClick={() => navigate(`/projects/${projectId}/discussions/${d.id}`)}
                   >
-                    <div className="p-3.5">
+                    <div className="p-5">
                       <div className="flex items-start gap-2">
                         <div className="flex items-center gap-1.5 min-w-0 flex-1">
-                          <h3 className={`min-w-0 truncate text-sm font-medium transition-colors ${active ? 'text-pm-accent' : 'text-pm-text-primary group-hover:text-pm-accent'}`}>
+                          <h3 className={`min-w-0 truncate text-[15px] font-semibold transition-colors ${active ? 'text-pm-accent' : 'text-pm-text-primary group-hover:text-pm-accent'}`}>
                             {d.title}
                           </h3>
                           {isPrivate && <Lock className="h-3.5 w-3.5 text-pm-text-muted shrink-0" />}
@@ -403,13 +404,13 @@ export default function DiscussionsPage() {
                           : (d.description?.content || d.description?.html || "");
                         if (!descText) return null;
                         return (
-                          <p className="text-[13px] text-pm-text-muted mt-1 line-clamp-2">
+                          <p className="text-sm text-pm-text-muted mt-2 line-clamp-3">
                             {descText.replace(/<[^>]*>/g, "")}
                           </p>
                         );
                       })()}
 
-                      <div className="flex items-center gap-1.5 mt-2 text-[12px] text-pm-text-muted">
+                      <div className="flex items-center gap-1.5 mt-3 text-[13px] text-pm-text-muted">
                         {d.creator?.data && (
                           <span className="flex items-center gap-1 min-w-0">
                             <UserAvatar user={d.creator.data} size="sm" />

@@ -140,7 +140,7 @@ export default function ReportsPage() {
                   className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-lg"
                   onClick={() => setOpen(true)}
                 >
-                  <div className="flex items-center gap-2 bg-pm-surface rounded-full px-4 py-2 shadow-lg">
+                  <div className="flex items-center gap-2 bg-pm-surface rounded-md px-4 py-2 shadow-lg">
                     <Crown className="h-5 w-5 text-orange-500" />
                     <span className="text-sm font-medium text-pm-text-primary">
                       {__("Upgrade to Pro", 'wedevs-project-manager')}

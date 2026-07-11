@@ -22,7 +22,7 @@ export default function TemplatesHeaderButton() {
       <Button
         size="sm"
         variant="outline"
-        className="gap-1.5 group/tpl"
+        className="gap-1.5 group/tpl h-11 px-5"
         onClick={() => setOpen(true)}
       >
         <LayoutTemplate className="h-4 w-4" />

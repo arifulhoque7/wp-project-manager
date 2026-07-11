@@ -113,13 +113,13 @@ export default function TaskFilterBar({ projectId, lists, onFilterResults, onCle
         <Button
           variant="outline"
           size="sm"
-          className="gap-1.5 h-8 text-sm"
+          className="gap-1.5 h-11 text-sm"
           onClick={() => setIsOpen(true)}
         >
           <Filter className="h-4 w-4" />
           {__('Filter', 'wedevs-project-manager')}
           {activeCount > 0 && (
-            <Badge variant="secondary" className="h-4 px-1 text-[14px] rounded-full ml-0.5">
+            <Badge variant="secondary" className="h-4 px-1 text-[14px] rounded-md ml-0.5">
               {activeCount}
             </Badge>
           )}
@@ -131,7 +131,7 @@ export default function TaskFilterBar({ projectId, lists, onFilterResults, onCle
   return (
     <div className="rounded-lg border bg-card px-3 py-2.5 flex items-center gap-2 flex-wrap">
       {/* Search */}
-      <div className="flex items-center gap-1.5 flex-1 min-w-[160px] max-w-[240px] h-8 rounded-md border border-input bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent">
+      <div className="flex items-center gap-1.5 flex-1 min-w-[160px] max-w-[240px] h-11 rounded-md border border-input bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent/40 focus-within:border-pm-accent">
         <Search className="h-4 w-4 text-pm-text-muted shrink-0" />
         <input
           value={searchTitle}
@@ -143,7 +143,7 @@ export default function TaskFilterBar({ projectId, lists, onFilterResults, onCle
 
       {/* Status */}
       <Select value={status} onValueChange={(v) => { setStatus(v); applyFilter({ status: v }) }}>
-        <SelectTrigger className="h-8 w-auto sm:w-[120px] text-sm">
+        <SelectTrigger className="h-11 w-auto sm:w-[120px] text-sm">
           <SelectValue placeholder={__('Status', 'wedevs-project-manager')} />
         </SelectTrigger>
         <SelectContent>
@@ -154,7 +154,7 @@ export default function TaskFilterBar({ projectId, lists, onFilterResults, onCle
 
       {/* Due date */}
       <Select value={dueDate} onValueChange={(v) => { setDueDate(v); applyFilter({ dueDate: v }) }}>
-        <SelectTrigger className="h-8 w-auto sm:w-[120px] text-sm">
+        <SelectTrigger className="h-11 w-auto sm:w-[120px] text-sm">
           <SelectValue placeholder={__('Due Date', 'wedevs-project-manager')} />
         </SelectTrigger>
         <SelectContent>
@@ -167,7 +167,7 @@ export default function TaskFilterBar({ projectId, lists, onFilterResults, onCle
       {/* List */}
       {lists?.length > 0 && (
         <Select value={listId} onValueChange={(v) => { setListId(v); applyFilter({ listId: v }) }}>
-          <SelectTrigger className="h-8 w-auto sm:w-[140px] text-sm">
+          <SelectTrigger className="h-11 w-auto sm:w-[140px] text-sm">
             <SelectValue placeholder={__('Task List', 'wedevs-project-manager')} />
           </SelectTrigger>
           <SelectContent>
@@ -181,7 +181,7 @@ export default function TaskFilterBar({ projectId, lists, onFilterResults, onCle
       {/* Assignee */}
       {allAssignees.length > 0 && (
         <Select value={assigneeId} onValueChange={(v) => { setAssigneeId(v); applyFilter({ assigneeId: v }) }}>
-          <SelectTrigger className="h-8 w-auto sm:w-[140px] text-sm">
+          <SelectTrigger className="h-11 w-auto sm:w-[140px] text-sm">
             <SelectValue placeholder={__('Assignee', 'wedevs-project-manager')} />
           </SelectTrigger>
           <SelectContent>
@@ -199,7 +199,7 @@ export default function TaskFilterBar({ projectId, lists, onFilterResults, onCle
 
       {/* Clear */}
       {hasActiveFilter && (
-        <Button variant="outline" size="sm" className="h-8 text-sm gap-1" onClick={handleClear}>
+        <Button variant="outline" size="sm" className="h-11 text-sm gap-1" onClick={handleClear}>
           <X className="h-3.5 w-3.5" />
           {__('Clear', 'wedevs-project-manager')}
         </Button>

@@ -168,7 +168,7 @@ export default function GoogleWorkspacePage() {
               }}
             />
           ) : (
-            <span className="text-[11px] font-medium text-gray-500 bg-gray-100 rounded-full px-2 py-0.5">{__('Off', 'wedevs-project-manager')}</span>
+            <span className="text-[11px] font-medium text-gray-500 bg-gray-100 rounded-md px-2 py-0.5">{__('Off', 'wedevs-project-manager')}</span>
           )}
         </div>
         {!status.drive_enabled ? (

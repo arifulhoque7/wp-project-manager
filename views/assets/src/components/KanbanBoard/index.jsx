@@ -330,7 +330,7 @@ export default function KanbanBoard() {
               <Button
                 size="sm"
                 variant="outline"
-                className="h-8 text-xs gap-1.5 border-pm-border text-pm-text hover:bg-pm-surface-muted"
+                className="h-11 text-xs gap-1.5 border-pm-border text-pm-text hover:bg-pm-surface-muted"
                 onClick={() => setBgDialogOpen(true)}
                 title={__("Set board background", 'wedevs-project-manager')}
               >
@@ -353,7 +353,7 @@ export default function KanbanBoard() {
           <Button
             size="sm"
             variant="outline"
-            className="h-8 text-xs gap-1.5 border-pm-border text-pm-text hover:bg-pm-surface-muted"
+            className="h-11 text-xs gap-1.5 border-pm-border text-pm-text hover:bg-pm-surface-muted"
             onClick={() => setFilterOpen(!filterOpen)}
           >
             <Filter className="h-3.5 w-3.5" />

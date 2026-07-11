@@ -323,7 +323,7 @@ export function ProjectCreateSheet() {
                 if ((e.target.value || '').trim()) setTitleError('')
               }}
               className={cn(
-                'flex h-10 w-full rounded-md border border-input bg-background text-foreground px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+                'flex h-11 w-full rounded-md border border-input bg-background text-foreground px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                 titleError && 'border-destructive'
               )}
             />
@@ -452,11 +452,11 @@ export function ProjectCreateSheet() {
               <div className="rounded-md border overflow-hidden">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b bg-muted/50">
-                      <th className="text-left px-3 py-2 font-medium text-pm-text-muted">
+                    <tr className="h-10 border-b border-border bg-card">
+                      <th className="text-left px-3 py-2 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">
                         {__('User', 'wedevs-project-manager')}
                       </th>
-                      <th className="text-left px-3 py-2 font-medium text-pm-text-muted w-36">
+                      <th className="text-left px-3 py-2 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282] w-36">
                         {__('Role', 'wedevs-project-manager')}
                       </th>
                       <th className="px-3 py-2 w-10" />
@@ -464,7 +464,7 @@ export function ProjectCreateSheet() {
                   </thead>
                   <tbody>
                     {selectedUsers.map((user) => (
-                      <tr key={user.id} className="border-b last:border-b-0">
+                      <tr key={user.id} className="border-b border-border last:border-b-0 hover:bg-muted/40 transition-colors">
                         <td className="px-3 py-2">
                           <div className="flex items-center gap-2">
                             <UserAvatar user={{ ...user, display_name: getUserName(user) }} size="md" />
@@ -476,7 +476,7 @@ export function ProjectCreateSheet() {
                             value={String(user.roleId)}
                             onValueChange={(val) => handleRoleChange(user.id, Number(val))}
                           >
-                            <SelectTrigger className="h-8 text-sm">
+                            <SelectTrigger className="h-11 text-sm">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -525,12 +525,13 @@ export function ProjectCreateSheet() {
         <SheetFooter className="px-6 py-4 border-t">
           <Button
             variant="outline"
+            className="h-11 px-5"
             onClick={() => isEditMode ? dispatch(closeEditSheet()) : dispatch(setCreateSheetOpen(false))}
             disabled={isSaving}
           >
             {__('Cancel', 'wedevs-project-manager')}
           </Button>
-          <Button onClick={handleSubmit} disabled={isSaving}>
+          <Button className="h-11 px-5" onClick={handleSubmit} disabled={isSaving}>
             {isSaving && <Loader2 className="h-5 w-5 mr-2 animate-spin" />}
             {isSaving
               ? (isEditMode ? __('Updating...', 'wedevs-project-manager') : __('Creating...', 'wedevs-project-manager'))

@@ -117,7 +117,7 @@ export default function AutomationModal({
                 {__("Move Tasks", 'wedevs-project-manager')}
               </Label>
               <Select value={moveType} onValueChange={setMoveType}>
-                <SelectTrigger className="h-8 text-sm">
+                <SelectTrigger className="h-11 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

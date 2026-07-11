@@ -205,12 +205,12 @@ const GeneralTab = () => {
               )}
               <div className="flex gap-2">
                 <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
-                <Button type="button" size="sm" variant="outline" className="h-8 text-sm" onClick={handleLogoUpload} disabled={uploading}>
+                <Button type="button" size="sm" variant="outline" className="h-11 text-sm" onClick={handleLogoUpload} disabled={uploading}>
                   {uploading ? <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" /> : <Upload className="h-3.5 w-3.5 mr-1" />}
                   {uploading ? __('Uploading...', 'wedevs-project-manager') : logo ? __('Change', 'wedevs-project-manager') : __('Upload', 'wedevs-project-manager')}
                 </Button>
                 {logo && (
-                  <Button type="button" size="sm" variant="outline" className="h-8 text-sm text-destructive" onClick={() => { setLogo(null); setLogoId(null); setIsDirty(true) }}>
+                  <Button type="button" size="sm" variant="outline" className="h-11 text-sm text-destructive" onClick={() => { setLogo(null); setLogoId(null); setIsDirty(true) }}>
                     <Trash2 className="h-3.5 w-3.5 mr-1" />{__('Remove', 'wedevs-project-manager')}
                   </Button>
                 )}

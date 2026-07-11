@@ -642,7 +642,7 @@ export function AppSidebar() {
               />
               {planLabel && (
                 <span className="flex items-center gap-1.5 whitespace-nowrap">
-                  <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+                  <span className="inline-flex items-center rounded-md bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
                     {planLabel}
                   </span>
                   {proVersion && (

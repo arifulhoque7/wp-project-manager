@@ -230,7 +230,7 @@ export default function WelcomePage() {
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Left - text */}
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 motion-reduce:animate-none">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-yellow-200 mb-4 backdrop-blur-sm">
+            <span className="inline-flex items-center gap-1.5 rounded-md bg-white/15 px-3 py-1 text-xs font-medium text-yellow-200 mb-4 backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5" />
               {__('Welcome to', 'wedevs-project-manager')}
             </span>

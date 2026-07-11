@@ -417,10 +417,11 @@ export default function MyTasksPage() {
             avatar_url: user?.avatar_url || PM_Vars.current_user?.data?.avatar_url,
             display_name: user?.display_name || PM_Vars.current_user?.data?.display_name || '?',
           }}
-          size="xl"
+          size="lg"
+          className="h-11 w-11"
         />
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-bold text-pm-text-primary">
+          <h1 className="text-lg font-bold text-pm-text-primary">
             {__("My Tasks", 'wedevs-project-manager')}
           </h1>
           <p className="text-sm text-pm-text-muted">
@@ -439,13 +440,13 @@ export default function MyTasksPage() {
               setShowReportDateError(false);
             }}
           >
-            <SelectTrigger className="h-8 w-full sm:w-[220px] text-sm shrink-0">
+            <SelectTrigger className="h-11 w-[240px] max-w-full text-sm shrink-0">
               <SelectValue placeholder={__("Select User", 'wedevs-project-manager')} />
             </SelectTrigger>
             <SelectContent>
               {allUsers.map((u) => (
                 <SelectItem key={u.id || u.ID} value={String(u.id || u.ID)}>
-                  {u.display_name}
+                  <span className="flex items-center gap-2"><UserAvatar user={u} size="sm" />{u.display_name}</span>
                 </SelectItem>
               ))}
             </SelectContent>
@@ -455,7 +456,7 @@ export default function MyTasksPage() {
         <Button
           size="sm"
           onClick={() => setNewTaskOpen(true)}
-          className="gap-1.5 shrink-0"
+          className="gap-1.5 shrink-0 h-11 px-5"
         >
           <Plus className="h-5 w-5" />
           {__("New Task", 'wedevs-project-manager')}
@@ -478,7 +479,7 @@ export default function MyTasksPage() {
               }}
               className={`relative inline-flex shrink-0 whitespace-nowrap items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? "bg-background text-pm-text-primary shadow-sm"
+                  ? "bg-background text-pm-accent shadow-sm"
                   : "text-pm-text-muted hover:text-pm-text-primary"
               }`}
             >
@@ -491,7 +492,7 @@ export default function MyTasksPage() {
               )}
               {count !== undefined && (
                 <span
-                  className={`inline-flex items-center justify-center rounded-full px-1.5 min-w-[18px] h-[18px] text-[14px] font-medium tabular-nums ${
+                  className={`inline-flex items-center justify-center rounded-md px-1.5 min-w-[18px] h-[18px] text-[14px] font-medium tabular-nums ${
                     isActive
                       ? "bg-pm-accent/10 text-pm-accent"
                       : "text-pm-text-muted/70"
@@ -551,7 +552,7 @@ export default function MyTasksPage() {
                   {__('Activity Filter', 'wedevs-project-manager')}
                 </span>
                 {(overviewStartDate || overviewEndDate) && (
-                  <Button variant="ghost" size="sm" className="h-7 text-xs text-pm-text-muted hover:text-destructive" onClick={() => { setOverviewStartDate(''); setOverviewEndDate(''); setAppliedFilterDates({ start: '', end: '' }) }}>
+                  <Button variant="ghost" size="sm" className="h-11 text-xs text-pm-text-muted hover:text-destructive" onClick={() => { setOverviewStartDate(''); setOverviewEndDate(''); setAppliedFilterDates({ start: '', end: '' }) }}>
                     <X className="h-3.5 w-3.5 mr-1" />{__('Clear', 'wedevs-project-manager')}
                   </Button>
                 )}
@@ -562,7 +563,7 @@ export default function MyTasksPage() {
                   <DatePicker
                     value={overviewStartDate}
                     onChange={(v) => setOverviewStartDate(v)}
-                    className="h-8 text-sm w-auto sm:w-40"
+                    className="h-11 text-sm w-auto sm:w-40"
                   />
                 </div>
                 <div className="space-y-1">
@@ -570,10 +571,10 @@ export default function MyTasksPage() {
                   <DatePicker
                     value={overviewEndDate}
                     onChange={(v) => setOverviewEndDate(v)}
-                    className="h-8 text-sm w-auto sm:w-40"
+                    className="h-11 text-sm w-auto sm:w-40"
                   />
                 </div>
-                <Button size="sm" className="h-8 text-sm" onClick={() => setAppliedFilterDates({ start: overviewStartDate, end: overviewEndDate })}>
+                <Button size="sm" className="h-11 text-sm" onClick={() => setAppliedFilterDates({ start: overviewStartDate, end: overviewEndDate })}>
                   <Filter className="h-3.5 w-3.5 mr-1" />{__('Filter', 'wedevs-project-manager')}
                 </Button>
               </div>
@@ -672,7 +673,7 @@ export default function MyTasksPage() {
                   {__("Calendar", 'wedevs-project-manager')}
                 </h3>
                 <div className="flex items-center gap-2">
-                  <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => setCalDate(new Date())}>
+                  <Button size="sm" variant="outline" className="h-11 text-xs" onClick={() => setCalDate(new Date())}>
                     {__("Today", 'wedevs-project-manager')}
                   </Button>
                   <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => setCalDate(new Date(calYear, calMonth - 1, 1))}>
@@ -757,15 +758,15 @@ export default function MyTasksPage() {
                 <label className={cn("text-[12px] font-medium uppercase tracking-wide", showReportDateError && !reportStart ? "text-red-500" : "text-muted-foreground/70")}>
                   {__("Start Date", 'wedevs-project-manager')}<span className="text-red-500 ml-0.5">*</span>
                 </label>
-                <DatePicker value={reportStart} onChange={(v) => { setReportStart(v); setShowReportDateError(false) }} className={cn("h-8 text-sm w-auto sm:w-36", showReportDateError && !reportStart && "border-red-500 ring-1 ring-red-500")} />
+                <DatePicker value={reportStart} onChange={(v) => { setReportStart(v); setShowReportDateError(false) }} className={cn("h-11 text-sm w-auto sm:w-36", showReportDateError && !reportStart && "border-red-500 ring-1 ring-red-500")} />
               </div>
               <div className="space-y-1">
                 <label className={cn("text-[12px] font-medium uppercase tracking-wide", showReportDateError && !reportEnd ? "text-red-500" : "text-muted-foreground/70")}>
                   {__("End Date", 'wedevs-project-manager')}<span className="text-red-500 ml-0.5">*</span>
                 </label>
-                <DatePicker value={reportEnd} onChange={(v) => { setReportEnd(v); setShowReportDateError(false) }} className={cn("h-8 text-sm w-auto sm:w-36", showReportDateError && !reportEnd && "border-red-500 ring-1 ring-red-500")} />
+                <DatePicker value={reportEnd} onChange={(v) => { setReportEnd(v); setShowReportDateError(false) }} className={cn("h-11 text-sm w-auto sm:w-36", showReportDateError && !reportEnd && "border-red-500 ring-1 ring-red-500")} />
               </div>
-              <Button size="sm" className="h-8" onClick={fetchReport}>{__("Run Report", 'wedevs-project-manager')}</Button>
+              <Button size="sm" className="h-11" onClick={fetchReport}>{__("Run Report", 'wedevs-project-manager')}</Button>
             </div>
             <div className="text-center py-12">
               <BarChart3 className="h-12 w-12 text-pm-text-muted/20 mx-auto mb-3" />
@@ -779,15 +780,15 @@ export default function MyTasksPage() {
                 <label className={cn("text-[12px] font-medium uppercase tracking-wide", showReportDateError && !reportStart ? "text-red-500" : "text-muted-foreground/70")}>
                   {__("Start Date", 'wedevs-project-manager')}<span className="text-red-500 ml-0.5">*</span>
                 </label>
-                <DatePicker value={reportStart} onChange={(v) => { setReportStart(v); setShowReportDateError(false) }} className={cn("h-8 text-sm w-auto sm:w-36", showReportDateError && !reportStart && "border-red-500 ring-1 ring-red-500")} />
+                <DatePicker value={reportStart} onChange={(v) => { setReportStart(v); setShowReportDateError(false) }} className={cn("h-11 text-sm w-auto sm:w-36", showReportDateError && !reportStart && "border-red-500 ring-1 ring-red-500")} />
               </div>
               <div className="space-y-1">
                 <label className={cn("text-[12px] font-medium uppercase tracking-wide", showReportDateError && !reportEnd ? "text-red-500" : "text-muted-foreground/70")}>
                   {__("End Date", 'wedevs-project-manager')}<span className="text-red-500 ml-0.5">*</span>
                 </label>
-                <DatePicker value={reportEnd} onChange={(v) => { setReportEnd(v); setShowReportDateError(false) }} className={cn("h-8 text-sm w-auto sm:w-36", showReportDateError && !reportEnd && "border-red-500 ring-1 ring-red-500")} />
+                <DatePicker value={reportEnd} onChange={(v) => { setReportEnd(v); setShowReportDateError(false) }} className={cn("h-11 text-sm w-auto sm:w-36", showReportDateError && !reportEnd && "border-red-500 ring-1 ring-red-500")} />
               </div>
-              <Button size="sm" className="h-8" onClick={fetchReport}>{__("Run Report", 'wedevs-project-manager')}</Button>
+              <Button size="sm" className="h-11" onClick={fetchReport}>{__("Run Report", 'wedevs-project-manager')}</Button>
             </div>
 
             <div className="flex items-center gap-3">
@@ -884,16 +885,16 @@ export default function MyTasksPage() {
                     <div className="rounded-xl border bg-card overflow-x-auto">
                       <h4 className="text-sm font-medium text-pm-text-primary px-4 py-3 border-b">{__("Projects", 'wedevs-project-manager')}</h4>
                       <table className="w-full text-sm">
-                        <thead><tr className="border-b text-sm text-pm-text-muted">
-                          <th className="text-left px-4 py-2">{__("Project", 'wedevs-project-manager')}</th>
-                          <th className="text-left px-4 py-2">{__("Assigned", 'wedevs-project-manager')}</th>
-                          <th className="text-left px-4 py-2">{__("Completed", 'wedevs-project-manager')}</th>
-                          <th className="text-left px-4 py-2">{__("Working H", 'wedevs-project-manager')}</th>
-                          <th className="text-left px-4 py-2">{__("Est. H", 'wedevs-project-manager')}</th>
+                        <thead><tr className="h-10 border-b border-border bg-card">
+                          <th className="text-left px-4 py-2 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">{__("Project", 'wedevs-project-manager')}</th>
+                          <th className="text-left px-4 py-2 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">{__("Assigned", 'wedevs-project-manager')}</th>
+                          <th className="text-left px-4 py-2 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">{__("Completed", 'wedevs-project-manager')}</th>
+                          <th className="text-left px-4 py-2 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">{__("Working H", 'wedevs-project-manager')}</th>
+                          <th className="text-left px-4 py-2 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">{__("Est. H", 'wedevs-project-manager')}</th>
                         </tr></thead>
                         <tbody>
                           {allProj.map((p, i) => (
-                            <tr key={i} className="border-b last:border-b-0">
+                            <tr key={i} className="border-b border-border last:border-b-0 hover:bg-muted/40 transition-colors">
                               <td className="px-4 py-2 font-medium max-w-[200px] truncate" title={p.project?.title || ""}>{p.project?.title || "—"}</td>
                               <td className="px-4 py-2 text-pm-text-muted">{p.assigned_tasks || 0}</td>
                               <td className="px-4 py-2 text-pm-text-muted">{p.completed_tasks || 0}</td>
@@ -910,14 +911,14 @@ export default function MyTasksPage() {
                     <div className="rounded-xl border bg-card overflow-x-auto">
                       <h4 className="text-sm font-medium text-pm-text-primary px-4 py-3 border-b">{__("Task type", 'wedevs-project-manager')}</h4>
                       <table className="w-full text-sm">
-                        <thead><tr className="border-b text-sm text-pm-text-muted">
-                          <th className="text-left px-4 py-2">{__("Task type", 'wedevs-project-manager')}</th>
-                          <th className="text-left px-4 py-2">{__("Task", 'wedevs-project-manager')}</th>
-                          <th className="text-left px-4 py-2">{__("Est. Hour", 'wedevs-project-manager')}</th>
+                        <thead><tr className="h-10 border-b border-border bg-card">
+                          <th className="text-left px-4 py-2 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">{__("Task type", 'wedevs-project-manager')}</th>
+                          <th className="text-left px-4 py-2 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">{__("Task", 'wedevs-project-manager')}</th>
+                          <th className="text-left px-4 py-2 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">{__("Est. Hour", 'wedevs-project-manager')}</th>
                         </tr></thead>
                         <tbody>
                           {taskTypes.map((t, i) => (
-                            <tr key={i} className="border-b last:border-b-0">
+                            <tr key={i} className="border-b border-border last:border-b-0 hover:bg-muted/40 transition-colors">
                               <td className="px-4 py-2 font-medium">{t.type || "—"}</td>
                               <td className="px-4 py-2 text-pm-text-muted">{t.assigned || 0}</td>
                               <td className="px-4 py-2 text-pm-text-muted">{t.est_hours || "0:00"}</td>
@@ -932,17 +933,17 @@ export default function MyTasksPage() {
                     <div className="rounded-xl border bg-card overflow-x-auto">
                       <h4 className="text-sm font-medium text-pm-text-primary px-4 py-3 border-b">{__("Subtasks", 'wedevs-project-manager')}</h4>
                       <table className="w-full text-sm">
-                        <thead><tr className="border-b text-sm text-pm-text-muted">
-                          <th className="text-left px-4 py-2">{__("Completed At", 'wedevs-project-manager')}</th>
-                          <th className="text-left px-4 py-2">{__("Task Title", 'wedevs-project-manager')}</th>
-                          <th className="text-left px-4 py-2">{__("Subtask Title", 'wedevs-project-manager')}</th>
-                          <th className="text-left px-4 py-2">{__("Project", 'wedevs-project-manager')}</th>
-                          <th className="text-left px-4 py-2">{__("Type", 'wedevs-project-manager')}</th>
-                          <th className="text-left px-4 py-2">{__("Hour", 'wedevs-project-manager')}</th>
+                        <thead><tr className="h-10 border-b border-border bg-card">
+                          <th className="text-left px-4 py-2 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">{__("Completed At", 'wedevs-project-manager')}</th>
+                          <th className="text-left px-4 py-2 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">{__("Task Title", 'wedevs-project-manager')}</th>
+                          <th className="text-left px-4 py-2 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">{__("Subtask Title", 'wedevs-project-manager')}</th>
+                          <th className="text-left px-4 py-2 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">{__("Project", 'wedevs-project-manager')}</th>
+                          <th className="text-left px-4 py-2 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">{__("Type", 'wedevs-project-manager')}</th>
+                          <th className="text-left px-4 py-2 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">{__("Hour", 'wedevs-project-manager')}</th>
                         </tr></thead>
                         <tbody>
                           {subtasksAll.map((st, i) => (
-                            <tr key={i} className="border-b last:border-b-0">
+                            <tr key={i} className="border-b border-border last:border-b-0 hover:bg-muted/40 transition-colors">
                               <td className="px-4 py-2 text-pm-text-muted">{st.completed_at_display || "N/A"}</td>
                               <td className="px-4 py-2 max-w-[180px] truncate" title={st.parent_task_title || ""}>{st.parent_task_title || "—"}</td>
                               <td className="px-4 py-2 font-medium max-w-[180px] truncate" title={st.title}>{st.title}</td>
@@ -963,7 +964,7 @@ export default function MyTasksPage() {
       ) : activeTab !== "activities" ? (
         <div className="space-y-4">
           <div className="rounded-xl border bg-card px-3 py-2.5 flex items-center gap-2 flex-wrap">
-            <div className="flex items-center gap-1.5 flex-1 min-w-[160px] max-w-[240px] h-8 rounded-md border border-input bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent">
+            <div className="flex items-center gap-1.5 flex-1 min-w-[160px] max-w-[240px] h-11 rounded-md border border-input bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent/40 focus-within:border-pm-accent">
               <Search className="h-4 w-4 text-pm-text-muted shrink-0" />
               <input
                 value={searchTitle}
@@ -980,7 +981,7 @@ export default function MyTasksPage() {
               value={filterProjectId || "all"}
               onValueChange={(val) => setFilterProjectId(val === "all" ? "" : val)}
             >
-              <SelectTrigger className="h-8 text-sm w-full sm:w-[180px]">
+              <SelectTrigger className="h-11 text-sm w-[200px] max-w-full">
                 <SelectValue placeholder={__("All Projects", 'wedevs-project-manager')} />
               </SelectTrigger>
               <SelectContent>
@@ -998,14 +999,14 @@ export default function MyTasksPage() {
                 <DatePicker
                   value={taskStartDate}
                   onChange={(v) => { setTaskStartDate(v); setTaskDateError(""); }}
-                  className="h-8 text-sm w-auto sm:w-[150px]"
+                  className="h-11 text-sm w-auto sm:w-[150px]"
                   aria-label={__("Start Date", 'wedevs-project-manager')}
                 />
                 <span className="text-pm-text-muted text-sm">{__("to", 'wedevs-project-manager')}</span>
                 <DatePicker
                   value={taskEndDate}
                   onChange={(v) => { setTaskEndDate(v); setTaskDateError(""); }}
-                  className="h-8 text-sm w-auto sm:w-[150px]"
+                  className="h-11 text-sm w-auto sm:w-[150px]"
                   aria-label={__("End Date", 'wedevs-project-manager')}
                 />
               </>
@@ -1040,7 +1041,7 @@ export default function MyTasksPage() {
                   setTaskEndDate("");
                   setTaskDateError("");
                 }}
-                className="gap-1 text-pm-text-muted h-8 px-2"
+                className="gap-1 text-pm-text-muted h-11 px-2"
               >
                 <X className="h-4 w-4" />
                 {__("Clear", 'wedevs-project-manager')}
@@ -1050,7 +1051,7 @@ export default function MyTasksPage() {
             <div className="ml-auto flex items-center gap-1 text-sm text-pm-text-muted">
               <span>{__("Sort:", 'wedevs-project-manager')}</span>
               <Select value={sortBy} onValueChange={(val) => setSortBy(val)}>
-                <SelectTrigger className="h-8 text-sm w-auto sm:w-[140px]">
+                <SelectTrigger className="h-11 text-sm w-auto sm:w-[140px]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

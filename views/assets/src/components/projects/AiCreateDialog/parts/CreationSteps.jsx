@@ -98,14 +98,14 @@ function RowState({ status }) {
 
 function StatusTag({ allDone, anyError, anyActive }) {
   if (anyError) {
-    return <span className="rounded-full bg-red-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-red-600">{__('Failed', 'wedevs-project-manager')}</span>;
+    return <span className="rounded-md bg-red-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-red-600">{__('Failed', 'wedevs-project-manager')}</span>;
   }
   if (allDone) {
-    return <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-600">{__('Complete', 'wedevs-project-manager')}</span>;
+    return <span className="rounded-md bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-600">{__('Complete', 'wedevs-project-manager')}</span>;
   }
   if (anyActive) {
     return (
-      <span className="flex items-center gap-1.5 rounded-full bg-pm-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-pm-accent">
+      <span className="flex items-center gap-1.5 rounded-md bg-pm-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-pm-accent">
         <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-pm-accent" />
         {__('Working', 'wedevs-project-manager')}
       </span>

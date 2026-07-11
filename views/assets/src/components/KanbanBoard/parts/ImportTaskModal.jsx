@@ -109,7 +109,7 @@ export default function ImportTaskModal({ open, onOpenChange, projectId, boardId
                 value={selectedList || "none"}
                 onValueChange={(v) => setSelectedList(v === "none" ? "" : v)}
               >
-                <SelectTrigger className="h-8 text-sm">
+                <SelectTrigger className="h-11 text-sm">
                   <SelectValue placeholder={__("Select Task List", 'wedevs-project-manager')} />
                 </SelectTrigger>
                 <SelectContent>

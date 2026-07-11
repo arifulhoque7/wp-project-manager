@@ -84,6 +84,8 @@ import {
   Search,
   ListChecks,
   Calendar,
+  Users,
+  Activity,
 } from "lucide-react";
 
 import AiCreateDialog from "../AiCreateDialog";
@@ -268,7 +270,7 @@ export default function ProjectsPage() {
         {__("Get started by creating a new project.", 'wedevs-project-manager')}
       </p>
       {canCreate && (
-        <Button onClick={() => dispatch(setCreateSheetOpen(true))}>
+        <Button className="h-11 px-5" onClick={() => dispatch(setCreateSheetOpen(true))}>
           <Plus className="h-4 w-4 mr-2" />
           {__("New Project", 'wedevs-project-manager')}
         </Button>
@@ -504,21 +506,21 @@ export default function ProjectsPage() {
       <div className="rounded-xl border bg-card overflow-x-auto">
         <table className="w-full text-sm min-w-[820px]">
           <thead>
-            <tr className="border-b bg-muted/30">
-              <th className="text-left px-5 py-2.5 text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70">
-                {__("Project Name", 'wedevs-project-manager')}
+            <tr className="h-10 border-b border-border bg-card">
+              <th className="text-left px-5 py-2.5 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">
+                <span className="inline-flex items-center gap-1.5"><FolderKanban className="h-3.5 w-3.5" />{__("Project Name", 'wedevs-project-manager')}</span>
               </th>
-              <th className="text-left px-4 py-2.5 text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70">
-                {__("Description", 'wedevs-project-manager')}
+              <th className="text-left px-4 py-2.5 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">
+                <span className="inline-flex items-center gap-1.5"><FileText className="h-3.5 w-3.5" />{__("Description", 'wedevs-project-manager')}</span>
               </th>
-              <th className="text-left px-4 py-2.5 text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70 whitespace-nowrap">
-                {__("Deadline", 'wedevs-project-manager')}
+              <th className="text-left px-4 py-2.5 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282] whitespace-nowrap">
+                <span className="inline-flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{__("Deadline", 'wedevs-project-manager')}</span>
               </th>
-              <th className="text-left px-4 py-2.5 text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70 w-40">
-                {__("Progress", 'wedevs-project-manager')}
+              <th className="text-left px-4 py-2.5 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282] w-40">
+                <span className="inline-flex items-center gap-1.5"><Activity className="h-3.5 w-3.5" />{__("Progress", 'wedevs-project-manager')}</span>
               </th>
-              <th className="text-left px-4 py-2.5 text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70">
-                {__("Members", 'wedevs-project-manager')}
+              <th className="text-left px-4 py-2.5 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">
+                <span className="inline-flex items-center gap-1.5"><Users className="h-3.5 w-3.5" />{__("Members", 'wedevs-project-manager')}</span>
               </th>
               <th className="px-4 py-2.5 w-10"></th>
             </tr>
@@ -553,7 +555,7 @@ export default function ProjectsPage() {
                   return (
                     <tr
                       key={project.id}
-                      className="group border-t hover:bg-muted/20 transition-colors"
+                      className="group border-b border-border last:border-b-0 hover:bg-muted/40 transition-colors"
                     >
                       <td className="px-5 py-3 max-w-[260px]">
                         <div className="flex items-center gap-2.5 min-w-0">
@@ -667,7 +669,7 @@ export default function ProjectsPage() {
             <Button
               size="sm"
               variant="outline"
-              className="gap-1.5"
+              className="gap-1.5 h-11 px-5"
               onClick={() => setAiDialogOpen(true)}
             >
               <Sparkles className="h-4 w-4" />
@@ -675,7 +677,7 @@ export default function ProjectsPage() {
             </Button>
             <Button
               size="sm"
-              className="gap-1.5"
+              className="gap-1.5 h-11 px-5"
               onClick={() => dispatch(setCreateSheetOpen(true))}
             >
               <Plus className="h-4 w-4" />
@@ -702,7 +704,7 @@ export default function ProjectsPage() {
                 className={cn(
                   "relative inline-flex shrink-0 items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-200",
                   isActive
-                    ? "bg-background text-pm-text-primary shadow-sm"
+                    ? "bg-background text-pm-accent shadow-sm"
                     : "text-pm-text-muted hover:text-pm-text-primary",
                 )}
               >
@@ -714,7 +716,7 @@ export default function ProjectsPage() {
                 )}
                 {tab.label}
                 <span
-                  className="inline-flex items-center justify-center rounded-full px-1.5 min-w-[18px] h-[18px] text-[14px] font-medium tabular-nums transition-colors"
+                  className="inline-flex items-center justify-center rounded-md px-1.5 min-w-[18px] h-[18px] text-[14px] font-medium tabular-nums transition-colors"
                   style={isActive ? { backgroundColor: tab.color + '15', color: tab.color } : { color: 'var(--pm-text-muted)' }}
                 >
                   {count}
@@ -725,7 +727,7 @@ export default function ProjectsPage() {
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
-          <div className="flex items-center gap-1.5 h-8 flex-1 min-w-[160px] max-w-[240px] rounded-md border border-input bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent">
+          <div className="flex items-center gap-1.5 h-11 flex-1 min-w-[160px] max-w-[240px] rounded-md border border-input bg-background px-2.5 focus-within:ring-1 focus-within:ring-pm-accent/40 focus-within:border-pm-accent">
             <Search className="h-4 w-4 text-pm-text-muted shrink-0" />
             <input
               type="text"
@@ -739,7 +741,7 @@ export default function ProjectsPage() {
             value={categoryId !== undefined ? String(categoryId) : "__all__"}
             onValueChange={handleCategoryChange}
           >
-            <SelectTrigger className="h-8 w-auto sm:w-[160px] text-sm">
+            <SelectTrigger className="h-11 w-auto sm:w-[160px] text-sm">
               <SelectValue placeholder={__("All Categories", 'wedevs-project-manager')} />
             </SelectTrigger>
             <SelectContent>
@@ -753,7 +755,7 @@ export default function ProjectsPage() {
           </Select>
 
           <Select value={orderBy} onValueChange={handleSortChange}>
-            <SelectTrigger className="h-8 w-auto sm:w-[160px] text-sm">
+            <SelectTrigger className="h-11 w-auto sm:w-[160px] text-sm">
               <SelectValue placeholder={__("Sort By", 'wedevs-project-manager')} />
             </SelectTrigger>
             <SelectContent>
@@ -764,13 +766,13 @@ export default function ProjectsPage() {
             </SelectContent>
           </Select>
 
-          <div className="inline-flex items-center gap-0.5 rounded-lg border border-pm-border bg-muted/60 p-1">
+          <div className="inline-flex h-11 items-center gap-0.5 rounded-lg border border-pm-border bg-muted/60 p-1">
             <button
               type="button"
               onClick={() => handleViewModeChange("grid")}
               aria-label={__("Grid view", 'wedevs-project-manager')}
               className={cn(
-                'inline-flex h-7 w-7 items-center justify-center rounded-md transition-all duration-200',
+                'inline-flex h-9 w-9 items-center justify-center rounded-md transition-all duration-200',
                 viewMode === "grid" ? 'bg-background text-pm-accent shadow-sm' : 'text-pm-text-muted hover:text-pm-text-primary',
               )}
             >
@@ -781,7 +783,7 @@ export default function ProjectsPage() {
               onClick={() => handleViewModeChange("list")}
               aria-label={__("List view", 'wedevs-project-manager')}
               className={cn(
-                'inline-flex h-7 w-7 items-center justify-center rounded-md transition-all duration-200',
+                'inline-flex h-9 w-9 items-center justify-center rounded-md transition-all duration-200',
                 viewMode === "list" ? 'bg-background text-pm-accent shadow-sm' : 'text-pm-text-muted hover:text-pm-text-primary',
               )}
             >
@@ -814,11 +816,12 @@ export default function ProjectsPage() {
           <DialogFooter>
             <Button
               variant="outline"
+              className="h-11 px-5"
               onClick={() => setDeleteDialogOpen(false)}
             >
               {__("Cancel", 'wedevs-project-manager')}
             </Button>
-            <Button variant="destructive" onClick={handleDelete}>
+            <Button variant="destructive" className="h-11 px-5" onClick={handleDelete}>
               <Trash2 className="h-4 w-4 mr-2" />
               {__("Delete", 'wedevs-project-manager')}
             </Button>

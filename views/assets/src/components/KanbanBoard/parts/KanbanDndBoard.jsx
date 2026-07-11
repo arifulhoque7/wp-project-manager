@@ -175,7 +175,7 @@ export default function KanbanDndBoard({
               value={newColTitle}
               onChange={(e) => setNewColTitle(e.target.value)}
               placeholder={__("+ Add new section", 'wedevs-project-manager')}
-              className="h-8 text-sm bg-transparent border-none shadow-none focus-visible:ring-0 placeholder:text-pm-text-muted"
+              className="h-11 text-sm bg-transparent border-none shadow-none focus-visible:ring-0 placeholder:text-pm-text-muted"
               onKeyDown={(e) => {
                 if (e.key === "Enter") onCreateBoard();
                 if (e.key === "Escape") setNewColTitle("");

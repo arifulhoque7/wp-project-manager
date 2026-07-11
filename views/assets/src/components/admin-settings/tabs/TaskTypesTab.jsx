@@ -150,10 +150,10 @@ const TaskTypesTab = () => {
         {!taskTypesLoading && taskTypes.length > 0 && (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-pm-border">
-                <th className="text-left px-5 py-3 font-medium text-pm-text-muted w-1/4">{__('Name', 'wedevs-project-manager')}</th>
-                <th className="text-left px-5 py-3 font-medium text-pm-text-muted">{__('Description', 'wedevs-project-manager')}</th>
-                <th className="text-right px-5 py-3 font-medium text-pm-text-muted w-28">{__('Actions', 'wedevs-project-manager')}</th>
+              <tr className="h-10 border-b border-border bg-card">
+                <th className="text-left px-5 py-3 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282] w-1/4">{__('Name', 'wedevs-project-manager')}</th>
+                <th className="text-left px-5 py-3 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282]">{__('Description', 'wedevs-project-manager')}</th>
+                <th className="text-right px-5 py-3 text-[12px] font-normal uppercase leading-[1.4] tracking-normal text-[#828282] w-28">{__('Actions', 'wedevs-project-manager')}</th>
               </tr>
             </thead>
             <tbody>
@@ -161,8 +161,8 @@ const TaskTypesTab = () => {
                 <tr key={type.id} className={`border-b border-pm-border last:border-b-0 ${editingId === type.id ? 'bg-pm-surface-muted' : ''}`}>
                   {editingId === type.id ? (
                     <>
-                      <td className="px-5 py-3"><Input value={editForm.title} onChange={(e) => setEditForm((f) => ({ ...f, title: e.target.value }))} className="h-8 text-sm" /></td>
-                      <td className="px-5 py-3"><Input value={editForm.description} onChange={(e) => setEditForm((f) => ({ ...f, description: e.target.value }))} className="h-8 text-sm" placeholder={__('optional', 'wedevs-project-manager')} /></td>
+                      <td className="px-5 py-3"><Input value={editForm.title} onChange={(e) => setEditForm((f) => ({ ...f, title: e.target.value }))} className="h-11 text-sm" /></td>
+                      <td className="px-5 py-3"><Input value={editForm.description} onChange={(e) => setEditForm((f) => ({ ...f, description: e.target.value }))} className="h-11 text-sm" placeholder={__('optional', 'wedevs-project-manager')} /></td>
                       <td className="px-5 py-3 text-right">
                         <div className="flex justify-end gap-1">
                           <Button variant="ghost" size="icon" className="h-7 w-7 text-pm-status-done hover:bg-green-50" disabled={editBusy} title={__('Save', 'wedevs-project-manager')} onClick={() => submitEdit(type.id)}><Check className="w-4 h-4" /></Button>

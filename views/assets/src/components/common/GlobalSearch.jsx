@@ -91,7 +91,7 @@ export function GlobalSearch({ variant = 'topbar' }) {
           <Button
             variant="outline"
             size="sm"
-            className="h-7 text-sm gap-1.5 text-pm-text-muted font-normal hidden md:flex"
+            className="h-11 text-sm gap-1.5 text-pm-text-muted font-normal hidden md:flex"
             onClick={() => setOpen(true)}
           >
             <Search className="h-3.5 w-3.5" />

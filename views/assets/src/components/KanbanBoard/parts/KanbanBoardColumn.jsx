@@ -526,14 +526,14 @@ export default function KanbanBoardColumn({
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="h-7 text-xs px-2 text-pm-text-muted"
+                      className="h-11 text-xs px-2 text-pm-text-muted"
                       onClick={resetCreateForm}
                     >
                       {__("Cancel", 'wedevs-project-manager')}
                     </Button>
                     <Button
                       size="sm"
-                      className="h-7 text-xs px-3"
+                      className="h-11 text-xs px-3"
                       disabled={creating || !newTaskTitle.trim()}
                       onClick={handleCreateTask}
                     >

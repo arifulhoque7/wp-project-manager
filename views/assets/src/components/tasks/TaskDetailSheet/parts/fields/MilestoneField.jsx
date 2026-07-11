@@ -107,7 +107,7 @@ export default function MilestoneField({ task, projectId, api, canEdit = true })
   };
 
   return (
-    <div className="flex items-center min-h-10 px-2 rounded-md hover:bg-muted/40 transition-colors">
+    <div className="flex items-center min-h-11 px-2 rounded-md hover:bg-muted/40 transition-colors">
       <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
         <MilestoneIcon className="h-4 w-4" />
         <span className="text-sm">{__('Milestone', 'wedevs-project-manager')}</span>

@@ -605,8 +605,9 @@ export default function TaskDetailSheet() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center h-10 px-2 rounded-md hover:bg-muted/40 transition-colors cursor-pointer" onClick={handleToggleStatus}>
+              <h3 className="px-2 text-[13px] font-semibold text-pm-text-primary">{__('Attributes', 'wedevs-project-manager')}</h3>
+              <div className="flex flex-col divide-y divide-pm-border/40 -mt-2">
+                <div className="flex items-center h-11 px-2 rounded-md hover:bg-muted/40 transition-colors cursor-pointer" onClick={handleToggleStatus}>
                   <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
                     <Check className="h-4 w-4" /><span className="text-sm">{__('Status', 'wedevs-project-manager')}</span>
                   </div>
@@ -617,7 +618,7 @@ export default function TaskDetailSheet() {
                   </span>
                 </div>
 
-                <div className="flex items-center min-h-10 px-2 rounded-md hover:bg-muted/40 transition-colors">
+                <div className="flex items-center min-h-11 px-2 rounded-md hover:bg-muted/40 transition-colors">
                   <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
                     <Calendar className="h-4 w-4" /><span className="text-sm">{__('Dates', 'wedevs-project-manager')}</span>
                   </div>
@@ -638,8 +639,8 @@ export default function TaskDetailSheet() {
                         placeholder={__('Due', 'wedevs-project-manager')}
                         className="h-7 w-auto min-w-[140px]"
                       />
-                      <Button size="sm" className="h-6 text-[15px] px-2" onClick={handleDateSave}>{__('Save', 'wedevs-project-manager')}</Button>
-                      <Button variant="ghost" size="sm" className="h-6 text-[15px] px-2" onClick={() => setEditingDates(false)}>{__('Cancel', 'wedevs-project-manager')}</Button>
+                      <Button size="sm" className="h-11 text-[15px] px-2" onClick={handleDateSave}>{__('Save', 'wedevs-project-manager')}</Button>
+                      <Button variant="ghost" size="sm" className="h-11 text-[15px] px-2" onClick={() => setEditingDates(false)}>{__('Cancel', 'wedevs-project-manager')}</Button>
                     </div>
                   ) : (
                     <button type="button" disabled={!canEditCurrentTask} onClick={() => canEditCurrentTask && setEditingDates(true)} className={cn('text-sm text-pm-text-primary transition-colors', canEditCurrentTask && 'hover:text-pm-accent')}>
@@ -652,7 +653,7 @@ export default function TaskDetailSheet() {
                   )}
                 </div>
 
-                <div className="flex items-center min-h-10 px-2 rounded-md hover:bg-muted/40 transition-colors">
+                <div className="flex items-center min-h-11 px-2 rounded-md hover:bg-muted/40 transition-colors">
                   <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
                     <Users className="h-4 w-4" /><span className="text-sm">{__('Assignees', 'wedevs-project-manager')}</span>
                   </div>
@@ -717,7 +718,7 @@ export default function TaskDetailSheet() {
                 </div>
 
                 {currentTask.creator?.data && (
-                  <div className="flex items-center h-10 px-2 rounded-md hover:bg-muted/40 transition-colors">
+                  <div className="flex items-center h-11 px-2 rounded-md hover:bg-muted/40 transition-colors">
                     <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
                       <Users className="h-4 w-4" /><span className="text-sm">{__('Created by', 'wedevs-project-manager')}</span>
                     </div>
@@ -733,7 +734,7 @@ export default function TaskDetailSheet() {
                 )}
 
                 {currentTask.created_at && (
-                  <div className="flex items-center h-10 px-2 rounded-md hover:bg-muted/40 transition-colors">
+                  <div className="flex items-center h-11 px-2 rounded-md hover:bg-muted/40 transition-colors">
                     <div className="flex items-center gap-2 text-pm-text-muted w-28 shrink-0">
                       <Calendar className="h-4 w-4" /><span className="text-sm">{__('Created', 'wedevs-project-manager')}</span>
                     </div>
@@ -769,7 +770,7 @@ export default function TaskDetailSheet() {
                 {!editingDesc && canEditTask(currentTask) && (
                   <Button
                     size="sm"
-                    className="h-7 text-sm gap-1"
+                    className="h-11 px-4 text-sm gap-1.5"
                     onClick={() => { setDescription(currentTask.description?.html || currentTask.description?.content || ''); setEditingDesc(true) }}
                   >
                     {currentTask.description?.content ? (<>
@@ -784,12 +785,20 @@ export default function TaskDetailSheet() {
                 <div className="space-y-3">
                   <RichTextEditor content={description} placeholder={__('Write a description...', 'wedevs-project-manager')} onChange={html => setDescription(html)} autofocus minHeight="100px" users={project?.assignees?.data ?? []} />
                   <div className="flex items-center gap-2">
-                    <Button size="sm" className="h-7 text-sm" onClick={handleDescSave} disabled={savingDesc}>{savingDesc ? __('Saving...', 'wedevs-project-manager') : __('Save', 'wedevs-project-manager')}</Button>
-                    <Button variant="ghost" size="sm" className="h-7 text-sm" onClick={handleDescCancel}>{__('Cancel', 'wedevs-project-manager')}</Button>
+                    <Button size="sm" className="h-11 text-sm" onClick={handleDescSave} disabled={savingDesc}>{savingDesc ? __('Saving...', 'wedevs-project-manager') : __('Save', 'wedevs-project-manager')}</Button>
+                    <Button variant="ghost" size="sm" className="h-11 text-sm" onClick={handleDescCancel}>{__('Cancel', 'wedevs-project-manager')}</Button>
                   </div>
                 </div>
               ) : (
-                <div className={cn('rounded-lg p-3 min-h-[48px] transition-colors', currentTask.description?.html ? 'bg-muted/20' : 'bg-muted/10 border border-dashed border-border/60')}>
+                <div
+                  className={cn('rounded-lg p-3 min-h-[48px] transition-colors', currentTask.description?.html ? 'bg-muted/20' : 'bg-muted/10 border border-dashed border-border/60', canEditTask(currentTask) && !currentTask.description?.html && 'cursor-text hover:bg-muted/40')}
+                  {...(canEditTask(currentTask) && !currentTask.description?.html ? {
+                    role: 'button',
+                    tabIndex: 0,
+                    onClick: () => { setDescription(currentTask.description?.content || ''); setEditingDesc(true) },
+                    onKeyDown: (e) => { if (e.key === 'Enter') { e.preventDefault(); setDescription(currentTask.description?.content || ''); setEditingDesc(true) } },
+                  } : {})}
+                >
                   {currentTask.description?.html ? (
                     <>
                       <div className="prose prose-sm max-w-none text-foreground text-sm [&>*:first-child]:mt-0 [&>*:last-child]:mb-0" dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripAllPreviewUrls(currentTask.description.html)) }} />
@@ -798,7 +807,7 @@ export default function TaskDetailSheet() {
                       <LoomPreviewContainer content={currentTask.description.html} />
                     </>
                   ) : (
-                    <p className="text-sm text-pm-text-muted italic">{__('No description yet. Click "Add" to write one.', 'wedevs-project-manager')}</p>
+                    <p className="text-sm text-pm-text-muted italic">{canEditTask(currentTask) ? __('Click here to add a description…', 'wedevs-project-manager') : __('No description yet.', 'wedevs-project-manager')}</p>
                   )}
                 </div>
               )}
@@ -807,7 +816,7 @@ export default function TaskDetailSheet() {
             <Separator />
 
             <div className="px-6 pt-4">
-              <div className="flex items-center gap-6 border-b border-pm-border">
+              <div className="inline-flex max-w-full items-center rounded-lg border border-pm-border bg-muted/60 p-1 gap-0.5 overflow-x-auto scrollbar-none">
                 {[
                   { key: 'subtasks', label: __('Subtasks', 'wedevs-project-manager'), count: 0, pro: !isPro, icon: ListChecks },
                   { key: 'comments', label: __('Comments', 'wedevs-project-manager'), count: comments.length, icon: MessageSquare },
@@ -817,13 +826,12 @@ export default function TaskDetailSheet() {
                     key={t.key}
                     type="button"
                     onClick={() => { setDetailTab(t.key); if (t.key === 'activities' && !showActivities) handleLoadActivities() }}
-                    className={cn('relative -mb-px flex items-center gap-1.5 pb-3 text-sm font-medium transition-colors', detailTab === t.key ? 'text-pm-text-primary' : 'text-pm-text-muted hover:text-pm-text')}
+                    className={cn('relative inline-flex shrink-0 whitespace-nowrap items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-200', detailTab === t.key ? 'bg-background text-pm-accent shadow-sm' : 'text-pm-text-muted hover:text-pm-text-primary')}
                   >
                     {t.icon && <t.icon className="h-4 w-4" />}
                     {t.label}
-                    {t.count > 0 && <span className="text-[12px] bg-muted px-1.5 py-0.5 rounded-md tabular-nums font-medium">{t.count}</span>}
+                    {t.count > 0 && <span className={cn('inline-flex items-center justify-center rounded-md px-1.5 min-w-[18px] h-[18px] text-[12px] font-medium tabular-nums', detailTab === t.key ? 'bg-pm-accent/10 text-pm-accent' : 'text-pm-text-muted/70')}>{t.count}</span>}
                     {t.pro && <ProBadge interactive={false} />}
-                    {detailTab === t.key && <span className="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-pm-accent" />}
                   </button>
                 ))}
               </div>
@@ -880,10 +888,10 @@ export default function TaskDetailSheet() {
                               )}
                               <FileUploadArea files={editCommentNewFiles} onFilesChange={setEditCommentNewFiles} compact />
                               <div className="flex items-center gap-2">
-                                <Button size="sm" className="h-6 text-[15px]" onClick={handleUpdateComment} disabled={savingEditComment || !editCommentText.trim()}>
+                                <Button size="sm" className="h-11 text-[15px]" onClick={handleUpdateComment} disabled={savingEditComment || !editCommentText.trim()}>
                                   {savingEditComment ? __('Saving...', 'wedevs-project-manager') : __('Save', 'wedevs-project-manager')}
                                 </Button>
-                                <Button size="sm" variant="ghost" className="h-6 text-[15px]" onClick={cancelEditComment} disabled={savingEditComment}>{__('Cancel', 'wedevs-project-manager')}</Button>
+                                <Button size="sm" variant="ghost" className="h-11 text-[15px]" onClick={cancelEditComment} disabled={savingEditComment}>{__('Cancel', 'wedevs-project-manager')}</Button>
                                 <CommentLinkActions projectId={projectId} onInsert={(html) => setEditCommentText(prev => (prev || '') + html)} />
                               </div>
                             </div>
@@ -924,7 +932,7 @@ export default function TaskDetailSheet() {
                   onChange={setCommentNotifyUsers}
                 />
                 <div className="flex items-center gap-2">
-                  <Button size="sm" className="h-7 text-sm gap-1" onClick={handleSubmitComment} disabled={!newComment.trim() || submittingComment}>
+                  <Button size="sm" className="h-11 text-sm gap-1" onClick={handleSubmitComment} disabled={!newComment.trim() || submittingComment}>
                     <Plus className="h-4 w-4" />{submittingComment ? __('Sending...', 'wedevs-project-manager') : __('Add Comment', 'wedevs-project-manager')}
                   </Button>
                   <CommentLinkActions projectId={projectId} onInsert={(html) => setNewComment(prev => (prev || '') + html)} />
@@ -939,7 +947,7 @@ export default function TaskDetailSheet() {
                     <div className="space-y-4">
                       {[0, 1, 2].map((i) => (
                         <div key={i} className="flex gap-3">
-                          <Skeleton className="h-7 w-7 rounded-full shrink-0" />
+                          <Skeleton className="h-7 w-7 rounded-md shrink-0" />
                           <div className="flex-1 space-y-1.5 pt-0.5">
                             <Skeleton className="h-3.5 w-3/4" />
                             <Skeleton className="h-3 w-1/4" />
@@ -969,7 +977,7 @@ export default function TaskDetailSheet() {
                               {actActor ? (
                                 <UserAvatar user={actActor} size="sm" />
                               ) : (
-                                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-muted">
+                                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-muted">
                                   <Activity className="h-3.5 w-3.5 text-pm-text-muted" />
                                 </span>
                               )}

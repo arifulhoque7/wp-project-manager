@@ -20,7 +20,7 @@ function KanbanMock() {
       {cols.map(col => (
         <div key={col.title} className="flex-1 rounded-lg bg-pm-surface-muted overflow-hidden">
           <div className="px-3 py-2 text-white text-sm font-medium flex justify-between" style={{ background: col.color }}>
-            {col.title} <span className="bg-white/30 rounded-full px-1.5 text-[14px]">{col.tasks.length}</span>
+            {col.title} <span className="bg-white/30 rounded-md px-1.5 text-[14px]">{col.tasks.length}</span>
           </div>
           <div className="p-2">
             {col.tasks.map((t, i) => (
@@ -78,7 +78,7 @@ function InvoiceMock() {
         </div>
         <div className="text-right">
           <div className="text-[15px] text-pm-text-muted">{__('Due: Apr 15, 2026', 'wedevs-project-manager')}</div>
-          <span className="inline-block mt-1 px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-500 text-[15px] font-semibold">{__('Unpaid', 'wedevs-project-manager')}</span>
+          <span className="inline-block mt-1 px-2.5 py-0.5 rounded-md bg-amber-500/15 text-amber-500 text-[15px] font-semibold">{__('Unpaid', 'wedevs-project-manager')}</span>
         </div>
       </div>
       <table className="w-full text-sm">
@@ -146,7 +146,7 @@ function SprintsMock() {
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full" style={{ background: s.color }} />
                 <span className="text-sm font-medium text-pm-text-primary">{s.name}</span>
-                <span className={`px-2 py-0.5 rounded-full text-[14px] font-medium ${s.status === 'Active' ? 'bg-pm-accent/15 text-pm-accent' : 'bg-green-500/15 text-green-500'}`}>{s.status}</span>
+                <span className={`px-2 py-0.5 rounded-md text-[14px] font-medium ${s.status === 'Active' ? 'bg-pm-accent/15 text-pm-accent' : 'bg-green-500/15 text-green-500'}`}>{s.status}</span>
               </div>
               <span className="text-[15px] text-pm-text-muted">{s.dates}</span>
             </div>
@@ -183,7 +183,7 @@ function WooProjectMock() {
           <div key={i} className="rounded-lg border border-pm-border bg-pm-surface p-4">
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm font-medium text-pm-text-primary">{p.name}</span>
-              <span className={`px-2.5 py-0.5 rounded-full text-[14px] font-medium ${p.action.includes('Duplicate') ? 'bg-blue-500/15 text-blue-500' : 'bg-green-500/15 text-green-500'}`}>{p.action}</span>
+              <span className={`px-2.5 py-0.5 rounded-md text-[14px] font-medium ${p.action.includes('Duplicate') ? 'bg-blue-500/15 text-blue-500' : 'bg-green-500/15 text-green-500'}`}>{p.action}</span>
             </div>
             <div className="flex items-center gap-4 text-[15px] text-pm-text-muted">
               <div className="flex items-center gap-1">
@@ -230,7 +230,7 @@ function TemplatesMock() {
                 <LayoutTemplate className="h-4 w-4 text-pm-accent" />
               </div>
               {t.system && (
-                <span className="px-2 py-0.5 rounded-full text-[12px] font-medium bg-pm-accent/10 text-pm-accent">{__('System', 'wedevs-project-manager')}</span>
+                <span className="px-2 py-0.5 rounded-md text-[12px] font-medium bg-pm-accent/10 text-pm-accent">{__('System', 'wedevs-project-manager')}</span>
               )}
             </div>
             <div className="text-sm font-medium text-pm-text-primary mb-1">{t.name}</div>

@@ -192,7 +192,7 @@ export default function CategoriesPage() {
           {__("Categories", 'wedevs-project-manager')}
         </h1>
         {canManage && (
-          <Button size="sm" className="gap-1.5" onClick={openCreate}>
+          <Button size="sm" className="gap-1.5 h-11 px-5" onClick={openCreate}>
             <Plus className="h-5 w-5" />
             {__("New Category", 'wedevs-project-manager')}
           </Button>
@@ -208,7 +208,7 @@ export default function CategoriesPage() {
           <Button
             variant="destructive"
             size="sm"
-            className="h-7 text-sm gap-1"
+            className="h-11 text-sm gap-1"
             onClick={handleBulkDelete}
           >
             <Trash2 className="h-3.5 w-3.5" />
@@ -217,7 +217,7 @@ export default function CategoriesPage() {
           <Button
             variant="ghost"
             size="sm"
-            className="h-7 text-sm ml-auto"
+            className="h-11 text-sm ml-auto"
             onClick={() => setSelected(new Set())}
           >
             {__("Clear", 'wedevs-project-manager')}
@@ -382,10 +382,10 @@ export default function CategoriesPage() {
           </div>
 
           <SheetFooter className="px-6 py-4 border-t">
-            <Button variant="outline" onClick={() => setSheetOpen(false)}>
+            <Button variant="outline" className="h-11 px-5" onClick={() => setSheetOpen(false)}>
               {__("Cancel", 'wedevs-project-manager')}
             </Button>
-            <Button onClick={handleSave} disabled={saving || !formTitle.trim()}>
+            <Button className="h-11 px-5" onClick={handleSave} disabled={saving || !formTitle.trim()}>
               {saving && <Loader2 className="h-5 w-5 mr-2 animate-spin" />}
               {saving
                 ? __("Saving...", 'wedevs-project-manager')

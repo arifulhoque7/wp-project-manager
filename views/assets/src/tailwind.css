@@ -284,9 +284,14 @@ body:not(.wp-admin) #wedevs-project-manager {
   /* Global focus outline — use pm-accent purple color.
      Exclude contenteditable (Tiptap) — it manages its own focus indicator
      via the container border; outline here would show on mouse click too. */
-  *:focus-visible:not([contenteditable]) {
-    outline: 2px solid hsl(var(--primary)) !important;
-    outline-offset: 2px;
+  *:focus-visible:not([contenteditable]):not(input):not(textarea):not(select) {
+    outline: 1px solid hsl(var(--primary)) !important;
+    outline-offset: 1px;
+  }
+  /* Form fields manage their own soft accent ring (see input/select/textarea) —
+     keep the heavy global outline off them. */
+  input:focus-visible, textarea:focus-visible, select:focus-visible {
+    outline: none !important;
   }
 
   [contenteditable]:focus,
