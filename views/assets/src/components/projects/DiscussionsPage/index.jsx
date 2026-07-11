@@ -459,7 +459,19 @@ export default function DiscussionsPage() {
         {/* RIGHT — conversation panel */}
         <div className="flex flex-col min-w-0 flex-1">
           {discussionId ? (
-            <DiscussionDetailPage key={discussionId} />
+            <DiscussionDetailPage
+              key={discussionId}
+              syncedPrivacy={
+                discussions.find((d) => String(d.id) === String(discussionId))?.meta?.privacy
+              }
+              onPrivacyChange={(id, privacy) =>
+                setDiscussions((prev) =>
+                  prev.map((d) =>
+                    String(d.id) === String(id) ? { ...d, meta: { ...d.meta, privacy } } : d
+                  )
+                )
+              }
+            />
           ) : (
             <div className="w-full flex flex-col items-center justify-center text-center rounded-xl border border-dashed border-pm-border py-24 px-6">
               <MessageSquare className="h-12 w-12 text-muted-foreground/30 mb-3" />

@@ -1,6 +1,6 @@
 import { Loader2 } from 'lucide-react'
 import { __ } from '@wordpress/i18n';
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "@hooks/useApi";
 import { useToast } from "@hooks/useToast";
@@ -64,7 +64,7 @@ function extractMentionedUsers(html) {
   return ids.join(',')
 }
 
-export default function DiscussionDetailPage() {
+export default function DiscussionDetailPage({ onPrivacyChange, syncedPrivacy } = {}) {
   const { projectId, discussionId } = useParams();
   const navigate = useNavigate();
   const api = useApi();
@@ -124,6 +124,20 @@ export default function DiscussionDetailPage() {
   useEffect(() => {
     fetchDiscussion();
   }, [fetchDiscussion]);
+
+  // Reflect a privacy toggle done from the list card into this open pane.
+  // Skip the first run so the pane's own fetch stays authoritative on mount.
+  const firstPrivacySync = useRef(true);
+  useEffect(() => {
+    if (firstPrivacySync.current) {
+      firstPrivacySync.current = false;
+      return;
+    }
+    if (syncedPrivacy == null) return;
+    setDiscussion((prev) =>
+      prev ? { ...prev, meta: { ...prev.meta, privacy: syncedPrivacy } } : prev
+    );
+  }, [syncedPrivacy]);
 
   useEffect(() => {
     api
@@ -204,6 +218,7 @@ export default function DiscussionDetailPage() {
         is_private: newPrivacy,
       });
       setDiscussion((prev) => ({ ...prev, meta: { ...prev.meta, privacy: newPrivacy } }));
+      onPrivacyChange?.(discussionId, newPrivacy);
       toast.success(newPrivacy ? __("Set to private", 'wedevs-project-manager') : __("Set to public", 'wedevs-project-manager'));
     } catch {
       toast.error(__("Failed to update privacy", 'wedevs-project-manager'));
