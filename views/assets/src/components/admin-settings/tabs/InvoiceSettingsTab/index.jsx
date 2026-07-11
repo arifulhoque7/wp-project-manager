@@ -319,7 +319,7 @@ export default function InvoiceSettingsTab() {
       </div>
 
       <div className="flex items-center gap-3">
-        <Button type="submit" disabled={!isDirty}>
+        <Button className="h-11 px-5" type="submit" disabled={!isDirty}>
           {__('Save Changes', 'wedevs-project-manager')}
         </Button>
         {isDirty && (

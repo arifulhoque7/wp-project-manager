@@ -434,7 +434,7 @@ export default function ProjectOverview() {
                           {__("No user found named", 'wedevs-project-manager')}{' '}
                           <span className="font-medium text-pm-text-primary">&quot;{memberSearch}&quot;</span>
                         </p>
-                        <Button
+                        <Button className="h-11 px-5"
                           type="button"
                           size="sm"
                           onClick={() => { setMemberPopover(false); setCreateUserOpen(true); }}
@@ -484,10 +484,10 @@ export default function ProjectOverview() {
                     </Select>
                   </div>
                   <div className="flex justify-end gap-2 pt-1">
-                    <Button variant="ghost" size="sm" onClick={() => { setPendingUser(null); setPendingRoleId(null); }}>
+                    <Button className="h-11 px-5" variant="ghost" size="sm" onClick={() => { setPendingUser(null); setPendingRoleId(null); }}>
                       {__("Back", 'wedevs-project-manager')}
                     </Button>
-                    <Button size="sm" onClick={handleConfirmAddMember} disabled={!pendingRoleId}>
+                    <Button className="h-11 px-5" size="sm" onClick={handleConfirmAddMember} disabled={!pendingRoleId}>
                       {__("Add", 'wedevs-project-manager')}
                     </Button>
                   </div>

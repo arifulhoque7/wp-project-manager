@@ -213,7 +213,7 @@ function TrelloImportCard() {
                 <Button
                   type="submit"
                   disabled={importing}
-                  className="bg-pm-accent hover:bg-pm-accent/90"
+                  className="bg-pm-accent hover:bg-pm-accent/90 h-11 px-5"
                 >
                   {importing ? (
                     <>

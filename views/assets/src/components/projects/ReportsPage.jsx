@@ -117,7 +117,7 @@ export default function ReportsPage() {
 
                 {/* Action button */}
                 {isPro ? (
-                  <Button variant="outline" size="sm" className="gap-1.5">
+                  <Button variant="outline" size="sm" className="gap-1.5 h-11 px-5">
                     <Eye className="h-4 w-4" />
                     {__("View Full Report", 'wedevs-project-manager')}
                   </Button>
@@ -125,7 +125,7 @@ export default function ReportsPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="gap-1.5"
+                    className="gap-1.5 h-11 px-5"
                     onClick={() => setOpen(true)}
                   >
                     <Lock className="h-4 w-4" />

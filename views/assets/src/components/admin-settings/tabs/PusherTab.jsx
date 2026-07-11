@@ -171,7 +171,7 @@ const PusherTab = () => {
       </div>
 
       <div className="flex items-center gap-3 mt-5">
-        <Button type="submit" disabled={!isDirty || pusherSaving}>
+        <Button className="h-11 px-5" type="submit" disabled={!isDirty || pusherSaving}>
           {pusherSaving ? __('Saving...', 'wedevs-project-manager') : __('Save Changes', 'wedevs-project-manager')}
         </Button>
         <Button
@@ -179,7 +179,7 @@ const PusherTab = () => {
           variant="outline"
           onClick={handleTest}
           disabled={testing || isDirty || !form.pusher_app_key || !enabled}
-          className="gap-1.5"
+          className="gap-1.5 h-11 px-5"
         >
           <Zap className="w-4 h-4" />
           {testing ? __('Testing...', 'wedevs-project-manager') : __('Test Connection', 'wedevs-project-manager')}

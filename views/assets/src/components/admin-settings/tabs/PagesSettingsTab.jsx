@@ -81,7 +81,7 @@ export default function PagesSettingsTab() {
       </div>
 
       <div className="flex items-center gap-3">
-        <Button type="submit" disabled={!isDirty || saving}>
+        <Button className="h-11 px-5" type="submit" disabled={!isDirty || saving}>
           {saving ? __('Saving...', 'wedevs-project-manager') : __('Save Changes', 'wedevs-project-manager')}
         </Button>
         {isDirty && (

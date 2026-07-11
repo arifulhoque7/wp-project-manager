@@ -367,11 +367,11 @@ export default function DiscussionDetailPage() {
             )}
             <FileUploadArea files={editNewFiles} onFilesChange={setEditNewFiles} compact />
             <div className="flex gap-2">
-              <Button size="sm" className="gap-1" onClick={handleUpdate} disabled={savingDiscussion || !editTitle.trim()}>
+              <Button size="sm" className="gap-1 h-11 px-5" onClick={handleUpdate} disabled={savingDiscussion || !editTitle.trim()}>
                 <Check className="h-3.5 w-3.5" />
                 {savingDiscussion ? __("Saving...", 'wedevs-project-manager') : __("Save", 'wedevs-project-manager')}
               </Button>
-              <Button size="sm" variant="outline" className="gap-1" onClick={cancelEdit} disabled={savingDiscussion}>
+              <Button size="sm" variant="outline" className="gap-1 h-11 px-5" onClick={cancelEdit} disabled={savingDiscussion}>
                 <X className="h-3.5 w-3.5" />
                 {__("Cancel", 'wedevs-project-manager')}
               </Button>

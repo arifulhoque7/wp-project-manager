@@ -118,10 +118,10 @@ export default function CreateUserDialog({ open, onOpenChange, defaultSeed = '',
             />
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange?.(false)} disabled={submitting}>
+            <Button className="h-11 px-5" type="button" variant="outline" onClick={() => onOpenChange?.(false)} disabled={submitting}>
               {__('Cancel', 'wedevs-project-manager')}
             </Button>
-            <Button type="submit" disabled={submitting}>
+            <Button className="h-11 px-5" type="submit" disabled={submitting}>
               {submitting && <Loader2 className="h-5 w-5 mr-2 animate-spin" />}
               {submitting ? __('Creating...', 'wedevs-project-manager') : __('Create User', 'wedevs-project-manager')}
             </Button>

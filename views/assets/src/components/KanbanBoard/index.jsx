@@ -399,10 +399,10 @@ export default function KanbanBoard() {
           </DialogHeader>
           <FileUploadArea files={bgFiles} onFilesChange={(f) => setBgFiles(f.slice(-1))} />
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setBgDialogOpen(false); setBgFiles([]); }}>
+            <Button className="h-11 px-5" variant="outline" onClick={() => { setBgDialogOpen(false); setBgFiles([]); }}>
               {__("Cancel", 'wedevs-project-manager')}
             </Button>
-            <Button onClick={handleBgUpload} disabled={!bgFiles.length || bgUploading}>
+            <Button className="h-11 px-5" onClick={handleBgUpload} disabled={!bgFiles.length || bgUploading}>
               {bgUploading ? __("Uploading…", 'wedevs-project-manager') : __("Set background", 'wedevs-project-manager')}
             </Button>
           </DialogFooter>

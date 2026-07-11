@@ -362,14 +362,14 @@ export default function AutomationModal({
           </div>
         </ScrollArea>
         <DialogFooter>
-          <Button
+          <Button className="h-11 px-5"
             variant="outline"
             size="sm"
             onClick={() => onOpenChange(false)}
           >
             {__("Cancel", 'wedevs-project-manager')}
           </Button>
-          <Button size="sm" onClick={handleSave} disabled={saving}>
+          <Button className="h-11 px-5" size="sm" onClick={handleSave} disabled={saving}>
             {saving ? __("Saving...", 'wedevs-project-manager') : __("Update Automation", 'wedevs-project-manager')}
           </Button>
         </DialogFooter>

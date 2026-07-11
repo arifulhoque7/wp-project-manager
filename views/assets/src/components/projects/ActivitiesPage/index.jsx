@@ -266,7 +266,7 @@ export default function ActivitiesPage() {
 
               {hasMore && (
                 <div className="text-center pt-2 pb-1">
-                  <Button variant="outline" size="sm" onClick={loadMore} disabled={loadingMore} className="gap-2">
+                  <Button variant="outline" size="sm" onClick={loadMore} disabled={loadingMore} className="gap-2 h-11 px-5">
                     {loadingMore ? <Loader2 className="h-4 w-4 animate-spin" /> : <ChevronDown className="h-4 w-4" />}
                     {__('Load More', 'wedevs-project-manager')}
                   </Button>

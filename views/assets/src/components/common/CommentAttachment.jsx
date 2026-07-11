@@ -150,13 +150,13 @@ export default function CommentAttachment({ file, onRemove, className, children,
           )}
         </div>
         <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 border-t bg-background px-6 py-3">
-          <Button asChild variant="outline" size="sm" className="no-underline hover:no-underline focus:no-underline">
+          <Button asChild variant="outline" size="sm" className="no-underline hover:no-underline focus:no-underline h-11 px-5">
             <a href={file.url} download={fileName}>
               <Download className="h-4 w-4" />
               {__('Download', 'wedevs-project-manager')}
             </a>
           </Button>
-          <Button asChild size="sm" className="no-underline hover:no-underline focus:no-underline">
+          <Button asChild size="sm" className="no-underline hover:no-underline focus:no-underline h-11 px-5">
             <a href={file.url} target="_blank" rel="noreferrer">
               <ExternalLink className="h-4 w-4" />
               {__('Open in new tab', 'wedevs-project-manager')}

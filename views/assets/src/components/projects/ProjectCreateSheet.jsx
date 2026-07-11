@@ -389,7 +389,7 @@ export function ProjectCreateSheet() {
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full justify-start text-muted-foreground font-normal"
+                  className="w-full justify-start text-muted-foreground font-normal h-11 px-5"
                   onClick={() => setPopoverOpen(true)}
                 >
                   <UserPlus className="mr-2 h-5 w-5" />
@@ -417,7 +417,7 @@ export function ProjectCreateSheet() {
                           {__('No user found named', 'wedevs-project-manager')}{' '}
                           <span className="font-medium text-pm-text-primary">&quot;{searchQuery}&quot;</span>
                         </p>
-                        <Button type="button" size="sm" onClick={openCreateUserDialog}>
+                        <Button className="h-11 px-5" type="button" size="sm" onClick={openCreateUserDialog}>
                           <UserPlus className="h-4 w-4 mr-1" />{__('Create User', 'wedevs-project-manager')}
                         </Button>
                       </div>

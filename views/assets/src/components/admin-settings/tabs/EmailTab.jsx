@@ -128,7 +128,7 @@ const EmailTab = () => {
       </div>
 
       <div className="flex items-center gap-3 mt-5">
-        <Button type="submit" disabled={!isDirty || emailSaving}>
+        <Button className="h-11 px-5" type="submit" disabled={!isDirty || emailSaving}>
           {emailSaving
             ? __('Saving...', 'wedevs-project-manager')
             : __('Save Changes', 'wedevs-project-manager')}

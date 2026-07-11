@@ -111,7 +111,7 @@ const TaskTypesTab = () => {
           <h2 className="text-lg font-semibold text-pm-text-primary mb-1">{__('Task Types', 'wedevs-project-manager')}</h2>
           <p className="text-sm text-pm-text-muted mt-0.5">{__('Define custom task types for your projects.', 'wedevs-project-manager')}</p>
         </div>
-        <Button size="sm" className="gap-1.5" onClick={() => setShowNewForm(!showNewForm)}>
+        <Button size="sm" className="gap-1.5 h-11 px-5" onClick={() => setShowNewForm(!showNewForm)}>
           <Plus className="w-4 h-4" />
           {__('New Type', 'wedevs-project-manager')}
         </Button>
@@ -132,8 +132,8 @@ const TaskTypesTab = () => {
                   <Input value={newForm.description} onChange={(e) => setNewForm((f) => ({ ...f, description: e.target.value }))} placeholder={__('Short description...', 'wedevs-project-manager')} />
                 </div>
                 <div className="flex gap-2 pb-0.5">
-                  <Button size="sm" disabled={newFormBusy} onClick={submitNew}>{newFormBusy ? __('Creating...', 'wedevs-project-manager') : __('Create', 'wedevs-project-manager')}</Button>
-                  <Button size="sm" variant="outline" disabled={newFormBusy} onClick={() => setShowNewForm(false)}>{__('Cancel', 'wedevs-project-manager')}</Button>
+                  <Button className="h-11 px-5" size="sm" disabled={newFormBusy} onClick={submitNew}>{newFormBusy ? __('Creating...', 'wedevs-project-manager') : __('Create', 'wedevs-project-manager')}</Button>
+                  <Button className="h-11 px-5" size="sm" variant="outline" disabled={newFormBusy} onClick={() => setShowNewForm(false)}>{__('Cancel', 'wedevs-project-manager')}</Button>
                 </div>
               </div>
             </div>
@@ -191,7 +191,7 @@ const TaskTypesTab = () => {
         {!taskTypesLoading && taskTypes.length === 0 && (
           <div className="px-5 py-8 text-center">
             <p className="text-sm text-pm-text-muted">{__('No task types yet.', 'wedevs-project-manager')}</p>
-            <Button variant="outline" size="sm" className="mt-3 gap-1.5" onClick={() => setShowNewForm(true)}>
+            <Button variant="outline" size="sm" className="mt-3 gap-1.5 h-11 px-5" onClick={() => setShowNewForm(true)}>
               <Plus className="w-4 h-4" />
               {__('Create your first type', 'wedevs-project-manager')}
             </Button>

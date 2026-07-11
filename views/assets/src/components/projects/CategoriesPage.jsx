@@ -245,7 +245,7 @@ export default function CategoriesPage() {
             <Button
               size="sm"
               variant="outline"
-              className="gap-1.5"
+              className="gap-1.5 h-11 px-5"
               onClick={openCreate}
             >
               <Plus className="h-5 w-5" />

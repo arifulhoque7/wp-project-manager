@@ -221,7 +221,7 @@ const AiSettingsTab = () => {
                     </Button>
                   )}
                   {editingKey && (
-                    <Button
+                    <Button className="h-11 px-5"
                       type="button"
                       variant="outline"
                       size="sm"
@@ -283,10 +283,10 @@ const AiSettingsTab = () => {
         </div>
 
         <div className="flex items-center gap-3 mt-5 flex-wrap">
-          <Button type="button" variant="outline" disabled={aiTestingConn || aiSaving} onClick={handleTestConnection}>
+          <Button className="h-11 px-5" type="button" variant="outline" disabled={aiTestingConn || aiSaving} onClick={handleTestConnection}>
             {aiTestingConn ? __('Testing...', 'wedevs-project-manager') : __('Test Connection', 'wedevs-project-manager')}
           </Button>
-          <Button type="submit" disabled={aiSaving || aiTestingConn || !isDirty}>
+          <Button className="h-11 px-5" type="submit" disabled={aiSaving || aiTestingConn || !isDirty}>
             {aiSaving ? __('Saving...', 'wedevs-project-manager') : __('Save Changes', 'wedevs-project-manager')}
           </Button>
           {isDirty && (

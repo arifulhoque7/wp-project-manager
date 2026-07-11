@@ -248,7 +248,7 @@ const GitHubSettingsTab = () => {
               {connStatus === 'failed' && <><XCircle className="h-4 w-4 text-destructive" /><span className="text-destructive">{connError}</span></>}
             </div>
           </div>
-          <Button type="button" variant="outline" size="sm" onClick={testConnection} disabled={connStatus === 'testing'}>
+          <Button className="h-11 px-5" type="button" variant="outline" size="sm" onClick={testConnection} disabled={connStatus === 'testing'}>
             {__('Test Connection', 'wedevs-project-manager')}
           </Button>
         </div>
@@ -262,7 +262,7 @@ const GitHubSettingsTab = () => {
       </div>
 
       <div className="flex items-center gap-3 mt-5">
-        <Button type="submit" disabled={!isDirty || saving}>
+        <Button className="h-11 px-5" type="submit" disabled={!isDirty || saving}>
           {saving ? __('Saving...', 'wedevs-project-manager') : __('Save Changes', 'wedevs-project-manager')}
         </Button>
         {isDirty && !saving && (

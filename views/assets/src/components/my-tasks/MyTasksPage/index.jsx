@@ -1012,7 +1012,7 @@ export default function MyTasksPage() {
               </>
             )}
 
-            <Button
+            <Button className="h-11 px-5"
               variant="outline"
               size="sm"
               onClick={() => {
@@ -1217,7 +1217,7 @@ export default function MyTasksPage() {
               })}
               {actHasMore && (
                 <div className="text-center pt-4">
-                  <Button
+                  <Button className="h-11 px-5"
                     variant="outline"
                     size="sm"
                     onClick={loadMoreActivities}

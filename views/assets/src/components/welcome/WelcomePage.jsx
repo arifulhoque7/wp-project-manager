@@ -243,7 +243,7 @@ export default function WelcomePage() {
             <div className="flex flex-wrap gap-3">
               <Button
                 onClick={() => navigate('/projects')}
-                className="group bg-white text-purple-600 hover:bg-white hover:shadow-lg hover:-translate-y-0.5 transition-all font-semibold text-sm no-underline"
+                className="group bg-white text-purple-600 hover:bg-white hover:shadow-lg hover:-translate-y-0.5 transition-all font-semibold text-sm no-underline h-11 px-5"
               >
                 <Rocket className="h-5 w-5 mr-1.5 transition-transform group-hover:-translate-y-0.5 group-hover:rotate-12" />
                 {__('Create Your First Project', 'wedevs-project-manager')}
@@ -251,7 +251,7 @@ export default function WelcomePage() {
               <Button
                 variant="ghost"
                 asChild
-                className="group border border-white/40 text-white hover:bg-white/10 hover:text-white hover:-translate-y-0.5 transition-all font-medium text-sm"
+                className="group border border-white/40 text-white hover:bg-white/10 hover:text-white hover:-translate-y-0.5 transition-all font-medium text-sm h-11 px-5"
               >
                 <a
                   href="https://wedevs.com/docs/wp-project-manager/"
@@ -312,7 +312,7 @@ export default function WelcomePage() {
           ))}
         </div>
         <div className="text-center mt-8">
-          <Button asChild variant="outline" className="group font-medium">
+          <Button asChild variant="outline" className="group font-medium h-11 px-5">
             <a
               href="https://wedevs.com/wp-project-manager-pro/features/"
               target="_blank"
@@ -353,7 +353,7 @@ export default function WelcomePage() {
                 <p className="text-sm text-pm-text-muted leading-relaxed mb-4">
                   {resource.description}
                 </p>
-                <Button asChild size="sm" variant="default" className="font-medium">
+                <Button asChild size="sm" variant="default" className="font-medium h-11 px-5">
                   <a
                     href={resource.buttonUrl}
                     target="_blank"

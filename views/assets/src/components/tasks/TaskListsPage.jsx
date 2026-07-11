@@ -318,7 +318,7 @@ export default function TaskListsPage() {
             </div>
           )}
           <div className="flex items-center gap-2 pt-1">
-            <Button
+            <Button className="h-11 px-5"
               type="button"
               variant="outline"
               size="sm"
@@ -331,7 +331,7 @@ export default function TaskListsPage() {
             >
               {__("Cancel", 'wedevs-project-manager')}
             </Button>
-            <Button
+            <Button className="h-11 px-5"
               type="submit"
               size="sm"
               disabled={!newListTitle.trim() || creatingList}

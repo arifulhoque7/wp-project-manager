@@ -174,7 +174,7 @@ export default function GoogleWorkspaceSettingsTab() {
           <label className="block text-sm font-medium text-gray-700 mb-1">{__('Authorized redirect URI', 'wedevs-project-manager')}</label>
           <div className="flex items-center gap-2">
             <code className="flex-1 text-xs bg-gray-50 border border-gray-200 rounded px-3 py-2 break-all">{redirectUri}</code>
-            <Button type="button" variant="outline" size="sm" onClick={copyRedirect}>
+            <Button className="h-11 px-5" type="button" variant="outline" size="sm" onClick={copyRedirect}>
               {copied ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
             </Button>
           </div>
@@ -209,7 +209,7 @@ export default function GoogleWorkspaceSettingsTab() {
               <p className="text-xs text-gray-400 mt-1">{__('Your Google Cloud project number (Dashboard → Project info).', 'wedevs-project-manager')}</p>
             </div>
             <div className="flex items-center gap-3 pt-1">
-              <Button type="submit" disabled={saving}>{saving ? __('Saving…', 'wedevs-project-manager') : __('Save credentials', 'wedevs-project-manager')}</Button>
+              <Button className="h-11 px-5" type="submit" disabled={saving}>{saving ? __('Saving…', 'wedevs-project-manager') : __('Save credentials', 'wedevs-project-manager')}</Button>
               <a
                 href="https://console.cloud.google.com/apis/credentials"
                 target="_blank" rel="noreferrer"

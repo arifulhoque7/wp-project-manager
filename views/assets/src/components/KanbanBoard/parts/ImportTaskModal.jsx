@@ -205,14 +205,14 @@ export default function ImportTaskModal({ open, onOpenChange, projectId, boardId
           )}
         </div>
         <DialogFooter className="shrink-0">
-          <Button
+          <Button className="h-11 px-5"
             variant="outline"
             size="sm"
             onClick={() => onOpenChange(false)}
           >
             {__("Cancel", 'wedevs-project-manager')}
           </Button>
-          <Button
+          <Button className="h-11 px-5"
             size="sm"
             onClick={handleImport}
             disabled={selectedTasks.length === 0}

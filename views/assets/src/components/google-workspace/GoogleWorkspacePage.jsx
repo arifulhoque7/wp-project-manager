@@ -120,14 +120,14 @@ export default function GoogleWorkspacePage() {
               <ShieldCheck className="h-5 w-5 text-green-600" />
               <span>{__('Connected as', 'wedevs-project-manager')} <strong>{status.account_email || __('Google account', 'wedevs-project-manager')}</strong></span>
             </div>
-            <Button variant="outline" size="sm" onClick={() => setDisconnectOpen(true)}>
+            <Button className="h-11 px-5" variant="outline" size="sm" onClick={() => setDisconnectOpen(true)}>
               <Unlink className="h-4 w-4 mr-1.5" /> {__('Disconnect', 'wedevs-project-manager')}
             </Button>
           </div>
         ) : (
           <div className="flex items-center justify-between gap-4">
             <p className="text-sm text-gray-600">{__('Connect your Google account to browse and attach Drive files to tasks.', 'wedevs-project-manager')}</p>
-            <Button size="sm" onClick={onConnect} disabled={connecting}>
+            <Button className="h-11 px-5" size="sm" onClick={onConnect} disabled={connecting}>
               <GoogleColorGlyph width="16" height="16" /> <span className="ml-1.5">{connecting ? __('Redirecting…', 'wedevs-project-manager') : __('Connect Google', 'wedevs-project-manager')}</span>
             </Button>
           </div>
