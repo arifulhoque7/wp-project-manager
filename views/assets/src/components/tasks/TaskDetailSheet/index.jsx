@@ -539,10 +539,10 @@ export default function TaskDetailSheet() {
             <Separator />
 
             {/* Two-column body */}
-            <div className="flex flex-col md:flex-row flex-1 min-h-0 max-md:overflow-y-auto">
+            <div className="flex flex-1 min-h-0 max-md:flex-col max-md:overflow-y-auto">
 
             {/* LEFT — task header + properties */}
-            <aside className="w-full md:w-[400px] shrink-0 md:overflow-y-auto border-b md:border-b-0 md:border-r border-pm-border px-5 py-4 space-y-2.5">
+            <aside className="w-[400px] shrink-0 overflow-y-auto border-r border-pm-border px-5 py-4 space-y-2.5 max-md:w-full max-md:overflow-visible max-md:border-r-0 max-md:border-b">
               <div className="space-y-1.5">
                 <div className="flex items-center gap-2 text-[13px] text-muted-foreground min-w-0">
                   {(currentTask.project?.data?.title || currentTask.project?.title) && (
@@ -744,7 +744,7 @@ export default function TaskDetailSheet() {
             </aside>
 
             {/* RIGHT — description + tabs */}
-            <div className="w-full md:flex-1 min-w-0 md:overflow-y-auto">
+            <div className="flex-1 min-w-0 overflow-y-auto max-md:w-full">
             <div className="px-6 py-5">
               <div className="flex items-center justify-between mb-3">
                 <h4 className="flex items-center gap-1.5 text-[12px] font-medium uppercase tracking-wide text-muted-foreground/70"><FileText className="h-4 w-4" />{__('Description', 'wedevs-project-manager')}</h4>
