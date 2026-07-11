@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Preflight is disabled, so Tailwind never initialises its per-element
+   transform variables. Without these defaults a single-axis utility like
+   -translate-y-1/2 compiles to `transform: translate(, -50%)` — invalid, so
+   the browser drops it and the element isn't centered. Seed the same
+   defaults Preflight would (low specificity, so transform utilities still
+   win). Only Tailwind's own transform utilities read these vars, so setting
+   them globally is inert for the rest of wp-admin. */
+*,
+::before,
+::after {
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+}
+
 /* Inter — self-hosted variable font (OFL) */
 @font-face {
   font-family: Inter;

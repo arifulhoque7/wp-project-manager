@@ -667,7 +667,7 @@ export default function TaskDetailSheet() {
                         <button
                           type="button"
                           onClick={() => { setShowAssigneeSearch(false); setAssigneeQuery('') }}
-                          className="absolute right-1 top-1/2 -translate-y-1/2 p-0.5 rounded text-pm-text-muted hover:text-destructive hover:bg-muted transition-colors"
+                          className="absolute right-1 inset-y-0 flex items-center px-0.5 text-pm-text-muted hover:text-destructive transition-colors"
                           title={__('Close', 'wedevs-project-manager')}
                         >
                           <X className="h-4 w-4" />

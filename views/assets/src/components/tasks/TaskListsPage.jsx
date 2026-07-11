@@ -23,7 +23,7 @@ import RichTextEditor from "@components/common/RichTextEditor";
 import { Checkbox } from "@components/ui/checkbox";
 import { Skeleton } from "@components/ui/skeleton";
 import { PaginationNav } from "@components/ui/pagination";
-import { Plus, ChevronsUpDown, ListTodo } from "lucide-react";
+import { Plus, ChevronsUpDown, ListTodo, Filter } from "lucide-react";
 import ProBadge from "@components/common/ProBadge";
 import BackButton from '@components/common/BackButton';
 import { Slot } from "@hooks/useSlot";
@@ -367,8 +367,9 @@ export default function TaskListsPage() {
             </span>
           </div>
           {filteredTasks.length === 0 ? (
-            <div className="py-8 text-center text-sm text-pm-text-muted">
-              {__("No tasks match your filters.", 'wedevs-project-manager')}
+            <div className="py-8 text-center">
+              <Filter className="h-8 w-8 text-muted-foreground/40 mx-auto mb-2" />
+              <p className="text-sm text-pm-text-muted">{__("No tasks match your filters.", 'wedevs-project-manager')}</p>
             </div>
           ) : (
             <div>
