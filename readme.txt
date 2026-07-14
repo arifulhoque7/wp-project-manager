@@ -113,6 +113,12 @@ By upgrading to Project Manager Pro, you can unlock the full power of project ma
 ##💬 Slack Integration
 –   Get real-time Slack notifications whenever new tasks, subtasks, or comments are created
 –   Stay informed when tasks are completed or new team members are added
+##📁 Google Workspace Integration (Drive, Calendar, Meet)
+–   Attach and link Google Drive files directly within tasks, messages, and comments
+–   Sync task due dates and milestones automatically with Google Calendar
+–   Generate Google Meet links from tasks or project discussions for quick team calls
+–   Keep files, schedules, and meetings connected to the relevant task without leaving the project view
+–   Ideal for remote teams managing documents, deadlines, and calls in one place
 ##🔗 GitHub & Bitbucket Integration
 –   Connect your GitHub and Bitbucket accounts directly to Project Manager
 –   Issues created in GitHub or Bitbucket are automatically added to your task manager list
@@ -176,6 +182,9 @@ Project Manager uses the following third-party services to enhance project manag
 
 5. **Asana API** - Syncs tasks, stories, and project updates. Task titles, descriptions, deadlines, and comments are sent to Asana for project updates.
    - **[Terms of Service](https://asana.com/terms) and [Privacy Policy](https://asana.com/privacy)**
+
+6. **Google Workspace API (Drive, Calendar, Meet)** - Integrates Google Drive, Google Calendar, and Google Meet to support file attachments, due date/milestone syncing, and meeting link generation within tasks and projects. Data sent to Google may include file names and links, task titles, descriptions, dates, assignee details, and participant email addresses, depending on which integration is used.
+   - **[Terms of Service](https://developers.google.com/terms) and [Privacy Policy](https://policies.google.com/privacy)**
 
 == Terms and Conditions ==
 - [weDevs Terms of Service](https://wedevs.com/terms-and-conditions/)
