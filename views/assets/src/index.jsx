@@ -47,6 +47,7 @@ const DiscussionDetailPage = React.lazy(() => import('@components/projects/Discu
 const MilestonesPage  = React.lazy(() => import('@components/projects/MilestonesPage'))
 const FilesPage       = React.lazy(() => import('@components/projects/FilesPage'))
 const ActivitiesPage  = React.lazy(() => import('@components/projects/ActivitiesPage'))
+const KanbanBoard     = React.lazy(() => import('@components/KanbanBoard'))
 const CategoriesPage  = React.lazy(() => import('@components/projects/CategoriesPage'))
 const PremiumPage     = React.lazy(() => import('@components/projects/PremiumPage'))
 const ModulesPage     = React.lazy(() => import('@components/projects/ModulesPage'))
@@ -54,6 +55,14 @@ const MyTasksPage     = React.lazy(() => import('@components/my-tasks/MyTasksPag
 const ToolsPage       = React.lazy(() => import('@components/projects/ToolsPage'))
 const WelcomePage     = React.lazy(() => import('@components/welcome/WelcomePage'))
 const LicensePage     = React.lazy(() => import('@components/projects/LicensePage'))
+const GoogleWorkspacePage    = React.lazy(() => import('@components/google-workspace/GoogleWorkspacePage'))
+const GoogleDriveTaskSection = React.lazy(() => import('@components/google-workspace/GoogleDriveTaskSection'))
+
+// Google Drive attachments render in the task detail sheet (free feature),
+// only when an admin has enabled Drive in Settings → Google Workspace.
+if (typeof PM_Vars !== 'undefined' && PM_Vars.google_workspace?.drive_enabled) {
+  registerSlot('task.detail.subtasks', GoogleDriveTaskSection)
+}
 
 // ── Free placeholder pages (shown when Pro does NOT replace them) ──
 const CalendarPlaceholder = React.lazy(() => import('@components/projects/CalendarPage'))
@@ -62,7 +71,7 @@ const ProgressPlaceholder = React.lazy(() => import('@components/projects/Progre
 import ProFeaturePlaceholder from '@components/common/ProFeaturePlaceholder'
 import { AdminRoute, ProjectRoute, LicenseRoute, ManagerRoute } from '@components/common/ProtectedRoute'
 import { ErrorBoundary } from '@components/common/ErrorBoundary'
-import { Columns3, GitBranch, Receipt, Settings as SettingsIcon, Zap, ShoppingCart } from 'lucide-react'
+import { Columns3, GitBranch, Receipt, Settings as SettingsIcon, Zap, ShoppingCart, LayoutTemplate } from 'lucide-react'
 
 // ── Replaceable page wrapper — pro can override via filters ──
 function FilteredPage({ filterName, fallback: Fallback }) {
@@ -114,6 +123,8 @@ function AppRoutes() {
         <Route path="projects/:projectId/milestones/tasks/:taskId" element={<ProjectRoute><MilestonesPage /><TaskDeepLinkOpener /></ProjectRoute>} />
         <Route path="projects/:projectId/files" element={<ProjectRoute><FilteredPage filterName="route.files.element" fallback={FilesPage} /></ProjectRoute>} />
         <Route path="projects/:projectId/activities" element={<ProjectRoute><ActivitiesPage /></ProjectRoute>} />
+        <Route path="projects/:projectId/kanban" element={<ProjectRoute><KanbanBoard /></ProjectRoute>} />
+        <Route path="projects/:projectId/kanban/tasks/:taskId" element={<ProjectRoute><KanbanBoard /><TaskDeepLinkOpener /></ProjectRoute>} />
         <Route path="my-tasks" element={<MyTasksPage />} />
 
         {/* ── Admin-only routes — gated by AdminRoute. Categories also available on frontend for admins. ── */}
@@ -124,12 +135,14 @@ function AppRoutes() {
         {!isFrontend && <Route path="welcome" element={<AdminRoute><WelcomePage /></AdminRoute>} />}
         {!isFrontend && <Route path="modules" element={<AdminRoute><FilteredPage filterName="route.modules.element" fallback={ModulesPage} /></AdminRoute>} />}
         <Route path="premium" element={<AdminRoute><PremiumPage /></AdminRoute>} />
+        <Route path="google-workspace" element={<GoogleWorkspacePage />} />
         {!isFrontend && isProInstalled && <Route path="license" element={<LicenseRoute><LicensePage /></LicenseRoute>} />}
 
         {/* ── Replaceable pages — Pro overrides via registerFilter() ── */}
         <Route path="calendar" element={<FilteredPage filterName="route.calendar.element" fallback={CalendarPlaceholder} />} />
         <Route path="reports/*" element={<FilteredPage filterName="route.reports.element" fallback={ReportsPlaceholder} />} />
         <Route path="progress" element={<FilteredPage filterName="route.progress.element" fallback={ProgressPlaceholder} />} />
+        {!isFrontend && <Route path="templates" element={<AdminRoute><FilteredPage filterName="route.templates.element" fallback={() => <ProFeaturePlaceholder title={__("Templates", 'wedevs-project-manager')} description={__("Create reusable project templates to streamline project setup.", 'wedevs-project-manager')} icon={LayoutTemplate} mockKey="templates" />} /></AdminRoute>} />}
 
         {/* ── Dynamic routes registered by Pro plugin ── */}
         {dynamicRoutes.map(({ path, element }, i) => (
@@ -139,9 +152,6 @@ function AppRoutes() {
         ))}
 
         {/* ── Pro feature placeholders — only shown when Pro hasn't registered the route ── */}
-        {!dynamicRoutes.some(r => r.path === 'projects/:projectId/kanban') && (
-          <Route path="projects/:projectId/kanban" element={<ProjectRoute><ProFeaturePlaceholder title={__("Kanban Board", 'wedevs-project-manager')} description={__("Visualize your workflow with drag-and-drop boards.", 'wedevs-project-manager')} icon={Columns3} mockKey="kanban" /></ProjectRoute>} />
-        )}
         {!dynamicRoutes.some(r => r.path === 'projects/:projectId/gantt') && (
           <Route path="projects/:projectId/gantt" element={<ProjectRoute><ProFeaturePlaceholder title={__("Gantt Chart", 'wedevs-project-manager')} description={__("Plan and track project timelines with interactive Gantt charts.", 'wedevs-project-manager')} icon={GitBranch} mockKey="gantt" /></ProjectRoute>} />
         )}
@@ -243,6 +253,13 @@ window.PM = {
 
   // Free store actions/thunks that pro may need to dispatch
   thunks: { fetchTask, fetchTaskLists, fetchProjectAssignees },
+
+  // Google Workspace: free owns OAuth/token; pro (Calendar/Meet) dispatches these.
+  googleWorkspace: {
+    fetchStatus: require('@store/googleWorkspaceSlice').fetchStatus,
+    getAuthUrl:  require('@store/googleWorkspaceSlice').getAuthUrl,
+    disconnect:  require('@store/googleWorkspaceSlice').disconnect,
+  },
   actions: { resetProjectState, openTaskSheet, closeTaskSheet, markTaskModified },
 
   // Free hooks that pro may use (same Redux store context)
@@ -260,6 +277,11 @@ window.PM = {
     BackButton:       require('@components/common/BackButton'),
     FileUploadArea:  require('@components/common/FileUploadArea'),
     CommentAttachment: require('@components/common/CommentAttachment'),
+    GoogleDriveAttach: require('@components/google-workspace/GoogleDriveAttach'),
+    GoogleDriveCommentButton: require('@components/google-workspace/GoogleDriveCommentButton'),
+    CommentLinkActions: require('@components/google-workspace/CommentLinkActions'),
+    GoogleDriveStage:  require('@components/google-workspace/GoogleDriveStage'),
+    DrivePickerModal:  require('@components/google-workspace/DrivePickerModal'),
     TaskStatusCircle: require('@components/common/TaskStatusCircle'),
     ProBadge:        require('@components/common/ProBadge'),
     ProUpgradeModal: require('@components/common/ProUpgradeModal'),
@@ -298,8 +320,10 @@ window.PM = {
     Button:       require('@components/ui/button'),
     Card:         require('@components/ui/card'),
     Checkbox:     require('@components/ui/checkbox'),
+    Calendar:     require('@components/ui/calendar'),
     Command:      require('@components/ui/command'),
     ContextMenu:  require('@components/ui/context-menu'),
+    DatePicker:   require('@components/ui/date-picker'),
     Dialog:       require('@components/ui/dialog'),
     DropdownMenu: require('@components/ui/dropdown-menu'),
     Input:        require('@components/ui/input'),
@@ -331,6 +355,7 @@ window.PM = {
     urlStrippers: require('@/lib/url-strippers'),
     sanitize: require('@lib/sanitize'),
     pmUtils: require('@lib/pm-utils'),
+    googleLinks: require('@lib/google-links'),
   },
 
   // Re-export Radix UI primitives so pro uses the SAME context instances.

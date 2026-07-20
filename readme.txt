@@ -1,12 +1,12 @@
 === Project Manager – AI Powered Project Management, Task Management, Kanban Board & Time Tracker ===
 
-Contributors: tareq1988, nizamuddinbabu, wedevs, asaquzzaman
+Contributors: tareq1988, nizamuddinbabu, wedevs
 Donate Link: https://tareq.co/donate/
 Tags: kanban, project, project management, task management, project manager
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 4.0.4
+Stable tag: 4.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -240,6 +240,25 @@ A. If you face any issues, you can contact the support team through the official
 14. Manage projects from the frontend
 
 == Changelog ==
+
+= v4.0.6 – Jul 20, 2026 =
+
+**New:** Google Workspace integration — connect Google Drive to attach files to tasks, comments, and discussions (per-project role access), plus Google Meet links and Google Calendar sync (Calendar & Meet powered by Pro).
+**New:** Kanban board is now built into the Free plugin (previously Pro-only).
+**Improved:** Welcome screen light-mode visibility and overall UI/UX polish.
+**Improved:** Translations now load reliably (JavaScript strings + POT extraction) and the date picker follows your site locale.
+**Improved:** Sidebar footer now shows your active Pro plan and version.
+**Improved:** Hardened per-project access controls across Google Drive attachments, Meet links, and the Kanban board.
+**Improved:** Privacy controls are now gated by your capability, with a clearer Pro indicator on the private toggle.
+**Fixed:** Marking a task or task list private while creating it now works again.
+**Fixed:** Token-authenticated (JWT/mobile app) API requests no longer error while loading tasks, comments, milestones, and users.
+
+= v4.0.5 – Jun 26, 2026 =
+
+**New:** Project Templates — create projects faster from reusable templates (full picker and management with Pro).
+**Improved:** Action buttons (create, edit, delete, status) now stay hidden when you do not have the matching capability, across projects, tasks, task lists, milestones, and files.
+**Fixed:** Task list screen inconsistencies, a stuck add-task assignee dropdown, and a broken task link in comment-notification emails.
+**Fixed:** PHP 8.1–8.5 deprecation notices no longer leak into REST API responses.
 
 = v4.0.4 – Jun 11, 2026 =
 

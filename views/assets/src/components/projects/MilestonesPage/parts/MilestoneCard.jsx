@@ -49,12 +49,14 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
   const navigate = useNavigate();
   const project = useCurrentProject(projectId);
   const { isPro, userCan, isManager, currentUserId } = usePermissions(project);
-  const creatorId = milestone?.creator?.data?.id ?? milestone?.created_by;
+  // No edit_milestone/delete_milestone capability exists — milestone edit/delete
+  // is manager-or-creator (Vue can_edit_milestone parity). The bogus userCan keys
+  // always returned false.
+  const creatorId = milestone?.creator?.data?.id ?? milestone?.created_by ?? milestone?.creator?.id;
   const canEditMilestone =
     isManager ||
-    userCan('edit_milestone') ||
     (currentUserId && creatorId && String(currentUserId) === String(creatorId));
-  const canDeleteMilestone = isManager || userCan('delete_milestone') || canEditMilestone;
+  const canDeleteMilestone = canEditMilestone;
 
   const isComplete =
     milestone.status === "complete" || milestone.status === 1 || milestone.status === "1";
@@ -117,6 +119,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
   }, [dispatch, projectId, milestone.id, toast, __]);
 
   const handleToggleStatus = useCallback(async () => {
+    if (!canEditMilestone) return;
     const newStatus = isComplete ? "incomplete" : "complete";
     try {
       await dispatch(
@@ -135,10 +138,10 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
     } catch {
       toast.error(__("Failed to update status", 'wedevs-project-manager'));
     }
-  }, [dispatch, projectId, milestone, isComplete, toast, __]);
+  }, [dispatch, projectId, milestone, isComplete, toast, __, canEditMilestone]);
 
   const handleTogglePrivacy = useCallback(async () => {
-    const newPrivacy = milestone.meta?.privacy ? 0 : 1;
+    const newPrivacy = checkPrivate(milestone.meta?.privacy) ? 0 : 1;
     try {
       await dispatch(
         toggleMilestonePrivacy({
@@ -161,7 +164,8 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
           <button
             type="button"
             onClick={handleToggleStatus}
-            className="shrink-0 mt-0.5"
+            disabled={!canEditMilestone}
+            className={cn("shrink-0 mt-0.5", !canEditMilestone && "cursor-default")}
             title={isComplete ? __("Mark Incomplete", 'wedevs-project-manager') : __("Mark Complete", 'wedevs-project-manager')}
           >
             <CheckCircle
@@ -191,7 +195,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                   milestone.health ?? (isComplete ? "completed" : "no-date")
                 }
               />
-              {milestone.meta?.privacy ? (
+              {checkPrivate(milestone.meta?.privacy) ? (
                 <Lock className="h-3.5 w-3.5 text-pm-text-muted" />
               ) : null}
             </div>
@@ -258,7 +262,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                   onClick={() => isPro && handleTogglePrivacy()}
                   disabled={!isPro}
                 >
-                  {milestone.meta?.privacy ? (
+                  {checkPrivate(milestone.meta?.privacy) ? (
                     <>
                       <Unlock className="h-4 w-4 mr-2" />
                       {__("Make Public", 'wedevs-project-manager')}

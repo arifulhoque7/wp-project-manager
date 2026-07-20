@@ -29,6 +29,42 @@ class WP_Router {
 		static::$routes = $routes;
 
         add_action( 'rest_api_init', array( new WP_Router, 'make_wp_rest_route' ) );
+
+        // Keep PHP notices/deprecations (incl. PHP 8.1–8.5 ones from vendor libs)
+        // out of the JSON body — they would otherwise corrupt REST responses when
+        // display_errors is on. Errors are still logged; only display is silenced.
+        add_filter( 'rest_pre_dispatch', array( __CLASS__, 'silence_error_display' ), 10, 3 );
+	}
+
+	/**
+	 * Disable error display for this plugin's REST requests so stray PHP
+	 * notices/deprecations never leak into the JSON response body.
+	 *
+	 * @param  mixed            $result
+	 * @param  \WP_REST_Server  $server
+	 * @param  \WP_REST_Request $request
+	 *
+	 * @return mixed
+	 */
+	public static function silence_error_display( $result, $server, $request ) {
+		if ( ! is_object( $request ) ) {
+			return $result;
+		}
+
+		$namespace = wedevs_pm_api_namespace();
+		$route     = ltrim( (string) $request->get_route(), '/' );
+
+		// Exact namespace or a sub-route of it — avoids matching unrelated prefixes (pm/v2 vs pm/v20).
+		if ( $route === $namespace || strpos( $route, $namespace . '/' ) === 0 ) {
+			static $logged = false;
+
+			if ( ini_set( 'display_errors', '0' ) === false && ! $logged ) {
+				$logged = true;
+				error_log( 'WeDevs PM: unable to disable display_errors for REST request; PHP notices may leak into JSON responses.' );
+			}
+		}
+
+		return $result;
 	}
 
 	/**
@@ -239,17 +275,20 @@ class WP_Router {
 
 	protected function append_params( WP_REST_Request $request ) {
 		$nonce = $request->get_header( 'x_wp_nonce' );
-		
+
 		// if ( ! isset(  $_SERVER['HTTP_X_WP_NONCE'] ) ) {
 		// 	return $request;
-		// }; 
+		// };
 
 		// $nonce = sanitize_text_field( $_SERVER['HTTP_X_WP_NONCE'] );
-		
+
+		// JWT/mobile requests carry no wp_rest nonce but transformers still need the shared request object, so always set it before the nonce gate.
+		static::$request = $request;
+
 		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
 			return $request;
 		}
-		
+
 		$get_data = wp_unslash( $_GET );
 		$post_data = wp_unslash( $_POST );
 		$file_data = wp_unslash( $_FILES );
@@ -268,7 +307,6 @@ class WP_Router {
 		$request->set_query_params( $get_data );
 		$request->set_body_params( $post_data );
 		$request->set_file_params( $file_data );
-		static::$request = $request;
 		return $request;
 	}
 

@@ -4,6 +4,7 @@ import { Badge } from "@components/ui/badge";
 import { UserAvatar } from '@components/common/UserAvatar';
 import TaskLabelBadges from "@components/tasks/TaskLabelBadges";
 import TaskStatusCircle from "@components/common/TaskStatusCircle";
+import { isPrivate } from "@lib/pm-utils";
 import { MessageSquare, Lock, Layers } from "lucide-react";
 import {
   isTaskComplete,
@@ -98,7 +99,7 @@ export default function MyTaskRow({ task, projectTitle, onToggle, onOpen }) {
         </span>
       )}
 
-      {task.meta?.privacy === 1 && (
+      {isPrivate(task.meta?.privacy) && (
         <Lock className="h-3.5 w-3.5 text-pm-text-muted shrink-0" />
       )}
     </div>

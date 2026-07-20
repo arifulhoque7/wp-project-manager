@@ -1,6 +1,6 @@
 {
   "name": "pmapi",
-  "version": "4.0.4",
+  "version": "4.0.6",
   "description": "Front-end package manager for project manager",
   "engines": {
     "node": ">=22.0.0",
@@ -11,7 +11,7 @@
     "build": "wp-scripts build",
     "lint": "eslint views/assets/src --ext .ts,.tsx",
     "makepot": "wp i18n make-pot . languages/wedevs-project-manager.pot --exclude=node_modules,build,tests,views/assets/dist,vendor",
-    "release": "grunt release --force"
+    "release": "php composer-scripts/patch-deprecations.php && grunt release --force"
   },
   "dependencies": {
     "@babel/runtime": "^7.24.0",
@@ -67,7 +67,7 @@
     "lucide-react": "^0.400.0",
     "react": "^18.3.0",
     "react-chartjs-2": "^5.2.0",
-    "react-day-picker": "9",
+    "react-day-picker": "^10.0.1",
     "react-dom": "^18.3.0",
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.23.0",

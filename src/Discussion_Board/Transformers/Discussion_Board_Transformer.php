@@ -67,7 +67,8 @@ class Discussion_Board_Transformer extends TransformerAbstract {
     }
 
     public function includeComments( Discussion_Board $item ) {
-        $page = WP_Router::$request->get_param( 'comment_page' ) ?? 1;
+        $request = WP_Router::$request;
+        $page    = $request ? ( $request->get_param( 'comment_page' ) ?? 1 ) : 1;
 
         // Paginator::currentPageResolver(function () use ($page) {
         //     return $page;
@@ -86,7 +87,8 @@ class Discussion_Board_Transformer extends TransformerAbstract {
     }
 
     public function includeFiles( Discussion_Board $item ) {
-        $page = WP_Router::$request->get_param( 'file_page' ) ?? 1;
+        $request = WP_Router::$request;
+        $page    = $request ? ( $request->get_param( 'file_page' ) ?? 1 ) : 1;
        
 
         Paginator::currentPageResolver(function () use ($page) {

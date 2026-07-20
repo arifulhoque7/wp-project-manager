@@ -2,19 +2,23 @@ import { __ } from '@wordpress/i18n';
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@store/index'
-import { toggleExpand, addTaskToList, reorderTasksLocal, updateTaskList, deleteTaskList } from '@store/taskListsSlice'
+import { toggleExpand, addTaskToList, reorderTasksLocal, updateTaskList, deleteTaskList, updateTaskPrivacy, updateListPrivacy } from '@store/taskListsSlice'
 import { sortTasks } from '@store/tasksSlice'
 import { createTask } from '@store/tasksSlice'
 import { useApi } from '@hooks/useApi'
 import { cn } from '@lib/utils'
+import { isPrivate } from '@lib/pm-utils'
 import { useToast } from '@hooks/useToast'
 import { useConfirm } from '@hooks/useConfirm'
 import { Milestone as MilestoneIcon } from 'lucide-react'
 import { Button } from '@components/ui/button'
 import { Input } from '@components/ui/input'
+import { Checkbox } from '@components/ui/checkbox'
+import { DatePicker } from '@components/ui/date-picker'
 import RichTextEditor from '@components/common/RichTextEditor'
 import { Progress } from '@components/ui/progress'
 import { UserAvatar } from '@components/common/UserAvatar'
+import ProBadge from '@components/common/ProBadge'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,6 +34,7 @@ import {
   Check,
   X,
   Lock,
+  Unlock,
   ArrowUpRight,
   Archive,
   Copy,
@@ -52,8 +57,10 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
   const { isPro, userCan, isManager } = usePermissions(project)
   const { setOpen: openProModal } = useProModal()
   const canCreateTask = isManager || userCan('create_task')
-  const canEditTaskList = isManager || userCan('edit_task_list')
-  const canDeleteTaskList = isManager || userCan('delete_task_list')
+  // No edit_task_list/delete_task_list capability exists — list edit/delete is
+  // manager-only (Vue parity). Bogus userCan() keys always returned false here.
+  const canEditTaskList = isManager
+  const canDeleteTaskList = isManager
 
   const api = useApi()
   const [ConfirmDialog, confirm] = useConfirm()
@@ -63,7 +70,10 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
   const [newTitle, setNewTitle] = useState('')
   const [newDesc, setNewDesc] = useState('')
   const [newDueDate, setNewDueDate] = useState('')
+  const [newTaskPrivate, setNewTaskPrivate] = useState(false)
   const [assigneeSearch, setAssigneeSearch] = useState('')
+  const [assigneeOpen, setAssigneeOpen] = useState(false)
+  const assigneeBoxRef = useRef(null)
   const projectMembers = project?.assignees?.data ?? []
   const assigneeResults = assigneeSearch.trim().length === 0
     ? projectMembers
@@ -84,6 +94,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
 
   const handleSearchUsers = useCallback((q) => {
     setAssigneeSearch(q)
+    setAssigneeOpen(true)
   }, [])
 
   const addAssignee = useCallback((user) => {
@@ -98,6 +109,15 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
   }, [])
 
   useEffect(() => {
+    if (!assigneeOpen) return
+    const onDown = (e) => {
+      if (assigneeBoxRef.current && !assigneeBoxRef.current.contains(e.target)) setAssigneeOpen(false)
+    }
+    document.addEventListener('mousedown', onDown)
+    return () => document.removeEventListener('mousedown', onDown)
+  }, [assigneeOpen])
+
+  useEffect(() => {
     if (!showNewTask || !projectId || milestones.length > 0) return;
     api.get(`projects/${projectId}/milestones`, { per_page: 50 })
       .then(res => setMilestones(res?.data ?? []))
@@ -110,7 +130,9 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
     setNewTitle('')
     setNewDesc('')
     setNewDueDate('')
+    setNewTaskPrivate(false)
     setAssigneeSearch('')
+    setAssigneeOpen(false)
     setSelectedAssignees([])
     setSelectedMilestone('')
   }, [])
@@ -125,6 +147,19 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
   const handleToggle = useCallback(() => {
     dispatch(toggleExpand(list.id))
   }, [dispatch, list.id])
+
+  // Toggle an existing list private<->public via the dedicated endpoint (Pro).
+  // Optimistic, reverts on error — mirrors TaskPrivacyField.
+  const handleToggleListPrivacy = useCallback(async () => {
+    const next = isPrivate(list.meta?.privacy) ? 0 : 1
+    dispatch(updateListPrivacy({ listId: list.id, privacy: next }))
+    try {
+      await api.post(`projects/${projectId}/task-lists/privacy/${list.id}`, { is_private: next })
+    } catch {
+      dispatch(updateListPrivacy({ listId: list.id, privacy: next ? 0 : 1 }))
+      toast.error(__('Failed to update list privacy', 'wedevs-project-manager'))
+    }
+  }, [dispatch, api, projectId, list.id, list.meta, toast, __])
 
   const handleCreateTask = useCallback(async (e) => {
     e.preventDefault()
@@ -150,6 +185,15 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
             task_ids: [result.id],
           }).catch(() => {});
         }
+        // Privacy (Pro) persists through the dedicated endpoint, then reflect it
+        // locally so the Lock icon shows without a reload.
+        if (isPro && newTaskPrivate && result.id) {
+          api.post(`projects/${projectId}/tasks/privacy/${result.id}`, {
+            is_private: 1,
+          }).then(() => {
+            dispatch(updateTaskPrivacy({ taskId: result.id, privacy: 1 }));
+          }).catch(() => {});
+        }
       }
       resetForm()
       setShowNewTask(true) // keep form open for rapid entry
@@ -158,7 +202,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
       toast.error(__('Failed to create task', 'wedevs-project-manager'))
     }
     setCreating(false)
-  }, [dispatch, projectId, list.id, newTitle, newDesc, newDueDate, selectedAssignees, creating, toast, __, resetForm])
+  }, [dispatch, projectId, list.id, newTitle, newDesc, newDueDate, selectedAssignees, creating, isPro, newTaskPrivate, api, toast, __, resetForm])
 
   // ── Task drag-drop within list ──────────────────
   const dragTaskIdx = useRef(null)
@@ -318,7 +362,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
           <h3 className="text-sm font-semibold text-pm-text-primary flex-1 truncate" dangerouslySetInnerHTML={{ __html: sanitizeHtml(list.title) }} />
         )}
 
-        {!renaming && list.meta?.privacy === 1 && (
+        {!renaming && isPrivate(list.meta?.privacy) && (
           <Lock className="h-3.5 w-3.5 text-pm-text-muted shrink-0" title={__('Private', 'wedevs-project-manager')} />
         )}
 
@@ -351,6 +395,8 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
             variant="ghost"
             size="icon"
             className="h-6 w-6"
+            title={__('Add task', 'wedevs-project-manager')}
+            aria-label={__('Add task', 'wedevs-project-manager')}
             onClick={() => { setShowNewTask(v => !v); if (!expanded) dispatch(toggleExpand(list.id)) }}
           >
             <Plus className="h-4 w-4" />
@@ -360,7 +406,7 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
         {/* Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-6 w-6">
+            <Button variant="ghost" size="icon" className="h-6 w-6" title={__('List options', 'wedevs-project-manager')} aria-label={__('List options', 'wedevs-project-manager')}>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -369,6 +415,17 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
               <DropdownMenuItem onClick={startRename}>
                 <Pencil className="h-4 w-4 mr-2" />
                 {__('Rename', 'wedevs-project-manager')}
+              </DropdownMenuItem>
+            )}
+
+            {/* Privacy toggle (Pro, capability-gated) */}
+            {isPro && userCan('view_private_list') && canEditTaskList && (
+              <DropdownMenuItem onClick={handleToggleListPrivacy}>
+                {isPrivate(list.meta?.privacy) ? (
+                  <><Unlock className="h-4 w-4 mr-2" />{__('Make Public', 'wedevs-project-manager')}</>
+                ) : (
+                  <><Lock className="h-4 w-4 mr-2" />{__('Make Private', 'wedevs-project-manager')}</>
+                )}
               </DropdownMenuItem>
             )}
 
@@ -392,6 +449,14 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                 >
                   <Archive className="h-4 w-4 mr-2" />
                   <span className="flex-1">{__('Archive', 'wedevs-project-manager')}</span>
+                  <Crown className="h-3.5 w-3.5 text-pm-accent" />
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={(e) => { e.preventDefault(); openProModal(true) }}
+                  className="text-pm-text-muted focus:text-pm-text"
+                >
+                  <Lock className="h-4 w-4 mr-2" />
+                  <span className="flex-1">{__('Private', 'wedevs-project-manager')}</span>
                   <Crown className="h-3.5 w-3.5 text-pm-accent" />
                 </DropdownMenuItem>
               </>
@@ -503,10 +568,9 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                   {/* Due date */}
                   <div className="flex items-center gap-2">
                     <label className="text-sm text-pm-text-muted w-16 shrink-0">{__('Due date', 'wedevs-project-manager')}</label>
-                    <Input
-                      type="date"
+                    <DatePicker
                       value={newDueDate}
-                      onChange={e => setNewDueDate(e.target.value)}
+                      onChange={v => setNewDueDate(v)}
                       className="h-8 text-sm w-40"
                     />
                   </div>
@@ -534,14 +598,16 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                   <div className="space-y-1.5">
                     <div className="flex items-center gap-2">
                       <label className="text-sm text-pm-text-muted w-16 shrink-0">{__('Assign', 'wedevs-project-manager')}</label>
-                      <div className="relative flex-1">
+                      <div className="relative flex-1" ref={assigneeBoxRef}>
                         <Input
                           value={assigneeSearch}
                           onChange={e => handleSearchUsers(e.target.value)}
+                          onFocus={() => setAssigneeOpen(true)}
+                          onKeyDown={e => { if (e.key === 'Escape') setAssigneeOpen(false) }}
                           placeholder={__('Search users...', 'wedevs-project-manager')}
                           className="h-8 text-sm"
                         />
-                        {assigneeResults.length > 0 && (
+                        {assigneeOpen && assigneeResults.length > 0 && (
                           <div className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-lg shadow-lg z-50 max-h-40 overflow-y-auto">
                             {assigneeResults.map(user => {
                               const isSelected = selectedAssignees.some(u => parseInt(u.id) === parseInt(user.id))
@@ -584,11 +650,29 @@ export default function TaskListSection({ list, projectId, showLabels, isInbox =
                       </div>
                     )}
                   </div>
+                  {/* Privacy (Pro, capability-gated) — advanced option, under "More" */}
+                  {userCan('view_private_task') && (
+                    <div className="flex items-center gap-2">
+                      <Checkbox
+                        id={`new-task-private-${list.id}`}
+                        checked={newTaskPrivate}
+                        onCheckedChange={(v) => setNewTaskPrivate(!!v)}
+                        disabled={!isPro}
+                      />
+                      <label
+                        htmlFor={`new-task-private-${list.id}`}
+                        className={cn('text-sm cursor-pointer', isPro ? 'text-pm-text-primary' : 'text-pm-text-muted')}
+                      >
+                        {__('Private', 'wedevs-project-manager')}
+                      </label>
+                      {!isPro && <ProBadge />}
+                    </div>
+                  )}
                 </div>
               )}
 
               {/* Actions */}
-              <div className="flex items-center gap-2 pl-[26px]">
+              <div className="flex items-center gap-2">
                 <Button
                   type="submit"
                   size="sm"

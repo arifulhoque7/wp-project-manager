@@ -9,6 +9,7 @@ import {
   reorderListsLocal,
   expandAll,
   collapseAll,
+  updateListPrivacy,
 } from "@store/taskListsSlice";
 import { cn } from "@lib/utils";
 import { useToast } from "@hooks/useToast";
@@ -24,7 +25,8 @@ import {
   Pagination, PaginationContent, PaginationItem,
   PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis,
 } from "@components/ui/pagination";
-import { Plus, ChevronsUpDown, ListTodo, Crown } from "lucide-react";
+import { Plus, ChevronsUpDown, ListTodo } from "lucide-react";
+import ProBadge from "@components/common/ProBadge";
 import BackButton from '@components/common/BackButton';
 import { Slot } from "@hooks/useSlot";
 import TaskListSection from "./TaskListSection";
@@ -41,7 +43,7 @@ export default function TaskListsPage() {
   const api = useApi();
   const project = useCurrentProject(projectId);
   const { isPro, userCan, isManager } = usePermissions(project);
-  const canCreateList = isManager || userCan('create_task_list');
+  const canCreateList = isManager || userCan('create_list');
 
   const { lists, loading, expandedIds, listsMeta } = useAppSelector((s) => s.taskLists);
 
@@ -122,17 +124,28 @@ export default function TaskListsPage() {
   const handleCreateList = useCallback(
     async (e) => {
       e.preventDefault();
-      if (!newListTitle.trim() || creatingList) return;
+      if (!canCreateList || !newListTitle.trim() || creatingList) return;
       setCreatingList(true);
       try {
-        await dispatch(
+        const newList = await dispatch(
           createTaskList({
             projectId,
             title: newListTitle.trim(),
             description: newListDesc.trim() || undefined,
-            privacy: newListPrivate ? 1 : 0,
           }),
         ).unwrap();
+        // Privacy is a Pro feature persisted through the dedicated privacy
+        // endpoint (the create route ignores it). Mirror the task-privacy flow.
+        if (isPro && newListPrivate && newList?.id) {
+          try {
+            await api.post(`projects/${projectId}/task-lists/privacy/${newList.id}`, {
+              is_private: 1,
+            });
+            dispatch(updateListPrivacy({ listId: newList.id, privacy: 1 }));
+          } catch {
+            toast.error(__("Failed to set list privacy", 'wedevs-project-manager'));
+          }
+        }
         setNewListTitle("");
         setNewListDesc("");
         setNewListPrivate(false);
@@ -150,10 +163,22 @@ export default function TaskListsPage() {
       newListDesc,
       newListPrivate,
       creatingList,
+      canCreateList,
+      isPro,
+      api,
       toast,
       __,
     ],
   );
+
+  useEffect(() => {
+    if (!canCreateList) {
+      setShowNewList(false);
+      setNewListTitle("");
+      setNewListDesc("");
+      setNewListPrivate(false);
+    }
+  }, [canCreateList, projectId]);
 
   const allExpanded = expandedIds.length === lists.length && lists.length > 0;
 
@@ -209,7 +234,7 @@ export default function TaskListsPage() {
           </h1>
           {lists.length > 0 && (
             <span className="text-sm text-pm-text-muted bg-muted/60 px-2 py-0.5 rounded-full tabular-nums">
-              {lists.length} {lists.length === 1 ? __("list", 'wedevs-project-manager') : __("lists", 'wedevs-project-manager')}
+              {lists.length}
             </span>
           )}
         </div>
@@ -248,7 +273,7 @@ export default function TaskListsPage() {
       </div>
 
       {/* New list form */}
-      {showNewList && (
+      {showNewList && canCreateList && (
         <form
           onSubmit={handleCreateList}
           className="rounded-xl border bg-card p-4 space-y-3"
@@ -274,21 +299,23 @@ export default function TaskListsPage() {
             placeholder={__("Task list details", 'wedevs-project-manager')}
             minHeight="80px"
           />
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id="new-list-private"
-              checked={newListPrivate}
-              onCheckedChange={(v) => setNewListPrivate(!!v)}
-              disabled={!isPro}
-            />
-            <label
-              htmlFor="new-list-private"
-              className={cn("text-sm cursor-pointer", isPro ? 'text-pm-text-primary' : 'text-pm-text-muted')}
-            >
-              {__("Private", 'wedevs-project-manager')}
-            </label>
-            {!isPro && <Crown className="h-3.5 w-3.5 text-pm-accent" />}
-          </div>
+          {userCan('view_private_list') && (
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="new-list-private"
+                checked={newListPrivate}
+                onCheckedChange={(v) => setNewListPrivate(!!v)}
+                disabled={!isPro}
+              />
+              <label
+                htmlFor="new-list-private"
+                className={cn("text-sm cursor-pointer", isPro ? 'text-pm-text-primary' : 'text-pm-text-muted')}
+              >
+                {__("Private", 'wedevs-project-manager')}
+              </label>
+              {!isPro && <ProBadge />}
+            </div>
+          )}
           <div className="flex items-center gap-2 pt-1">
             <Button
               type="button"

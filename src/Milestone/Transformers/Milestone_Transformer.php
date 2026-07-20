@@ -66,7 +66,8 @@ class Milestone_Transformer extends TransformerAbstract {
     }
 
     public function includeTaskLists( Milestone $item ) {
-        $page = WP_Router::$request->get_param( 'task_list_page' ) ?? 1;
+        $request = WP_Router::$request;
+        $page    = $request ? ( $request->get_param( 'task_list_page' ) ?? 1 ) : 1;
 
         Paginator::currentPageResolver(function () use ($page) {
             return $page;
@@ -104,7 +105,8 @@ class Milestone_Transformer extends TransformerAbstract {
     }
 
     public function includeDiscussionBoards( Milestone $item ) {
-        $page = WP_Router::$request->get_param( 'discussion_page' ) ?? 1;
+        $request = WP_Router::$request;
+        $page    = $request ? ( $request->get_param( 'discussion_page' ) ?? 1 ) : 1;
 
         Paginator::currentPageResolver(function () use ($page) {
             return $page;

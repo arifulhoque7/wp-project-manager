@@ -16,6 +16,14 @@ export const Users = {
   memberEmail: process.env.QA_MEMBER_EMAIL ? process.env.QA_MEMBER_EMAIL : 'pm_member@example.com',
   memberPassword: process.env.QA_MEMBER_PASSWORD ? process.env.QA_MEMBER_PASSWORD : 'password',
 
+  coworkerUsername: process.env.QA_COWORKER_USERNAME ? process.env.QA_COWORKER_USERNAME : 'pm_coworker_user',
+  coworkerEmail: process.env.QA_COWORKER_EMAIL ? process.env.QA_COWORKER_EMAIL : 'pm_coworker@example.com',
+  coworkerPassword: process.env.QA_COWORKER_PASSWORD ? process.env.QA_COWORKER_PASSWORD : 'password',
+
+  clientUsername: process.env.QA_CLIENT_USERNAME ? process.env.QA_CLIENT_USERNAME : 'pm_client_user',
+  clientEmail: process.env.QA_CLIENT_EMAIL ? process.env.QA_CLIENT_EMAIL : 'pm_client@example.com',
+  clientPassword: process.env.QA_CLIENT_PASSWORD ? process.env.QA_CLIENT_PASSWORD : 'password',
+
   newUsername: process.env.QA_NEW_USERNAME ? process.env.QA_NEW_USERNAME : 'pm_new_user',
   newUserEmail: process.env.QA_NEW_USEREMAIL ? process.env.QA_NEW_USEREMAIL : 'pm_new_user@example.com',
   newUserFirstName: process.env.QA_NEW_FIRSTNAME ? process.env.QA_NEW_FIRSTNAME : 'NewUserFirstName',
