@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import { useApi } from '@hooks/useApi'
 import { usePermissions } from '@hooks/usePermissions'
 import { useActiveProModules, isProModuleActive, isProPluginInstalled } from '@hooks/useActiveProModules'
@@ -14,6 +15,7 @@ import {
   LayoutTemplate,
 } from 'lucide-react'
 import { cn } from '@lib/utils'
+import { DriveMonoGlyph as GoogleDriveNavIcon } from '@components/google-workspace/GoogleIcons'
 
 function statusColor(p) {
   const s = p.status
@@ -44,12 +46,19 @@ export function AppSidebar() {
   const { isAdmin, isPro, canManage, canManageLicense, isManagerAnywhere } = usePermissions()
   const isFrontend = typeof PM_Vars !== 'undefined' && PM_Vars.is_frontend && !PM_Vars.is_admin
 
+  // Pro plan + version for the sidebar footer badge (Dokan-style). Present only
+  // when the Pro plugin localized PM_Pro_Vars.
+  const proPlan = typeof PM_Pro_Vars !== 'undefined' && typeof PM_Pro_Vars.plan === 'string' ? PM_Pro_Vars.plan : ''
+  const proVersion = typeof PM_Pro_Vars !== 'undefined' && PM_Pro_Vars.version ? PM_Pro_Vars.version : ''
+  const planLabel = proPlan ? proPlan.charAt(0).toUpperCase() + proPlan.slice(1) : ''
+
   // ── Project sub-nav items — inside component so __() is extractable by make-pot ──
   const projectSubNav_FREE = useMemo(() => [
     { key: 'task-lists',   label: __('Task Lists', 'wedevs-project-manager'),   icon: LayoutList,     path: (pid) => `/projects/${pid}/task-lists` },
     { key: 'overview',     label: __('Overview', 'wedevs-project-manager'),      icon: Layout,         path: (pid) => `/projects/${pid}/overview` },
     { key: 'discussions',  label: __('Discussions', 'wedevs-project-manager'),   icon: MessageSquare,  path: (pid) => `/projects/${pid}/discussions` },
     { key: 'milestones',   label: __('Milestones', 'wedevs-project-manager'),    icon: Milestone,      path: (pid) => `/projects/${pid}/milestones` },
+    { key: 'kanban',       label: __('Kanban Board', 'wedevs-project-manager'),  icon: Columns3,       path: (pid) => `/projects/${pid}/kanban` },
     { key: 'files',        label: __('Files', 'wedevs-project-manager'),         icon: FileText,       path: (pid) => `/projects/${pid}/files` },
   ], [__])
 
@@ -59,7 +68,6 @@ export function AppSidebar() {
     const items = []
     // Activities is not a module, always show when pro is active
     items.push({ key: 'activities', label: __('Activities', 'wedevs-project-manager'),    icon: Activity,   path: (pid) => `/projects/${pid}/activities` })
-    if (isActive('Kanboard'))  items.push({ key: 'kanban',   label: __('Kanban Board', 'wedevs-project-manager'), icon: Columns3,  path: (pid) => `/projects/${pid}/kanban` })
     if (isActive('Gantt'))     items.push({ key: 'gantt',    label: __('Gantt Chart', 'wedevs-project-manager'),  icon: GitBranch,  path: (pid) => `/projects/${pid}/gantt` })
     const canSeeManagerItems = canManage || isManagerAnywhere
     if (isActive('Invoice') && canSeeManagerItems) items.push({ key: 'invoices', label: __('Invoices', 'wedevs-project-manager'),     icon: Receipt,    path: (pid) => `/projects/${pid}/invoices` })
@@ -78,7 +86,6 @@ export function AppSidebar() {
     if (isPro) return [...projectSubNav_FREE, ...getProSubNav(activeModulePaths)]
     const proItems = [
       { key: 'activities', label: __('Activities', 'wedevs-project-manager'),    icon: Activity,   path: (pid) => `/projects/${pid}/activities`, proPreview: true },
-      { key: 'kanban',   label: __('Kanban Board', 'wedevs-project-manager'), icon: Columns3,  path: (pid) => `/projects/${pid}/kanban`,   proPreview: true },
       { key: 'gantt',    label: __('Gantt Chart', 'wedevs-project-manager'),  icon: GitBranch,  path: (pid) => `/projects/${pid}/gantt`,    proPreview: true },
     ]
     if (canManage || isManagerAnywhere) {
@@ -225,6 +232,15 @@ export function AppSidebar() {
   // Pro plugin installed (pm-pro.js loaded) — may or may not be licensed
   const isProInstalled = isProPluginInstalled()
 
+  // G Workspace nav visibility: show when the admin has enabled ANY feature
+  // (Drive, Calendar, or Meet). Prefer the live store (reacts to toggles this
+  // session); fall back to PM_Vars until status is first fetched.
+  const gwStatusFetched = useSelector(s => s.googleWorkspace?.statusFetched)
+  const gwStatus        = useSelector(s => s.googleWorkspace?.status)
+  const gwVars          = (typeof PM_Vars !== 'undefined' && PM_Vars.google_workspace) || {}
+  const anyFeature = (src) => !!(src && (src.drive_enabled || src.calendar_enabled || src.meet_enabled))
+  const workspaceNavEnabled = gwStatusFetched ? anyFeature(gwStatus) : anyFeature(gwVars)
+
   const viewNavItems = useMemo(() => {
     const isModuleActive = (dir) => isProModuleActive(activeModulePaths, dir)
     const items = [
@@ -239,8 +255,13 @@ export function AppSidebar() {
         items.push({ key: 'sprints', label: __('Sprints', 'wedevs-project-manager'), short: __('Sprint', 'wedevs-project-manager'), icon: Timer, route: '/sprints', pro: !isPro })
       }
     }
+    // Google Workspace — free feature, shown to everyone when the admin has
+    // enabled Google Drive in Settings → Google Workspace.
+    if (workspaceNavEnabled) {
+      items.push({ key: 'google-workspace', label: __('G Workspace', 'wedevs-project-manager'), short: __('Workspace', 'wedevs-project-manager'), icon: GoogleDriveNavIcon, route: '/google-workspace' })
+    }
     return items
-  }, [__, isPro, activeModulePaths, canManage, isManagerAnywhere])
+  }, [__, isPro, activeModulePaths, canManage, isManagerAnywhere, workspaceNavEnabled])
 
   // Auto-collapse sidebar on full-width pages (reports, calendar, progress, sprints)
   const autoCollapsedRef = useRef(false)
@@ -285,6 +306,7 @@ export function AppSidebar() {
     if (path.startsWith('/progress')) return 'progress'
     if (path.startsWith('/reports'))  return 'reports'
     if (path.startsWith('/sprints'))  return 'sprints'
+    if (path.startsWith('/google-workspace')) return 'google-workspace'
     if (path.startsWith('/templates')) return 'templates'
     if (path.startsWith('/importtools')) return 'importtools'
     if (path.startsWith('/license')) return 'license'
@@ -316,7 +338,7 @@ export function AppSidebar() {
         )}
         title={item.label}
       >
-        <Icon className={cn('shrink-0', collapsed ? 'w-[18px] h-[18px]' : 'w-[18px] h-[18px]', isActive ? 'text-pm-accent' : 'text-pm-text-muted')} />
+        <Icon className={cn('shrink-0', collapsed ? 'w-[18px] h-[18px]' : 'w-[18px] h-[18px]', !collapsed && item.key === 'google-workspace' && 'self-start mt-[3px]', isActive ? 'text-pm-accent' : 'text-pm-text-muted')} />
         {collapsed
           ? <span className={cn('text-[10px] font-medium leading-none', isActive ? 'text-pm-accent' : 'text-pm-text-muted')}>{item.short ?? item.label}</span>
           : <TruncText className="text-[15px]">{item.label}</TruncText>
@@ -585,12 +607,22 @@ export function AppSidebar() {
               <ArrowLeft className="w-5 h-5" />
             </button>
           ) : (
-            <div className="flex justify-center px-2">
+            <div className="flex items-center justify-between gap-2 px-1">
               <img
                 src={`${typeof PM_Vars !== 'undefined' ? PM_Vars.dir_url : '/wp-content/plugins/wedevs-project-manager/'}views/assets/images/pm-logo.svg`}
                 alt="WP Project Manager"
-                className="h-6 opacity-60"
+                className="h-6 opacity-60 shrink-0"
               />
+              {planLabel && (
+                <span className="flex items-center gap-1.5 whitespace-nowrap">
+                  <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary">
+                    {planLabel}
+                  </span>
+                  {proVersion && (
+                    <span className="text-[11px] font-medium text-pm-text-muted">v{proVersion}</span>
+                  )}
+                </span>
+              )}
             </div>
           )}
         </div>

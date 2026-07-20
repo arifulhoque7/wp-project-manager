@@ -11,7 +11,8 @@ export class TaskListPage extends Base {
     await this.validateAndClick(Selectors.taskList.newButton);
     await this.validateAndFillStrings(Selectors.taskList.titleInput, title);
     if (description) {
-      await this.validateAndFillStrings(Selectors.taskList.descriptionInput, description);
+      const desc = this.page.locator(Selectors.taskList.descriptionInput).first();
+      if (await desc.count()) await desc.fill(description);
     }
     const [response] = await Promise.all([
       this.page.waitForResponse(
@@ -26,11 +27,43 @@ export class TaskListPage extends Base {
     await expect(this.page.locator(Selectors.taskList.byTitle(title)).first()).toBeVisible();
   }
 
+  async assertListNotVisible(title: string) {
+    await expect(this.page.locator(Selectors.taskList.byTitle(title))).toHaveCount(0);
+  }
+
+  // Rename via the section "…" menu → inline input in the header → Save (check).
+  async renameList(oldTitle: string, newTitle: string) {
+    await this.page.locator(Selectors.taskList.menuTrigger(oldTitle)).first().click();
+    await this.page.waitForTimeout(300);
+    await this.page.locator(Selectors.taskList.renameMenuItem).first().click();
+    const input = this.page.locator(Selectors.taskList.renameInput).first();
+    await input.waitFor();
+    await input.fill(newTitle);
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) =>
+          /\/task-lists\/\d+\/update/.test(r.url()) && r.request().method() === 'POST',
+      ),
+      this.page.locator(Selectors.taskList.renameSave).first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
+    await this.waitForLoading();
+  }
+
   async deleteList(title: string) {
-    const listRow = this.page.locator(Selectors.taskList.byTitle(title)).first();
-    await listRow.hover();
-    await this.validateAndClick(Selectors.taskList.deleteMenu);
-    await this.validateAndClick(Selectors.taskList.deleteAction);
+    await this.page.locator(Selectors.taskList.menuTrigger(title)).first().click();
+    await this.page.waitForTimeout(300);
+    await this.page.locator(Selectors.taskList.deleteMenuItem).first().click();
+    const [response] = await Promise.all([
+      this.page.waitForResponse(
+        (r) =>
+          r.url().includes('/task-lists/') &&
+          r.url().includes('/delete') &&
+          r.request().method() === 'POST',
+      ),
+      this.page.locator(Selectors.taskList.confirmDelete).first().click(),
+    ]);
+    expect(response.ok()).toBeTruthy();
     await this.waitForLoading();
   }
 }

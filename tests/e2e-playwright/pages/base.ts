@@ -157,7 +157,7 @@ export class Base {
     try {
       await this.page.waitForSelector('#wedevs-project-manager', { timeout: 15000 });
       const result = await this.page.evaluate(() => {
-        const pm = (window as unknown as { PM_Vars?: { is_pro?: unknown } }).PM_Vars;
+        const pm = window.PM_Vars;
         return Boolean(pm?.is_pro);
       });
       return result;
@@ -169,7 +169,8 @@ export class Base {
   // Wait for PM SPA to hydrate and first /pm/v2/projects response to settle
   async waitForPmSpa() {
     try {
-      await this.page.waitForSelector('#wedevs-project-manager', { timeout: 30000 });
+      // 60s: under sustained suite load the admin bundle can take >30s to hydrate.
+      await this.page.waitForSelector('#wedevs-project-manager', { timeout: 60000 });
       await this.page
         .waitForResponse(
           (r) => r.url().includes('/wp-json/pm/v2/projects') && r.status() < 500,

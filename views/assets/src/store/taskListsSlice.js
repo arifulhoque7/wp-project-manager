@@ -278,6 +278,16 @@ const taskListsSlice = createSlice({
       state.lists.forEach(list => updateIn(list))
       if (state.currentList) updateIn(state.currentList)
     },
+    // Optimistic: update a list's own privacy meta so the Lock icon shows at once
+    updateListPrivacy(state, action) {
+      const { listId, privacy } = action.payload
+      const setOn = (list) => {
+        if (!list || list.id !== listId) return
+        list.meta = { ...list.meta, privacy }
+      }
+      state.lists.forEach(setOn)
+      if (state.currentList) setOn(state.currentList)
+    },
     // Optimistic: move task between incomplete <-> complete within a list
     toggleTaskInList(state, action) {
       const { listId, taskId, newStatus } = action.payload
@@ -433,7 +443,7 @@ const taskListsSlice = createSlice({
 
 export const {
   setProjectId, toggleExpand, expandAll, collapseAll, clearLists,
-  addTaskToList, removeTaskFromList, updateTaskPrivacy, toggleTaskInList,
+  addTaskToList, removeTaskFromList, updateTaskPrivacy, updateListPrivacy, toggleTaskInList,
   reorderListsLocal, reorderTasksLocal, clearListComments,
 } = taskListsSlice.actions
 

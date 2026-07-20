@@ -16,6 +16,11 @@ export class MyTasksPage extends Base {
     await expect(this.page.locator(`text=${title}`).first()).toBeVisible();
   }
 
+  async assertTaskRowNotVisible(title: string) {
+    await this.page.waitForTimeout(1000);
+    await expect(this.page.locator(`text=${title}`)).toHaveCount(0);
+  }
+
   async assertEmpty() {
     const rows = this.page.locator(Selectors.myTasks.taskRow);
     await expect(rows).toHaveCount(0);

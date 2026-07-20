@@ -25,18 +25,16 @@ import NotionPreviewContainer from '@components/common/NotionPreviewContainer'
 import LoomPreviewContainer from '@components/common/LoomPreviewContainer'
 import { stripAllPreviewUrls } from '@/lib/url-strippers'
 import { sanitizeHtml } from '@lib/sanitize'
+import { decorateGoogleLinks } from '@lib/google-links'
 import FileUploadArea from '@components/common/FileUploadArea'
 import CommentAttachment from '@components/common/CommentAttachment'
+import CommentLinkActions from '@components/google-workspace/CommentLinkActions'
 import TaskStatusCircle from '@components/common/TaskStatusCircle'
 import NotifyUsers from '@components/common/NotifyUsers'
 import { UserAvatar } from '@components/common/UserAvatar'
 import { Separator } from '@components/ui/separator'
 import { Skeleton } from '@components/ui/skeleton'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@components/ui/popover'
+import { DatePicker } from '@components/ui/date-picker'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -62,7 +60,9 @@ import {
   Pencil,
   FileText,
   Loader2,
+  Video,
 } from 'lucide-react'
+import { DriveMonoGlyph } from '@components/google-workspace/GoogleIcons'
 import {
   isTaskComplete,
   formatPmDate,
@@ -87,6 +87,19 @@ function extractMentionedUsers(html) {
     if (id && !ids.includes(id)) ids.push(id)
   })
   return ids.join(',')
+}
+
+// The Google Drive Picker renders its own overlay outside this sheet's DOM.
+// Treat clicks/focus on it as "inside" so the task sheet stays open while
+// the user picks a file (only the X / Esc should close the sheet).
+function isGooglePickerInteraction(e) {
+  // While the Picker session is active, never let an outside interaction close
+  // the sheet (the Picker overlay lives outside this DOM and its focus/pointer
+  // events would otherwise dismiss the task).
+  if (typeof window !== 'undefined' && window.__pmGooglePickerOpen) return true
+  const t = e?.detail?.originalEvent?.target || e?.target
+  if (!t || typeof t.closest !== 'function') return false
+  return !!t.closest('.picker-dialog, .picker-dialog-bg, .picker, .picker-dialog-content')
 }
 
 export default function TaskDetailSheet() {
@@ -486,6 +499,9 @@ export default function TaskDetailSheet() {
           'overflow-y-auto p-0 transition-all duration-300',
           fullscreen ? 'w-full sm:max-w-full' : 'w-full sm:max-w-[560px]',
         )}
+        onPointerDownOutside={(e) => { if (isGooglePickerInteraction(e)) e.preventDefault() }}
+        onInteractOutside={(e) => { if (isGooglePickerInteraction(e)) e.preventDefault() }}
+        onFocusOutside={(e) => { if (isGooglePickerInteraction(e)) e.preventDefault() }}
       >
         {loading && !currentTask ? (
           <div className="flex items-center justify-center py-20">
@@ -605,37 +621,19 @@ export default function TaskDetailSheet() {
                   </div>
                   {editingDates ? (
                     <div className="flex items-center gap-2 flex-wrap">
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button variant="outline" size="sm" className="h-7 text-sm gap-1.5 font-normal min-w-[120px] justify-start">
-                            <Calendar className="h-3.5 w-3.5" />
-                            {startDate || __('Start', 'wedevs-project-manager')}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-3" align="start">
-                          <div className="space-y-2">
-                            <p className="text-sm font-medium text-pm-text-muted">{__('Start Date', 'wedevs-project-manager')}</p>
-                            <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} className="w-full rounded-md border border-input bg-background text-foreground px-3 py-1.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
-                            {startDate && <Button variant="ghost" size="sm" className="h-6 text-[14px] w-full" onClick={() => setStartDate('')}>{__('Clear', 'wedevs-project-manager')}</Button>}
-                          </div>
-                        </PopoverContent>
-                      </Popover>
+                      <DatePicker
+                        value={startDate}
+                        onChange={(v) => setStartDate(v)}
+                        placeholder={__('Start', 'wedevs-project-manager')}
+                        className="h-7 w-auto min-w-[140px]"
+                      />
                       <span className="text-sm text-pm-text-muted">→</span>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button variant="outline" size="sm" className="h-7 text-sm gap-1.5 font-normal min-w-[120px] justify-start">
-                            <Calendar className="h-3.5 w-3.5" />
-                            {dueDate || __('Due', 'wedevs-project-manager')}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-3" align="start">
-                          <div className="space-y-2">
-                            <p className="text-sm font-medium text-pm-text-muted">{__('Due Date', 'wedevs-project-manager')}</p>
-                            <input type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} className="w-full rounded-md border border-input bg-background text-foreground px-3 py-1.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
-                            {dueDate && <Button variant="ghost" size="sm" className="h-6 text-[14px] w-full" onClick={() => setDueDate('')}>{__('Clear', 'wedevs-project-manager')}</Button>}
-                          </div>
-                        </PopoverContent>
-                      </Popover>
+                      <DatePicker
+                        value={dueDate}
+                        onChange={(v) => setDueDate(v)}
+                        placeholder={__('Due', 'wedevs-project-manager')}
+                        className="h-7 w-auto min-w-[140px]"
+                      />
                       <Button size="sm" className="h-6 text-[15px] px-2" onClick={handleDateSave}>{__('Save', 'wedevs-project-manager')}</Button>
                       <Button variant="ghost" size="sm" className="h-6 text-[15px] px-2" onClick={() => setEditingDates(false)}>{__('Cancel', 'wedevs-project-manager')}</Button>
                     </div>
@@ -827,11 +825,12 @@ export default function TaskDetailSheet() {
                                   {savingEditComment ? __('Saving...', 'wedevs-project-manager') : __('Save', 'wedevs-project-manager')}
                                 </Button>
                                 <Button size="sm" variant="ghost" className="h-6 text-[15px]" onClick={cancelEditComment} disabled={savingEditComment}>{__('Cancel', 'wedevs-project-manager')}</Button>
+                                <CommentLinkActions projectId={projectId} onInsert={(html) => setEditCommentText(prev => (prev || '') + html)} />
                               </div>
                             </div>
                           ) : (
                             <>
-                              <div className="pm-rich-comment-content text-sm leading-relaxed prose prose-sm max-w-none text-foreground" dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripAllPreviewUrls(comment.content)) }} />
+                              <div className="pm-rich-comment-content text-sm leading-relaxed prose prose-sm max-w-none text-foreground" dangerouslySetInnerHTML={{ __html: decorateGoogleLinks(sanitizeHtml(stripAllPreviewUrls(comment.content))) }} />
                               <GitHubPreviewContainer content={comment.content || ''} />
                               <NotionPreviewContainer content={comment.content || ''} />
                               <LoomPreviewContainer content={comment.content || ''} />
@@ -865,9 +864,12 @@ export default function TaskDetailSheet() {
                   value={commentNotifyUsers}
                   onChange={setCommentNotifyUsers}
                 />
-                <Button size="sm" className="h-7 text-sm gap-1" onClick={handleSubmitComment} disabled={!newComment.trim() || submittingComment}>
-                  <Plus className="h-3 w-3" />{submittingComment ? __('Sending...', 'wedevs-project-manager') : __('Add Comment', 'wedevs-project-manager')}
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button size="sm" className="h-7 text-sm gap-1" onClick={handleSubmitComment} disabled={!newComment.trim() || submittingComment}>
+                    <Plus className="h-3 w-3" />{submittingComment ? __('Sending...', 'wedevs-project-manager') : __('Add Comment', 'wedevs-project-manager')}
+                  </Button>
+                  <CommentLinkActions projectId={projectId} onInsert={(html) => setNewComment(prev => (prev || '') + html)} />
+                </div>
               </div>
             </div>
 
@@ -934,6 +936,18 @@ export default function TaskDetailSheet() {
                               </button>
                             ) : (
                               <span className="text-pm-text">{parseActivityMessage(act) || act.action}</span>
+                            )}
+                            {(act.action === 'attach_drive_file' || act.meta?.has_drive) && (
+                              act.action === 'attach_drive_file' && act.meta?.file_url ? (
+                                <a href={act.meta.file_url} target="_blank" rel="noopener noreferrer" title={act.meta.file_name || __('Google Drive file', 'wedevs-project-manager')} className="ml-1.5 inline-flex align-middle text-pm-text-muted/35 hover:text-pm-accent">
+                                  <DriveMonoGlyph className="h-3.5 w-3.5" />
+                                </a>
+                              ) : (
+                                <DriveMonoGlyph className="ml-1.5 inline-flex align-middle h-3.5 w-3.5 text-pm-text-muted/30" title={__('Google Drive', 'wedevs-project-manager')} />
+                              )
+                            )}
+                            {act.meta?.has_meet && (
+                              <Video className="ml-1.5 inline-flex align-middle h-3.5 w-3.5 text-pm-text-muted/30" title={__('Google Meet', 'wedevs-project-manager')} />
                             )}
                             {act.committed_at && <span className="ml-1.5 text-[14px]">· {formatPmDateTime(act.committed_at)}</span>}
                           </div>

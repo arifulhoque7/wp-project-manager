@@ -275,17 +275,20 @@ class WP_Router {
 
 	protected function append_params( WP_REST_Request $request ) {
 		$nonce = $request->get_header( 'x_wp_nonce' );
-		
+
 		// if ( ! isset(  $_SERVER['HTTP_X_WP_NONCE'] ) ) {
 		// 	return $request;
-		// }; 
+		// };
 
 		// $nonce = sanitize_text_field( $_SERVER['HTTP_X_WP_NONCE'] );
-		
+
+		// JWT/mobile requests carry no wp_rest nonce but transformers still need the shared request object, so always set it before the nonce gate.
+		static::$request = $request;
+
 		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
 			return $request;
 		}
-		
+
 		$get_data = wp_unslash( $_GET );
 		$post_data = wp_unslash( $_POST );
 		$file_data = wp_unslash( $_FILES );
@@ -304,7 +307,6 @@ class WP_Router {
 		$request->set_query_params( $get_data );
 		$request->set_body_params( $post_data );
 		$request->set_file_params( $file_data );
-		static::$request = $request;
 		return $request;
 	}
 

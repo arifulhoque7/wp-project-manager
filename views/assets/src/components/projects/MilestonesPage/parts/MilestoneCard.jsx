@@ -141,7 +141,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
   }, [dispatch, projectId, milestone, isComplete, toast, __, canEditMilestone]);
 
   const handleTogglePrivacy = useCallback(async () => {
-    const newPrivacy = milestone.meta?.privacy ? 0 : 1;
+    const newPrivacy = checkPrivate(milestone.meta?.privacy) ? 0 : 1;
     try {
       await dispatch(
         toggleMilestonePrivacy({
@@ -195,7 +195,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                   milestone.health ?? (isComplete ? "completed" : "no-date")
                 }
               />
-              {milestone.meta?.privacy ? (
+              {checkPrivate(milestone.meta?.privacy) ? (
                 <Lock className="h-3.5 w-3.5 text-pm-text-muted" />
               ) : null}
             </div>
@@ -262,7 +262,7 @@ export default function MilestoneCard({ milestone, projectId, onEdit, onImportTa
                   onClick={() => isPro && handleTogglePrivacy()}
                   disabled={!isPro}
                 >
-                  {milestone.meta?.privacy ? (
+                  {checkPrivate(milestone.meta?.privacy) ? (
                     <>
                       <Unlock className="h-4 w-4 mr-2" />
                       {__("Make Public", 'wedevs-project-manager')}
