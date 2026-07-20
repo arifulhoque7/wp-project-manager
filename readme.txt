@@ -1,6 +1,6 @@
 === Project Manager – AI Powered Project Management, Task Management, Kanban Board & Time Tracker ===
 
-Contributors: tareq1988, nizamuddinbabu, wedevs, asaquzzaman
+Contributors: tareq1988, nizamuddinbabu, wedevs
 Donate Link: https://tareq.co/donate/
 Tags: kanban, project, project management, task management, project manager
 Requires at least: 6.2
