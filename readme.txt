@@ -241,7 +241,7 @@ A. If you face any issues, you can contact the support team through the official
 
 == Changelog ==
 
-= v4.0.6 – Jul 03, 2026 =
+= v4.0.6 – Jul 20, 2026 =
 
 **New:** Google Workspace integration — connect Google Drive to attach files to tasks, comments, and discussions (per-project role access), plus Google Meet links and Google Calendar sync (Calendar & Meet powered by Pro).
 **New:** Kanban board is now built into the Free plugin (previously Pro-only).
