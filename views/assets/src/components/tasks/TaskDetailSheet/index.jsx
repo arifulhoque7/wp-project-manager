@@ -797,7 +797,7 @@ export default function TaskDetailSheet() {
             <Separator />
 
             <div className="px-6 pt-4">
-              <div className="inline-flex max-w-full items-center rounded-lg border border-pm-border bg-muted/60 p-1 gap-0.5 overflow-x-auto scrollbar-none">
+              <div className="inline-flex max-w-full items-center rounded-lg border border-pm-border bg-muted/60 p-1 gap-0.5 overflow-x-auto scrollbar-none max-md:flex-wrap max-md:overflow-visible">
                 {[
                   { key: 'subtasks', label: __('Subtasks', 'wedevs-project-manager'), count: 0, pro: !isPro, icon: ListChecks },
                   { key: 'comments', label: __('Comments', 'wedevs-project-manager'), count: comments.length, icon: MessageSquare },
