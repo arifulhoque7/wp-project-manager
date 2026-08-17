@@ -664,8 +664,10 @@ class Task_Controller {
 
     public function privacy( WP_REST_Request $request ) {
         $project_id = intval( $request->get_param( 'project_id' ) );
-        $task_id = $request->get_param( 'task_id' );
-        $privacy = $request->get_param( 'is_private' );
+        $task_id = intval( $request->get_param( 'task_id' ) );
+        // Stored in pm_meta and read back through unserialize(); anything but an
+        // int here is a PHP object injection vector.
+        $privacy = intval( $request->get_param( 'is_private' ) );
         $task = Task::find( $task_id );
         $task->update_model( [
             'is_private' => $privacy

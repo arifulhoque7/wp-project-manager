@@ -32,7 +32,7 @@ class Activity extends Eloquent {
     }
 
     public function getMetaAttribute( $value ) {
-        return unserialize( $value );
+        return wedevs_pm_safe_unserialize( $value );
     }
 
     public function project() {

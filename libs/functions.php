@@ -1475,3 +1475,25 @@ function wedevs_pm_load_headway_badge( $selector = '#pm-headway-icon' ) {
 
     <?php
 }
+
+/**
+ * Unserialize a stored value without ever instantiating a class.
+ *
+ * pm_meta / activity / comment payloads are written by project members, so a
+ * plain unserialize() there is a PHP object injection sink (Patchstack #455).
+ * allowed_classes => false turns any serialized object into
+ * __PHP_Incomplete_Class, which has no magic methods to fire.
+ *
+ * @param mixed $value
+ *
+ * @return mixed
+ */
+function wedevs_pm_safe_unserialize( $value ) {
+    if ( ! is_string( $value ) || ! is_serialized( $value ) ) {
+        return $value;
+    }
+
+    $unserialized = @unserialize( $value, [ 'allowed_classes' => false ] );
+
+    return false === $unserialized && 'b:0;' !== $value ? $value : $unserialized;
+}

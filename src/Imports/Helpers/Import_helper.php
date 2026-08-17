@@ -190,9 +190,19 @@ class Import_helper {
                             'user_nicename' => $ind_user->username,
                             'first_name' => $ind_user->fullName,
                             'role' => 'subscriber',
-                            'user_pass' => md5('123456#')
+                            // Never a predictable password. The imported user sets
+                            // their own through the reset link below.
+                            'user_pass' => wp_generate_password( 24, true, true )
                         ];
                         $user_id = wp_insert_user( $userdata ) ;
+
+                        if ( ! is_wp_error( $user_id ) ) {
+                            wp_new_user_notification( $user_id, null, 'user' );
+                        }
+                    }
+
+                    if ( is_wp_error( $user_id ) ) {
+                        continue;
                     }
                     $local_project_id = $project_arr[0];
                     $local_task_id = $project_arr[2];
