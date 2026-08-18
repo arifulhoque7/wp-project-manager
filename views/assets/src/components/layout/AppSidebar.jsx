@@ -6,7 +6,7 @@ import { useApi } from '@hooks/useApi'
 import { usePermissions } from '@hooks/usePermissions'
 import { useActiveProModules, isProModuleActive, isProPluginInstalled } from '@hooks/useActiveProModules'
 import ProBadge from '@components/common/ProBadge'
-import { FolderKanban, CheckSquare, Calendar, BarChart3, Settings, ArrowLeft, PanelLeftClose, PanelLeftOpen, ChevronDown, Star, LayoutList, Layout, MessageSquare, Milestone, FileText, Activity, Tag, Crown, Layers, Columns3, GitBranch, Receipt, Timer, Shield, Wrench, LayoutTemplate, Sparkles } from 'lucide-react'
+import { FolderKanban, CheckSquare, Calendar, BarChart3, Settings, ArrowLeft, PanelLeftClose, PanelLeftOpen, ChevronDown, Star, LayoutList, Layout, MessageSquare, Milestone, FileText, Activity, Tag, Crown, Layers, Columns3, GitBranch, Receipt, Timer, Shield, Wrench, LayoutTemplate, Sparkles, LayoutDashboard } from 'lucide-react'
 import { cn } from '@lib/utils'
 import { DriveMonoGlyph as GoogleDriveNavIcon } from '@components/google-workspace/GoogleIcons'
 
@@ -232,6 +232,7 @@ export function AppSidebar() {
   )
 
   const topNavItems = useMemo(() => [
+    { key: 'dashboard', label: __('Dashboard', 'wedevs-project-manager'), short: __('Home', 'wedevs-project-manager'), icon: LayoutDashboard, route: '/dashboard' },
     { key: 'projects', label: __('Projects', 'wedevs-project-manager'), short: __('Proj', 'wedevs-project-manager'), icon: FolderKanban, route: '/projects' },
     { key: 'my-tasks', label: __('My Tasks', 'wedevs-project-manager'), short: __('Tasks', 'wedevs-project-manager'), icon: CheckSquare,  route: '/my-tasks' },
   ], [__])
@@ -303,6 +304,7 @@ export function AppSidebar() {
 
   const activeKey = useMemo(() => {
     const path = location.pathname
+    if (path.startsWith('/dashboard')) return 'dashboard'
     if (path.startsWith('/modules')) return 'modules'
     if (path.startsWith('/premium')) return 'premium'
     if (path.startsWith('/categories')) return 'categories'
