@@ -47,7 +47,7 @@ export default function CreateUserDialog({ open, onOpenChange, defaultSeed = '',
       const createdName = created.display_name || `${form.first_name} ${form.last_name}`.trim() || form.username
       toast.success(
         __('User created', 'wedevs-project-manager'),
-        sprintf(__('%s was added as a user.', 'wedevs-project-manager'), createdName),
+        sprintf(/* translators: %s is the name of the user that was created. */ __('%s was added as a user.', 'wedevs-project-manager'), createdName),
         { user: { ...created, display_name: createdName } }
       )
       onOpenChange?.(false)

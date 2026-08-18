@@ -238,11 +238,11 @@ function TemplatesMock() {
             <div className="flex items-center gap-4 text-[13px] text-pm-text-muted pt-2 border-t border-pm-border">
               <div className="flex items-center gap-1">
                 <ListChecks className="h-3.5 w-3.5" />
-                <span>{sprintf(__('%d lists', 'wedevs-project-manager'), t.lists)}</span>
+                <span>{sprintf(/* translators: %d is the number of task lists in the template. */ __('%d lists', 'wedevs-project-manager'), t.lists)}</span>
               </div>
               <div className="flex items-center gap-1">
                 <CheckSquare className="h-3.5 w-3.5" />
-                <span>{sprintf(__('%d tasks', 'wedevs-project-manager'), t.tasks)}</span>
+                <span>{sprintf(/* translators: %d is the number of tasks in the template. */ __('%d tasks', 'wedevs-project-manager'), t.tasks)}</span>
               </div>
             </div>
           </div>

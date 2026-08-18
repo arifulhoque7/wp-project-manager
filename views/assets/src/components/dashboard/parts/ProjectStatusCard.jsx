@@ -89,7 +89,7 @@ export default function ProjectStatusCard({ status }) {
             className="mt-3 flex items-center justify-between rounded-lg bg-rose-50 px-3 py-2 text-left hover:bg-rose-100 transition-colors"
           >
             <span className="text-[13px] text-rose-600 font-medium">
-              {sprintf( _n( '%d project needs attention', '%d projects need attention', s.at_risk, 'wedevs-project-manager' ), s.at_risk )}
+              {sprintf( /* translators: %d is the number of at-risk projects. */ _n( '%d project needs attention', '%d projects need attention', s.at_risk, 'wedevs-project-manager' ), s.at_risk )}
             </span>
             <ChevronRight className="w-4 h-4 text-rose-500 shrink-0" />
           </button>

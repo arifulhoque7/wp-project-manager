@@ -25,7 +25,7 @@ export default function TaskPerformanceCard({ performance, range = 7 }) {
     <Card className="rounded-xl p-5 border-pm-border flex flex-col">
       <CardHead
         title={__('Task Performance', 'wedevs-project-manager')}
-        subtitle={sprintf( __( 'Created vs completed, last %d days', 'wedevs-project-manager' ), range )}
+        subtitle={sprintf( /* translators: %d is the number of days in the selected range. */ __( 'Created vs completed, last %d days', 'wedevs-project-manager' ), range )}
       />
 
       {isEmpty ? (

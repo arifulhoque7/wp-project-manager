@@ -317,7 +317,7 @@ export default function TaskDetailSheet() {
       dispatch(fetchTask({ projectId, taskId: currentTask.id }))
       toast.success(
         __('Assignee added', 'wedevs-project-manager'),
-        sprintf(__('%s was assigned to this task.', 'wedevs-project-manager'), user.display_name),
+        sprintf(/* translators: %s is the name of the user assigned to the task. */ __('%s was assigned to this task.', 'wedevs-project-manager'), user.display_name),
         { user }
       )
     } catch {
@@ -342,7 +342,7 @@ export default function TaskDetailSheet() {
       toast.success(
         __('Assignee removed', 'wedevs-project-manager'),
         removedName
-          ? sprintf(__('%s was removed from this task.', 'wedevs-project-manager'), removedName)
+          ? sprintf(/* translators: %s is the name of the user removed from the task. */ __('%s was removed from this task.', 'wedevs-project-manager'), removedName)
           : undefined,
         removedUser ? { user: removedUser } : undefined
       )

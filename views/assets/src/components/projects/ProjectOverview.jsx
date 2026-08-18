@@ -181,7 +181,7 @@ export default function ProjectOverview() {
       }));
       toast.success(
         __('Member added', 'wedevs-project-manager'),
-        sprintf(__('%s was added to the project.', 'wedevs-project-manager'), userWithRole.display_name),
+        sprintf(/* translators: %s is the name of the user added to the project. */ __('%s was added to the project.', 'wedevs-project-manager'), userWithRole.display_name),
         { user: userWithRole }
       );
     } catch { toast.error(__('Failed to add member', 'wedevs-project-manager')); }
@@ -215,7 +215,7 @@ export default function ProjectOverview() {
       toast.success(
         __('Role updated', 'wedevs-project-manager'),
         target && roleObj
-          ? sprintf(__('%1$s is now %2$s.', 'wedevs-project-manager'), target.display_name, roleObj.title)
+          ? sprintf(/* translators: %1$s is the user name, %2$s is their new role. */ __('%1$s is now %2$s.', 'wedevs-project-manager'), target.display_name, roleObj.title)
           : undefined,
         target ? { user: target } : undefined
       );
@@ -241,7 +241,7 @@ export default function ProjectOverview() {
       }));
       toast.success(
         __('Member removed', 'wedevs-project-manager'),
-        target ? sprintf(__('%s was removed from the project.', 'wedevs-project-manager'), target.display_name) : undefined,
+        target ? sprintf(/* translators: %s is the name of the user removed from the project. */ __('%s was removed from the project.', 'wedevs-project-manager'), target.display_name) : undefined,
         target ? { user: target } : undefined
       );
     } catch { toast.error(__('Failed to remove member', 'wedevs-project-manager')); }
@@ -393,7 +393,7 @@ export default function ProjectOverview() {
                         </span>
                       )}
                     </span>
-                    <span>{sprintf(_n('%d member', '%d members', assignees.length, 'wedevs-project-manager'), assignees.length)}</span>
+                    <span>{sprintf(/* translators: %d is the number of project members. */ _n('%d member', '%d members', assignees.length, 'wedevs-project-manager'), assignees.length)}</span>
                   </span>
                 )}
           {canManageMembers && (
@@ -502,7 +502,7 @@ export default function ProjectOverview() {
             <div className="w-full">
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-[13px] text-pm-text-muted">
-                  {sprintf(__('Project progress · %1$d of %2$d tasks done', 'wedevs-project-manager'), completeTasks, totalTasks)}
+                  {sprintf(/* translators: %1$d is the number of completed tasks, %2$d is the total. */ __('Project progress · %1$d of %2$d tasks done', 'wedevs-project-manager'), completeTasks, totalTasks)}
                 </span>
                 <span className="text-sm font-semibold text-pm-text-primary">{progress}%</span>
               </div>

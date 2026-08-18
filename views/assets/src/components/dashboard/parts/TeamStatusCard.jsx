@@ -26,8 +26,8 @@ export default function TeamStatusCard({ team, range = 7, scope }) {
         title={__('Team workload', 'wedevs-project-manager')}
         subtitle={
           scope === 'organisation'
-            ? sprintf( _n( '%d person across all projects', '%d people across all projects', total, 'wedevs-project-manager' ), total )
-            : sprintf( _n( '%d person in your projects', '%d people in your projects', total, 'wedevs-project-manager' ), total )
+            ? sprintf( /* translators: %d is the number of people on the team. */ _n( '%d person across all projects', '%d people across all projects', total, 'wedevs-project-manager' ), total )
+            : sprintf( /* translators: %d is the number of people on the team. */ _n( '%d person in your projects', '%d people in your projects', total, 'wedevs-project-manager' ), total )
         }
       />
 
@@ -60,7 +60,7 @@ export default function TeamStatusCard({ team, range = 7, scope }) {
                     )}>
                       {burden === 0
                         ? __('Free', 'wedevs-project-manager')
-                        : sprintf( _n( '%d task', '%d tasks', burden, 'wedevs-project-manager' ), burden )}
+                        : sprintf( /* translators: %d is the number of tasks the person is carrying. */ _n( '%d task', '%d tasks', burden, 'wedevs-project-manager' ), burden )}
                     </span>
                   </div>
 
@@ -73,14 +73,14 @@ export default function TeamStatusCard({ team, range = 7, scope }) {
                   <div className="flex items-center gap-2 mt-1 text-[11px] text-pm-text-muted">
                     {overdue > 0 && (
                       <span className="text-rose-500 font-medium tabular-nums">
-                        {sprintf( _n( '%d overdue', '%d overdue', overdue, 'wedevs-project-manager' ), overdue )}
+                        {sprintf( /* translators: %d is the number of overdue tasks for that person. */ _n( '%d overdue', '%d overdue', overdue, 'wedevs-project-manager' ), overdue )}
                       </span>
                     )}
                     <span className="tabular-nums">
-                      {sprintf( __( '%1$d due in %2$d days', 'wedevs-project-manager' ), dueSoon, range )}
+                      {sprintf( /* translators: %1$d is the number of tasks due, %2$d is the number of days in the range. */ __( '%1$d due in %2$d days', 'wedevs-project-manager' ), dueSoon, range )}
                     </span>
                     <span className="ml-auto tabular-nums">
-                      {sprintf( __( '%d done', 'wedevs-project-manager' ), m.completed ?? 0 )}
+                      {sprintf( /* translators: %d is the number of tasks the person completed. */ __( '%d done', 'wedevs-project-manager' ), m.completed ?? 0 )}
                     </span>
                   </div>
                 </div>
@@ -92,7 +92,7 @@ export default function TeamStatusCard({ team, range = 7, scope }) {
 
       {hidden > 0 && (
         <p className="mt-3 shrink-0 text-[11px] text-pm-text-muted">
-          {sprintf( __( 'Showing the %1$d most loaded of %2$d', 'wedevs-project-manager' ), members.length, total )}
+          {sprintf( /* translators: %1$d is how many people are listed, %2$d is the team size. */ __( 'Showing the %1$d most loaded of %2$d', 'wedevs-project-manager' ), members.length, total )}
         </p>
       )}
     </Card>

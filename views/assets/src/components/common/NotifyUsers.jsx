@@ -35,7 +35,7 @@ export default function NotifyUsers({ users = [], value = [], onChange, classNam
   };
 
   const label = count > 0
-    ? sprintf(_n('Notify %d user', 'Notify %d users', count, 'wedevs-project-manager'), count)
+    ? sprintf(/* translators: %d is the number of users who will be notified. */ _n('Notify %d user', 'Notify %d users', count, 'wedevs-project-manager'), count)
     : __('Notify users', 'wedevs-project-manager');
 
   return (

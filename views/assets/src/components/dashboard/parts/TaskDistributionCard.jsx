@@ -27,7 +27,7 @@ export default function TaskDistributionCard({ distribution }) {
     <Card className="rounded-xl p-5 border-pm-border flex flex-col h-full">
       <CardHead
         title={__('Task status', 'wedevs-project-manager')}
-        subtitle={sprintf( __( '%d tasks in total', 'wedevs-project-manager' ), total )}
+        subtitle={sprintf( /* translators: %d is the total number of tasks. */ __( '%d tasks in total', 'wedevs-project-manager' ), total )}
       />
 
       <div className="relative w-full flex-1 min-h-[170px] max-h-[210px]">

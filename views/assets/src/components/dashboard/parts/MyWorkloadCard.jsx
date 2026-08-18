@@ -19,9 +19,9 @@ export default function MyWorkloadCard({ workload, range = 7 }) {
 
   const rows = [
     { key: 'overdue', icon: AlertTriangle, label: __('Overdue', 'wedevs-project-manager'), value: overdue, tone: 'text-rose-500 bg-rose-50' },
-    { key: 'due',     icon: CalendarDays,  label: sprintf( __( 'Due in %d days', 'wedevs-project-manager' ), range ), value: dueSoon, tone: 'text-pm-accent bg-pm-accent-light' },
+    { key: 'due',     icon: CalendarDays,  label: sprintf( /* translators: %d is the number of days in the selected range. */ __( 'Due in %d days', 'wedevs-project-manager' ), range ), value: dueSoon, tone: 'text-pm-accent bg-pm-accent-light' },
     { key: 'open',    icon: ListChecks,    label: __('Open tasks', 'wedevs-project-manager'), value: open, tone: 'text-pm-text-muted bg-pm-surface-muted' },
-    { key: 'done',    icon: CheckCircle2,  label: sprintf( __( 'Completed in %d days', 'wedevs-project-manager' ), range ), value: completed, tone: 'text-emerald-500 bg-emerald-50' },
+    { key: 'done',    icon: CheckCircle2,  label: sprintf( /* translators: %d is the number of days in the selected range. */ __( 'Completed in %d days', 'wedevs-project-manager' ), range ), value: completed, tone: 'text-emerald-500 bg-emerald-50' },
   ]
 
   return (
@@ -31,7 +31,7 @@ export default function MyWorkloadCard({ workload, range = 7 }) {
         title={__('My workload', 'wedevs-project-manager')}
         subtitle={
           overdue > 0
-            ? sprintf( _n( '%d task needs attention', '%d tasks need attention', overdue, 'wedevs-project-manager' ), overdue )
+            ? sprintf( /* translators: %d is the number of overdue tasks. */ _n( '%d task needs attention', '%d tasks need attention', overdue, 'wedevs-project-manager' ), overdue )
             : __('Nothing late right now', 'wedevs-project-manager')
         }
       />

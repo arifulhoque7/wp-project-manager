@@ -80,7 +80,7 @@ export default function ProductivityHeatmapCard() {
         action={
         <div className="flex items-center gap-3 shrink-0">
           <span className="text-[12px] text-pm-text-muted hidden sm:inline">
-            {sprintf( __( '%d active days', 'wedevs-project-manager' ), activeDays )}
+            {sprintf( /* translators: %d is the number of days with recorded activity. */ __( '%d active days', 'wedevs-project-manager' ), activeDays )}
           </span>
           <Select value={year} onValueChange={onYearChange}>
             <SelectTrigger className="h-8 w-[150px] text-[13px]">
@@ -130,7 +130,7 @@ export default function ProductivityHeatmapCard() {
                         <TooltipContent side="top" className="text-[12px]">
                           <span className="font-medium">{format(parseISO(d.date), 'EEE, MMM d')}</span>
                           {' · '}
-                          {sprintf( __( '%d activities', 'wedevs-project-manager' ), d.count )}
+                          {sprintf( /* translators: %d is the number of activities recorded on that day. */ __( '%d activities', 'wedevs-project-manager' ), d.count )}
                         </TooltipContent>
                       </Tooltip>
                     )

@@ -948,7 +948,7 @@ class Project_Controller {
 					);
 				} elseif ( isset( $response_data['error']['type'] ) ) {
 					$error_message = sprintf(
-						// translators: %s: error type
+						// translators: %s: error message
 						__( 'AI API error: %s', 'wedevs-project-manager' ),
 						sanitize_text_field( $response_data['error']['type'] )
 					);

@@ -23,7 +23,7 @@ export default function OverduePriorityCard({ items, total = 0 }) {
         icon={AlertTriangle}
         iconClassName="text-rose-500"
         title={__('Needs attention', 'wedevs-project-manager')}
-        subtitle={total > 0 ? sprintf( _n( '%d task past its due date', '%d tasks past their due date', total, 'wedevs-project-manager' ), total ) : null}
+        subtitle={total > 0 ? sprintf( /* translators: %d is the number of overdue tasks. */ _n( '%d task past its due date', '%d tasks past their due date', total, 'wedevs-project-manager' ), total ) : null}
       />
 
       {list.length === 0 ? (
@@ -42,7 +42,7 @@ export default function OverduePriorityCard({ items, total = 0 }) {
                 {t.project_title && <div className="text-[12px] text-pm-text-muted truncate">{t.project_title}</div>}
               </div>
               <Badge variant="outline" className="shrink-0 text-[11px] text-rose-600 border-rose-200 bg-rose-50">
-                {sprintf( _n( '%dd', '%dd', t.days_overdue, 'wedevs-project-manager' ), t.days_overdue )}
+                {sprintf( /* translators: %d is the number of days a task is overdue, abbreviated (e.g. 45d). */ _n( '%dd', '%dd', t.days_overdue, 'wedevs-project-manager' ), t.days_overdue )}
               </Badge>
             </button>
           ))}
@@ -55,7 +55,7 @@ export default function OverduePriorityCard({ items, total = 0 }) {
           onClick={() => navigate('/my-tasks')}
           className="mt-3 shrink-0 rounded-lg border border-pm-border py-2 text-[12px] font-medium text-pm-text-muted transition-colors hover:bg-pm-hover hover:text-pm-text-primary"
         >
-          {sprintf( _n( 'View %d more', 'View %d more', hidden, 'wedevs-project-manager' ), hidden )}
+          {sprintf( /* translators: %d is the number of tasks not shown in the list. */ _n( 'View %d more', 'View %d more', hidden, 'wedevs-project-manager' ), hidden )}
         </button>
       )}
     </Card>

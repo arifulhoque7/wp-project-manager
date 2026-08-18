@@ -15,7 +15,7 @@ export default function KpiCards({ kpis, range = 7 }) {
         label={__('Completed', 'wedevs-project-manager')}
         value={k.completed ?? 0}
         trend={k.completed_trend}
-        sub={sprintf( __( 'vs previous %d days', 'wedevs-project-manager' ), range )}
+        sub={sprintf( /* translators: %d is the number of days in the selected range. */ __( 'vs previous %d days', 'wedevs-project-manager' ), range )}
         onClick={() => navigate('/my-tasks')}
       />
       <StatCard

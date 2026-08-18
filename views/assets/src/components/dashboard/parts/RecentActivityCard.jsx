@@ -25,7 +25,7 @@ export default function RecentActivityCard({ activity, range = 7 }) {
       <CardHead
         icon={Activity}
         title={__('Recent Activity', 'wedevs-project-manager')}
-        subtitle={sprintf( __( 'Last %d days', 'wedevs-project-manager' ), range )}
+        subtitle={sprintf( /* translators: %d is the number of days in the selected range. */ __( 'Last %d days', 'wedevs-project-manager' ), range )}
       />
 
       {list.length === 0 ? (
