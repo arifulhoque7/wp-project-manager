@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback, useRef, Suspense } from 'react
 import { useApi } from '@hooks/useApi'
 import { usePermissions } from '@hooks/usePermissions'
 import { Skeleton } from '@components/ui/skeleton'
+import { cn } from '@lib/utils'
 
 // ── Header is eager (above the fold, tiny). Everything else is lazy-loaded
 //    into its own chunk and streamed in behind a Skeleton fallback. ──
@@ -104,12 +105,21 @@ export default function DashboardPage() {
 
   const showTeam = canManage || isManagerAnywhere
   const team = data?.team ?? []
+  const thirdCard = showTeam
+    ? <Lazy><TeamStatusCard team={team} /></Lazy>
+    : (!isPro ? <Lazy><ProUpgradeCard /></Lazy> : null)
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
-      <DashboardHeader user={data?.user} onTaskCreated={() => load(range, false)} />
+      <DashboardHeader
+        user={data?.user}
+        onTaskCreated={() => load(range, false)}
+        range={range}
+        onRangeChange={onRangeChange}
+        loading={refetching}
+      />
 
-      <Lazy h="h-24"><KpiCards kpis={data?.kpis} /></Lazy>
+      <Lazy h="h-24"><KpiCards kpis={data?.kpis} range={range} /></Lazy>
 
       {/* Pro insights (module-gated, managers) */}
       {showTeam && isPro && <Lazy h="h-24"><ProInsightsRow /></Lazy>}
@@ -118,43 +128,39 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2">
           <Lazy h="h-72">
-            <TaskPerformanceCard
-              performance={data?.performance}
-              range={range}
-              onRangeChange={onRangeChange}
-              loading={refetching}
-            />
+            <TaskPerformanceCard performance={data?.performance} range={range} />
           </Lazy>
         </div>
         <Lazy h="h-72"><ProjectStatusCard status={data?.projects_status} /></Lazy>
       </div>
 
-      {/* Active projects (wide) + calendar */}
+      {/* What needs doing, and when. Highest-intent row, so it sits directly
+          under the charts rather than at the bottom of the page. */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <Lazy><OverduePriorityCard items={data?.overdue_list} total={data?.overdue_total} /></Lazy>
+        <Lazy><UpcomingScheduleCard items={data?.upcoming} total={data?.upcoming_total} /></Lazy>
+        <Lazy h="h-80"><MiniCalendarCard calendar={data?.calendar} /></Lazy>
+      </div>
+
+      {/* Where the work lives */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2">
           <Lazy h="h-80"><ActiveProjectsCard projects={data?.active_projects} /></Lazy>
         </div>
-        <Lazy h="h-80"><MiniCalendarCard calendar={data?.calendar} /></Lazy>
-      </div>
-
-      {/* Productivity heatmap (full width, self-fetches by year) */}
-      <Lazy h="h-44"><ProductivityHeatmapCard /></Lazy>
-
-      {/* Upcoming + milestones + activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <Lazy><UpcomingScheduleCard items={data?.upcoming} /></Lazy>
         <Lazy><MilestonesCard milestones={data?.milestones} /></Lazy>
-        <Lazy><RecentActivityCard activity={data?.recent_activity} /></Lazy>
       </div>
 
-      {/* Overdue + distribution + team / upgrade */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <Lazy><OverduePriorityCard items={data?.overdue_list} /></Lazy>
+      {/* Who and how — supporting context. A member with Pro gets neither the
+          team card nor the upsell, so the row drops to two columns rather
+          than leaving an empty third cell. */}
+      <div className={cn('grid grid-cols-1 gap-5', thirdCard ? 'lg:grid-cols-3' : 'lg:grid-cols-2')}>
         <Lazy><TaskDistributionCard distribution={data?.task_distribution} /></Lazy>
-        {showTeam
-          ? <Lazy><TeamStatusCard team={team} /></Lazy>
-          : (!isPro ? <Lazy><ProUpgradeCard /></Lazy> : null)}
+        <Lazy><RecentActivityCard activity={data?.recent_activity} range={range} /></Lazy>
+        {thirdCard}
       </div>
+
+      {/* Ambient, not actionable — so it closes the page */}
+      <Lazy h="h-44"><ProductivityHeatmapCard /></Lazy>
     </div>
   )
 }

@@ -1,9 +1,9 @@
-import { __ } from '@wordpress/i18n'
+import { __, sprintf } from '@wordpress/i18n'
 import { ListChecks, Activity, Clock, AlertTriangle, CheckCircle2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import StatCard from './StatCard'
 
-export default function KpiCards({ kpis }) {
+export default function KpiCards({ kpis, range = 7 }) {
   const navigate = useNavigate()
   const k = kpis || {}
 
@@ -15,7 +15,7 @@ export default function KpiCards({ kpis }) {
         label={__('Completed', 'wedevs-project-manager')}
         value={k.completed ?? 0}
         trend={k.completed_trend}
-        sub={__('vs last week', 'wedevs-project-manager')}
+        sub={sprintf( __( 'vs previous %d days', 'wedevs-project-manager' ), range )}
         onClick={() => navigate('/my-tasks')}
       />
       <StatCard
@@ -30,18 +30,21 @@ export default function KpiCards({ kpis }) {
         label={__('Pending', 'wedevs-project-manager')}
         value={k.pending ?? 0}
         sub={__('awaiting start', 'wedevs-project-manager')}
+        onClick={() => navigate('/my-tasks')}
       />
       <StatCard
         icon={AlertTriangle}
         label={__('Overdue', 'wedevs-project-manager')}
         value={k.overdue ?? 0}
         sub={__('past due date', 'wedevs-project-manager')}
+        onClick={() => navigate('/my-tasks')}
       />
       <StatCard
         icon={ListChecks}
         label={__('Total Tasks', 'wedevs-project-manager')}
         value={k.total_tasks ?? 0}
         sub={`${k.completion_rate ?? 0}% ${__('complete', 'wedevs-project-manager')}`}
+        onClick={() => navigate('/my-tasks')}
       />
     </div>
   )

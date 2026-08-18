@@ -8,13 +8,13 @@ export default function TeamStatusCard({ team }) {
   const list = team || []
 
   return (
-    <Card className="rounded-xl p-5 border-pm-border flex flex-col">
+    <Card className="rounded-xl p-5 border-pm-border flex flex-col h-full">
       <CardHead icon={Users} title={__('Team Workload', 'wedevs-project-manager')} />
 
       {list.length === 0 ? (
-        <EmptyState icon={Users}>{__('No active team members yet.', 'wedevs-project-manager')}</EmptyState>
+        <EmptyState icon={Users}>{__('No one has open tasks. Assign work to see workload here.', 'wedevs-project-manager')}</EmptyState>
       ) : (
-        <div className="space-y-2.5">
+        <div className="space-y-2.5 flex-1 min-h-0 overflow-y-auto pm-sidebar-scroll pr-1">
           {list.map(m => {
             const totalAssigned = m.active + m.completed
             const pct = totalAssigned > 0 ? Math.round((m.completed / totalAssigned) * 100) : 0

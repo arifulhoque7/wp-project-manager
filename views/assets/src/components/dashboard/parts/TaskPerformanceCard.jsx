@@ -1,8 +1,7 @@
-import { __ } from '@wordpress/i18n'
+import { __, sprintf } from '@wordpress/i18n'
 import { Bar, BarChart, XAxis, CartesianGrid } from 'recharts'
 import { BarChart3 } from 'lucide-react'
 import { Card } from '@components/ui/card'
-import { cn } from '@lib/utils'
 import { CardHead, EmptyState } from './CardShell'
 import {
   ChartContainer,
@@ -12,12 +11,8 @@ import {
   ChartLegendContent,
 } from '@components/ui/chart'
 
-export default function TaskPerformanceCard({ performance, range = 7, onRangeChange, loading = false }) {
+export default function TaskPerformanceCard({ performance, range = 7 }) {
   const data = performance || []
-  const ranges = [
-    { v: 7, label: __('7d', 'wedevs-project-manager') },
-    { v: 30, label: __('30d', 'wedevs-project-manager') },
-  ]
 
   const isEmpty = data.every(d => !d.created && !d.completed)
 
@@ -30,24 +25,7 @@ export default function TaskPerformanceCard({ performance, range = 7, onRangeCha
     <Card className="rounded-xl p-5 border-pm-border flex flex-col">
       <CardHead
         title={__('Task Performance', 'wedevs-project-manager')}
-        subtitle={__('Created vs completed', 'wedevs-project-manager')}
-        action={onRangeChange && (
-          <div className="flex items-center gap-0.5 rounded-lg bg-pm-surface-muted p-0.5 shrink-0">
-            {ranges.map(r => (
-              <button
-                key={r.v}
-                onClick={() => onRangeChange(r.v)}
-                disabled={loading}
-                className={cn(
-                  'px-2.5 py-1 rounded-md text-[12px] font-medium transition-colors',
-                  range === r.v ? 'bg-card text-pm-text-primary shadow-sm' : 'text-pm-text-muted hover:text-pm-text-primary',
-                )}
-              >
-                {r.label}
-              </button>
-            ))}
-          </div>
-        )}
+        subtitle={sprintf( __( 'Created vs completed, last %d days', 'wedevs-project-manager' ), range )}
       />
 
       {isEmpty ? (

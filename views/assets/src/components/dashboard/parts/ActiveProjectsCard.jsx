@@ -12,7 +12,7 @@ export default function ActiveProjectsCard({ projects }) {
   const list = projects || []
 
   return (
-    <Card className="rounded-xl p-5 border-pm-border flex flex-col">
+    <Card className="rounded-xl p-5 border-pm-border flex flex-col h-full">
       <CardHead
         icon={FolderKanban}
         title={__('Active Projects', 'wedevs-project-manager')}
@@ -20,9 +20,9 @@ export default function ActiveProjectsCard({ projects }) {
       />
 
       {list.length === 0 ? (
-        <EmptyState icon={FolderKanban}>{__('No active projects yet.', 'wedevs-project-manager')}</EmptyState>
+        <EmptyState icon={FolderKanban}>{__('No active projects. Create one to start tracking work.', 'wedevs-project-manager')}</EmptyState>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-3 flex-1 min-h-0 overflow-y-auto pm-sidebar-scroll pr-1">
           {list.map(p => (
             <button
               key={p.id}

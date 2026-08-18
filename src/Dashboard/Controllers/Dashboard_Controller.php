@@ -57,22 +57,25 @@ class Dashboard_Controller {
     public function index( WP_REST_Request $request ) {
         $this->boot();
 
-        // Performance chart window — 7 / 30 days (default 7).
+        // Dashboard-wide window — 7 / 30 / 90 days (default 7). Every
+        // time-based figure on the page reads from this one value.
         $range = (int) $request->get_param( 'range' );
-        $days  = in_array( $range, [ 7, 30 ], true ) ? $range : 7;
+        $days  = in_array( $range, [ 7, 30, 90 ], true ) ? $range : 7;
 
         $data = [
             'user'              => $this->user_block(),
             'range'             => $days,
-            'kpis'              => $this->kpis(),
+            'kpis'              => $this->kpis( $days ),
             'projects_status'   => $this->projects_status(),
             'performance'       => $this->performance( $days ),
             'task_distribution' => $this->task_distribution(),
             'upcoming'          => $this->upcoming_tasks(),
+            'upcoming_total'    => $this->upcoming_total(),
             'overdue_list'      => $this->overdue_tasks(),
+            'overdue_total'     => $this->overdue_total(),
             'calendar'          => $this->calendar_month(),
             'active_projects'   => $this->active_projects(),
-            'recent_activity'   => $this->recent_activity(),
+            'recent_activity'   => $this->recent_activity( $days ),
             'milestones'        => $this->upcoming_milestones(),
             'team'              => ( $this->is_admin || $this->is_manager ) ? $this->team_status() : [],
             'generated_at'      => current_time( 'mysql' ),
@@ -154,7 +157,7 @@ class Dashboard_Controller {
         ];
     }
 
-    protected function kpis() {
+    protected function kpis( $days = 7 ) {
         $today = Carbon::today();
 
         $total       = (clone $this->task_query())->count();
@@ -167,15 +170,15 @@ class Dashboard_Controller {
             ->whereDate( 'due_date', '<', $today )
             ->count();
 
-        // Trend: tasks completed in the last 7 days vs the prior 7 days.
-        $this_week = (clone $this->task_query())
+        // Trend: this window vs the window immediately before it.
+        $this_period = (clone $this->task_query())
             ->where( 'status', Task::COMPLETE )
-            ->whereDate( 'completed_at', '>=', $today->copy()->subDays( 7 ) )
+            ->whereDate( 'completed_at', '>=', $today->copy()->subDays( $days ) )
             ->count();
-        $last_week = (clone $this->task_query())
+        $last_period = (clone $this->task_query())
             ->where( 'status', Task::COMPLETE )
-            ->whereDate( 'completed_at', '>=', $today->copy()->subDays( 14 ) )
-            ->whereDate( 'completed_at', '<', $today->copy()->subDays( 7 ) )
+            ->whereDate( 'completed_at', '>=', $today->copy()->subDays( $days * 2 ) )
+            ->whereDate( 'completed_at', '<', $today->copy()->subDays( $days ) )
             ->count();
 
         return [
@@ -185,7 +188,9 @@ class Dashboard_Controller {
             'pending'         => $pending,
             'overdue'         => $overdue,
             'completion_rate' => $total > 0 ? round( ( $completed / $total ) * 100 ) : 0,
-            'completed_trend' => $this->trend( $this_week, $last_week ),
+            'completed_trend' => $this->trend( $this_period, $last_period ),
+            'completed_in_range' => $this_period,
+            'range_days'      => $days,
         ];
     }
 
@@ -231,12 +236,16 @@ class Dashboard_Controller {
      * (7 or 30 days) for the bar chart.
      */
     protected function performance( $days = 7 ) {
-        $rows  = [];
-        $label = $days > 7 ? 'M j' : 'D';
+        $rows = [];
 
-        for ( $i = $days - 1; $i >= 0; $i-- ) {
-            $day   = Carbon::today()->subDays( $i );
-            $start = $day->copy()->startOfDay();
+        // Past 30 days a daily bar per day is unreadable, so bucket by week.
+        $bucket  = $days > 30 ? 7 : 1;
+        $buckets = (int) ceil( $days / $bucket );
+        $label   = $days > 30 ? 'M j' : ( $days > 7 ? 'M j' : 'D' );
+
+        for ( $i = $buckets - 1; $i >= 0; $i-- ) {
+            $day   = Carbon::today()->subDays( $i * $bucket );
+            $start = $day->copy()->subDays( $bucket - 1 )->startOfDay();
             $end   = $day->copy()->endOfDay();
 
             $created = (clone $this->task_query())
@@ -272,7 +281,7 @@ class Dashboard_Controller {
             ->whereDate( 'due_date', '<', $today )
             ->orderBy( 'priority', 'DESC' )
             ->orderBy( 'due_date', 'ASC' )
-            ->limit( 6 )
+            ->limit( 10 )
             ->get( [ 'id', 'title', 'due_date', 'priority', 'project_id' ] );
 
         return $tasks->map( function ( $t ) use ( $today ) {
@@ -288,6 +297,24 @@ class Dashboard_Controller {
                 'project_title' => $t->projects ? $t->projects->title : '',
             ];
         } )->all();
+    }
+
+    /** Total overdue tasks in scope — the list above is capped. */
+    protected function overdue_total() {
+        return (clone $this->task_query())
+            ->where( 'status', '!=', Task::COMPLETE )
+            ->whereNotNull( 'due_date' )
+            ->whereDate( 'due_date', '<', Carbon::today() )
+            ->count();
+    }
+
+    /** Total upcoming tasks in scope — the list above is capped. */
+    protected function upcoming_total() {
+        return (clone $this->task_query())
+            ->where( 'status', '!=', Task::COMPLETE )
+            ->whereNotNull( 'due_date' )
+            ->whereDate( 'due_date', '>=', Carbon::today() )
+            ->count();
     }
 
     /**
@@ -392,7 +419,7 @@ class Dashboard_Controller {
             ->whereNotNull( 'due_date' )
             ->whereDate( 'due_date', '>=', $today )
             ->orderBy( 'due_date', 'ASC' )
-            ->limit( 6 )
+            ->limit( 10 )
             ->get( [ 'id', 'title', 'due_date', 'status', 'priority', 'project_id' ] );
 
         return $tasks->map( function ( $t ) {
@@ -510,8 +537,9 @@ class Dashboard_Controller {
     /**
      * Latest activity across scoped projects (timeline feed).
      */
-    protected function recent_activity() {
+    protected function recent_activity( $days = 7 ) {
         $query = \WeDevs\PM\Activity\Models\Activity::with( [ 'actor', 'project' ] )
+            ->whereDate( 'created_at', '>=', Carbon::today()->subDays( $days ) )
             ->orderBy( 'created_at', 'DESC' );
 
         if ( ! $this->is_admin ) {

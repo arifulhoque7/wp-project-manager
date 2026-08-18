@@ -1,11 +1,11 @@
-import { __ } from '@wordpress/i18n'
+import { __, sprintf } from '@wordpress/i18n'
 import { useNavigate } from 'react-router-dom'
 import { Activity } from 'lucide-react'
 import { Card } from '@components/ui/card'
 import { UserAvatar } from '@components/common/UserAvatar'
 import { CardHead, EmptyState } from './CardShell'
 
-export default function RecentActivityCard({ activity }) {
+export default function RecentActivityCard({ activity, range = 7 }) {
   const navigate = useNavigate()
   const list = activity || []
 
@@ -22,10 +22,14 @@ export default function RecentActivityCard({ activity }) {
 
   return (
     <Card className="rounded-xl p-5 border-pm-border flex flex-col h-full">
-      <CardHead icon={Activity} title={__('Recent Activity', 'wedevs-project-manager')} />
+      <CardHead
+        icon={Activity}
+        title={__('Recent Activity', 'wedevs-project-manager')}
+        subtitle={sprintf( __( 'Last %d days', 'wedevs-project-manager' ), range )}
+      />
 
       {list.length === 0 ? (
-        <EmptyState icon={Activity}>{__('No recent activity.', 'wedevs-project-manager')}</EmptyState>
+        <EmptyState icon={Activity}>{__('No activity in this period. Changes your team makes will show up here.', 'wedevs-project-manager')}</EmptyState>
       ) : (
         <div className="space-y-3 flex-1 min-h-0 overflow-y-auto pm-sidebar-scroll pr-1">
           {list.map(a => (

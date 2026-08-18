@@ -8,13 +8,13 @@ export default function MilestonesCard({ milestones }) {
   const list = milestones || []
 
   return (
-    <Card className="rounded-xl p-5 border-pm-border flex flex-col">
+    <Card className="rounded-xl p-5 border-pm-border flex flex-col h-full">
       <CardHead icon={Flag} title={__('Upcoming Milestones', 'wedevs-project-manager')} />
 
       {list.length === 0 ? (
-        <EmptyState icon={Flag}>{__('No upcoming milestones.', 'wedevs-project-manager')}</EmptyState>
+        <EmptyState icon={Flag}>{__('No milestones due. Add one to a project to track a delivery date.', 'wedevs-project-manager')}</EmptyState>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-3 flex-1 min-h-0 overflow-y-auto pm-sidebar-scroll pr-1">
           {list.map(m => (
             <div key={m.id}>
               <div className="flex items-center justify-between gap-2 mb-1">

@@ -75,7 +75,8 @@ export default function ProductivityHeatmapCard() {
     <Card className="rounded-xl p-5 border-pm-border flex flex-col">
       <CardHead
         icon={Flame}
-        title={__('Productivity', 'wedevs-project-manager')}
+        title={__('Activity', 'wedevs-project-manager')}
+        subtitle={__('Each square is one day of recorded activity', 'wedevs-project-manager')}
         action={
         <div className="flex items-center gap-3 shrink-0">
           <span className="text-[12px] text-pm-text-muted hidden sm:inline">

@@ -7,9 +7,16 @@ import { setCreateSheetOpen, fetchCategories, fetchRoles } from '@store/projects
 import { usePermissions } from '@hooks/usePermissions'
 import { Button } from '@components/ui/button'
 import { Badge } from '@components/ui/badge'
+import { cn } from '@lib/utils'
 import { UserAvatar } from '@components/common/UserAvatar'
 import NewTaskSheet from '@components/my-tasks/MyTasksPage/parts/NewTaskSheet'
 import { ProjectCreateSheet } from '@components/projects/ProjectCreateSheet'
+
+const RANGES = [
+  { v: 7,  label: __('7d', 'wedevs-project-manager') },
+  { v: 30, label: __('30d', 'wedevs-project-manager') },
+  { v: 90, label: __('90d', 'wedevs-project-manager') },
+]
 
 function greeting() {
   const h = new Date().getHours()
@@ -18,7 +25,7 @@ function greeting() {
   return __('Good evening', 'wedevs-project-manager')
 }
 
-export default function DashboardHeader({ user, onTaskCreated }) {
+export default function DashboardHeader({ user, onTaskCreated, range, onRangeChange, loading }) {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { canCreate, canManage, isManagerAnywhere } = usePermissions()
@@ -65,6 +72,26 @@ export default function DashboardHeader({ user, onTaskCreated }) {
       </div>
 
       <div className="flex items-center gap-2">
+        {/* Window for every time-based figure on the page. */}
+        {onRangeChange && (
+          <div className="flex items-center gap-0.5 rounded-lg bg-pm-surface-muted p-0.5 mr-1">
+            {RANGES.map(r => (
+              <button
+                key={r.v}
+                type="button"
+                onClick={() => onRangeChange(r.v)}
+                disabled={loading}
+                aria-pressed={range === r.v}
+                className={cn(
+                  'px-2.5 py-1 rounded-md text-[12px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pm-accent/40',
+                  range === r.v ? 'bg-card text-pm-text-primary shadow-sm' : 'text-pm-text-muted hover:text-pm-text-primary',
+                )}
+              >
+                {r.label}
+              </button>
+            ))}
+          </div>
+        )}
         {/* New Task — any user, matches MyTasksPage (ungated) */}
         <Button variant="outline" size="sm" onClick={() => setNewTaskOpen(true)} className="gap-1.5">
           <ListPlus className="w-4 h-4" />

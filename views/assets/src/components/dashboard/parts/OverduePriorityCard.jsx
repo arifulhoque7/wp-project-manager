@@ -12,16 +12,22 @@ const PRIORITY_DOT = {
   low:    'bg-pm-text-muted/50',
 }
 
-export default function OverduePriorityCard({ items }) {
+export default function OverduePriorityCard({ items, total = 0 }) {
   const navigate = useNavigate()
   const list = items || []
+  const hidden = Math.max(0, total - list.length)
 
   return (
     <Card className="rounded-xl p-5 border-pm-border flex flex-col h-full">
-      <CardHead icon={AlertTriangle} iconClassName="text-rose-500" title={__('Overdue & Priority', 'wedevs-project-manager')} />
+      <CardHead
+        icon={AlertTriangle}
+        iconClassName="text-rose-500"
+        title={__('Needs attention', 'wedevs-project-manager')}
+        subtitle={total > 0 ? sprintf( _n( '%d task past its due date', '%d tasks past their due date', total, 'wedevs-project-manager' ), total ) : null}
+      />
 
       {list.length === 0 ? (
-        <EmptyState icon={CheckCircle2} tone="positive">{__('Nothing overdue — great work!', 'wedevs-project-manager')}</EmptyState>
+        <EmptyState icon={CheckCircle2} tone="positive">{__('Nothing overdue. Everything with a due date is on time.', 'wedevs-project-manager')}</EmptyState>
       ) : (
         <div className="space-y-1 flex-1 min-h-0 overflow-y-auto pm-sidebar-scroll pr-1">
           {list.map(t => (
@@ -41,6 +47,16 @@ export default function OverduePriorityCard({ items }) {
             </button>
           ))}
         </div>
+      )}
+
+      {hidden > 0 && (
+        <button
+          type="button"
+          onClick={() => navigate('/my-tasks')}
+          className="mt-3 shrink-0 rounded-lg border border-pm-border py-2 text-[12px] font-medium text-pm-text-muted transition-colors hover:bg-pm-hover hover:text-pm-text-primary"
+        >
+          {sprintf( _n( 'View %d more', 'View %d more', hidden, 'wedevs-project-manager' ), hidden )}
+        </button>
       )}
     </Card>
   )

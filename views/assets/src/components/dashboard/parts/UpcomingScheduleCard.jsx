@@ -1,4 +1,4 @@
-import { __ } from '@wordpress/i18n'
+import { __, sprintf, _n } from '@wordpress/i18n'
 import { useNavigate } from 'react-router-dom'
 import { CalendarDays, CircleDot } from 'lucide-react'
 import { Card } from '@components/ui/card'
@@ -11,12 +11,13 @@ const PRIORITY = {
   high:   'hsl(0 72% 60%)',
 }
 
-export default function UpcomingScheduleCard({ items }) {
+export default function UpcomingScheduleCard({ items, total = 0 }) {
   const navigate = useNavigate()
   const list = items || []
+  const hidden = Math.max(0, total - list.length)
 
   return (
-    <Card className="rounded-xl p-5 border-pm-border flex flex-col">
+    <Card className="rounded-xl p-5 border-pm-border flex flex-col h-full">
       <CardHead
         icon={CalendarDays}
         title={__('Upcoming Tasks', 'wedevs-project-manager')}
@@ -24,9 +25,9 @@ export default function UpcomingScheduleCard({ items }) {
       />
 
       {list.length === 0 ? (
-        <EmptyState icon={CalendarDays}>{__('No upcoming tasks with a due date.', 'wedevs-project-manager')}</EmptyState>
+        <EmptyState icon={CalendarDays}>{__('Nothing scheduled. Add a due date to a task to see it here.', 'wedevs-project-manager')}</EmptyState>
       ) : (
-        <div className="space-y-1">
+        <div className="space-y-1 flex-1 min-h-0 overflow-y-auto pm-sidebar-scroll pr-1">
           {list.map(t => (
             <button
               key={t.id}
@@ -46,6 +47,16 @@ export default function UpcomingScheduleCard({ items }) {
             </button>
           ))}
         </div>
+      )}
+
+      {hidden > 0 && (
+        <button
+          type="button"
+          onClick={() => navigate('/my-tasks')}
+          className="mt-3 shrink-0 rounded-lg border border-pm-border py-2 text-[12px] font-medium text-pm-text-muted transition-colors hover:bg-pm-hover hover:text-pm-text-primary"
+        >
+          {sprintf( _n( 'View %d more', 'View %d more', hidden, 'wedevs-project-manager' ), hidden )}
+        </button>
       )}
     </Card>
   )

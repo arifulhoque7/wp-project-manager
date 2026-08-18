@@ -17,7 +17,7 @@ export default function StatCard({ icon: Icon, label, value, sub, trend, accent 
       onClick={onClick}
       className={cn(
         'rounded-xl border p-4 flex flex-col gap-2 transition-shadow text-left w-full',
-        onClick && 'cursor-pointer hover:shadow-md',
+        onClick && 'cursor-pointer hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pm-accent/40',
         accent
           ? 'bg-pm-accent text-white border-transparent'
           : 'bg-card border-pm-border',
