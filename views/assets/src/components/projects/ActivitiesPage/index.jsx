@@ -267,7 +267,7 @@ export default function ActivitiesPage() {
                     {__('Load More', 'wedevs-project-manager')}
                   </Button>
                   <p className="text-[13px] text-pm-text-muted/50 mt-1.5">
-                    {sprintf(__('Showing %1$s of %2$s activities', 'wedevs-project-manager'), activities.length, total || '...')}
+                    {sprintf(/* translators: %1$s is the number shown, %2$s is the total number of activities. */ __('Showing %1$s of %2$s activities', 'wedevs-project-manager'), activities.length, total || '...')}
                   </p>
                 </div>
               )}

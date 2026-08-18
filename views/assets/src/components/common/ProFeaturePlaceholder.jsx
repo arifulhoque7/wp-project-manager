@@ -153,7 +153,7 @@ function SprintsMock() {
             <div className="w-full h-2 rounded-full bg-pm-surface-muted">
               <div className="h-full rounded-full" style={{ width: `${(s.completed / s.tasks) * 100}%`, background: s.color, opacity: 0.7 }} />
             </div>
-            <div className="mt-2 text-[15px] text-pm-text-muted">{sprintf(__('%1$s/%2$s tasks completed', 'wedevs-project-manager'), s.completed, s.tasks)}</div>
+            <div className="mt-2 text-[15px] text-pm-text-muted">{sprintf(/* translators: %1$s is the number of completed tasks, %2$s is the total. */ __('%1$s/%2$s tasks completed', 'wedevs-project-manager'), s.completed, s.tasks)}</div>
           </div>
         ))}
       </div>
