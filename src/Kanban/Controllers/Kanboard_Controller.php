@@ -946,6 +946,7 @@ class Kanboard_Controller {
     function search_tasks( WP_REST_Request $request ) {
         $tb_lists     = wedevs_pm_tb_prefix() . 'pm_boards';
         $tb_tasks     = wedevs_pm_tb_prefix() . 'pm_tasks';
+        $project_id   = intval( $request->get_param( 'project_id' ) );
         $task_ids     = [];
 
         $list_tasks = ( new Task_Controller )->filter_query( $request );
@@ -957,8 +958,12 @@ class Kanboard_Controller {
             }
         }
 
+        // Scope to the project in the route. Without this the response carried
+        // every kanban column on the site, and the board ids of other projects
+        // with it.
         $boards = Kanboard::select( $tb_lists. '.id' )
             ->where( $tb_lists . '.type', 'kanboard' )
+            ->where( $tb_lists . '.project_id', $project_id )
             ->with(
                 [
                     'tasks' => function($q) use( $tb_tasks, $task_ids ) {

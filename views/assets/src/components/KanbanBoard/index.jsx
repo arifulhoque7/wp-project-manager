@@ -28,14 +28,13 @@ import {
   DialogFooter,
 } from "@components/ui/dialog";
 import FileUploadArea from "@components/common/FileUploadArea";
-import { Filter, Image as ImageIcon, X } from "lucide-react";
+import { Filter, Image as ImageIcon, X, Search, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import FilterPanel from "./parts/FilterPanel";
 import KanbanDndBoard from "./parts/KanbanDndBoard";
 
 const api = useApi();
-const proApi = useApi();
 
 export default function KanbanBoard() {
   const { projectId } = useParams();
@@ -45,6 +44,9 @@ export default function KanbanBoard() {
   const { boards, loading } = useAppSelector((s) => s.kanban);
   const [newColTitle, setNewColTitle] = useState("");
   const [filterOpen, setFilterOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [panelFilters, setPanelFilters] = useState(null);
+  const [searching, setSearching] = useState(false);
   const [defaultListId, setDefaultListId] = useState("");
   const users = useProjectAssignees(projectId);
 
@@ -188,7 +190,7 @@ export default function KanbanBoard() {
     async (taskId, fromBoardId, toBoardId) => {
       if (!toBoardId) {
         try {
-          await proApi.post(
+          await api.post(
             `projects/${projectId}/kanboard/${fromBoardId}/tasks/${taskId}/delete`,
           );
           toast.success(__("Task removed", 'wedevs-project-manager'));
@@ -199,7 +201,7 @@ export default function KanbanBoard() {
         return;
       }
       try {
-        await proApi.post(`projects/${projectId}/kanboard/task-order`, {
+        await api.post(`projects/${projectId}/kanboard/task-order`, {
           section_id: toBoardId,
           sender_section_id: fromBoardId,
           dragabel_task_id: taskId,
@@ -253,9 +255,10 @@ export default function KanbanBoard() {
     [dispatch, projectId, __],
   );
 
-  const handleFilter = useCallback(
+  const applyFilters = useCallback(
     async (filters) => {
       try {
+        setSearching(true);
         const payload = {
           users: filters.users || [],
           title: filters.title || "",
@@ -264,7 +267,7 @@ export default function KanbanBoard() {
           status: filters.status || "",
           filterTask: "active",
         };
-        const res = await proApi.post(
+        const res = await api.post(
           `projects/${projectId}/kanboard/filter`,
           payload,
         );
@@ -283,11 +286,45 @@ export default function KanbanBoard() {
           });
         }
       } catch {
-        toast.error(__("Filter failed", 'wedevs-project-manager'));
+        toast.error(__("Couldn't search this board", 'wedevs-project-manager'));
+      } finally {
+        setSearching(false);
       }
     },
     [projectId, dispatch, __],
   );
+
+  const handleFilter = useCallback(
+    (filters) => {
+      setPanelFilters(filters);
+      applyFilters({ ...filters, title: filters.title || search });
+    },
+    [applyFilters, search],
+  );
+
+  // Debounced title search, composed with the panel's other filters. Emptying
+  // the box with no panel filters active restores the untouched board.
+  useEffect(() => {
+    const term = search.trim();
+
+    if (term.length > 0 && term.length < 2) return;
+
+    const timer = setTimeout(() => {
+      if (!term && !panelFilters) {
+        loadAllBoards();
+        return;
+      }
+      applyFilters({ ...(panelFilters || {}), title: term });
+    }, 350);
+
+    return () => clearTimeout(timer);
+  }, [search]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const clearSearch = useCallback(() => {
+    setSearch("");
+    setPanelFilters(null);
+    loadAllBoards();
+  }, [loadAllBoards]);
 
   if (loading) {
     return (
@@ -325,6 +362,33 @@ export default function KanbanBoard() {
           {__("Kanban Board", 'wedevs-project-manager')}
         </h2>
         <div className="flex items-center gap-2">
+          {/* Search is scoped to this project by the route it posts to. */}
+          <div className={cn(
+            "flex items-center gap-2 h-11 rounded-lg border border-pm-border bg-pm-surface px-3 w-[200px] sm:w-[260px] focus-within:border-pm-accent focus-within:ring-1 focus-within:ring-pm-accent/40 transition-colors",
+            boardBg && "bg-pm-surface/90 backdrop-blur",
+          )}>
+            <Search className="h-3.5 w-3.5 text-pm-text-muted shrink-0" />
+            <input
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={__("Search tasks…", 'wedevs-project-manager')}
+              aria-label={__("Search tasks on this board", 'wedevs-project-manager')}
+              className="flex-1 min-w-0 h-full bg-transparent text-xs text-pm-text-primary placeholder:text-pm-text-muted focus:outline-none !border-0 !p-0 !shadow-none [&::-webkit-search-cancel-button]:appearance-none"
+            />
+            {searching ? (
+              <Loader2 className="h-3.5 w-3.5 text-pm-text-muted shrink-0 animate-spin" />
+            ) : (search || panelFilters) ? (
+              <button
+                type="button"
+                onClick={clearSearch}
+                title={__("Clear search", 'wedevs-project-manager')}
+                className="shrink-0 rounded p-0.5 text-pm-text-muted hover:text-pm-text-primary transition-colors"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            ) : null}
+          </div>
           {canManage && (
             <>
               <Button
