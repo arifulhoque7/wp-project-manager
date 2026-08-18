@@ -8,6 +8,7 @@ use WeDevs\PM\Common\Traits\Transformer_Manager;
 use WeDevs\PM\Task\Models\Task;
 use WeDevs\PM\Project\Models\Project;
 use WeDevs\PM\User\Models\User_Role;
+use WeDevs\PM\Common\Models\Assignee;
 use WeDevs\PM\User\Helper\Avatar;
 
 /**
@@ -37,6 +38,9 @@ class Dashboard_Controller {
     /** @var array|null cached scoped project ids (null = all, admin only) */
     protected $project_ids = null;
 
+    /** @var array|null projects the caller manages (null = all, admin only) */
+    protected $managed_ids = null;
+
     /**
      * Resolve the caller's scope once per request. Three tiers:
      *   - admin   → full organisation (all projects, all tasks)
@@ -44,14 +48,21 @@ class Dashboard_Controller {
      *   - member  → only their projects, and only tasks assigned to them
      */
     protected function boot() {
-        $this->user_id    = get_current_user_id();
-        $this->is_admin   = wedevs_pm_has_admin_capability();
-        $this->is_manager = wedevs_pm_has_manage_capability();
+        $this->user_id  = get_current_user_id();
+        $this->is_admin = wedevs_pm_has_admin_capability();
 
         // Everyone except a full admin is limited to the projects they belong to.
         if ( ! $this->is_admin ) {
             $this->project_ids = $this->scoped_project_ids();
+            $this->managed_ids = $this->managed_project_ids();
         }
+
+        // PM roles are per project: someone can manage project A and merely
+        // belong to project B. A global capability still means manager
+        // everywhere, but holding the manager role on any project is enough
+        // to get the manager view — scoped to those projects.
+        $this->is_manager = wedevs_pm_has_manage_capability()
+            || ! empty( $this->managed_ids );
     }
 
     public function index( WP_REST_Request $request ) {
@@ -77,7 +88,8 @@ class Dashboard_Controller {
             'active_projects'   => $this->active_projects(),
             'recent_activity'   => $this->recent_activity( $days ),
             'milestones'        => $this->upcoming_milestones(),
-            'team'              => ( $this->is_admin || $this->is_manager ) ? $this->team_status() : [],
+            'team'              => ( $this->is_admin || $this->is_manager ) ? $this->team_status( $days ) : null,
+            'my_workload'       => $this->my_workload( $days ),
             'generated_at'      => current_time( 'mysql' ),
         ];
 
@@ -87,6 +99,21 @@ class Dashboard_Controller {
     // ──────────────────────────────────────────────────────────────────
     // Scope helpers
     // ──────────────────────────────────────────────────────────────────
+
+    /** Projects where the caller holds the Manager role (role_id 1). */
+    protected function managed_project_ids() {
+        return User_Role::where( 'user_id', $this->user_id )
+            ->where( 'role_id', 1 )
+            ->distinct()
+            ->pluck( 'project_id' )
+            ->map( 'absint' )
+            ->all();
+    }
+
+    /** @return array projects the caller manages (admin = every project). */
+    protected function managed_scope_ids() {
+        return empty( $this->managed_ids ) ? [ 0 ] : $this->managed_ids;
+    }
 
     protected function scoped_project_ids() {
         return User_Role::where( 'user_id', $this->user_id )
@@ -111,15 +138,28 @@ class Dashboard_Controller {
             return $query;
         }
 
-        // Manager + member: limit to their projects.
+        // Limited to the projects they belong to either way.
         $query->whereIn( 'project_id', $this->scope_ids() );
 
-        // Member only: further limit to tasks assigned to them.
-        if ( ! $this->is_manager ) {
-            $query->whereHas( 'assignees', function ( $a ) {
-                $a->where( 'assigned_to', $this->user_id );
-            } );
+        // A global manager sees every task in those projects. Otherwise the
+        // tier is per project: all tasks where they manage, only their own
+        // where they are just a member.
+        if ( wedevs_pm_has_manage_capability() ) {
+            return $query;
         }
+
+        $managed = $this->managed_ids;
+        $user_id = $this->user_id;
+
+        $query->where( function ( $q ) use ( $managed, $user_id ) {
+            $q->whereHas( 'assignees', function ( $a ) use ( $user_id ) {
+                $a->where( 'assigned_to', $user_id );
+            } );
+
+            if ( ! empty( $managed ) ) {
+                $q->orWhereIn( 'project_id', $managed );
+            }
+        } );
 
         return $query;
     }
@@ -653,58 +693,163 @@ class Dashboard_Controller {
     /**
      * Per-member active/completed task counts (managers only).
      */
-    protected function team_status() {
-        // Admin → all projects; manager → their projects (project_query scopes it).
-        $project_ids = (clone $this->project_query())->pluck( 'id' )->all();
+    /**
+     * Per-member workload for the selected window.
+     *
+     * One grouped query over the assignee table rather than a pair of counts
+     * per member — the old shape ran 2 queries per person.
+     *
+     * "Burden" is forward-looking (what is on someone's plate), so due_soon
+     * spans the next $days; completed looks back over the same span so the
+     * two read as load vs throughput.
+     */
+    protected function team_status( $days = 7 ) {
+        // Admin -> every project. A manager only sees workload for projects
+        // they manage, not every project they happen to belong to.
+        $project_ids = $this->is_admin
+            ? (clone $this->project_query())->pluck( 'id' )->all()
+            : ( wedevs_pm_has_manage_capability() ? $this->scope_ids() : $this->managed_scope_ids() );
 
         if ( empty( $project_ids ) ) {
             return [];
         }
 
-        $members = User_Role::whereIn( 'project_id', $project_ids )
+        $prefix    = wedevs_pm_tb_prefix();
+        $tasks_tb  = $prefix . 'pm_tasks';
+        $asg_tb    = $prefix . 'pm_assignees';
+
+        $today = Carbon::today()->toDateString();
+        $until = Carbon::today()->addDays( $days )->toDateString();
+        $since = Carbon::today()->subDays( $days )->toDateString();
+        $done  = (int) Task::COMPLETE;
+
+        $rows = Assignee::query()
+            ->join( "{$tasks_tb} as t", 't.id', '=', "{$asg_tb}.task_id" )
+            ->whereIn( "{$asg_tb}.project_id", $project_ids )
+            ->where( 't.parent_id', 0 )
+            ->groupBy( "{$asg_tb}.assigned_to" )
+            ->selectRaw( "{$asg_tb}.assigned_to as user_id" )
+            ->selectRaw( "SUM(CASE WHEN t.status <> ? THEN 1 ELSE 0 END) as open_tasks", [ $done ] )
+            ->selectRaw(
+                "SUM(CASE WHEN t.status <> ? AND t.due_date IS NOT NULL AND DATE(t.due_date) < ? THEN 1 ELSE 0 END) as overdue",
+                [ $done, $today ]
+            )
+            ->selectRaw(
+                "SUM(CASE WHEN t.status <> ? AND t.due_date IS NOT NULL AND DATE(t.due_date) BETWEEN ? AND ? THEN 1 ELSE 0 END) as due_soon",
+                [ $done, $today, $until ]
+            )
+            ->selectRaw(
+                "SUM(CASE WHEN t.status = ? AND t.completed_at IS NOT NULL AND DATE(t.completed_at) >= ? THEN 1 ELSE 0 END) as completed",
+                [ $done, $since ]
+            )
+            ->get();
+
+        $stats = [];
+
+        foreach ( $rows as $row ) {
+            $stats[ absint( $row->user_id ) ] = $row;
+        }
+
+        // Everyone who belongs to a project in scope, so members holding no
+        // work still appear — free capacity is the other half of workload.
+        $member_ids = User_Role::whereIn( 'project_id', $project_ids )
             ->distinct()
             ->pluck( 'user_id' )
             ->map( 'absint' )
-            ->take( 12 )
             ->all();
+
+        $member_ids = array_values( array_unique( array_merge( $member_ids, array_keys( $stats ) ) ) );
 
         $team = [];
 
-        foreach ( $members as $uid ) {
-            $base = Task::parent()
-                ->whereIn( 'project_id', $project_ids )
-                ->whereHas( 'assignees', function ( $a ) use ( $uid ) {
-                    $a->where( 'assigned_to', $uid );
-                } );
-
-            $active    = (clone $base)->where( 'status', '!=', Task::COMPLETE )->count();
-            $completed = (clone $base)->where( 'status', Task::COMPLETE )->count();
-
-            if ( $active === 0 && $completed === 0 ) {
+        foreach ( $member_ids as $uid ) {
+            if ( ! $uid ) {
                 continue;
             }
 
             $wp_user = get_userdata( $uid );
+
             if ( ! $wp_user ) {
                 continue;
             }
+
+            $row       = isset( $stats[ $uid ] ) ? $stats[ $uid ] : null;
+            $open      = $row ? absint( $row->open_tasks ) : 0;
+            $completed = $row ? absint( $row->completed ) : 0;
+            $overdue   = $row ? absint( $row->overdue ) : 0;
+            $due_soon  = $row ? absint( $row->due_soon ) : 0;
 
             $team[] = [
                 'id'         => $uid,
                 'name'       => $wp_user->display_name,
                 'avatar_url' => Avatar::get_url( $uid ),
-                'active'     => $active,
+                'open'       => $open,
+                'overdue'    => $overdue,
+                'due_soon'   => $due_soon,
                 'completed'  => $completed,
+                // What the member is carrying for this window: everything late
+                // plus everything landing inside it.
+                'burden'     => $overdue + $due_soon,
+                // Kept so existing consumers of the old shape do not break.
+                'active'     => $open,
             ];
         }
 
-        // Busiest first.
+        // Most loaded first; overdue breaks ties because it is the sharper
+        // signal. Idle members sort to the bottom rather than disappearing.
         usort( $team, function ( $a, $b ) {
-            return $b['active'] <=> $a['active'];
+            return [ $b['burden'], $b['overdue'], $b['open'] ] <=> [ $a['burden'], $a['overdue'], $a['open'] ];
         } );
 
-        return array_slice( $team, 0, 8 );
+        // An admin is looking at the whole organisation and needs the full
+        // roster; a manager gets a slice of their own projects.
+        $cap = $this->is_admin ? 100 : 25;
+
+        return [
+            'members' => array_slice( $team, 0, $cap ),
+            'total'   => count( $team ),
+            'scope'   => $this->is_admin ? 'organisation' : 'projects',
+        ];
     }
+
+    /**
+     * The caller's own load, in the same shape as one team row. Members do not
+     * get the team card, so this gives them the same read on their own work.
+     */
+    protected function my_workload( $days = 7 ) {
+        $today = Carbon::today();
+        $mine  = function () {
+            return (clone $this->task_query())->whereHas( 'assignees', function ( $a ) {
+                $a->where( 'assigned_to', $this->user_id );
+            } );
+        };
+
+        $open = $mine()->where( 'status', '!=', Task::COMPLETE )->count();
+
+        $overdue = $mine()->where( 'status', '!=', Task::COMPLETE )
+            ->whereNotNull( 'due_date' )
+            ->whereDate( 'due_date', '<', $today )
+            ->count();
+
+        $due_soon = $mine()->where( 'status', '!=', Task::COMPLETE )
+            ->whereNotNull( 'due_date' )
+            ->whereDate( 'due_date', '>=', $today )
+            ->whereDate( 'due_date', '<=', $today->copy()->addDays( $days ) )
+            ->count();
+
+        $completed = $mine()->where( 'status', Task::COMPLETE )
+            ->whereDate( 'completed_at', '>=', $today->copy()->subDays( $days ) )
+            ->count();
+
+        return [
+            'open'      => $open,
+            'overdue'   => $overdue,
+            'due_soon'  => $due_soon,
+            'completed' => $completed,
+            'burden'    => $overdue + $due_soon,
+        ];
+    }
+
 
     protected function trend( $current, $previous ) {
         if ( $previous <= 0 ) {

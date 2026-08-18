@@ -30,7 +30,7 @@ export default function TaskDistributionCard({ distribution }) {
         subtitle={sprintf( __( '%d tasks in total', 'wedevs-project-manager' ), total )}
       />
 
-      <div className="relative w-full flex-1 min-h-[190px]">
+      <div className="relative w-full flex-1 min-h-[170px] max-h-[210px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie

@@ -23,6 +23,7 @@ const OverduePriorityCard   = React.lazy(() => import('./parts/OverduePriorityCa
 const TaskDistributionCard  = React.lazy(() => import('./parts/TaskDistributionCard'))
 const TeamStatusCard        = React.lazy(() => import('./parts/TeamStatusCard'))
 const ProUpgradeCard        = React.lazy(() => import('./parts/ProUpgradeCard'))
+const MyWorkloadCard        = React.lazy(() => import('./parts/MyWorkloadCard'))
 
 // Lazy card wrapper — own Suspense boundary so one card streaming in never
 // blocks the others.
@@ -104,10 +105,9 @@ export default function DashboardPage() {
   }
 
   const showTeam = canManage || isManagerAnywhere
-  const team = data?.team ?? []
   const thirdCard = showTeam
-    ? <Lazy><TeamStatusCard team={team} /></Lazy>
-    : (!isPro ? <Lazy><ProUpgradeCard /></Lazy> : null)
+    ? <Lazy><TeamStatusCard team={data?.team} range={range} scope={data?.team?.scope} /></Lazy>
+    : <Lazy><MyWorkloadCard workload={data?.my_workload} range={range} /></Lazy>
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
@@ -159,8 +159,18 @@ export default function DashboardPage() {
         {thirdCard}
       </div>
 
-      {/* Ambient, not actionable — so it closes the page */}
-      <Lazy h="h-44"><ProductivityHeatmapCard /></Lazy>
+      {/* Ambient, not actionable — so it closes the page. The upsell rides
+          alongside it rather than displacing a member's workload card. */}
+      {isPro ? (
+        <Lazy h="h-44"><ProductivityHeatmapCard /></Lazy>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <div className="lg:col-span-2">
+            <Lazy h="h-44"><ProductivityHeatmapCard /></Lazy>
+          </div>
+          <Lazy h="h-44"><ProUpgradeCard /></Lazy>
+        </div>
+      )}
     </div>
   )
 }
