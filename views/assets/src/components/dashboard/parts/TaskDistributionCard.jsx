@@ -2,9 +2,10 @@ import { __ } from '@wordpress/i18n'
 import { useMemo } from 'react'
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
 import { Card } from '@components/ui/card'
+import { CardHead } from './CardShell'
 
 const COLORS = {
-  completed:   'hsl(262 80% 57%)',
+  completed:   'hsl(var(--primary))',
   in_progress: 'hsl(152 60% 45%)',
   pending:     'hsl(38 92% 55%)',
 }
@@ -23,10 +24,8 @@ export default function TaskDistributionCard({ distribution }) {
   const data = segments.filter(s => s.value > 0)
 
   return (
-    <Card className="p-5 border-pm-border flex flex-col">
-      <h3 className="text-[15px] font-semibold text-pm-text-primary mb-2">
-        {__('Task Distribution', 'wedevs-project-manager')}
-      </h3>
+    <Card className="rounded-xl p-5 border-pm-border flex flex-col">
+      <CardHead title={__('Task Distribution', 'wedevs-project-manager')} />
 
       <div className="relative w-full h-[150px]">
         <ResponsiveContainer width="100%" height="100%">
@@ -38,17 +37,18 @@ export default function TaskDistributionCard({ distribution }) {
               outerRadius={66}
               paddingAngle={data.length > 1 ? 3 : 0}
               strokeWidth={0}
+              isAnimationActive={false}
               startAngle={90}
               endAngle={-270}
             >
               {(data.length ? data : [{ key: 'empty' }]).map(seg => (
-                <Cell key={seg.key} fill={COLORS[seg.key] || 'hsl(220 13% 91%)'} />
+                <Cell key={seg.key} fill={COLORS[seg.key] || 'hsl(var(--muted))'} />
               ))}
             </Pie>
           </PieChart>
         </ResponsiveContainer>
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <span className="text-2xl font-bold text-pm-text-primary leading-none">{pct}%</span>
+          <span className="text-2xl font-bold text-pm-text-primary leading-none tabular-nums">{pct}%</span>
           <span className="text-[11px] text-pm-text-muted">{__('Done', 'wedevs-project-manager')}</span>
         </div>
       </div>
@@ -58,7 +58,7 @@ export default function TaskDistributionCard({ distribution }) {
           <div key={seg.key} className="flex items-center gap-1.5 text-[12px]">
             <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: COLORS[seg.key] }} />
             <span className="text-pm-text-muted">{seg.label}</span>
-            <span className="font-semibold text-pm-text-primary">{seg.value}</span>
+            <span className="font-semibold text-pm-text-primary tabular-nums">{seg.value}</span>
           </div>
         ))}
       </div>

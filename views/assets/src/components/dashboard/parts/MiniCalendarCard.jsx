@@ -7,6 +7,7 @@ import { Card } from '@components/ui/card'
 import { Calendar } from '@components/ui/calendar'
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@components/ui/tooltip'
 import { cn } from '@lib/utils'
+import { CardHead } from './CardShell'
 
 export default function MiniCalendarCard({ calendar }) {
   const navigate = useNavigate()
@@ -41,22 +42,29 @@ export default function MiniCalendarCard({ calendar }) {
     return [...(calendar?.days || [])].sort((a, b) => a.date.localeCompare(b.date))
   }, [calendar])
 
-  // Custom day button: default number + a load dot (rose = overdue, accent = upcoming).
+  // Custom day button: number on top, load dot on its own row underneath, so
+  // the dot never lands on the digits the way an overlaid dot did.
   const DayButton = ({ day, modifiers, className, children, ...rest }) => {
     const ds = format(day.date, 'yyyy-MM-dd')
     const info = dayMap.get(ds)
 
     const btn = (
-      <button {...rest} className={cn(className, 'relative')}>
-        <span>{format(day.date, 'd')}</span>
-        {info && (
-          <span
-            className={cn(
-              'absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full',
-              modifiers?.selected ? 'bg-white' : info.overdue ? 'bg-rose-500' : 'bg-pm-accent',
-            )}
-          />
+      <button
+        {...rest}
+        className={cn(
+          className,
+          'flex h-full w-full flex-col items-center justify-center gap-[3px] rounded-lg text-[13px] leading-none',
         )}
+      >
+        <span className="leading-none">{format(day.date, 'd')}</span>
+        <span
+          className={cn(
+            'h-1.5 w-1.5 rounded-full',
+            !info ? 'bg-transparent'
+              : modifiers?.selected ? 'bg-white'
+              : info.overdue ? 'bg-rose-500' : 'bg-pm-accent',
+          )}
+        />
       </button>
     )
 
@@ -76,17 +84,17 @@ export default function MiniCalendarCard({ calendar }) {
   }
 
   return (
-    <Card className="p-5 border-pm-border flex flex-col">
-      <div className="flex items-center justify-between mb-1">
-        <h3 className="text-[15px] font-semibold text-pm-text-primary flex items-center gap-2">
-          <CalendarDays className="w-4 h-4 text-pm-text-muted" />
-          {__('Calendar', 'wedevs-project-manager')}
-        </h3>
-        <div className="flex items-center gap-3 text-[11px] text-pm-text-muted">
+    <Card className="rounded-xl p-5 border-pm-border flex flex-col">
+      <CardHead
+        icon={CalendarDays}
+        title={__('Calendar', 'wedevs-project-manager')}
+        action={
+        <div className="flex items-center gap-3 text-[11px] text-pm-text-muted shrink-0 pt-1">
           <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-pm-accent" />{__('Due', 'wedevs-project-manager')}</span>
           <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-rose-500" />{__('Overdue', 'wedevs-project-manager')}</span>
         </div>
-      </div>
+        }
+      />
 
       <TooltipProvider delayDuration={100}>
         <Calendar
@@ -96,7 +104,24 @@ export default function MiniCalendarCard({ calendar }) {
           modifiers={{ due: dueDates, overdue: overdueDates }}
           onSelect={(d) => { if (d) navigate('/my-tasks') }}
           components={{ DayButton }}
-          className="p-0 [&_.rdp-month_caption]:justify-start [&_.rdp-nav]:justify-end"
+          className="w-full p-0"
+          classNames={{
+            root: 'w-full',
+            months: 'relative flex w-full flex-col',
+            month: 'flex w-full flex-col gap-2',
+            month_caption: 'flex h-8 w-full items-center justify-center',
+            caption_label: 'select-none text-[13px] font-semibold text-pm-text-primary',
+            nav: 'absolute inset-x-0 top-0 flex h-8 items-center justify-between',
+            button_previous: 'h-7 w-7 inline-flex items-center justify-center rounded-md text-pm-text-muted hover:bg-pm-hover hover:text-pm-text-primary transition-colors aria-disabled:opacity-40',
+            button_next: 'h-7 w-7 inline-flex items-center justify-center rounded-md text-pm-text-muted hover:bg-pm-hover hover:text-pm-text-primary transition-colors aria-disabled:opacity-40',
+            month_grid: 'w-full border-collapse',
+            weekdays: 'flex w-full',
+            weekday: 'flex-1 select-none text-center text-[11px] font-medium text-pm-text-muted',
+            week: 'mt-1 flex w-full',
+            day: 'group/day relative h-10 flex-1 p-0 text-center',
+            today: 'rounded-lg bg-pm-accent-light font-semibold text-pm-accent',
+            outside: 'text-pm-text-muted/40',
+          }}
         />
       </TooltipProvider>
 

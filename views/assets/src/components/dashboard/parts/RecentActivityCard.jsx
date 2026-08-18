@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Activity } from 'lucide-react'
 import { Card } from '@components/ui/card'
 import { UserAvatar } from '@components/common/UserAvatar'
+import { CardHead, EmptyState } from './CardShell'
 
 export default function RecentActivityCard({ activity }) {
   const navigate = useNavigate()
@@ -20,17 +21,11 @@ export default function RecentActivityCard({ activity }) {
   }
 
   return (
-    <Card className="p-5 border-pm-border flex flex-col h-full">
-      <h3 className="text-[15px] font-semibold text-pm-text-primary flex items-center gap-2 mb-3">
-        <Activity className="w-4 h-4 text-pm-text-muted" />
-        {__('Recent Activity', 'wedevs-project-manager')}
-      </h3>
+    <Card className="rounded-xl p-5 border-pm-border flex flex-col h-full">
+      <CardHead icon={Activity} title={__('Recent Activity', 'wedevs-project-manager')} />
 
       {list.length === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center py-8 text-center">
-          <Activity className="w-8 h-8 text-pm-text-muted/40 mb-2" />
-          <p className="text-[13px] text-pm-text-muted">{__('No recent activity.', 'wedevs-project-manager')}</p>
-        </div>
+        <EmptyState icon={Activity}>{__('No recent activity.', 'wedevs-project-manager')}</EmptyState>
       ) : (
         <div className="space-y-3 flex-1 min-h-0 overflow-y-auto pm-sidebar-scroll pr-1">
           {list.map(a => (
@@ -39,7 +34,7 @@ export default function RecentActivityCard({ activity }) {
                 user={{ display_name: a.actor, avatar_url: a.avatar_url }}
                 size="md"
                 className="w-8 h-8 shrink-0 mt-0.5"
-                fallbackClassName="text-[12px] bg-violet-100 text-violet-700"
+                fallbackClassName="text-[12px]"
               />
               <div className="flex-1 min-w-0">
                 <p className="text-[13px] text-pm-text-primary leading-snug">

@@ -16,7 +16,7 @@ export default function StatCard({ icon: Icon, label, value, sub, trend, accent 
       type={onClick ? 'button' : undefined}
       onClick={onClick}
       className={cn(
-        'rounded-lg border p-3 flex flex-col gap-1.5 transition-shadow text-left w-full',
+        'rounded-xl border p-4 flex flex-col gap-2 transition-shadow text-left w-full',
         onClick && 'cursor-pointer hover:shadow-md',
         accent
           ? 'bg-pm-accent text-white border-transparent'
@@ -35,7 +35,7 @@ export default function StatCard({ icon: Icon, label, value, sub, trend, accent 
         </span>
       </div>
 
-      <div className={cn('text-2xl font-bold leading-none', accent ? 'text-white' : 'text-pm-text-primary')}>
+      <div className={cn('text-2xl font-bold leading-none tabular-nums', accent ? 'text-white' : 'text-pm-text-primary')}>
         {value}
       </div>
 

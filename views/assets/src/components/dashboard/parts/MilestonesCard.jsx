@@ -2,22 +2,17 @@ import { __ } from '@wordpress/i18n'
 import { Flag } from 'lucide-react'
 import { Card } from '@components/ui/card'
 import { Progress } from '@components/ui/progress'
+import { CardHead, EmptyState } from './CardShell'
 
 export default function MilestonesCard({ milestones }) {
   const list = milestones || []
 
   return (
-    <Card className="p-5 border-pm-border flex flex-col">
-      <h3 className="text-[15px] font-semibold text-pm-text-primary flex items-center gap-2 mb-3">
-        <Flag className="w-4 h-4 text-pm-text-muted" />
-        {__('Upcoming Milestones', 'wedevs-project-manager')}
-      </h3>
+    <Card className="rounded-xl p-5 border-pm-border flex flex-col">
+      <CardHead icon={Flag} title={__('Upcoming Milestones', 'wedevs-project-manager')} />
 
       {list.length === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center py-8 text-center">
-          <Flag className="w-8 h-8 text-pm-text-muted/40 mb-2" />
-          <p className="text-[13px] text-pm-text-muted">{__('No upcoming milestones.', 'wedevs-project-manager')}</p>
-        </div>
+        <EmptyState icon={Flag}>{__('No upcoming milestones.', 'wedevs-project-manager')}</EmptyState>
       ) : (
         <div className="space-y-3">
           {list.map(m => (

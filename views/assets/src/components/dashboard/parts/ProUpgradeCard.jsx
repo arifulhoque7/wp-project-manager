@@ -18,7 +18,7 @@ export default function ProUpgradeCard() {
   ]
 
   return (
-    <Card className="p-5 border-transparent bg-gradient-to-br from-pm-accent to-[#5b21b6] text-white flex flex-col">
+    <Card className="rounded-xl p-5 border-transparent bg-gradient-to-br from-pm-accent to-pm-accent-hover text-white flex flex-col">
       <div className="flex items-center gap-2 mb-2">
         <Crown className="w-5 h-5" />
         <h3 className="text-[15px] font-semibold">{__('Unlock Pro', 'wedevs-project-manager')}</h3>

@@ -20,7 +20,7 @@ function Tile({ icon: Icon, accent, children, onClick }) {
     <Card
       onClick={onClick}
       className={cn(
-        'p-4 border-pm-border flex items-center gap-4 transition-shadow',
+        'rounded-xl p-4 border-pm-border flex items-center gap-4 transition-shadow',
         onClick && 'cursor-pointer hover:shadow-md',
       )}
     >
@@ -52,9 +52,9 @@ export default function ProInsightsRow() {
 
   if (time?.enabled) {
     tiles.push(
-      <Tile key="time" icon={Timer} accent="bg-violet-100 text-violet-600" onClick={() => navigate('/reports')}>
+      <Tile key="time" icon={Timer} accent="bg-pm-accent-light text-pm-accent" onClick={() => navigate('/reports')}>
         <div className="text-[12px] text-pm-text-muted">{__('Time tracked today', 'wedevs-project-manager')}</div>
-        <div className="text-xl font-bold text-pm-text-primary leading-tight">{fmtDuration(time.today_seconds)}</div>
+        <div className="text-xl font-bold text-pm-text-primary leading-tight tabular-nums">{fmtDuration(time.today_seconds)}</div>
         <div className="text-[11px] text-pm-text-muted">{fmtDuration(time.week_seconds)} {__('this week', 'wedevs-project-manager')}</div>
       </Tile>
     )
@@ -64,7 +64,7 @@ export default function ProInsightsRow() {
     tiles.push(
       <Tile key="sprint" icon={Zap} accent="bg-amber-100 text-amber-600" onClick={() => navigate('/sprints')}>
         <div className="text-[12px] text-pm-text-muted truncate">{sprint.title || __('Active Sprint', 'wedevs-project-manager')}</div>
-        <div className="text-xl font-bold text-pm-text-primary leading-tight">{sprint.done}/{sprint.total}</div>
+        <div className="text-xl font-bold text-pm-text-primary leading-tight tabular-nums">{sprint.done}/{sprint.total}</div>
         <Progress value={sprint.progress} className="h-1.5 mt-1" />
       </Tile>
     )
@@ -74,7 +74,7 @@ export default function ProInsightsRow() {
     tiles.push(
       <Tile key="invoice" icon={Receipt} accent="bg-emerald-100 text-emerald-600">
         <div className="text-[12px] text-pm-text-muted">{__('Invoices', 'wedevs-project-manager')}</div>
-        <div className="text-xl font-bold text-pm-text-primary leading-tight">{invoice.total}</div>
+        <div className="text-xl font-bold text-pm-text-primary leading-tight tabular-nums">{invoice.total}</div>
         <div className="text-[11px] text-pm-text-muted">
           <span className="text-emerald-600">{invoice.paid} {__('paid', 'wedevs-project-manager')}</span>
           {' · '}
@@ -86,5 +86,5 @@ export default function ProInsightsRow() {
 
   if (tiles.length === 0) return null
 
-  return <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">{tiles}</div>
+  return <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">{tiles}</div>
 }

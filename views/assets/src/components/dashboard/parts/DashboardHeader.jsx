@@ -6,6 +6,7 @@ import { useAppDispatch } from '@store/index'
 import { setCreateSheetOpen, fetchCategories, fetchRoles } from '@store/projectsSlice'
 import { usePermissions } from '@hooks/usePermissions'
 import { Button } from '@components/ui/button'
+import { Badge } from '@components/ui/badge'
 import { UserAvatar } from '@components/common/UserAvatar'
 import NewTaskSheet from '@components/my-tasks/MyTasksPage/parts/NewTaskSheet'
 import { ProjectCreateSheet } from '@components/projects/ProjectCreateSheet'
@@ -46,16 +47,20 @@ export default function DashboardHeader({ user, onTaskCreated }) {
             user={{ id: user.id, display_name: user.name, avatar_url: user.avatar_url }}
             size="xl"
             className="w-12 h-12 shrink-0"
-            fallbackClassName="bg-violet-100 text-violet-700"
           />
         )}
         <div className="min-w-0">
           <h1 className="text-xl font-bold text-pm-text-primary truncate">
             {greeting()}{firstName ? `, ${firstName}` : ''} 👋
           </h1>
-          <p className="text-[13px] text-pm-text-muted">
-            {user?.role_label ? `${user.role_label} · ` : ''}{today}
-          </p>
+          <div className="flex items-center gap-2 mt-0.5">
+            {user?.role_label && (
+              <Badge variant="outline" className="text-[11px] font-medium border-pm-accent/25 bg-pm-accent-light text-pm-accent">
+                {user.role_label}
+              </Badge>
+            )}
+            <span className="text-[13px] text-pm-text-muted truncate">{today}</span>
+          </div>
         </div>
       </div>
 

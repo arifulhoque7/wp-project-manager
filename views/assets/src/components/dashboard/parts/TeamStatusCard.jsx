@@ -2,24 +2,17 @@ import { __, sprintf, _n } from '@wordpress/i18n'
 import { Users } from 'lucide-react'
 import { Card } from '@components/ui/card'
 import { UserAvatar } from '@components/common/UserAvatar'
+import { CardHead, EmptyState } from './CardShell'
 
 export default function TeamStatusCard({ team }) {
   const list = team || []
 
   return (
-    <Card className="p-5 border-pm-border flex flex-col">
-      <h3 className="text-[15px] font-semibold text-pm-text-primary flex items-center gap-2 mb-3">
-        <Users className="w-4 h-4 text-pm-text-muted" />
-        {__('Team Workload', 'wedevs-project-manager')}
-      </h3>
+    <Card className="rounded-xl p-5 border-pm-border flex flex-col">
+      <CardHead icon={Users} title={__('Team Workload', 'wedevs-project-manager')} />
 
       {list.length === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center py-8 text-center">
-          <Users className="w-8 h-8 text-pm-text-muted/40 mb-2" />
-          <p className="text-[13px] text-pm-text-muted">
-            {__('No active team members yet.', 'wedevs-project-manager')}
-          </p>
-        </div>
+        <EmptyState icon={Users}>{__('No active team members yet.', 'wedevs-project-manager')}</EmptyState>
       ) : (
         <div className="space-y-2.5">
           {list.map(m => {
@@ -27,7 +20,7 @@ export default function TeamStatusCard({ team }) {
             const pct = totalAssigned > 0 ? Math.round((m.completed / totalAssigned) * 100) : 0
             return (
               <div key={m.id} className="flex items-center gap-3">
-                <UserAvatar user={{ id: m.id, display_name: m.name, avatar_url: m.avatar_url }} size="md" className="w-8 h-8 shrink-0" fallbackClassName="text-[12px] bg-violet-100 text-violet-700" />
+                <UserAvatar user={{ id: m.id, display_name: m.name, avatar_url: m.avatar_url }} size="md" className="w-8 h-8 shrink-0" fallbackClassName="text-[12px]" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-[13px] font-medium text-pm-text-primary truncate">{m.name}</span>

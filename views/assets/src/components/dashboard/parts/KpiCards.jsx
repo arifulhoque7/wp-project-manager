@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n'
-import { ListChecks, Loader2, Clock3, AlertTriangle, CheckCircle2 } from 'lucide-react'
+import { ListChecks, Activity, Clock, AlertTriangle, CheckCircle2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import StatCard from './StatCard'
 
@@ -8,7 +8,7 @@ export default function KpiCards({ kpis }) {
   const k = kpis || {}
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
       <StatCard
         accent
         icon={CheckCircle2}
@@ -19,14 +19,14 @@ export default function KpiCards({ kpis }) {
         onClick={() => navigate('/my-tasks')}
       />
       <StatCard
-        icon={Loader2}
+        icon={Activity}
         label={__('In Progress', 'wedevs-project-manager')}
         value={k.in_progress ?? 0}
         sub={__('currently active', 'wedevs-project-manager')}
         onClick={() => navigate('/my-tasks')}
       />
       <StatCard
-        icon={Clock3}
+        icon={Clock}
         label={__('Pending', 'wedevs-project-manager')}
         value={k.pending ?? 0}
         sub={__('awaiting start', 'wedevs-project-manager')}

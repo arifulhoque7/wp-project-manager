@@ -23,6 +23,7 @@ import {
   AiMagicIcon as Hi_AiMagicIcon,
   ArrowUpDownIcon as Hi_ArrowUpDownIcon,
   ArrowUpRight01Icon as Hi_ArrowUpRight01Icon,
+  ArrowDownRight01Icon as Hi_ArrowDownRight01Icon,
   Attachment01Icon as Hi_Attachment01Icon,
   BadgeInfoIcon as Hi_BadgeInfoIcon,
   MinusSignIcon as Hi_MinusSignIcon,
@@ -40,6 +41,9 @@ import {
   Calendar01Icon as Hi_Calendar01Icon,
   CalendarClockIcon as Hi_CalendarClockIcon,
   CalendarRangeIcon as Hi_CalendarRangeIcon,
+  Calendar03Icon as Hi_Calendar03Icon,
+  Fire02Icon as Hi_Fire02Icon,
+  TaskAdd01Icon as Hi_TaskAdd01Icon,
   SquareUnlock01Icon as Hi_SquareUnlock01Icon,
   CheckIcon as Hi_CheckIcon,
   CheckListIcon as Hi_CheckListIcon,
@@ -197,6 +201,7 @@ export const ArrowRightLeft = /*#__PURE__*/ make(Hi_ArrowLeftRightIcon);
 export const ArrowUp = /*#__PURE__*/ make(Hi_ArrowUp01Icon);
 export const ArrowUpDown = /*#__PURE__*/ make(Hi_ArrowUpDownIcon);
 export const ArrowUpRight = /*#__PURE__*/ make(Hi_ArrowUpRight01Icon);
+export const ArrowDownRight = /*#__PURE__*/ make(Hi_ArrowDownRight01Icon);
 export const BarChart = /*#__PURE__*/ make(Hi_BarChartIcon);
 export const BarChart2 = /*#__PURE__*/ make(Hi_BarChartIcon);
 export const BarChart3 = /*#__PURE__*/ make(Hi_BarChartIcon);
@@ -209,6 +214,9 @@ export const Brain = /*#__PURE__*/ make(Hi_Brain01Icon);
 export const Calendar = /*#__PURE__*/ make(Hi_Calendar01Icon);
 export const CalendarClock = /*#__PURE__*/ make(Hi_CalendarClockIcon);
 export const CalendarRange = /*#__PURE__*/ make(Hi_CalendarRangeIcon);
+export const CalendarDays = /*#__PURE__*/ make(Hi_Calendar03Icon);
+export const Flame = /*#__PURE__*/ make(Hi_Fire02Icon);
+export const ListPlus = /*#__PURE__*/ make(Hi_TaskAdd01Icon);
 export const Check = /*#__PURE__*/ make(Hi_CheckIcon);
 export const CheckCircle = /*#__PURE__*/ make(Hi_CircleCheckIcon);
 export const CheckCircle2 = /*#__PURE__*/ make(Hi_CircleCheckIcon);

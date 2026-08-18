@@ -10,18 +10,20 @@ import {
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
 } from '@components/ui/select'
 import { cn } from '@lib/utils'
+import { CardHead } from './CardShell'
 
 const WEEKDAYS = ['', 'Mon', '', 'Wed', '', 'Fri', '']
 const ROLLING = 'rolling'
 
-// Distinct violet shades so all 4 levels separate clearly. Thresholds spread
+// Accent ramp — opacity steps of the theme accent, so the heatmap follows the
+// palette (and dark mode) instead of a fixed violet scale. Thresholds spread
 // to the real distribution (counts often run 10–60+).
 function levelClass(count) {
-  if (count <= 0) return 'bg-slate-100 border border-pm-border/70'
-  if (count >= 25) return 'bg-violet-800'
-  if (count >= 10) return 'bg-violet-600'
-  if (count >= 4) return 'bg-violet-400'
-  return 'bg-violet-300' // 1–3
+  if (count <= 0) return 'bg-pm-surface-muted border border-pm-border/70'
+  if (count >= 25) return 'bg-pm-accent'
+  if (count >= 10) return 'bg-pm-accent/75'
+  if (count >= 4) return 'bg-pm-accent/50'
+  return 'bg-pm-accent/25' // 1–3
 }
 
 export default function ProductivityHeatmapCard() {
@@ -70,13 +72,12 @@ export default function ProductivityHeatmapCard() {
   }, [weeks])
 
   return (
-    <Card className="p-5 border-pm-border flex flex-col">
-      <div className="flex items-center justify-between mb-3 gap-3">
-        <h3 className="text-[15px] font-semibold text-pm-text-primary flex items-center gap-2">
-          <Flame className="w-4 h-4 text-pm-text-muted" />
-          {__('Productivity', 'wedevs-project-manager')}
-        </h3>
-        <div className="flex items-center gap-3">
+    <Card className="rounded-xl p-5 border-pm-border flex flex-col">
+      <CardHead
+        icon={Flame}
+        title={__('Productivity', 'wedevs-project-manager')}
+        action={
+        <div className="flex items-center gap-3 shrink-0">
           <span className="text-[12px] text-pm-text-muted hidden sm:inline">
             {sprintf( __( '%d active days', 'wedevs-project-manager' ), activeDays )}
           </span>
@@ -92,7 +93,8 @@ export default function ProductivityHeatmapCard() {
             </SelectContent>
           </Select>
         </div>
-      </div>
+        }
+      />
 
       {loading ? (
         <Skeleton className="h-[120px] w-full" />
@@ -118,7 +120,7 @@ export default function ProductivityHeatmapCard() {
                 <div key={wi} className="flex-1 flex flex-col gap-[3px] min-w-[10px]">
                   {Array.from({ length: 7 }).map((_, di) => {
                     const d = week[di]
-                    if (!d) return <div key={di} className="aspect-square w-full rounded-[3px] bg-slate-100/60 border border-pm-border/40" />
+                    if (!d) return <div key={di} className="aspect-square w-full rounded-[3px] bg-pm-surface-muted/60 border border-pm-border/40" />
                     return (
                       <Tooltip key={di}>
                         <TooltipTrigger asChild>
@@ -141,11 +143,11 @@ export default function ProductivityHeatmapCard() {
 
       <div className="flex items-center justify-end gap-1.5 mt-3 text-[11px] text-pm-text-muted">
         {__('Less', 'wedevs-project-manager')}
-        <span className="w-[13px] h-[13px] rounded-[3px] bg-slate-100 border border-pm-border/70" />
-        <span className="w-[13px] h-[13px] rounded-[3px] bg-violet-300" />
-        <span className="w-[13px] h-[13px] rounded-[3px] bg-violet-400" />
-        <span className="w-[13px] h-[13px] rounded-[3px] bg-violet-600" />
-        <span className="w-[13px] h-[13px] rounded-[3px] bg-violet-800" />
+        <span className="w-[13px] h-[13px] rounded-[3px] bg-pm-surface-muted border border-pm-border/70" />
+        <span className="w-[13px] h-[13px] rounded-[3px] bg-pm-accent/25" />
+        <span className="w-[13px] h-[13px] rounded-[3px] bg-pm-accent/50" />
+        <span className="w-[13px] h-[13px] rounded-[3px] bg-pm-accent/75" />
+        <span className="w-[13px] h-[13px] rounded-[3px] bg-pm-accent" />
         {__('More', 'wedevs-project-manager')}
       </div>
     </Card>

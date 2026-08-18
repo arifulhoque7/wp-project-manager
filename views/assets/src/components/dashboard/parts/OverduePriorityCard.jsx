@@ -4,11 +4,12 @@ import { AlertTriangle, CheckCircle2 } from 'lucide-react'
 import { Card } from '@components/ui/card'
 import { Badge } from '@components/ui/badge'
 import { cn } from '@lib/utils'
+import { CardHead, EmptyState, ROW } from './CardShell'
 
 const PRIORITY_DOT = {
   high:   'bg-rose-500',
   medium: 'bg-amber-500',
-  low:    'bg-slate-400',
+  low:    'bg-pm-text-muted/50',
 }
 
 export default function OverduePriorityCard({ items }) {
@@ -16,24 +17,18 @@ export default function OverduePriorityCard({ items }) {
   const list = items || []
 
   return (
-    <Card className="p-5 border-pm-border flex flex-col h-full">
-      <h3 className="text-[15px] font-semibold text-pm-text-primary flex items-center gap-2 mb-3">
-        <AlertTriangle className="w-4 h-4 text-rose-500" />
-        {__('Overdue & Priority', 'wedevs-project-manager')}
-      </h3>
+    <Card className="rounded-xl p-5 border-pm-border flex flex-col h-full">
+      <CardHead icon={AlertTriangle} iconClassName="text-rose-500" title={__('Overdue & Priority', 'wedevs-project-manager')} />
 
       {list.length === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center py-8 text-center">
-          <CheckCircle2 className="w-8 h-8 text-emerald-400 mb-2" />
-          <p className="text-[13px] text-pm-text-muted">{__('Nothing overdue — great work!', 'wedevs-project-manager')}</p>
-        </div>
+        <EmptyState icon={CheckCircle2} tone="positive">{__('Nothing overdue — great work!', 'wedevs-project-manager')}</EmptyState>
       ) : (
         <div className="space-y-1 flex-1 min-h-0 overflow-y-auto pm-sidebar-scroll pr-1">
           {list.map(t => (
             <button
               key={t.id}
               onClick={() => navigate(`/projects/${t.project_id}/task-lists/tasks/${t.id}`)}
-              className="w-full flex items-center gap-3 rounded-lg px-2.5 py-2 hover:bg-pm-hover transition-colors text-left"
+              className={ROW}
             >
               <span className={cn('w-2 h-2 rounded-full shrink-0', PRIORITY_DOT[t.priority] || PRIORITY_DOT.medium)} />
               <div className="flex-1 min-w-0">

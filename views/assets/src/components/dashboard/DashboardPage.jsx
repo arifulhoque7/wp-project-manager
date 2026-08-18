@@ -26,19 +26,19 @@ const ProUpgradeCard        = React.lazy(() => import('./parts/ProUpgradeCard'))
 // Lazy card wrapper — own Suspense boundary so one card streaming in never
 // blocks the others.
 function Lazy({ h = 'h-72', children }) {
-  return <Suspense fallback={<Skeleton className={`${h} w-full`} />}>{children}</Suspense>
+  return <Suspense fallback={<Skeleton className={`${h} w-full rounded-xl`} />}>{children}</Suspense>
 }
 
 function LoadingState() {
   return (
     <div className="space-y-4">
-      <Skeleton className="h-14 w-full" />
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-        {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-24 w-full" />)}
+      <Skeleton className="h-16 w-full rounded-xl" />
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-24 w-full rounded-xl" />)}
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <Skeleton className="h-72 w-full lg:col-span-2" />
-        <Skeleton className="h-72 w-full" />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <Skeleton className="h-72 w-full rounded-xl lg:col-span-2" />
+        <Skeleton className="h-72 w-full rounded-xl" />
       </div>
     </div>
   )
@@ -83,15 +83,18 @@ export default function DashboardPage() {
   }, [load])
 
   if (loading) {
-    return <div className="p-4 sm:p-6 max-w-[1400px] mx-auto"><LoadingState /></div>
+    return <div className="p-4 sm:p-6"><LoadingState /></div>
   }
 
   if (error) {
     return (
-      <div className="p-6 max-w-[1400px] mx-auto">
-        <div className="rounded-lg border border-pm-border bg-card p-8 text-center">
+      <div className="p-4 sm:p-6">
+        <div className="rounded-xl border border-pm-border bg-card p-8 text-center">
           <p className="text-[14px] text-pm-text-muted mb-3">{error}</p>
-          <button onClick={() => load(range, true)} className="text-[13px] font-medium text-pm-accent hover:underline">
+          <button
+            onClick={() => load(range, true)}
+            className="rounded-lg bg-pm-accent px-4 py-2 text-[13px] font-medium text-white transition-colors hover:bg-pm-accent-hover"
+          >
             {__('Try again', 'wedevs-project-manager')}
           </button>
         </div>
@@ -103,16 +106,16 @@ export default function DashboardPage() {
   const team = data?.team ?? []
 
   return (
-    <div className="p-4 sm:p-6 max-w-[1400px] mx-auto space-y-5">
+    <div className="p-4 sm:p-6 space-y-6">
       <DashboardHeader user={data?.user} onTaskCreated={() => load(range, false)} />
+
+      <Lazy h="h-24"><KpiCards kpis={data?.kpis} /></Lazy>
 
       {/* Pro insights (module-gated, managers) */}
       {showTeam && isPro && <Lazy h="h-24"><ProInsightsRow /></Lazy>}
 
-      <Lazy h="h-24"><KpiCards kpis={data?.kpis} /></Lazy>
-
       {/* Performance (wide, range filter) + project status */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2">
           <Lazy h="h-72">
             <TaskPerformanceCard
@@ -127,7 +130,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Active projects (wide) + calendar */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2">
           <Lazy h="h-80"><ActiveProjectsCard projects={data?.active_projects} /></Lazy>
         </div>
@@ -138,14 +141,14 @@ export default function DashboardPage() {
       <Lazy h="h-44"><ProductivityHeatmapCard /></Lazy>
 
       {/* Upcoming + milestones + activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <Lazy><UpcomingScheduleCard items={data?.upcoming} /></Lazy>
         <Lazy><MilestonesCard milestones={data?.milestones} /></Lazy>
         <Lazy><RecentActivityCard activity={data?.recent_activity} /></Lazy>
       </div>
 
       {/* Overdue + distribution + team / upgrade */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <Lazy><OverduePriorityCard items={data?.overdue_list} /></Lazy>
         <Lazy><TaskDistributionCard distribution={data?.task_distribution} /></Lazy>
         {showTeam

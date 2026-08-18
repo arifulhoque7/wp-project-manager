@@ -1,7 +1,9 @@
 import { __ } from '@wordpress/i18n'
 import { Bar, BarChart, XAxis, CartesianGrid } from 'recharts'
+import { BarChart3 } from 'lucide-react'
 import { Card } from '@components/ui/card'
 import { cn } from '@lib/utils'
+import { CardHead, EmptyState } from './CardShell'
 import {
   ChartContainer,
   ChartTooltip,
@@ -17,24 +19,20 @@ export default function TaskPerformanceCard({ performance, range = 7, onRangeCha
     { v: 30, label: __('30d', 'wedevs-project-manager') },
   ]
 
+  const isEmpty = data.every(d => !d.created && !d.completed)
+
   const chartConfig = {
     completed: { label: __('Completed', 'wedevs-project-manager'), color: 'hsl(var(--primary))' },
     created:   { label: __('Created', 'wedevs-project-manager'),   color: 'hsl(152 60% 52%)' },
   }
 
   return (
-    <Card className="p-5 border-pm-border flex flex-col">
-      <div className="flex items-center justify-between mb-1">
-        <div>
-          <h3 className="text-[15px] font-semibold text-pm-text-primary">
-            {__('Task Performance', 'wedevs-project-manager')}
-          </h3>
-          <p className="text-[12px] text-pm-text-muted">
-            {__('Created vs completed', 'wedevs-project-manager')}
-          </p>
-        </div>
-        {onRangeChange && (
-          <div className="flex items-center gap-0.5 rounded-lg bg-pm-surface-muted p-0.5">
+    <Card className="rounded-xl p-5 border-pm-border flex flex-col">
+      <CardHead
+        title={__('Task Performance', 'wedevs-project-manager')}
+        subtitle={__('Created vs completed', 'wedevs-project-manager')}
+        action={onRangeChange && (
+          <div className="flex items-center gap-0.5 rounded-lg bg-pm-surface-muted p-0.5 shrink-0">
             {ranges.map(r => (
               <button
                 key={r.v}
@@ -50,8 +48,15 @@ export default function TaskPerformanceCard({ performance, range = 7, onRangeCha
             ))}
           </div>
         )}
-      </div>
+      />
 
+      {isEmpty ? (
+        <div className="h-[220px] flex">
+          <EmptyState icon={BarChart3}>
+            {__('No tasks created or completed in this period.', 'wedevs-project-manager')}
+          </EmptyState>
+        </div>
+      ) : (
       <ChartContainer config={chartConfig} className="h-[220px] w-full mt-2">
         <BarChart data={data} barGap={4}>
           <CartesianGrid vertical={false} strokeDasharray="3 3" />
@@ -62,6 +67,7 @@ export default function TaskPerformanceCard({ performance, range = 7, onRangeCha
           <Bar dataKey="created" fill="var(--color-created)" radius={[4, 4, 0, 0]} maxBarSize={26} />
         </BarChart>
       </ChartContainer>
+      )}
     </Card>
   )
 }
