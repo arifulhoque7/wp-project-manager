@@ -6,7 +6,7 @@ Tags: kanban, project, project management, task management, project manager
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 4.0.6
+Stable tag: 4.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -249,6 +249,15 @@ A. If you face any issues, you can contact the support team through the official
 14. Manage projects from the frontend
 
 == Changelog ==
+
+= v4.0.7 – Aug 19, 2026 =
+
+**Security:** Closed an unauthenticated account-creation and remote-code-execution chain — REST routes now fail closed by default, the Trello import endpoints require the proper capability, imported accounts receive a unique generated password, and stored data is deserialized without instantiating objects. Reported by Patchstack (20kilograma).
+**Security:** Fixed cross-project data exposure — task, activity and per-user endpoints now return only data from projects the caller belongs to. Reported via WPScan (Pedro Pinho, Usama Arshad).
+**Security:** Bound REST object IDs (task, comment, file, milestone) to the project they were authorized against, and stopped file downloads from reaching arbitrary media-library attachments (IDOR).
+**Security:** Scoped search, settings and activity feeds to the caller's projects, and restricted global role definitions to administrators.
+**Improved:** Compatibility with WordPress 7.1 and PHP 8.4, plus a hardened SVG upload check.
+**Update:** readme — added Google Workspace integration details.
 
 = v4.0.6 – Jul 20, 2026 =
 
