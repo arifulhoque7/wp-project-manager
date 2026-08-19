@@ -28,6 +28,10 @@ class Search_Controller {
 		}
 
     	if ( $project_id || !empty( $model ) ) {
+    		// A supplied project_id must be one the caller can access.
+    		if ( $project_id && ! wedevs_pm_user_can( 'view_project', $project_id ) ) {
+    			return new \WP_Error( 'pm_search', __( 'You have no permission.', 'wedevs-project-manager' ), [ 'status' => 403 ] );
+    		}
     		return $this->get_result_for_project( $string, $project_id, $model );
     	}
     	return $this->get_all_result( $string );

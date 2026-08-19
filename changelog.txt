@@ -1,5 +1,14 @@
 == Changelog ==
 
+= v4.0.7 – Aug 19, 2026 =
+
+**Security:** Closed an unauthenticated account-creation and remote-code-execution chain — REST routes now fail closed by default, the Trello import endpoints require the proper capability, imported accounts receive a unique generated password, and stored data is deserialized without instantiating objects. Reported by Patchstack (20kilograma).
+**Security:** Fixed cross-project data exposure — task, activity and per-user endpoints now return only data from projects the caller belongs to. Reported via WPScan (Pedro Pinho, Usama Arshad).
+**Security:** Bound REST object IDs (task, comment, file, milestone) to the project they were authorized against, and stopped file downloads from reaching arbitrary media-library attachments (IDOR).
+**Security:** Scoped search, settings and activity feeds to the caller's projects, and restricted global role definitions to administrators.
+**Improved:** Compatibility with WordPress 7.1 and PHP 8.4, plus a hardened SVG upload check.
+**Update:** readme — added Google Workspace integration details.
+
 = v4.0.6 – Jul 20, 2026 =
 
 **New:** Google Workspace integration — connect Google Drive to attach files to tasks, comments, and discussions (per-project role access), plus Google Meet links and Google Calendar sync (Calendar & Meet powered by Pro).

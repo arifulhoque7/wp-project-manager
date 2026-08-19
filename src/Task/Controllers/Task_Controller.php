@@ -94,6 +94,12 @@ class Task_Controller {
     public function show( WP_REST_Request $request ) {
         $project_id = intval( $request->get_param( 'project_id' ) );
         $task_id    = intval( $request->get_param( 'task_id' ) );
+
+        // Bind the task to the gated project (IDOR guard).
+        if ( ! Task::where( 'id', $task_id )->where( 'project_id', $project_id )->exists() ) {
+            return new \WP_Error( 'pm_task', __( 'Task not found in this project.', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
+
         return $this->get_task( $task_id, $project_id, $request->get_params() );
     }
 
@@ -328,6 +334,13 @@ class Task_Controller {
     }
 
     public function update( WP_REST_Request $request ) {
+        $project_id = intval( $request->get_param( 'project_id' ) );
+        $task_id    = intval( $request->get_param( 'task_id' ) );
+
+        // Bind the task to the gated project (IDOR guard).
+        if ( ! Task::where( 'id', $task_id )->where( 'project_id', $project_id )->exists() ) {
+            return new \WP_Error( 'pm_task', __( 'Task not found in this project.', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
 
         return $this->task_update( $request->get_params() );
     }
@@ -395,7 +408,14 @@ class Task_Controller {
     }
 
     public function change_status( WP_REST_Request $request ) {
+        $project_id   = intval( $request->get_param( 'project_id' ) );
         $task_id      = $request->get_param( 'task_id' );
+
+        // Bind the task to the gated project (IDOR guard).
+        if ( ! Task::where( 'id', $task_id )->where( 'project_id', $project_id )->exists() ) {
+            return new \WP_Error( 'pm_task', __( 'Task not found in this project.', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
+
         $task         = Task::with('assignees')->find( $task_id );
         $status       = $request->get_param( 'status' );
         $old_value    = $task->status;
@@ -561,11 +581,17 @@ class Task_Controller {
     }
 
     public function attach_to_board( WP_REST_Request $request ) {
+        $project_id = intval( $request->get_param( 'project_id' ) );
         $task_id  = $request->get_param( 'task_id' );
         $board_id = $request->get_param( 'board_id' );
 
-        $task  = Task::find( $task_id );
-        $board = Board::find( $board_id );
+        // Bind task + board to the gated project (IDOR guard).
+        $task  = Task::where( 'id', $task_id )->where( 'project_id', $project_id )->first();
+        $board = Board::where( 'id', $board_id )->where( 'project_id', $project_id )->first();
+
+        if ( ! $task || ! $board ) {
+            return new \WP_Error( 'pm_task', __( 'Task or board not found in this project.', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
 
         $latest_order = Boardable::latest_order( $board->id, $board->type, 'task' );
         $boardable    = Boardable::firstOrCreate([
@@ -582,11 +608,17 @@ class Task_Controller {
     }
 
     public function detach_from_board( WP_REST_Request $request ) {
+        $project_id = intval( $request->get_param( 'project_id' ) );
         $task_id  = $request->get_param( 'task_id' );
         $board_id = $request->get_param( 'board_id' );
 
-        $task  = Task::find( $task_id );
-        $board = Board::find( $board_id );
+        // Bind task + board to the gated project (IDOR guard).
+        $task  = Task::where( 'id', $task_id )->where( 'project_id', $project_id )->first();
+        $board = Board::where( 'id', $board_id )->where( 'project_id', $project_id )->first();
+
+        if ( ! $task || ! $board ) {
+            return new \WP_Error( 'pm_task', __( 'Task or board not found in this project.', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
 
         $boardable = Boardable::where( 'board_id', $board->id )
             ->where( 'board_type', $board->type )
@@ -664,9 +696,18 @@ class Task_Controller {
 
     public function privacy( WP_REST_Request $request ) {
         $project_id = intval( $request->get_param( 'project_id' ) );
-        $task_id = $request->get_param( 'task_id' );
-        $privacy = $request->get_param( 'is_private' );
-        $task = Task::find( $task_id );
+        $task_id    = intval( $request->get_param( 'task_id' ) );
+        // Stored in pm_meta and read back through unserialize(); anything but an
+        // int here is a PHP object injection vector.
+        $privacy    = (int) filter_var( $request->get_param( 'is_private' ), FILTER_VALIDATE_BOOLEAN );
+
+        // Bind the task to the gated project (IDOR guard).
+        $task = Task::where( 'id', $task_id )->where( 'project_id', $project_id )->first();
+
+        if ( ! $task ) {
+            return new \WP_Error( 'pm_task', __( 'Task not found in this project.', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
+
         $task->update_model( [
             'is_private' => $privacy
         ] );
@@ -683,6 +724,31 @@ class Task_Controller {
         $receive    = $request->get_param( 'receive' );
         $task       = [];
         $sender_list_id = false;
+
+        // Access_Project proves the caller belongs to $project_id. Bind every id
+        // supplied in the body to that same project so a member of one project
+        // cannot reorder or relocate another project's tasks (WPScan #42604).
+        if ( $list_id && ! Board::where( 'id', $list_id )->where( 'project_id', $project_id )->exists() ) {
+            wp_send_json_error( [ 'message' => __( 'The list does not belong to this project.', 'wedevs-project-manager' ) ], 403 );
+        }
+
+        if ( $task_id && ! Task::where( 'id', $task_id )->where( 'project_id', $project_id )->exists() ) {
+            wp_send_json_error( [ 'message' => __( 'The task does not belong to this project.', 'wedevs-project-manager' ) ], 403 );
+        }
+
+        if ( ! empty( $orders ) && is_array( $orders ) ) {
+            $order_ids = array_values( array_unique( array_filter( array_map( function ( $order ) {
+                return empty( $order['id'] ) ? 0 : intval( $order['id'] );
+            }, $orders ) ) ) );
+
+            if ( ! empty( $order_ids ) ) {
+                $valid = Task::whereIn( 'id', $order_ids )->where( 'project_id', $project_id )->count();
+
+                if ( intval( $valid ) !== count( $order_ids ) ) {
+                    wp_send_json_error( [ 'message' => __( 'One or more tasks do not belong to this project.', 'wedevs-project-manager' ) ], 403 );
+                }
+            }
+        }
 
         if ( isset( $receive ) && $receive == 1 ) {
             $task = wedevs_pm_get_task( $task_id );
@@ -935,6 +1001,13 @@ class Task_Controller {
 
         $current_page = intval( $request->get_param( 'activityPage' ) );
         $task_id = intval( $request->get_param( 'task_id' ) );
+        $project_id = intval( $request->get_param( 'project_id' ) );
+
+        // Bind the task to the gated project (IDOR guard).
+        if ( ! Task::where( 'id', $task_id )->where( 'project_id', $project_id )->exists() ) {
+            return new \WP_Error( 'pm_task', __( 'Task not found in this project.', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
+
 
         $per_page = 10;
 

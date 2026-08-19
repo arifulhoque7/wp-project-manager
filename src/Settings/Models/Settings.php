@@ -76,7 +76,7 @@ class Settings extends Eloquent {
         }
         
         // If JSON decode failed, try unserialize (for backward compatibility with old data)
-        $unserialized = @unserialize( $value );
+        $unserialized = @unserialize( $value, [ 'allowed_classes' => false ] );
         if ( $unserialized !== false ) {
             return $unserialized;
         }

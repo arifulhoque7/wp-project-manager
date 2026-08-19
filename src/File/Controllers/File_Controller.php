@@ -45,8 +45,15 @@ class File_Controller {
     }
 
     public function show( WP_REST_Request $request ) {
-        $file_id = intval($request->get_param( 'file_id' ) );
-        $file = File::find( $file_id );
+        $file_id    = intval( $request->get_param( 'file_id' ) );
+        $project_id = intval( $request->get_param( 'project_id' ) );
+
+        // Bind the file to the gated project (IDOR guard).
+        $file = File::where( 'id', $file_id )->where( 'project_id', $project_id )->first();
+
+        if ( ! $file ) {
+            return new \WP_Error( 'pm_file', __( 'File not found in this project.', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
 
         $resource = new Item( $file, new File_Transformer );
 
@@ -69,9 +76,16 @@ class File_Controller {
     }
 
     public function rename( WP_REST_Request $request ) {
-        $file_id   = intval( $request->get_param( 'file_id' ) );
-        $file_name = sanitize_file_name($request->get_param( 'name' ) );
-        $file      = File::find( $file_id );
+        $file_id    = intval( $request->get_param( 'file_id' ) );
+        $project_id = intval( $request->get_param( 'project_id' ) );
+        $file_name  = sanitize_file_name( $request->get_param( 'name' ) );
+
+        // Bind the file to the gated project (IDOR guard).
+        $file = File::where( 'id', $file_id )->where( 'project_id', $project_id )->first();
+
+        if ( ! $file ) {
+            return new \WP_Error( 'pm_file', __( 'File not found in this project.', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
 
         File_System::update( $file->attachment_id, array( 'name' => $file_name ) );
 
@@ -81,9 +95,16 @@ class File_Controller {
     }
 
     public function destroy( WP_REST_Request $request ) {
-        $file_id = intval( $request->get_param( 'file_id' ) );
+        $file_id    = intval( $request->get_param( 'file_id' ) );
+        $project_id = intval( $request->get_param( 'project_id' ) );
 
-        $file = File::find( $file_id );
+        // Bind the file to the gated project (IDOR guard).
+        $file = File::where( 'id', $file_id )->where( 'project_id', $project_id )->first();
+
+        if ( ! $file ) {
+            wp_send_json_error( [ 'message' => __( 'File not found in this project.', 'wedevs-project-manager' ) ], 404 );
+        }
+
         File_System::delete( $file->attachment_id );
         $file->delete();
 
@@ -91,11 +112,27 @@ class File_Controller {
     }
 
     public function download( WP_REST_Request $request ) {
-        $file_id = intval( $request->get_param('file_id') );
+        $file_id    = intval( $request->get_param('file_id') );
+        $project_id = intval( $request->get_param( 'project_id' ) );
+
+        // Bind the requested id to a file in the gated project. The param may be
+        // the pm_files id or the WP attachment id; either way it must resolve to a
+        // row in THIS project (prevents streaming any attachment on the site).
+        $file_row = File::where( 'project_id', $project_id )
+            ->where( function( $query ) use ( $file_id ) {
+                $query->where( 'id', $file_id )->orWhere( 'attachment_id', $file_id );
+            } )->first();
+
+        if ( ! $file_row ) {
+            status_header( 404 );
+            die( esc_html__( 'file not found', 'wedevs-project-manager' ) );
+        }
+
+        $attachment_id = intval( $file_row->attachment_id );
 
         //get file path
-        $file = File_System::get_file( $file_id );
-        $path = get_attached_file( $file_id );
+        $file = File_System::get_file( $attachment_id );
+        $path = get_attached_file( $attachment_id );
 
         // Initialize WP_Filesystem
         global $wp_filesystem;

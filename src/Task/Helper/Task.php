@@ -718,13 +718,7 @@ class Task {
 		foreach ( $this->tasks as $key => $task ) {
 			$filter_metas = empty( $metas[$task->id] ) ? [] : $metas[$task->id];
 			foreach ( $filter_metas as $key => $filter_meta ) {
-				$meta_value = @unserialize( $filter_meta->meta_value );
-				
-				if ($meta_value === false && $filter_meta->meta_value !== 'b:0;') {
-				    $task->meta[$filter_meta->meta_key] = $filter_meta->meta_value;
-				} else {
-					$task->meta[$filter_meta->meta_key] = maybe_unserialize( $filter_meta->meta_value );
-				}
+				$task->meta[$filter_meta->meta_key] = wedevs_pm_safe_unserialize( $filter_meta->meta_value );
 			}
 		}
 		
@@ -1249,6 +1243,7 @@ class Task {
 			->where_completed_at()
 			->where_created_at()
 			->where_project_id()
+			->where_membership()
 			->where_users()
 			->where_lists()
 			->where_milestone()
@@ -1413,6 +1408,44 @@ class Task {
 		$project_id = $this->get_prepare_data( $project_id );
 
 		$this->where .= $wpdb->prepare( " AND {$this->tb_tasks}.project_id IN ($format)", $project_id );
+
+		return $this;
+	}
+
+	/**
+	 * Constrain the query to the projects the current user belongs to.
+	 *
+	 * Managers / admins may query across every project; everyone else only sees
+	 * tasks in projects they are a member of. Without this a logged-in user could
+	 * omit project_id and read every project's tasks (WPScan #42604).
+	 *
+	 * @return self
+	 */
+	private function where_membership() {
+		if ( wedevs_pm_user_can_access() ) {
+			return $this;
+		}
+
+		global $wpdb;
+		$user_id      = get_current_user_id();
+		$tb_role_user = esc_sql( wedevs_pm_tb_prefix() . 'pm_role_user' );
+
+		$project_ids = $wpdb->get_col( $wpdb->prepare(
+			"SELECT DISTINCT project_id FROM {$tb_role_user} WHERE user_id = %d",
+			$user_id
+		) );
+
+		$project_ids = array_map( 'absint', (array) $project_ids );
+
+		if ( empty( $project_ids ) ) {
+			// Member of no project sees no tasks.
+			$this->where .= ' AND 0 = 1';
+
+			return $this;
+		}
+
+		$format = implode( ',', array_fill( 0, count( $project_ids ), '%d' ) );
+		$this->where .= $wpdb->prepare( " AND {$this->tb_tasks}.project_id IN ($format)", $project_ids );
 
 		return $this;
 	}

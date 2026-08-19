@@ -20,7 +20,7 @@ abstract class Abstract_Validator implements Validator {
      */
     protected $errors = [];
 
-    public function __construct( WP_REST_Request $request = null ) {
+    public function __construct( ?WP_REST_Request $request = null ) {
         if ( $request ) {
             $this->request = $request;
         }
