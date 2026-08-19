@@ -623,7 +623,7 @@ class MyTask_Controller {
         $settings = explode( '|', $settings );
 
         foreach ( $settings as $key => $setting ) {
-            return !empty( $setting ) ? maybe_unserialize( $setting ) : '';
+            return !empty( $setting ) ? wedevs_pm_safe_unserialize( $setting ) : '';
         }
 
         return [];

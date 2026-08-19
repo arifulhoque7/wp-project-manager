@@ -29,7 +29,7 @@ class Meta extends Eloquent {
     }
 
     public function getMetaValueAttribute( $value ) {
-        return maybe_unserialize( $value );
+        return wedevs_pm_safe_unserialize( $value );
     }
 
     public function setMetaValueAttribute( $value ) {

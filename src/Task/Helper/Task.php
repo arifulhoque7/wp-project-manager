@@ -718,13 +718,7 @@ class Task {
 		foreach ( $this->tasks as $key => $task ) {
 			$filter_metas = empty( $metas[$task->id] ) ? [] : $metas[$task->id];
 			foreach ( $filter_metas as $key => $filter_meta ) {
-				$meta_value = @unserialize( $filter_meta->meta_value );
-				
-				if ($meta_value === false && $filter_meta->meta_value !== 'b:0;') {
-				    $task->meta[$filter_meta->meta_key] = $filter_meta->meta_value;
-				} else {
-					$task->meta[$filter_meta->meta_key] = maybe_unserialize( $filter_meta->meta_value );
-				}
+				$task->meta[$filter_meta->meta_key] = wedevs_pm_safe_unserialize( $filter_meta->meta_value );
 			}
 		}
 		

@@ -103,14 +103,21 @@ class WP_Router {
 	 *
 	 * @param  array $permissions (Array of class namespaces of permission classes.)
 	 *
-	 * @return boolean (Return true if permitted; ortherwise false.)
+	 * @return boolean|\WP_Error (Return true if permitted; otherwise false or WP_Error.)
 	 */
 	private function check_permission( WP_REST_Request $request, $permissions ) {
 		$permitted   = array();
 		$merge_error = false;
 
+		// Fail closed. A route that forgets ->permission() used to be public to
+		// unauthenticated callers. Genuinely public endpoints must opt in with
+		// WeDevs\PM\Core\Permissions\Public_Access.
 		if ( empty( $permissions ) ) {
-			$permitted = true;
+			return new \WP_Error(
+				'wedevs_pm_no_permission',
+				__( 'You have no permission to access this endpoint.', 'wedevs-project-manager' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
 		}
 
 		foreach ( $permissions as $permission ) {
