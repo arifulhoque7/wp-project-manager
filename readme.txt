@@ -4,7 +4,7 @@ Contributors: tareq1988, nizamuddinbabu, wedevs
 Donate Link: https://tareq.co/donate/
 Tags: kanban, project, project management, task management, project manager
 Requires at least: 6.2
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
 Stable tag: 4.0.6
 License: GPLv2 or later

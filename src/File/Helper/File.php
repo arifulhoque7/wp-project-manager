@@ -76,7 +76,7 @@ class File {
     }
 
     public static function contains_xss_code( $content ) {
-		$pattern = '/<script.*?>.*?<\/script>|on[a-z]+\s*=\s*["\'][^"\']*["\']|javascript\s*[:=][^"\']+|data\s*[:=][^"\']+/ix';
+		$pattern = '/<script.*?>.*?<\/script>|on[a-z]+\s*=|javascript\s*[:=][^"\']+|data\s*[:=][^"\']+/ix';
         return preg_match($pattern, $content);
     }
 
