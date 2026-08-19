@@ -7,6 +7,6 @@ use WP_REST_Request;
 
 class Administrator extends Abstract_Permission {
     public function check() {
-        return true;
+        return current_user_can( 'manage_options' );
     }
 }

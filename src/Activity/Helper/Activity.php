@@ -176,27 +176,27 @@ class Activity {
     }
 
     private function parse_meta_for_task( $activity ) {
-        return is_serialized( $activity->meta ) ? maybe_unserialize( $activity->meta ) : $activity->meta;
+        return is_serialized( $activity->meta ) ? wedevs_pm_safe_unserialize( $activity->meta ) : $activity->meta;
     }
 
     private function parse_meta_for_task_list( $activity ) {
-        return is_serialized( $activity->meta ) ? maybe_unserialize( $activity->meta ) : $activity->meta;
+        return is_serialized( $activity->meta ) ? wedevs_pm_safe_unserialize( $activity->meta ) : $activity->meta;
     }
 
     private function parse_meta_for_discussion_board( $activity ) {
-        return is_serialized( $activity->meta ) ? maybe_unserialize( $activity->meta ) : $activity->meta;
+        return is_serialized( $activity->meta ) ? wedevs_pm_safe_unserialize( $activity->meta ) : $activity->meta;
     }
 
     private function parse_meta_for_milestone( $activity ) {
-        return is_serialized( $activity->meta ) ? maybe_unserialize( $activity->meta ) : $activity->meta;
+        return is_serialized( $activity->meta ) ? wedevs_pm_safe_unserialize( $activity->meta ) : $activity->meta;
     }
 
     private function parse_meta_for_project( $activity ) {
-        return is_serialized( $activity->meta ) ? maybe_unserialize( $activity->meta ) : $activity->meta;
+        return is_serialized( $activity->meta ) ? wedevs_pm_safe_unserialize( $activity->meta ) : $activity->meta;
     }
 
     private function parse_meta_for_file( $activity ) {
-        return is_serialized( $activity->meta ) ? maybe_unserialize( $activity->meta ) : $activity->meta;
+        return is_serialized( $activity->meta ) ? wedevs_pm_safe_unserialize( $activity->meta ) : $activity->meta;
     }
 
     private function parse_meta_for_comment( $activity ) {
@@ -206,7 +206,7 @@ class Activity {
             return $meta;
         }
 
-        $activity->meta = is_serialized( $activity->meta ) ? maybe_unserialize( $activity->meta ) : $activity->meta;
+        $activity->meta = is_serialized( $activity->meta ) ? wedevs_pm_safe_unserialize( $activity->meta ) : $activity->meta;
 
         foreach ($activity->meta as $key => $value) {
             if ( $key == 'commentable_type' && $value == 'file' ) {

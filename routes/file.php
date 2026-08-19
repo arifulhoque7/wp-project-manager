@@ -24,4 +24,5 @@ $wedevs_pm_router->post( 'projects/{project_id}/files/{file_id}/delete', 'WeDevs
 $wedevs_pm_router->get( 'projects/{project_id}/files/{file_id}/users/{user_id}/download', 'WeDevs/PM/File/Controllers/File_Controller@download' )
     ->permission( ['WeDevs\PM\Core\Permissions\Access_Project'] );
 
-$wedevs_pm_router->get( 'get-mime-type-icon', 'WeDevs/PM/File/Controllers/File_Controller@get_mime_type_icon' );
+$wedevs_pm_router->get( 'get-mime-type-icon', 'WeDevs/PM/File/Controllers/File_Controller@get_mime_type_icon' )
+    ->permission( ['WeDevs\PM\Core\Permissions\Authentic'] );

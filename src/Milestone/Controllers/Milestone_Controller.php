@@ -306,6 +306,8 @@ class Milestone_Controller {
     public function privacy( WP_REST_Request $request ) {
         $project_id   = intval( $request->get_param( 'project_id' ) );
         $milestone_id = intval( $request->get_param( 'milestone_id' ) );
+        // Stored in pm_meta and read back through unserialize(); anything but an
+        // int here is a PHP object injection vector.
         $privacy      = (int) filter_var( $request->get_param( 'is_private' ), FILTER_VALIDATE_BOOLEAN );
 
         // Bind the milestone to the gated project (IDOR guard).

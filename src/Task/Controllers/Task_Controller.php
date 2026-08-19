@@ -697,6 +697,8 @@ class Task_Controller {
     public function privacy( WP_REST_Request $request ) {
         $project_id = intval( $request->get_param( 'project_id' ) );
         $task_id    = intval( $request->get_param( 'task_id' ) );
+        // Stored in pm_meta and read back through unserialize(); anything but an
+        // int here is a PHP object injection vector.
         $privacy    = (int) filter_var( $request->get_param( 'is_private' ), FILTER_VALIDATE_BOOLEAN );
 
         // Bind the task to the gated project (IDOR guard).
@@ -722,6 +724,31 @@ class Task_Controller {
         $receive    = $request->get_param( 'receive' );
         $task       = [];
         $sender_list_id = false;
+
+        // Access_Project proves the caller belongs to $project_id. Bind every id
+        // supplied in the body to that same project so a member of one project
+        // cannot reorder or relocate another project's tasks (WPScan #42604).
+        if ( $list_id && ! Board::where( 'id', $list_id )->where( 'project_id', $project_id )->exists() ) {
+            wp_send_json_error( [ 'message' => __( 'The list does not belong to this project.', 'wedevs-project-manager' ) ], 403 );
+        }
+
+        if ( $task_id && ! Task::where( 'id', $task_id )->where( 'project_id', $project_id )->exists() ) {
+            wp_send_json_error( [ 'message' => __( 'The task does not belong to this project.', 'wedevs-project-manager' ) ], 403 );
+        }
+
+        if ( ! empty( $orders ) && is_array( $orders ) ) {
+            $order_ids = array_values( array_unique( array_filter( array_map( function ( $order ) {
+                return empty( $order['id'] ) ? 0 : intval( $order['id'] );
+            }, $orders ) ) ) );
+
+            if ( ! empty( $order_ids ) ) {
+                $valid = Task::whereIn( 'id', $order_ids )->where( 'project_id', $project_id )->count();
+
+                if ( intval( $valid ) !== count( $order_ids ) ) {
+                    wp_send_json_error( [ 'message' => __( 'One or more tasks do not belong to this project.', 'wedevs-project-manager' ) ], 403 );
+                }
+            }
+        }
 
         if ( isset( $receive ) && $receive == 1 ) {
             $task = wedevs_pm_get_task( $task_id );
