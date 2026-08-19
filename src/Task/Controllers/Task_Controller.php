@@ -686,6 +686,31 @@ class Task_Controller {
         $task       = [];
         $sender_list_id = false;
 
+        // Access_Project proves the caller belongs to $project_id. Bind every id
+        // supplied in the body to that same project so a member of one project
+        // cannot reorder or relocate another project's tasks (WPScan #42604).
+        if ( $list_id && ! Board::where( 'id', $list_id )->where( 'project_id', $project_id )->exists() ) {
+            wp_send_json_error( [ 'message' => __( 'The list does not belong to this project.', 'wedevs-project-manager' ) ], 403 );
+        }
+
+        if ( $task_id && ! Task::where( 'id', $task_id )->where( 'project_id', $project_id )->exists() ) {
+            wp_send_json_error( [ 'message' => __( 'The task does not belong to this project.', 'wedevs-project-manager' ) ], 403 );
+        }
+
+        if ( ! empty( $orders ) && is_array( $orders ) ) {
+            $order_ids = array_values( array_unique( array_filter( array_map( function ( $order ) {
+                return empty( $order['id'] ) ? 0 : intval( $order['id'] );
+            }, $orders ) ) ) );
+
+            if ( ! empty( $order_ids ) ) {
+                $valid = Task::whereIn( 'id', $order_ids )->where( 'project_id', $project_id )->count();
+
+                if ( intval( $valid ) !== count( $order_ids ) ) {
+                    wp_send_json_error( [ 'message' => __( 'One or more tasks do not belong to this project.', 'wedevs-project-manager' ) ], 403 );
+                }
+            }
+        }
+
         if ( isset( $receive ) && $receive == 1 ) {
             $task = wedevs_pm_get_task( $task_id );
             $sender_list_id = $task ? $task['data']['task_list']['data']['id'] : false;
