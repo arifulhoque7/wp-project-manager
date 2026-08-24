@@ -37,6 +37,43 @@
   font-display: swap;
 }
 
+/* Plus Jakarta Sans — self-hosted (OFL), primary UI font */
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('./fonts/PlusJakartaSans-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('./fonts/PlusJakartaSans-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('./fonts/PlusJakartaSans-600.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('./fonts/PlusJakartaSans-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('./fonts/PlusJakartaSans-800.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 
 /* Headway badge — position absolutely so it doesn't break flex layout */
 #pm-headway-icon .HW_badge_cont {
@@ -221,7 +258,7 @@ body:not(.wp-admin) #wedevs-project-manager {
 
 #wedevs-pm,
 #wedevs-project-manager {
-  font-family: 'Google Sans', 'Google Sans Text', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-family: 'Plus Jakarta Sans', 'Google Sans', 'Google Sans Text', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   font-size: 14px;
   line-height: 1.5;
   color: hsl(var(--foreground));
@@ -602,7 +639,7 @@ body.pm-fullscreen-settings.pm-mode-wordpress.folded #wedevs-pm {
      because a Select inside a Sheet still teleports here. ──── */
 [data-radix-popper-content-wrapper] {
   z-index: 3000 !important;
-  font-family: 'Google Sans', 'Google Sans Text', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-family: 'Plus Jakarta Sans', 'Google Sans', 'Google Sans Text', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   font-size: 14px !important;
   line-height: 1.5 !important;
   color: hsl(var(--foreground)) !important;
@@ -877,7 +914,7 @@ body.admin-bar [data-sonner-toaster] {
   min-height: 0 !important;
   min-width: 0 !important;
   padding: 0.5rem 1rem !important;
-  font-family: 'Google Sans', 'Google Sans Text', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-family: 'Plus Jakarta Sans', 'Google Sans', 'Google Sans Text', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   font-size: 0.875rem !important;
   font-weight: 500 !important;
   line-height: 1 !important;
