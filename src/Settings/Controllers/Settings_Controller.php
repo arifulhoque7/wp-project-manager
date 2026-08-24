@@ -21,6 +21,11 @@ class Settings_Controller {
         $project_id = intval( $request->get_param( 'project_id' ) );
         $key        = $request->get_param( 'key' );
 
+        // A supplied project_id must be one the caller can access (IDOR guard).
+        if ( $project_id && ! wedevs_pm_user_can( 'view_project', $project_id ) ) {
+            return new \WP_Error( 'pm_settings', __( 'You have no permission.', 'wedevs-project-manager' ), [ 'status' => 403 ] );
+        }
+
         if ( $project_id && $key ) {
             $settings = Settings::where( 'project_id', $project_id )
                 ->where( 'key', $key )

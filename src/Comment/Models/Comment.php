@@ -60,6 +60,6 @@ class Comment extends Eloquent {
     }
 
     public function getMentionedUsersAttribute( $value ) {
-        return unserialize( $value );
+        return wedevs_pm_safe_unserialize( $value );
     }
 }

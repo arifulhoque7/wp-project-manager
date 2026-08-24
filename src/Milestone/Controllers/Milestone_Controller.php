@@ -286,6 +286,12 @@ class Milestone_Controller {
         $milestone_id = intval( $request->get_param( 'milestone_id' ) );
         $task_id      = intval( $request->get_param( 'task_id' ) );
 
+        // Bind the milestone + task to the gated project (IDOR guard).
+        if ( ! Milestone::where( 'id', $milestone_id )->where( 'project_id', $project_id )->exists()
+            || ! \WeDevs\PM\Task\Models\Task::where( 'id', $task_id )->where( 'project_id', $project_id )->exists() ) {
+            return new \WP_Error( 'pm_milestone', __( 'Milestone or task not found in this project.', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
+
         Boardable::where( 'board_id', $milestone_id )
             ->where( 'board_type', 'milestone' )
             ->where( 'boardable_id', $task_id )
@@ -298,10 +304,19 @@ class Milestone_Controller {
     }
 
     public function privacy( WP_REST_Request $request ) {
-        $project_id = intval( $request->get_param( 'project_id' ) );
-        $milestone_id = $request->get_param( 'milestone_id' );
-        $privacy = $request->get_param( 'is_private' );
-        $milestone = Milestone::find( $milestone_id );
+        $project_id   = intval( $request->get_param( 'project_id' ) );
+        $milestone_id = intval( $request->get_param( 'milestone_id' ) );
+        // Stored in pm_meta and read back through unserialize(); anything but an
+        // int here is a PHP object injection vector.
+        $privacy      = (int) filter_var( $request->get_param( 'is_private' ), FILTER_VALIDATE_BOOLEAN );
+
+        // Bind the milestone to the gated project (IDOR guard).
+        $milestone = Milestone::where( 'id', $milestone_id )->where( 'project_id', $project_id )->first();
+
+        if ( ! $milestone ) {
+            return new \WP_Error( 'pm_milestone', __( 'Milestone not found in this project.', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
+
         $milestone->update_model( [
             'is_private' => $privacy
         ] );

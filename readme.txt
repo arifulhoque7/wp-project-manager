@@ -4,9 +4,9 @@ Contributors: tareq1988, nizamuddinbabu, wedevs
 Donate Link: https://tareq.co/donate/
 Tags: kanban, project, project management, task management, project manager
 Requires at least: 6.2
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 4.0.6
+Stable tag: 4.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,6 +113,12 @@ By upgrading to Project Manager Pro, you can unlock the full power of project ma
 ##💬 Slack Integration
 –   Get real-time Slack notifications whenever new tasks, subtasks, or comments are created
 –   Stay informed when tasks are completed or new team members are added
+##📁 Google Workspace Integration (Drive, Calendar, Meet)
+–   Attach and link Google Drive files directly within tasks, messages, and comments
+–   Sync task due dates and milestones automatically with Google Calendar
+–   Generate Google Meet links from tasks or project discussions for quick team calls
+–   Keep files, schedules, and meetings connected to the relevant task without leaving the project view
+–   Ideal for remote teams managing documents, deadlines, and calls in one place
 ##🔗 GitHub & Bitbucket Integration
 –   Connect your GitHub and Bitbucket accounts directly to Project Manager
 –   Issues created in GitHub or Bitbucket are automatically added to your task manager list
@@ -177,6 +183,9 @@ Project Manager uses the following third-party services to enhance project manag
 5. **Asana API** - Syncs tasks, stories, and project updates. Task titles, descriptions, deadlines, and comments are sent to Asana for project updates.
    - **[Terms of Service](https://asana.com/terms) and [Privacy Policy](https://asana.com/privacy)**
 
+6. **Google Workspace API (Drive, Calendar, Meet)** - Integrates Google Drive, Google Calendar, and Google Meet to support file attachments, due date/milestone syncing, and meeting link generation within tasks and projects. Data sent to Google may include file names and links, task titles, descriptions, dates, assignee details, and participant email addresses, depending on which integration is used.
+   - **[Terms of Service](https://developers.google.com/terms) and [Privacy Policy](https://policies.google.com/privacy)**
+
 == Terms and Conditions ==
 - [weDevs Terms of Service](https://wedevs.com/terms-and-conditions/)
 - [weDevs Privacy Policy](https://wedevs.com/privacy-policy/)
@@ -240,6 +249,15 @@ A. If you face any issues, you can contact the support team through the official
 14. Manage projects from the frontend
 
 == Changelog ==
+
+= v4.0.7 – Aug 19, 2026 =
+
+**Security:** Closed an unauthenticated account-creation and remote-code-execution chain — REST routes now fail closed by default, the Trello import endpoints require the proper capability, imported accounts receive a unique generated password, and stored data is deserialized without instantiating objects. Reported by Patchstack (20kilograma).
+**Security:** Fixed cross-project data exposure — task, activity and per-user endpoints now return only data from projects the caller belongs to. Reported via WPScan (Pedro Pinho, Usama Arshad).
+**Security:** Bound REST object IDs (task, comment, file, milestone) to the project they were authorized against, and stopped file downloads from reaching arbitrary media-library attachments (IDOR).
+**Security:** Scoped search, settings and activity feeds to the caller's projects, and restricted global role definitions to administrators.
+**Improved:** Compatibility with WordPress 7.1 and PHP 8.4, plus a hardened SVG upload check.
+**Update:** readme — added Google Workspace integration details.
 
 = v4.0.6 – Jul 20, 2026 =
 

@@ -176,27 +176,27 @@ class Activity {
     }
 
     private function parse_meta_for_task( $activity ) {
-        return is_serialized( $activity->meta ) ? maybe_unserialize( $activity->meta ) : $activity->meta;
+        return is_serialized( $activity->meta ) ? wedevs_pm_safe_unserialize( $activity->meta ) : $activity->meta;
     }
 
     private function parse_meta_for_task_list( $activity ) {
-        return is_serialized( $activity->meta ) ? maybe_unserialize( $activity->meta ) : $activity->meta;
+        return is_serialized( $activity->meta ) ? wedevs_pm_safe_unserialize( $activity->meta ) : $activity->meta;
     }
 
     private function parse_meta_for_discussion_board( $activity ) {
-        return is_serialized( $activity->meta ) ? maybe_unserialize( $activity->meta ) : $activity->meta;
+        return is_serialized( $activity->meta ) ? wedevs_pm_safe_unserialize( $activity->meta ) : $activity->meta;
     }
 
     private function parse_meta_for_milestone( $activity ) {
-        return is_serialized( $activity->meta ) ? maybe_unserialize( $activity->meta ) : $activity->meta;
+        return is_serialized( $activity->meta ) ? wedevs_pm_safe_unserialize( $activity->meta ) : $activity->meta;
     }
 
     private function parse_meta_for_project( $activity ) {
-        return is_serialized( $activity->meta ) ? maybe_unserialize( $activity->meta ) : $activity->meta;
+        return is_serialized( $activity->meta ) ? wedevs_pm_safe_unserialize( $activity->meta ) : $activity->meta;
     }
 
     private function parse_meta_for_file( $activity ) {
-        return is_serialized( $activity->meta ) ? maybe_unserialize( $activity->meta ) : $activity->meta;
+        return is_serialized( $activity->meta ) ? wedevs_pm_safe_unserialize( $activity->meta ) : $activity->meta;
     }
 
     private function parse_meta_for_comment( $activity ) {
@@ -206,7 +206,7 @@ class Activity {
             return $meta;
         }
 
-        $activity->meta = is_serialized( $activity->meta ) ? maybe_unserialize( $activity->meta ) : $activity->meta;
+        $activity->meta = is_serialized( $activity->meta ) ? wedevs_pm_safe_unserialize( $activity->meta ) : $activity->meta;
 
         foreach ($activity->meta as $key => $value) {
             if ( $key == 'commentable_type' && $value == 'file' ) {
@@ -330,6 +330,7 @@ class Activity {
 		$this->where_id()
 			->where_actor_id()
 			->where_project_id()
+			->where_membership()
 			->where_resource_id()
 			->where_resource_type()
 			->where_updated_at();
@@ -513,6 +514,39 @@ class Activity {
 		if ( !is_array( $project_id ) ) {
 			$this->where .= $wpdb->prepare( " AND {$this->tb_activity}.project_id IN (%d)", $project_id );
 		}
+
+		return $this;
+	}
+
+	/**
+	 * Constrain activities to the projects the current user belongs to.
+	 * Managers/admins see all; everyone else only their member projects
+	 * (prevents the whole-site activity feed leaking to any logged-in user).
+	 */
+	private function where_membership() {
+		if ( wedevs_pm_user_can_access() ) {
+			return $this;
+		}
+
+		global $wpdb;
+		$user_id      = get_current_user_id();
+		$tb_role_user = esc_sql( wedevs_pm_tb_prefix() . 'pm_role_user' );
+
+		$project_ids = $wpdb->get_col( $wpdb->prepare(
+			"SELECT DISTINCT project_id FROM {$tb_role_user} WHERE user_id = %d",
+			$user_id
+		) );
+
+		$project_ids = array_map( 'absint', (array) $project_ids );
+
+		if ( empty( $project_ids ) ) {
+			$this->where .= ' AND 0 = 1';
+
+			return $this;
+		}
+
+		$format = implode( ',', array_fill( 0, count( $project_ids ), '%d' ) );
+		$this->where .= $wpdb->prepare( " AND {$this->tb_activity}.project_id IN ($format)", $project_ids );
 
 		return $this;
 	}

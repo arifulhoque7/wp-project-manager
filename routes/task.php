@@ -26,7 +26,7 @@ $wedevs_pm_router->post( 'projects/{project_id}/tasks', 'WeDevs/PM/Task/Controll
     ->sanitizer( 'WeDevs\PM\Task\Sanitizers\Task_Sanitizer' );
 
 $wedevs_pm_router->post( 'projects/{project_id}/tasks/sorting', 'WeDevs/PM/Task/Controllers/Task_Controller@task_sorting' )
-    ->permission( [ $wedevs_pm_authentic ] );
+    ->permission( [ 'WeDevs\PM\Core\Permissions\Access_Project' ] );
 
 $wedevs_pm_router->get( 'projects/{project_id}/tasks/{task_id}', 'WeDevs/PM/Task/Controllers/Task_Controller@show' )
     ->permission(['WeDevs\PM\Core\Permissions\Access_Project']);

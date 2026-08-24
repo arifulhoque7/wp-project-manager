@@ -64,8 +64,15 @@ class Comment_Controller {
     }
 
     public function show( WP_REST_Request $request ) {
-        $comment_id = $request->get_param( 'comment_id' );
-        $comment    = Comment::find( $comment_id );
+        $comment_id = intval( $request->get_param( 'comment_id' ) );
+        $project_id = intval( $request->get_param( 'project_id' ) );
+
+        // Bind the comment to the gated project (IDOR guard).
+        $comment = Comment::where( 'id', $comment_id )->where( 'project_id', $project_id )->first();
+
+        if ( ! $comment ) {
+            return new \WP_Error( 'pm_comment', __( 'Comment not found in this project.', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
         $resource   = new Item( $comment, new Comment_Transformer );
 
         return $this->get_response( $resource );
@@ -120,7 +127,14 @@ class Comment_Controller {
         // An array of file ids that needs to be deleted
         $files_to_delete = $request->get_param( 'files_to_delete' );
 
-        $comment = Comment::with('files')->find( $data['comment_id'] );
+        $project_id = intval( $request->get_param( 'project_id' ) );
+
+        // Bind the comment to the gated project (IDOR guard).
+        $comment = Comment::with('files')->where( 'id', intval( $data['comment_id'] ) )->where( 'project_id', $project_id )->first();
+
+        if ( ! $comment ) {
+            return new \WP_Error( 'pm_comment', __( 'Comment not found in this project.', 'wedevs-project-manager' ), [ 'status' => 404 ] );
+        }
 
         $comment->update( $data );
 
@@ -146,8 +160,15 @@ class Comment_Controller {
     }
 
     public function destroy( WP_REST_Request $request ) {
-        $comment_id = $request->get_param( 'comment_id' );
-        $comment    = Comment::find( $comment_id );
+        $comment_id = intval( $request->get_param( 'comment_id' ) );
+        $project_id = intval( $request->get_param( 'project_id' ) );
+
+        // Bind the comment to the gated project (IDOR guard).
+        $comment = Comment::where( 'id', $comment_id )->where( 'project_id', $project_id )->first();
+
+        if ( ! $comment ) {
+            wp_send_json_error( [ 'message' => __( 'Comment not found in this project.', 'wedevs-project-manager' ) ], 404 );
+        }
         
         $resource_type = $comment->commentable_type;
         $resource_id = $comment->commentable_id;
