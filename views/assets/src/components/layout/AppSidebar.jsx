@@ -548,8 +548,8 @@ export function AppSidebar() {
             {viewNavItems.map(renderNavItem)}
           </div>
 
-          {/* Modules + Premium */}
-          {!isFrontend && (
+          {/* Modules + Premium (admin-only: module management is a site-admin action) */}
+          {!isFrontend && isAdmin && (
           <div className="mb-3">
             {!collapsed ? (
               <p className="text-[11px] font-semibold text-pm-text-muted/60 uppercase tracking-[0.08em] px-2 mb-1.5">
