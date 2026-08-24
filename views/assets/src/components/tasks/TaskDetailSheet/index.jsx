@@ -2,7 +2,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import React, { useEffect, useCallback, useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@store/index'
-import { openTaskSheet, closeTaskSheet, fetchTask, updateTask, changeTaskStatus, addTaskComment, updateTaskComment, deleteTaskComment, deleteTask } from '@store/tasksSlice'
+import { openTaskSheet, closeTaskSheet, fetchTask, updateTask, changeTaskStatus, addTaskComment, updateTaskComment, deleteTaskComment, deleteTask, markTaskModified } from '@store/tasksSlice'
 import { toggleTaskInList, removeTaskFromList } from '@store/taskListsSlice'
 import { useApi } from '@hooks/useApi'
 import { cn } from '@lib/utils'
@@ -450,6 +450,7 @@ export default function TaskDetailSheet() {
     const ok = await confirm(__('Are you sure you want to delete this task?', 'wedevs-project-manager'), __('Delete Task', 'wedevs-project-manager'))
     if (!ok) return
     dispatch(removeTaskFromList({ listId: currentTask.task_list_id, taskId: currentTask.id }))
+    dispatch(markTaskModified())
     dispatch(closeTaskSheet())
     try {
       await dispatch(deleteTask({ projectId, taskId: currentTask.id })).unwrap()

@@ -47,7 +47,8 @@ import {
   SelectValue,
 } from "@components/ui/select";
 import { useAppDispatch, useAppSelector } from "@store/index";
-import { fetchRoles, openEditSheet } from "@store/projectsSlice";
+import { fetchRoles, openEditSheet, invalidateProjectAssignees } from "@store/projectsSlice";
+import { invalidateProjectCache } from "@hooks/useCurrentProject";
 import { ProjectCreateSheet } from "@components/projects/ProjectCreateSheet";
 import CreateUserDialog from "@components/common/CreateUserDialog";
 import { Area, AreaChart, XAxis, CartesianGrid } from "recharts";
@@ -70,6 +71,11 @@ export default function ProjectOverview() {
   const { isPro, isManager, canManage } = usePermissions(project);
   const canManageMembers = isManager || canManage;
   const dispatch = useAppDispatch();
+
+  const invalidateMemberCaches = useCallback(() => {
+    invalidateProjectCache(projectId);
+    dispatch(invalidateProjectAssignees(projectId));
+  }, [projectId, dispatch]);
   const roles = useAppSelector((s) => s.projects.roles);
 
   const [loading, setLoading] = useState(true);
@@ -179,6 +185,7 @@ export default function ProjectOverview() {
         ...prev,
         assignees: { data: [...(prev.assignees?.data ?? []), userWithRole] },
       }));
+      invalidateMemberCaches();
       toast.success(
         __('Member added', 'wedevs-project-manager'),
         sprintf(/* translators: %s is the name of the user added to the project. */ __('%s was added to the project.', 'wedevs-project-manager'), userWithRole.display_name),
@@ -212,6 +219,7 @@ export default function ProjectOverview() {
           ),
         },
       }));
+      invalidateMemberCaches();
       toast.success(
         __('Role updated', 'wedevs-project-manager'),
         target && roleObj
@@ -239,6 +247,7 @@ export default function ProjectOverview() {
         ...prev,
         assignees: { data: (prev.assignees?.data ?? []).filter(u => parseInt(u.id) !== parseInt(userId)) },
       }));
+      invalidateMemberCaches();
       toast.success(
         __('Member removed', 'wedevs-project-manager'),
         target ? sprintf(/* translators: %s is the name of the user removed from the project. */ __('%s was removed from the project.', 'wedevs-project-manager'), target.display_name) : undefined,
