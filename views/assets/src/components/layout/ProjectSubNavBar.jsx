@@ -68,8 +68,8 @@ export function ProjectSubNavBar() {
   if (!activeProjectId) return null
 
   return (
-    <div className="shrink-0 bg-pm-surface border-b border-pm-border px-4 py-2">
-      <nav className="inline-flex items-center gap-0.5 overflow-x-auto rounded-lg border border-pm-border bg-muted/60 p-1 scrollbar-none">
+    <div className="shrink-0 bg-pm-surface border-b border-pm-border px-6 py-3">
+      <nav className="inline-flex items-center gap-1 overflow-x-auto rounded-xl border border-pm-border bg-muted/60 p-1.5 scrollbar-none">
         {subNav.map(item => {
           const Icon = item.icon
           const isActive = activeSubKey === item.key
@@ -79,14 +79,14 @@ export function ProjectSubNavBar() {
               key={item.key}
               onClick={() => navigate(item.path(activeProjectId))}
               className={cn(
-                'group/tab flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-medium whitespace-nowrap transition-all duration-200 shrink-0',
+                'group/tab flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all duration-200 shrink-0',
                 isActive
                   ? 'bg-background text-pm-accent shadow-sm'
                   : 'text-pm-text-muted hover:text-pm-text-primary',
               )}
             >
               <Icon className={cn(
-                'w-3.5 h-3.5 shrink-0',
+                'w-[18px] h-[18px] shrink-0',
                 isActive ? 'text-pm-accent' : 'text-pm-text-muted group-hover/tab:text-pm-text',
               )} />
               {item.label}

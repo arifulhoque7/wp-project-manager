@@ -134,11 +134,11 @@ const SettingsPage = () => {
     <div className="pm-settings-page flex flex-col h-full overflow-hidden">
 
       {/* ── Settings top nav (segmented) ───────────────────── */}
-      <div className="shrink-0 bg-pm-surface border-b border-pm-border px-4 pt-4 pb-2">
-        <h1 className="text-pm-text font-semibold text-base mb-2">
+      <div className="shrink-0 bg-pm-surface border-b border-pm-border px-6 pt-6 pb-4">
+        <h1 className="text-pm-text font-semibold text-2xl mb-4">
           {__('Settings', 'wedevs-project-manager')}
         </h1>
-        <nav className="inline-flex max-w-full items-center gap-0.5 overflow-x-auto rounded-lg border border-pm-border bg-muted/60 p-1 scrollbar-none">
+        <nav className="inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-xl border border-pm-border bg-muted/60 p-1.5 scrollbar-none">
           {tabGroups.flatMap(g => g.tabs).map((tab) => {
             const Icon = tab.icon
             const isActive = activeTab === tab.key
@@ -149,7 +149,7 @@ const SettingsPage = () => {
                 key={tab.key}
                 type="button"
                 className={cn(
-                  'group/tab flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-medium whitespace-nowrap transition-all duration-200 shrink-0',
+                  'group/tab flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all duration-200 shrink-0',
                   isActive
                     ? 'bg-background text-pm-accent shadow-sm'
                     : 'text-pm-text-muted hover:text-pm-text-primary',
@@ -157,7 +157,7 @@ const SettingsPage = () => {
                 onClick={() => setActiveTab(tab.key)}
               >
                 <Icon className={cn(
-                  'w-4 h-4 shrink-0',
+                  'w-[18px] h-[18px] shrink-0',
                   isActive ? 'text-pm-accent' : 'text-pm-text-muted group-hover/tab:text-pm-text',
                 )} />
                 {tab.label}
