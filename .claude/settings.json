@@ -18,6 +18,7 @@
       "Bash(pnpm -v)",
       "Bash(php -v)",
       "Bash(composer --version)",
+
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
@@ -33,6 +34,7 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git restore --staged:*)",
+
       "Bash(pnpm install)",
       "Bash(pnpm i)",
       "Bash(pnpm dev:*)",
@@ -43,6 +45,7 @@
       "Bash(pnpm run:*)",
       "Bash(npx playwright:*)",
       "Bash(npx eslint:*)",
+
       "Bash(composer install)",
       "Bash(composer dump-autoload:*)",
       "Bash(composer show:*)",
@@ -51,7 +54,9 @@
       "Bash(vendor/bin/phpcbf:*)",
       "Bash(vendor/bin/codecept:*)",
       "Bash(php -l:*)",
+
       "Bash(wp i18n:*)",
+
       "Bash(gh pr view:*)",
       "Bash(gh pr diff:*)",
       "Bash(gh pr list:*)",
@@ -66,6 +71,7 @@
       "Bash(rm -fr:*)",
       "Bash(sudo:*)",
       "Bash(chmod 777:*)",
+
       "Bash(git push --force:*)",
       "Bash(git push -f:*)",
       "Bash(git reset --hard:*)",
@@ -74,6 +80,7 @@
       "Bash(git branch -D:*)",
       "Bash(git rebase -i:*)",
       "Bash(git filter-branch:*)",
+
       "Bash(pnpm publish:*)",
       "Bash(npm publish:*)",
       "Bash(pnpm release:*)",
@@ -85,12 +92,14 @@
       "Bash(pnpm remove:*)",
       "Bash(pnpm up:*)",
       "Bash(npm install:*)",
+
       "Bash(mysql:*)",
       "Bash(mysqldump:*)",
       "Bash(wp db:*)",
       "Bash(wp plugin activate:*)",
       "Bash(wp plugin deactivate:*)",
       "Bash(wp plugin delete:*)",
+
       "Read(.env)",
       "Read(**/.env)",
       "Read(**/secrets/**)",
@@ -98,6 +107,7 @@
       "Read(**/*.pem)",
       "Read(**/*_rsa)",
       "Read(**/*_rsa.pub)",
+
       "Write(.env)",
       "Write(**/.env)",
       "Write(**/secrets/**)",
@@ -112,6 +122,7 @@
       "Write(package-lock.json)",
       "Write(languages/*.pot)",
       "Write(languages/*.mo)",
+
       "Edit(vendor/**)",
       "Edit(node_modules/**)",
       "Edit(build/**)",
